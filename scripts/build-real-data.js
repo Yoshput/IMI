@@ -145,7 +145,7 @@ branchConfigs.forEach(cfg => {
   });
 
   const sortedDates = Object.keys(dateMap).sort();
-  const branchDaily = sortedDates.map((date, idx) => {
+  allFollowerDaily[cfg.branchKey] = sortedDates.map((date, idx) => {
     const current = dateMap[date];
     const prev = idx > 0 ? dateMap[sortedDates[idx - 1]] : null;
     const igDelta = prev ? current.igFollowers - prev.igFollowers : 0;
@@ -161,8 +161,6 @@ branchConfigs.forEach(cfg => {
       likes: current.likes
     };
   });
-
-  allFollowerDaily[cfg.branchKey] = branchDaily;
 });
 
 // Calculate PIC Submission Tracker
@@ -178,10 +176,7 @@ const picTracker = [
   const dates = p.data.map(d => d.reportDate).filter(Boolean).sort();
   const latestDate = dates.length > 0 ? dates[dates.length - 1] : 'Belum pernah';
   const totalEntries = p.data.length;
-  // If latestDate is within 3 days of 2026-09-14 (>= 2026-09-11), consider updated
   const isUpToDate = latestDate >= '2026-09-11';
-  
-  // Calculate days behind
   let daysBehind = 0;
   if (latestDate && latestDate.includes('-')) {
     const diff = Math.floor((new Date('2026-09-14').getTime() - new Date(latestDate).getTime()) / (1000 * 3600 * 24));
@@ -202,67 +197,114 @@ const picTracker = [
   };
 });
 
-// Calculate Executive Recap (For Tuesday Meeting)
-const topPerformers = [];
-Object.entries(allBranchReels).forEach(([sheet, rows]) => {
-  rows.forEach(r => {
-    if (r.viewers > 1500) {
-      topPerformers.push({
-        branch: r.branch,
-        pic: r.pic,
-        date: r.reportDate,
-        title: r.reelsTitle,
-        pillar: r.contentPillar,
-        viewers: r.viewers,
-        likes: r.likes,
-        reelsLink: r.reelsLink
+// Helper: Extract weekly evaluation data for a given 7-day period
+function buildPeriodRecap(startDate, endDate, meetingDateTitle, meetingStatus) {
+  const weeklyReels = [];
+  Object.entries(allBranchReels).forEach(([sheet, rows]) => {
+    rows.forEach(r => {
+      if (r.reportDate >= startDate && r.reportDate <= endDate) {
+        weeklyReels.push({
+          branch: r.branch,
+          sheetKey: sheet,
+          pic: r.pic,
+          date: r.reportDate,
+          title: r.reelsTitle,
+          secondTitle: r.secondReelsTitle,
+          pillar: r.contentPillar,
+          viewers: r.viewers,
+          likes: r.likes,
+          reelsLink: r.reelsLink,
+          tiktokLink: r.tiktokLink
+        });
+      }
+    });
+  });
+  // Sort by viewers descending
+  weeklyReels.sort((a, b) => b.viewers - a.viewers);
+
+  // Weekly Story Data (Mba Nuha)
+  const weeklyStories = storyItems.filter(s => s.reportDate >= startDate && s.reportDate <= endDate);
+  const questionCounts = {};
+  let totalDms = 0;
+  weeklyStories.forEach(s => {
+    totalDms += s.dmInquiries || 0;
+    if (s.frequentQuestions && s.frequentQuestions !== '-') {
+      const items = s.frequentQuestions.split(/[,;\n]/).map(t => t.trim()).filter(Boolean);
+      items.forEach(it => {
+        questionCounts[it] = (questionCounts[it] || 0) + 1;
       });
     }
   });
-});
-topPerformers.sort((a, b) => b.viewers - a.viewers);
 
-// Top Frequent Questions in Story (Mba Nuha)
-const questionCounts = {};
-storyItems.forEach(s => {
-  if (s.frequentQuestions && s.frequentQuestions !== '-') {
-    const items = s.frequentQuestions.split(/[,;\n]/).map(t => t.trim()).filter(Boolean);
-    items.forEach(it => {
-      questionCounts[it] = (questionCounts[it] || 0) + 1;
-    });
-  }
-});
-
-// Obstacles Log across all PICs
-const obstacleLogs = [];
-storyItems.forEach(s => {
-  if (s.obstacle && s.obstacle !== '-' && s.obstacle !== 'tidak ada' && s.obstacle !== 'belum ada') {
-    obstacleLogs.push({
-      date: s.reportDate,
-      pic: 'Nuha',
-      role: 'Story PWT',
-      obstacle: s.obstacle,
-      areaToImprove: s.areaToImprove
-    });
-  }
-});
-Object.entries(allBranchReels).forEach(([sheet, rows]) => {
-  rows.forEach(r => {
+  // Weekly Obstacles
+  const weeklyObstacles = [];
+  weeklyStories.forEach(s => {
+    if (s.obstacle && s.obstacle !== '-' && s.obstacle !== 'tidak ada' && s.obstacle !== 'belum ada') {
+      weeklyObstacles.push({
+        date: s.reportDate,
+        pic: 'Nuha',
+        role: 'Story PWT',
+        obstacle: s.obstacle,
+        areaToImprove: s.areaToImprove
+      });
+    }
+  });
+  weeklyReels.forEach(r => {
     if (r.obstacle && r.obstacle !== '-' && r.obstacle !== 'tidak ada' && r.obstacle !== 'belum ada' && r.obstacle !== 'libur') {
-      obstacleLogs.push({
-        date: r.reportDate,
+      weeklyObstacles.push({
+        date: r.date,
         pic: r.pic,
-        role: `${sheet}`,
+        role: r.sheetKey,
         obstacle: r.obstacle,
         areaToImprove: '-'
       });
     }
   });
-});
+
+  return {
+    periodKey: `${startDate}_to_${endDate}`,
+    startDate,
+    endDate,
+    meetingDateTitle,
+    meetingStatus,
+    totalReelsUploaded: weeklyReels.length,
+    totalStoriesRecorded: weeklyStories.length,
+    totalDmInquiries: totalDms,
+    topViralReels: weeklyReels.slice(0, 8),
+    allWeeklyReels: weeklyReels,
+    frequentStoryInquiries: Object.entries(questionCounts)
+      .sort((a, b) => b[1] - a[1])
+      .map(([topic, count]) => ({ topic, count })),
+    obstacleLogs: weeklyObstacles
+  };
+}
+
+// 1. Period A: Selasa Kemarin (8 - 14 September 2026) -> Meeting: Selasa 15 September 2026
+const periodLastTuesday = buildPeriodRecap(
+  '2026-09-08',
+  '2026-09-14',
+  'Selasa, 15 September 2026 (Periode 8–14 Sep)',
+  'Sudah Berjalan / Evaluasi Resmi'
+);
+
+// 2. Period B: Siklus Berjalan Menuju Selasa Depan (15 - 21 September 2026) -> Meeting: Selasa 22 September 2026
+const periodNextTuesday = buildPeriodRecap(
+  '2026-09-15',
+  '2026-09-21',
+  'Selasa, 22 September 2026 (Periode 15–21 Sep)',
+  'Pemantauan Berjalan (Live Monitor H-7)'
+);
 
 const output = {
   syncTimestamp: new Date().toISOString(),
   sourceUrl: 'https://docs.google.com/spreadsheets/d/1BU0fIDP656Y-eue55bWVSxeaixSeFJwR3GP1n8kwBYc/edit?usp=sharing',
+  officialAccounts: [
+    { name: 'Optik I See You Purwokerto (Pusat)', handle: '@iseeyou.glasses', url: 'https://www.instagram.com/iseeyou.glasses/', city: 'Purwokerto', pic: 'Mba Ilya & Mba Nuha' },
+    { name: 'Optik I See You Purbalingga', handle: '@iseeyou.purbalingga', url: 'https://www.instagram.com/iseeyou.purbalingga/', city: 'Purbalingga', pic: 'Mba Ajun' },
+    { name: 'Optik I See You Cilacap', handle: '@iseeyou.cilacap', url: 'https://www.instagram.com/iseeyou.cilacap/', city: 'Cilacap', pic: 'Mba Arum' },
+    { name: 'Optik I See You Wonosobo', handle: '@iseeyou.wonosobo', url: 'https://www.instagram.com/iseeyou.wonosobo/', city: 'Wonosobo', pic: 'Mba Febi' },
+    { name: 'Lunar Eyewear Tegal (Second Brand)', handle: '@lunareyewear.co', url: 'https://www.instagram.com/lunareyewear.co', city: 'Tegal', pic: 'Mba Amanda' }
+  ],
   picTracker: picTracker,
   storyData: storyItems,
   branchReels: allBranchReels,
@@ -270,15 +312,15 @@ const output = {
   executiveRecap: {
     meetingTarget: 'Selasa Depan (Weekly Executive Board: HRD, Head, Finance, Owner)',
     latestTotalNetworkFollowers: {
-      instagram: 226581 + 6195 + 3946 + 7361 + 1248, // ~245,331 followers
-      tiktok: 87200 + 979 + 3031 + 42 + 541 // ~91,793 followers
+      instagram: 226581 + 6195 + 3946 + 7361 + 1248,
+      tiktok: 87200 + 979 + 3031 + 42 + 541
     },
-    topViralReels: topPerformers.slice(0, 8),
-    frequentStoryInquiries: Object.entries(questionCounts)
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 8)
-      .map(([topic, count]) => ({ topic, count })),
-    obstacleLogs: obstacleLogs.slice(-12).reverse()
+    // Historical weekly periods
+    periods: {
+      lastTuesday: periodLastTuesday,
+      nextTuesday: periodNextTuesday
+    },
+    activePeriodKey: 'lastTuesday'
   }
 };
 
@@ -288,7 +330,6 @@ fs.writeFileSync(
   'utf-8'
 );
 
-console.log('Successfully generated lib/real-sheets-data.json');
-console.log('Total Network Followers:', output.executiveRecap.latestTotalNetworkFollowers);
-console.log('PIC Tracker Status:');
-picTracker.forEach(p => console.log(`- ${p.pic} (${p.role}): ${p.statusText}`));
+console.log('Successfully generated lib/real-sheets-data.json with weekly evaluation cycles.');
+console.log('Period Last Tuesday Reels count:', periodLastTuesday.topViralReels.length);
+console.log('Top reel in 8-14 Sep:', periodLastTuesday.topViralReels[0]?.title, '| Views:', periodLastTuesday.topViralReels[0]?.viewers);

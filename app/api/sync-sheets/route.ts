@@ -224,65 +224,110 @@ export async function POST() {
       };
     });
 
-    const topPerformers: any[] = [];
-    Object.entries(allBranchReels).forEach(([, rows]) => {
-      rows.forEach((r) => {
-        if (r.viewers > 1500) {
-          topPerformers.push({
-            branch: r.branch,
-            pic: r.pic,
-            date: r.reportDate,
-            title: r.reelsTitle,
-            pillar: r.contentPillar,
-            viewers: r.viewers,
-            likes: r.likes,
-            reelsLink: r.reelsLink,
+    // Extract weekly evaluation data
+    const buildPeriodRecap = (startDate: string, endDate: string, meetingDateTitle: string, meetingStatus: string) => {
+      const weeklyReels: any[] = [];
+      Object.entries(allBranchReels).forEach(([sheet, rows]) => {
+        rows.forEach((r) => {
+          if (r.reportDate >= startDate && r.reportDate <= endDate) {
+            weeklyReels.push({
+              branch: r.branch,
+              sheetKey: sheet,
+              pic: r.pic,
+              date: r.reportDate,
+              title: r.reelsTitle,
+              secondTitle: r.secondReelsTitle,
+              pillar: r.contentPillar,
+              viewers: r.viewers,
+              likes: r.likes,
+              reelsLink: r.reelsLink,
+              tiktokLink: r.tiktokLink,
+            });
+          }
+        });
+      });
+      weeklyReels.sort((a, b) => b.viewers - a.viewers);
+
+      const weeklyStories = storyItems.filter((s) => s.reportDate && s.reportDate >= startDate && s.reportDate <= endDate);
+      const questionCounts: Record<string, number> = {};
+      let totalDms = 0;
+      weeklyStories.forEach((s) => {
+        totalDms += s.dmInquiries || 0;
+        if (s.frequentQuestions && s.frequentQuestions !== "-") {
+          const items = s.frequentQuestions.split(/[,;\n]/).map((t: string) => t.trim()).filter(Boolean);
+          items.forEach((it: string) => {
+            questionCounts[it] = (questionCounts[it] || 0) + 1;
           });
         }
       });
-    });
-    topPerformers.sort((a, b) => b.viewers - a.viewers);
 
-    const questionCounts: Record<string, number> = {};
-    storyItems.forEach((s) => {
-      if (s.frequentQuestions && s.frequentQuestions !== "-") {
-        const items = s.frequentQuestions.split(/[,;\n]/).map((t: string) => t.trim()).filter(Boolean);
-        items.forEach((it: string) => {
-          questionCounts[it] = (questionCounts[it] || 0) + 1;
-        });
-      }
-    });
-
-    const obstacleLogs: any[] = [];
-    storyItems.forEach((s) => {
-      if (s.obstacle && s.obstacle !== "-" && s.obstacle !== "tidak ada" && s.obstacle !== "belum ada") {
-        obstacleLogs.push({
-          date: s.reportDate,
-          pic: "Nuha",
-          role: "Story PWT",
-          obstacle: s.obstacle,
-          areaToImprove: s.areaToImprove,
-        });
-      }
-    });
-    Object.entries(allBranchReels).forEach(([sheet, rows]) => {
-      rows.forEach((r) => {
+      const weeklyObstacles: any[] = [];
+      weeklyStories.forEach((s) => {
+        if (s.obstacle && s.obstacle !== "-" && s.obstacle !== "tidak ada" && s.obstacle !== "belum ada") {
+          weeklyObstacles.push({
+            date: s.reportDate,
+            pic: "Nuha",
+            role: "Story PWT",
+            obstacle: s.obstacle,
+            areaToImprove: s.areaToImprove,
+          });
+        }
+      });
+      weeklyReels.forEach((r) => {
         if (r.obstacle && r.obstacle !== "-" && r.obstacle !== "tidak ada" && r.obstacle !== "belum ada" && r.obstacle !== "libur") {
-          obstacleLogs.push({
-            date: r.reportDate,
+          weeklyObstacles.push({
+            date: r.date,
             pic: r.pic,
-            role: `${sheet}`,
+            role: r.sheetKey,
             obstacle: r.obstacle,
             areaToImprove: "-",
           });
         }
       });
-    });
+
+      return {
+        periodKey: `${startDate}_to_${endDate}`,
+        startDate,
+        endDate,
+        meetingDateTitle,
+        meetingStatus,
+        totalReelsUploaded: weeklyReels.length,
+        totalStoriesRecorded: weeklyStories.length,
+        totalDmInquiries: totalDms,
+        topViralReels: weeklyReels.slice(0, 8),
+        allWeeklyReels: weeklyReels,
+        frequentStoryInquiries: Object.entries(questionCounts)
+          .sort((a, b) => b[1] - a[1])
+          .map(([topic, count]) => ({ topic, count })),
+        obstacleLogs: weeklyObstacles,
+      };
+    };
+
+    const periodLastTuesday = buildPeriodRecap(
+      "2026-09-08",
+      "2026-09-14",
+      "Selasa, 15 September 2026 (Periode 8–14 Sep)",
+      "Sudah Berjalan / Evaluasi Resmi"
+    );
+
+    const periodNextTuesday = buildPeriodRecap(
+      "2026-09-15",
+      "2026-09-21",
+      "Selasa, 22 September 2026 (Periode 15–21 Sep)",
+      "Pemantauan Berjalan (Live Monitor H-7)"
+    );
 
     const output = {
       syncTimestamp: new Date().toISOString(),
       sourceUrl:
         "https://docs.google.com/spreadsheets/d/1BU0fIDP656Y-eue55bWVSxeaixSeFJwR3GP1n8kwBYc/edit?usp=sharing",
+      officialAccounts: [
+        { name: "Optik I See You Purwokerto (Pusat)", handle: "@iseeyou.glasses", url: "https://www.instagram.com/iseeyou.glasses/", city: "Purwokerto", pic: "Mba Ilya & Mba Nuha" },
+        { name: "Optik I See You Purbalingga", handle: "@iseeyou.purbalingga", url: "https://www.instagram.com/iseeyou.purbalingga/", city: "Purbalingga", pic: "Mba Ajun" },
+        { name: "Optik I See You Cilacap", handle: "@iseeyou.cilacap", url: "https://www.instagram.com/iseeyou.cilacap/", city: "Cilacap", pic: "Mba Arum" },
+        { name: "Optik I See You Wonosobo", handle: "@iseeyou.wonosobo", url: "https://www.instagram.com/iseeyou.wonosobo/", city: "Wonosobo", pic: "Mba Febi" },
+        { name: "Lunar Eyewear Tegal (Second Brand)", handle: "@lunareyewear.co", url: "https://www.instagram.com/lunareyewear.co", city: "Tegal", pic: "Mba Amanda" },
+      ],
       picTracker: picTracker,
       storyData: storyItems,
       branchReels: allBranchReels,
@@ -293,12 +338,11 @@ export async function POST() {
           instagram: 226581 + 6195 + 3946 + 7361 + 1248,
           tiktok: 87200 + 979 + 3031 + 42 + 541,
         },
-        topViralReels: topPerformers.slice(0, 8),
-        frequentStoryInquiries: Object.entries(questionCounts)
-          .sort((a, b) => b[1] - a[1])
-          .slice(0, 8)
-          .map(([topic, count]) => ({ topic, count })),
-        obstacleLogs: obstacleLogs.slice(-12).reverse(),
+        periods: {
+          lastTuesday: periodLastTuesday,
+          nextTuesday: periodNextTuesday,
+        },
+        activePeriodKey: "lastTuesday",
       },
     };
 
@@ -306,8 +350,7 @@ export async function POST() {
     try {
       fs.writeFileSync(outPath, JSON.stringify(output, null, 2), "utf-8");
     } catch {
-      // Di serverless environment seperti Vercel, filesystem bersifat read-only.
-      // Data tetap berhasil diparsing dan dikirimkan langsung via response JSON.
+      // Vercel serverless read-only
     }
 
     return NextResponse.json({

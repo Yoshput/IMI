@@ -1,6 +1,43 @@
 {
-  "syncTimestamp": "2026-09-14T09:00:55.139Z",
+  "syncTimestamp": "2026-09-14T09:35:18.936Z",
   "sourceUrl": "https://docs.google.com/spreadsheets/d/1BU0fIDP656Y-eue55bWVSxeaixSeFJwR3GP1n8kwBYc/edit?usp=sharing",
+  "officialAccounts": [
+    {
+      "name": "Optik I See You Purwokerto (Pusat)",
+      "handle": "@iseeyou.glasses",
+      "url": "https://www.instagram.com/iseeyou.glasses/",
+      "city": "Purwokerto",
+      "pic": "Mba Ilya & Mba Nuha"
+    },
+    {
+      "name": "Optik I See You Purbalingga",
+      "handle": "@iseeyou.purbalingga",
+      "url": "https://www.instagram.com/iseeyou.purbalingga/",
+      "city": "Purbalingga",
+      "pic": "Mba Ajun"
+    },
+    {
+      "name": "Optik I See You Cilacap",
+      "handle": "@iseeyou.cilacap",
+      "url": "https://www.instagram.com/iseeyou.cilacap/",
+      "city": "Cilacap",
+      "pic": "Mba Arum"
+    },
+    {
+      "name": "Optik I See You Wonosobo",
+      "handle": "@iseeyou.wonosobo",
+      "url": "https://www.instagram.com/iseeyou.wonosobo/",
+      "city": "Wonosobo",
+      "pic": "Mba Febi"
+    },
+    {
+      "name": "Lunar Eyewear Tegal (Second Brand)",
+      "handle": "@lunareyewear.co",
+      "url": "https://www.instagram.com/lunareyewear.co",
+      "city": "Tegal",
+      "pic": "Mba Amanda"
+    }
+  ],
   "picTracker": [
     {
       "pic": "Mba Nuha",
@@ -17041,207 +17078,459 @@
       "instagram": 245331,
       "tiktok": 91793
     },
-    "topViralReels": [
-      {
-        "branch": "Lunar Eyewear Tegal (Second Brand)",
-        "pic": "Amanda",
-        "date": "2026-06-26",
-        "title": "derita mata minus silinder ketemu anomali make lampu tembak",
-        "pillar": "Hiburan / Tren Viral",
-        "viewers": 1136140,
-        "likes": 136000,
-        "reelsLink": "https://www.instagram.com/reel/DaC2_2FTx2U/?igsh=MTBhbWhpcHZtb2xiNQ=="
+    "periods": {
+      "lastTuesday": {
+        "periodKey": "2026-09-08_to_2026-09-14",
+        "startDate": "2026-09-08",
+        "endDate": "2026-09-14",
+        "meetingDateTitle": "Selasa, 15 September 2026 (Periode 8–14 Sep)",
+        "meetingStatus": "Sudah Berjalan / Evaluasi Resmi",
+        "totalReelsUploaded": 19,
+        "totalStoriesRecorded": 5,
+        "totalDmInquiries": 32,
+        "topViralReels": [
+          {
+            "branch": "Lunar Eyewear Tegal (Second Brand)",
+            "sheetKey": "Rekap TGL",
+            "pic": "Amanda",
+            "date": "2026-09-12",
+            "title": "libur",
+            "secondTitle": "padahal dunia seindah ini",
+            "pillar": "Testimoni / Review",
+            "viewers": 128980,
+            "likes": 10000,
+            "reelsLink": "libur",
+            "tiktokLink": "libur"
+          },
+          {
+            "branch": "Lunar Eyewear Tegal (Second Brand)",
+            "sheetKey": "Rekap TGL",
+            "pic": "Amanda",
+            "date": "2026-09-10",
+            "title": "pov:ternyata cuma lo",
+            "secondTitle": "jadi dewasa",
+            "pillar": "Promosi / Soft Sell",
+            "viewers": 62469,
+            "likes": 5860,
+            "reelsLink": "https://www.instagram.com/reel/DdGiT0OzQ_7/?stkn=MW8xbThsMXN6ODh2bg==",
+            "tiktokLink": "https://vt.tiktok.com/ZSqUNXnyJ/"
+          },
+          {
+            "branch": "Purwokerto (Pusat)",
+            "sheetKey": "Rekap PWT",
+            "pic": "Ilya",
+            "date": "2026-09-10",
+            "title": "Penglihatan mata silinder ( switch komen )",
+            "secondTitle": "Recap ISY open di RSM",
+            "pillar": "Edukasi",
+            "viewers": 19547,
+            "likes": 280,
+            "reelsLink": "https://www.instagram.com/reel/DdGmCEvvB-X/?stkn=Y3NwNzMwNmdkY3Uw",
+            "tiktokLink": "https://vt.tiktok.com/ZSqfwADRJ/"
+          },
+          {
+            "branch": "Purbalingga",
+            "sheetKey": "Rekap PBG",
+            "pic": "ajun",
+            "date": "2026-09-08",
+            "title": "Rasa ingin membersihkan ",
+            "secondTitle": "Tanya lagu favorit ",
+            "pillar": "Hiburan / Tren Viral",
+            "viewers": 6181,
+            "likes": 141,
+            "reelsLink": "https://www.instagram.com/reel/DdBa28YijET/?stkn=ZWhkdHd2NmV2NnUw",
+            "tiktokLink": "https://vt.tiktok.com/ZSqhSYY6r/"
+          },
+          {
+            "branch": "Lunar Eyewear Tegal (Second Brand)",
+            "sheetKey": "Rekap TGL",
+            "pic": "Amanda",
+            "date": "2026-09-13",
+            "title": "daily vlog",
+            "secondTitle": "pov: teryata cuma lo",
+            "pillar": "Promosi / Soft Sell",
+            "viewers": 5484,
+            "likes": 409,
+            "reelsLink": "https://www.instagram.com/reel/DdOQvBbT45k/?stkn=MTU5NjRrZHFwOHEwNg==",
+            "tiktokLink": "https://vt.tiktok.com/ZSqHmjNwd/"
+          },
+          {
+            "branch": "Lunar Eyewear Tegal (Second Brand)",
+            "sheetKey": "Rekap TGL",
+            "pic": "Amanda",
+            "date": "2026-09-11",
+            "title": "pake kacamata tiap hari ",
+            "secondTitle": "close 1 eyes",
+            "pillar": "Hiburan / Tren Viral",
+            "viewers": 4454,
+            "likes": 47,
+            "reelsLink": "https://www.instagram.com/reel/DdJHG_jTUGa/?stkn=MW0yY21uazVoOGFndQ==",
+            "tiktokLink": "https://vt.tiktok.com/ZSqP1YHDd/"
+          },
+          {
+            "branch": "Lunar Eyewear Tegal (Second Brand)",
+            "sheetKey": "Rekap TGL",
+            "pic": "Amanda",
+            "date": "2026-09-08",
+            "title": "close 1 eye",
+            "secondTitle": "manifesting",
+            "pillar": "Edukasi",
+            "viewers": 3247,
+            "likes": 142,
+            "reelsLink": "https://www.instagram.com/reel/DdBYtrkzhW4/?stkn=MWQ0ZXd5eG9iOWI5aw==",
+            "tiktokLink": "https://vt.tiktok.com/ZSqhSDrhG/"
+          },
+          {
+            "branch": "Wonosobo",
+            "sheetKey": "Rekap WNS",
+            "pic": "Febi",
+            "date": "2026-09-10",
+            "title": "mata plus",
+            "secondTitle": "edukasi mata silinder",
+            "pillar": "Hiburan / Tren Viral",
+            "viewers": 2410,
+            "likes": 34,
+            "reelsLink": "https://www.instagram.com/reel/DdGjgEbNByA/?stkn=NW0yM2x2cXpvZDZo",
+            "tiktokLink": "https://vt.tiktok.com/ZSqUFxQ8t/"
+          }
+        ],
+        "allWeeklyReels": [
+          {
+            "branch": "Lunar Eyewear Tegal (Second Brand)",
+            "sheetKey": "Rekap TGL",
+            "pic": "Amanda",
+            "date": "2026-09-12",
+            "title": "libur",
+            "secondTitle": "padahal dunia seindah ini",
+            "pillar": "Testimoni / Review",
+            "viewers": 128980,
+            "likes": 10000,
+            "reelsLink": "libur",
+            "tiktokLink": "libur"
+          },
+          {
+            "branch": "Lunar Eyewear Tegal (Second Brand)",
+            "sheetKey": "Rekap TGL",
+            "pic": "Amanda",
+            "date": "2026-09-10",
+            "title": "pov:ternyata cuma lo",
+            "secondTitle": "jadi dewasa",
+            "pillar": "Promosi / Soft Sell",
+            "viewers": 62469,
+            "likes": 5860,
+            "reelsLink": "https://www.instagram.com/reel/DdGiT0OzQ_7/?stkn=MW8xbThsMXN6ODh2bg==",
+            "tiktokLink": "https://vt.tiktok.com/ZSqUNXnyJ/"
+          },
+          {
+            "branch": "Purwokerto (Pusat)",
+            "sheetKey": "Rekap PWT",
+            "pic": "Ilya",
+            "date": "2026-09-10",
+            "title": "Penglihatan mata silinder ( switch komen )",
+            "secondTitle": "Recap ISY open di RSM",
+            "pillar": "Edukasi",
+            "viewers": 19547,
+            "likes": 280,
+            "reelsLink": "https://www.instagram.com/reel/DdGmCEvvB-X/?stkn=Y3NwNzMwNmdkY3Uw",
+            "tiktokLink": "https://vt.tiktok.com/ZSqfwADRJ/"
+          },
+          {
+            "branch": "Purbalingga",
+            "sheetKey": "Rekap PBG",
+            "pic": "ajun",
+            "date": "2026-09-08",
+            "title": "Rasa ingin membersihkan ",
+            "secondTitle": "Tanya lagu favorit ",
+            "pillar": "Hiburan / Tren Viral",
+            "viewers": 6181,
+            "likes": 141,
+            "reelsLink": "https://www.instagram.com/reel/DdBa28YijET/?stkn=ZWhkdHd2NmV2NnUw",
+            "tiktokLink": "https://vt.tiktok.com/ZSqhSYY6r/"
+          },
+          {
+            "branch": "Lunar Eyewear Tegal (Second Brand)",
+            "sheetKey": "Rekap TGL",
+            "pic": "Amanda",
+            "date": "2026-09-13",
+            "title": "daily vlog",
+            "secondTitle": "pov: teryata cuma lo",
+            "pillar": "Promosi / Soft Sell",
+            "viewers": 5484,
+            "likes": 409,
+            "reelsLink": "https://www.instagram.com/reel/DdOQvBbT45k/?stkn=MTU5NjRrZHFwOHEwNg==",
+            "tiktokLink": "https://vt.tiktok.com/ZSqHmjNwd/"
+          },
+          {
+            "branch": "Lunar Eyewear Tegal (Second Brand)",
+            "sheetKey": "Rekap TGL",
+            "pic": "Amanda",
+            "date": "2026-09-11",
+            "title": "pake kacamata tiap hari ",
+            "secondTitle": "close 1 eyes",
+            "pillar": "Hiburan / Tren Viral",
+            "viewers": 4454,
+            "likes": 47,
+            "reelsLink": "https://www.instagram.com/reel/DdJHG_jTUGa/?stkn=MW0yY21uazVoOGFndQ==",
+            "tiktokLink": "https://vt.tiktok.com/ZSqP1YHDd/"
+          },
+          {
+            "branch": "Lunar Eyewear Tegal (Second Brand)",
+            "sheetKey": "Rekap TGL",
+            "pic": "Amanda",
+            "date": "2026-09-08",
+            "title": "close 1 eye",
+            "secondTitle": "manifesting",
+            "pillar": "Edukasi",
+            "viewers": 3247,
+            "likes": 142,
+            "reelsLink": "https://www.instagram.com/reel/DdBYtrkzhW4/?stkn=MWQ0ZXd5eG9iOWI5aw==",
+            "tiktokLink": "https://vt.tiktok.com/ZSqhSDrhG/"
+          },
+          {
+            "branch": "Wonosobo",
+            "sheetKey": "Rekap WNS",
+            "pic": "Febi",
+            "date": "2026-09-10",
+            "title": "mata plus",
+            "secondTitle": "edukasi mata silinder",
+            "pillar": "Hiburan / Tren Viral",
+            "viewers": 2410,
+            "likes": 34,
+            "reelsLink": "https://www.instagram.com/reel/DdGjgEbNByA/?stkn=NW0yM2x2cXpvZDZo",
+            "tiktokLink": "https://vt.tiktok.com/ZSqUFxQ8t/"
+          },
+          {
+            "branch": "Purbalingga",
+            "sheetKey": "Rekap PBG",
+            "pic": "Ajun",
+            "date": "2026-09-13",
+            "title": "Aduh gimana nyak ",
+            "secondTitle": "Kerja beda umur",
+            "pillar": "Hiburan / Tren Viral",
+            "viewers": 2000,
+            "likes": 22,
+            "reelsLink": "https://www.instagram.com/reel/DdOUTEPCNku/?stkn=MTBqemVkMWY2czl0NA==",
+            "tiktokLink": "https://vt.tiktok.com/ZSqHu1wyc/"
+          },
+          {
+            "branch": "Purbalingga",
+            "sheetKey": "Rekap PBG",
+            "pic": "Ajun",
+            "date": "2026-09-11",
+            "title": "Gen Z",
+            "secondTitle": "Orang pake kacamata ",
+            "pillar": "Hiburan / Tren Viral",
+            "viewers": 1500,
+            "likes": 54,
+            "reelsLink": "https://www.instagram.com/reel/DdJI6QjKTdw/?stkn=MTM2dXJxaHJ0MDl2MA==",
+            "tiktokLink": "https://vt.tiktok.com/ZSqPeduyD/"
+          },
+          {
+            "branch": "Wonosobo",
+            "sheetKey": "Rekap WNS",
+            "pic": "Febi",
+            "date": "2026-09-13",
+            "title": "Mata kena abu vulkanik",
+            "secondTitle": "Mata Plus",
+            "pillar": "Edukasi",
+            "viewers": 865,
+            "likes": 4,
+            "reelsLink": "https://www.instagram.com/reel/DdOSPwpRkG2/?stkn=MXc5eDg2M282ZTJrcQ==",
+            "tiktokLink": "https://vt.tiktok.com/ZSqHmURs5/"
+          },
+          {
+            "branch": "Wonosobo",
+            "sheetKey": "Rekap WNS",
+            "pic": "Febi",
+            "date": "2026-09-12",
+            "title": "Gen Z kena minus",
+            "secondTitle": "Derita mata minus",
+            "pillar": "Hiburan / Tren Viral",
+            "viewers": 864,
+            "likes": 30,
+            "reelsLink": "https://www.instagram.com/reel/DdLu3AZspl0/?stkn=ajVkY3lkdXY5cGs2",
+            "tiktokLink": "https://vt.tiktok.com/ZSqacaokD/"
+          },
+          {
+            "branch": "Purbalingga",
+            "sheetKey": "Rekap PBG",
+            "pic": "ajun",
+            "date": "2026-09-09",
+            "title": "Coba tengok ",
+            "secondTitle": "Orang have",
+            "pillar": "Hiburan / Tren Viral",
+            "viewers": 700,
+            "likes": 10,
+            "reelsLink": "https://www.instagram.com/reel/DdD-azSCjXC/?stkn=eTA2czhjam45M2Jp",
+            "tiktokLink": "https://vt.tiktok.com/ZSqSMke5m/"
+          },
+          {
+            "branch": "Wonosobo",
+            "sheetKey": "Rekap WNS",
+            "pic": "Febi",
+            "date": "2026-09-11",
+            "title": "Soflens",
+            "secondTitle": "mata minus",
+            "pillar": "Promosi / Soft Sell",
+            "viewers": 506,
+            "likes": 21,
+            "reelsLink": "https://www.instagram.com/reel/DdJId_eObUS/?stkn=cGxieGszbjhobHVo",
+            "tiktokLink": "https://vt.tiktok.com/ZSqPeg5tA/"
+          },
+          {
+            "branch": "Wonosobo",
+            "sheetKey": "Rekap WNS",
+            "pic": "Febi",
+            "date": "2026-09-09",
+            "title": "Derita mata minus",
+            "secondTitle": "Mata minus kalo malam",
+            "pillar": "Hiburan / Tren Viral",
+            "viewers": 447,
+            "likes": 19,
+            "reelsLink": "https://www.instagram.com/reel/DdD_Jiztp2F/?stkn=MWNoOGtjMTRkaGRtdQ==",
+            "tiktokLink": "https://vt.tiktok.com/ZSqSrDfHr/"
+          },
+          {
+            "branch": "Purwokerto (Pusat)",
+            "sheetKey": "Rekap PWT",
+            "pic": "Ilya",
+            "date": "2026-09-08",
+            "title": "-",
+            "pillar": "Edukasi",
+            "viewers": 0,
+            "likes": 0,
+            "reelsLink": "-",
+            "tiktokLink": "-"
+          },
+          {
+            "branch": "Purwokerto (Pusat)",
+            "sheetKey": "Rekap PWT",
+            "pic": "Ilya",
+            "date": "2026-09-09",
+            "title": "Rame rame di Alun alun ( web ISY )",
+            "pillar": "Promosi / Soft Sell",
+            "viewers": 0,
+            "likes": 0,
+            "reelsLink": "https://www.instagram.com/reel/DdEMOs3zjfL/?stkn=NHFybzJiZ3NqYzdh",
+            "tiktokLink": "https://vt.tiktok.com/ZSqfwywge/"
+          },
+          {
+            "branch": "Purbalingga",
+            "sheetKey": "Rekap PBG",
+            "pic": "Ajun",
+            "date": "2026-09-12",
+            "title": "Cewe minta dimengerti ",
+            "pillar": "Promosi / Soft Sell",
+            "viewers": 0,
+            "likes": 0,
+            "reelsLink": "https://www.instagram.com/reel/DdLrx4oq5JP/?stkn=ZmZjbW95ZTM4NWEz",
+            "tiktokLink": "https://vt.tiktok.com/ZSqa7seka/"
+          },
+          {
+            "branch": "Lunar Eyewear Tegal (Second Brand)",
+            "sheetKey": "Rekap TGL",
+            "pic": "Amanda",
+            "date": "2026-09-09",
+            "title": "padahal dunia seindah ini",
+            "secondTitle": "libur",
+            "pillar": "Hiburan / Tren Viral",
+            "viewers": 0,
+            "likes": 0,
+            "reelsLink": "https://www.instagram.com/reel/DdD9h3wzCxw/?stkn=MTBleHplemgyYzBydA==",
+            "tiktokLink": "https://vt.tiktok.com/ZSqSMYGVy/"
+          }
+        ],
+        "frequentStoryInquiries": [
+          {
+            "topic": "Softlens",
+            "count": 2
+          },
+          {
+            "topic": "price list lensa",
+            "count": 2
+          },
+          {
+            "topic": "Frame yg di try on",
+            "count": 2
+          },
+          {
+            "topic": "price liat frame+lensa",
+            "count": 1
+          },
+          {
+            "topic": "Price list lensa",
+            "count": 1
+          },
+          {
+            "topic": "harga frame+lensa",
+            "count": 1
+          },
+          {
+            "topic": "softlens",
+            "count": 1
+          },
+          {
+            "topic": "frame yang di try on",
+            "count": 1
+          },
+          {
+            "topic": "frame try on",
+            "count": 1
+          }
+        ],
+        "obstacleLogs": [
+          {
+            "date": "2026-09-09",
+            "pic": "Nuha",
+            "role": "Story PWT",
+            "obstacle": "Cara manambah viewers dan cara edit foto dan video",
+            "areaToImprove": "Cara ngedit story biar simple minimalis"
+          },
+          {
+            "date": "2026-09-10",
+            "pic": "Nuha",
+            "role": "Story PWT",
+            "obstacle": "Belajar ngedit dan cari ide atau referensi untuk story",
+            "areaToImprove": "Cara bikin story yg estetik, opening yg estetik dan minimalis"
+          },
+          {
+            "date": "2026-09-11",
+            "pic": "Nuha",
+            "role": "Story PWT",
+            "obstacle": "Ide untuk openinv story dan rekomendasi frame",
+            "areaToImprove": "Bikin story lebih estetik dan simple"
+          },
+          {
+            "date": "2026-09-12",
+            "pic": "Nuha",
+            "role": "Story PWT",
+            "obstacle": "Cara mengedit foto/video biar lebih menarik dan estetik",
+            "areaToImprove": "Bikin story lebih estetik, belajar edit, cari referensi lebih banyak"
+          },
+          {
+            "date": "2026-09-13",
+            "pic": "Nuha",
+            "role": "Story PWT",
+            "obstacle": "Masih belajar dan cari ide/referensi buat story",
+            "areaToImprove": "Bikin story lebih estetik, belajat edit, story yg menarik customer"
+          }
+        ]
       },
-      {
-        "branch": "Lunar Eyewear Tegal (Second Brand)",
-        "pic": "Amanda",
-        "date": "2026-09-12",
-        "title": "libur",
-        "pillar": "Testimoni / Review",
-        "viewers": 128980,
-        "likes": 10000,
-        "reelsLink": "libur"
-      },
-      {
-        "branch": "Lunar Eyewear Tegal (Second Brand)",
-        "pic": "Amanda",
-        "date": "2026-06-24",
-        "title": "gw yg baru sadar kalo ternyata liat cahaya kaya gini ga normal",
-        "pillar": "Hiburan / Tren Viral",
-        "viewers": 70891,
-        "likes": 8086,
-        "reelsLink": "https://www.instagram.com/reel/DZ9uF1Rzv-s/?igsh=MWI5aDN4ejZvb3Jueg=="
-      },
-      {
-        "branch": "Cilacap",
-        "pic": "arum",
-        "date": "2026-08-23",
-        "title": "top 1 cilacap place i can' stop thinking about",
-        "pillar": "Promosi / Soft Sell",
-        "viewers": 67600,
-        "likes": 3368,
-        "reelsLink": "https://www.instagram.com/reel/DcYOSMhzyZB/?igsi=Mzh6NmVqMzlleXRq"
-      },
-      {
-        "branch": "Lunar Eyewear Tegal (Second Brand)",
-        "pic": "Amanda",
-        "date": "2026-07-18",
-        "title": "makanan apa yang kalo dimakan langsung pengen joget",
-        "pillar": "Social Experiment",
-        "viewers": 64111,
-        "likes": 8521,
-        "reelsLink": "https://www.instagram.com/reel/Da7Z2g2yu6_/?igsh=dWlzaWQxcXVrZDB6"
-      },
-      {
-        "branch": "Lunar Eyewear Tegal (Second Brand)",
-        "pic": "Amanda",
-        "date": "2026-09-10",
-        "title": "pov:ternyata cuma lo",
-        "pillar": "Promosi / Soft Sell",
-        "viewers": 62469,
-        "likes": 5860,
-        "reelsLink": "https://www.instagram.com/reel/DdGiT0OzQ_7/?stkn=MW8xbThsMXN6ODh2bg=="
-      },
-      {
-        "branch": "Lunar Eyewear Tegal (Second Brand)",
-        "pic": "Amanda",
-        "date": "2026-07-03",
-        "title": "🗣️coba dong kacamatanya dilepas ",
-        "pillar": "Hiburan / Tren Viral",
-        "viewers": 53631,
-        "likes": 6400,
-        "reelsLink": "https://www.instagram.com/reel/DaU4owoztwI/?igsh=aTl0OHJ5N2N3d2Rz"
-      },
-      {
-        "branch": "Lunar Eyewear Tegal (Second Brand)",
-        "pic": "Amanda",
-        "date": "2026-08-21",
-        "title": "at least gw ga min",
-        "pillar": "Hiburan / Tren Viral",
-        "viewers": 53444,
-        "likes": 3017,
-        "reelsLink": "https://www.instagram.com/reel/DcTCc_3Tbl1/?igsi=OGxvcTFpNjJheDc4"
+      "nextTuesday": {
+        "periodKey": "2026-09-15_to_2026-09-21",
+        "startDate": "2026-09-15",
+        "endDate": "2026-09-21",
+        "meetingDateTitle": "Selasa, 22 September 2026 (Periode 15–21 Sep)",
+        "meetingStatus": "Pemantauan Berjalan (Live Monitor H-7)",
+        "totalReelsUploaded": 0,
+        "totalStoriesRecorded": 0,
+        "totalDmInquiries": 0,
+        "topViralReels": [],
+        "allWeeklyReels": [],
+        "frequentStoryInquiries": [],
+        "obstacleLogs": []
       }
-    ],
-    "frequentStoryInquiries": [
-      {
-        "topic": "Price list lensa",
-        "count": 8
-      },
-      {
-        "topic": "Frame yg di try on",
-        "count": 7
-      },
-      {
-        "topic": "price list lensa",
-        "count": 4
-      },
-      {
-        "topic": "softlens",
-        "count": 4
-      },
-      {
-        "topic": "Frame terbaru",
-        "count": 3
-      },
-      {
-        "topic": "Frame plastik",
-        "count": 3
-      },
-      {
-        "topic": "Pricelist lensa",
-        "count": 3
-      },
-      {
-        "topic": "Softlens",
-        "count": 3
-      }
-    ],
-    "obstacleLogs": [
-      {
-        "date": "2026-06-30",
-        "pic": "Asya",
-        "role": "Rekap WNS",
-        "obstacle": "hari ini aman",
-        "areaToImprove": "-"
-      },
-      {
-        "date": "2026-06-11",
-        "pic": "Febi",
-        "role": "Rekap WNS",
-        "obstacle": "gform yang seharusnya di isi tgl 11 di isi tgl 12 karena mati listrik",
-        "areaToImprove": "-"
-      },
-      {
-        "date": "2026-08-25",
-        "pic": "arum",
-        "role": "Rekap CLP",
-        "obstacle": "belum ada kecuali frame sosek",
-        "areaToImprove": "-"
-      },
-      {
-        "date": "2026-08-24",
-        "pic": "arum",
-        "role": "Rekap CLP",
-        "obstacle": "belum dikirimin teh kotak / frame sosek",
-        "areaToImprove": "-"
-      },
-      {
-        "date": "2026-08-23",
-        "pic": "arum",
-        "role": "Rekap CLP",
-        "obstacle": "belum ada kecuali frame sosek",
-        "areaToImprove": "-"
-      },
-      {
-        "date": "2026-08-22",
-        "pic": "arum",
-        "role": "Rekap CLP",
-        "obstacle": "belum ada kcuali blum dikirim teh kotak/frame sosek",
-        "areaToImprove": "-"
-      },
-      {
-        "date": "2026-08-21",
-        "pic": "arum",
-        "role": "Rekap CLP",
-        "obstacle": "belum ada kcuali frame/hadiah buat sosek",
-        "areaToImprove": "-"
-      },
-      {
-        "date": "2026-08-20",
-        "pic": "arum",
-        "role": "Rekap CLP",
-        "obstacle": "belum ada kecuali kiriman barang frame",
-        "areaToImprove": "-"
-      },
-      {
-        "date": "2026-07-25",
-        "pic": "arum",
-        "role": "Rekap CLP",
-        "obstacle": "gaada",
-        "areaToImprove": "-"
-      },
-      {
-        "date": "2026-07-24",
-        "pic": "arum",
-        "role": "Rekap CLP",
-        "obstacle": "gaada",
-        "areaToImprove": "-"
-      },
-      {
-        "date": "2026-07-21",
-        "pic": "arum",
-        "role": "Rekap CLP",
-        "obstacle": "belum ada tiktok & battery",
-        "areaToImprove": "-"
-      },
-      {
-        "date": "2026-07-20",
-        "pic": "arum",
-        "role": "Rekap CLP",
-        "obstacle": "belum ada tiktok",
-        "areaToImprove": "-"
-      }
-    ]
+    },
+    "activePeriodKey": "lastTuesday"
   }
 }

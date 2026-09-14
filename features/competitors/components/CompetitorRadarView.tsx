@@ -149,7 +149,7 @@ const competitorsData: Competitor[] = [
   {
     id: "lunar-eyewear",
     name: "Lunar Eyewear Tegal",
-    handle: "@lunar.eyewear",
+    handle: "@lunareyewear.co",
     avatar: "LN",
     segment: "Sister Brand / Experimental Regional Outlet",
     priceRange: "Rp 150.000 – Rp 450.000",

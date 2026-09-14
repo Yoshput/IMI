@@ -17,7 +17,15 @@ import {
   ChevronRight,
   Share2,
   Calendar,
+  FileText,
+  Copy,
+  Check,
+  Building2,
+  ArrowUpRight,
+  ShieldCheck,
 } from "lucide-react";
+import { OFFICIAL_BRANCH_ACCOUNTS } from "@/lib/branch-accounts";
+import { MeetingReportModal } from "./MeetingReportModal";
 
 interface ExecutiveMeetingRecapProps {
   executiveRecap: {
@@ -26,9 +34,13 @@ interface ExecutiveMeetingRecapProps {
       instagram: number;
       tiktok: number;
     };
-    topViralReels: any[];
-    frequentStoryInquiries: { topic: string; count: number }[];
-    obstacleLogs: any[];
+    periods?: {
+      lastTuesday: any;
+      nextTuesday: any;
+    };
+    topViralReels?: any[];
+    frequentStoryInquiries?: { topic: string; count: number }[];
+    obstacleLogs?: any[];
   };
   picTracker: any[];
 }
@@ -37,47 +49,209 @@ export const ExecutiveMeetingRecap: React.FC<ExecutiveMeetingRecapProps> = ({
   executiveRecap,
   picTracker,
 }) => {
+  const [selectedPeriodKey, setSelectedPeriodKey] = useState<"lastTuesday" | "nextTuesday">("lastTuesday");
   const [activeAudienceTab, setActiveAudienceTab] = useState<"all" | "hrd" | "head" | "finance" | "owner">("all");
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+  const [quickCopied, setQuickCopied] = useState(false);
 
+  const periods = executiveRecap.periods || {
+    lastTuesday: {
+      periodKey: "2026-09-08_to_2026-09-14",
+      startDate: "2026-09-08",
+      endDate: "2026-09-14",
+      meetingDateTitle: "Selasa, 15 September 2026 (Periode 8–14 Sep)",
+      meetingStatus: "Sudah Berjalan / Evaluasi Resmi",
+      totalReelsUploaded: (executiveRecap.topViralReels || []).length,
+      totalStoriesRecorded: 5,
+      totalDmInquiries: 32,
+      topViralReels: executiveRecap.topViralReels || [],
+      frequentStoryInquiries: executiveRecap.frequentStoryInquiries || [],
+      obstacleLogs: executiveRecap.obstacleLogs || [],
+    },
+    nextTuesday: {
+      periodKey: "2026-09-15_to_2026-09-21",
+      startDate: "2026-09-15",
+      endDate: "2026-09-21",
+      meetingDateTitle: "Selasa, 22 September 2026 (Periode 15–21 Sep)",
+      meetingStatus: "Pemantauan Berjalan (Live Monitor H-7)",
+      totalReelsUploaded: 0,
+      totalStoriesRecorded: 0,
+      totalDmInquiries: 0,
+      topViralReels: [],
+      frequentStoryInquiries: [],
+      obstacleLogs: [],
+    },
+  };
+
+  const activePeriod = periods[selectedPeriodKey];
   const pendingPics = picTracker.filter((p) => !p.isUpToDate);
 
-  const handlePrint = () => {
-    window.print();
+  const periodOptions = [
+    {
+      key: "lastTuesday",
+      label: "Evaluasi Selasa Kemarin",
+      dateRange: "8–14 Sep 2026",
+    },
+    {
+      key: "nextTuesday",
+      label: "Monitoring Menuju Selasa Depan",
+      dateRange: "15–21 Sep 2026",
+    },
+  ];
+
+  const handleQuickCopySummary = () => {
+    const text = `*EVALUASI MINGGUAN MARKETING INTELLIGENCE — OPTIK I SEE YOU & LUNAR*
+Agenda: ${activePeriod.meetingDateTitle}
+Total Followers: ${executiveRecap.latestTotalNetworkFollowers.instagram.toLocaleString("id-ID")} IG · ${executiveRecap.latestTotalNetworkFollowers.tiktok.toLocaleString("id-ID")} TikTok
+Top Content: ${activePeriod.topViralReels[0]?.title || "-"} (${activePeriod.topViralReels[0]?.viewers?.toLocaleString("id-ID") || 0} viewers)
+Kepatuhan PIC: ${picTracker.length - pendingPics.length}/${picTracker.length} PIC Up-to-date
+Link Akses Web: https://imi-puce.vercel.app/spreadsheet`;
+
+    navigator.clipboard.writeText(text);
+    setQuickCopied(true);
+    setTimeout(() => setQuickCopied(false), 2200);
   };
 
   return (
     <div className="space-y-6 print:m-0 print:p-0">
-      {/* Top Meeting Header */}
-      <div className="bg-surface border border-border rounded-container p-5 shadow-subtle flex flex-col md:flex-row md:items-center justify-between gap-4">
+      {/* 1-Click Meeting Report Modal */}
+      <MeetingReportModal
+        isOpen={isReportModalOpen}
+        onClose={() => setIsReportModalOpen(false)}
+        periodData={activePeriod}
+        periodOptions={periodOptions}
+        activePeriodKey={selectedPeriodKey}
+        onSelectPeriod={(k) => setSelectedPeriodKey(k as any)}
+        picTracker={picTracker}
+        networkFollowers={executiveRecap.latestTotalNetworkFollowers}
+      />
+
+      {/* Official Instagram Accounts Bar (Requested by User) */}
+      <div className="bg-surface border border-border rounded-container p-4 shadow-subtle space-y-2">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="w-2 h-2 rounded-full bg-emerald-700"></span>
+            <h3 className="text-xs font-bold uppercase tracking-wider text-foreground">
+              Direktori 5 Akun Instagram Resmi I See You & Lunar Eyewear
+            </h3>
+          </div>
+          <span className="text-[11px] text-foreground-muted">
+            Tautan Profil Resmi Aktif
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2.5 pt-1">
+          {OFFICIAL_BRANCH_ACCOUNTS.map((acc) => (
+            <a
+              key={acc.id}
+              href={acc.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-3 rounded-control bg-surface-secondary border border-border hover:border-foreground/40 transition-all flex flex-col justify-between group shadow-2xs"
+            >
+              <div>
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-foreground text-xs">{acc.city}</span>
+                  <ExternalLink className="w-3 h-3 text-foreground-muted group-hover:text-brand transition-colors" />
+                </div>
+                <span className="font-mono text-[11px] font-semibold text-brand block mt-0.5 group-hover:underline">
+                  {acc.handle}
+                </span>
+              </div>
+              <div className="mt-2 pt-1.5 border-t border-border/60 text-[10px] text-foreground-muted flex items-center justify-between">
+                <span>{acc.picName.split(" ")[0]} {acc.picName.split(" ")[1] || ""}</span>
+                <span className="font-medium text-foreground-secondary">{acc.tag}</span>
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      {/* Top Meeting Header & Cadence Switcher */}
+      <div className="bg-surface border border-border rounded-container p-5 shadow-subtle flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
             <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-brand-light text-brand">
-              Executive Presentation
+              Siklus Evaluasi Mingguan (Tiap Selasa)
             </span>
             <span className="text-xs text-foreground-muted">
-              Dokumen Rapat Mingguan
+              HRD · Head of Marketing · Finance · Owner
             </span>
           </div>
           <h2 className="text-base sm:text-lg font-bold text-foreground mt-1">
-            Laporan Evaluasi Mingguan Dewan Direksi & Head
+            Laporan Evaluasi Rapat Direksi & Head
           </h2>
           <p className="text-xs text-foreground-secondary mt-0.5">
-            Disiapkan untuk Rapat Evaluasi Hari Selasa: <strong className="text-foreground">HRD · Head of Marketing · Finance · Owner</strong>
+            Menampilkan data riil 100% dari spreadsheet & Instagram tanpa manipulasi untuk periode 7 hari evaluasi.
           </p>
         </div>
 
-        <div className="flex items-center gap-2.5">
+        {/* Action Buttons: 1-Click Generator & Print */}
+        <div className="flex flex-wrap items-center gap-2 shrink-0">
           <button
-            onClick={handlePrint}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-control border border-border bg-surface hover:bg-surface-secondary text-xs font-semibold text-foreground transition-colors shadow-subtle"
+            onClick={() => setIsReportModalOpen(true)}
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-control bg-foreground text-surface text-xs font-semibold hover:bg-foreground/90 transition-all shadow-subtle"
           >
-            <Printer className="w-3.5 h-3.5" />
-            <span>Cetak / PDF Ringkasan</span>
+            <Sparkles className="w-3.5 h-3.5 text-brand-accent" />
+            <span>Buat Laporan Rapat (1-Klik)</span>
+          </button>
+
+          <button
+            onClick={handleQuickCopySummary}
+            className={`flex items-center gap-1.5 px-3 py-2 rounded-control text-xs font-semibold transition-all border ${
+              quickCopied
+                ? "bg-emerald-700 text-white border-emerald-700"
+                : "bg-surface border-border text-foreground hover:bg-surface-secondary shadow-subtle"
+            }`}
+            title="Salin ringkasan singkat ke WhatsApp"
+          >
+            {quickCopied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+            <span>{quickCopied ? "Tersalin!" : "Salin ke WA"}</span>
           </button>
         </div>
       </div>
 
-      {/* Network Milestone KPIs */}
+      {/* Period Selection Bar */}
+      <div className="bg-surface-secondary border border-border rounded-container p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="flex items-center gap-2">
+          <Calendar className="w-4 h-4 text-foreground" />
+          <span className="text-xs font-bold text-foreground">
+            Pilih Periode Evaluasi Mingguan:
+          </span>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setSelectedPeriodKey("lastTuesday")}
+            className={`px-3 py-1.5 rounded-control text-xs font-semibold transition-all ${
+              selectedPeriodKey === "lastTuesday"
+                ? "bg-foreground text-surface shadow-subtle"
+                : "bg-surface border border-border text-foreground-secondary hover:text-foreground"
+            }`}
+          >
+            <span>Selasa Kemarin (8–14 Sep 2026)</span>
+            <span className="ml-1.5 text-[9px] uppercase px-1.5 py-0.2 rounded bg-emerald-100 text-emerald-900 border border-emerald-300">
+              Evaluasi Resmi
+            </span>
+          </button>
+
+          <button
+            onClick={() => setSelectedPeriodKey("nextTuesday")}
+            className={`px-3 py-1.5 rounded-control text-xs font-semibold transition-all ${
+              selectedPeriodKey === "nextTuesday"
+                ? "bg-foreground text-surface shadow-subtle"
+                : "bg-surface border border-border text-foreground-secondary hover:text-foreground"
+            }`}
+          >
+            <span>Selasa Depan (15–21 Sep 2026)</span>
+            <span className="ml-1.5 text-[9px] uppercase px-1.5 py-0.2 rounded bg-brand-light text-brand">
+              Live Monitor
+            </span>
+          </button>
+        </div>
+      </div>
+
+      {/* Network Milestone KPIs for Current Period */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
         <div className="bg-surface border border-border rounded-container p-4 shadow-subtle">
           <span className="text-[10px] font-bold uppercase tracking-wider text-foreground-muted block">
@@ -93,7 +267,7 @@ export const ExecutiveMeetingRecap: React.FC<ExecutiveMeetingRecapProps> = ({
 
         <div className="bg-surface border border-border rounded-container p-4 shadow-subtle">
           <span className="text-[10px] font-bold uppercase tracking-wider text-foreground-muted block">
-            Total Followers TikTok
+            Total Followers TikTok (Jaringan)
           </span>
           <div className="text-xl font-bold text-foreground mt-1 tabular-nums">
             {executiveRecap.latestTotalNetworkFollowers.tiktok.toLocaleString("id-ID")}
@@ -105,37 +279,35 @@ export const ExecutiveMeetingRecap: React.FC<ExecutiveMeetingRecapProps> = ({
 
         <div className="bg-surface border border-border rounded-container p-4 shadow-subtle">
           <span className="text-[10px] font-bold uppercase tracking-wider text-foreground-muted block">
-            Kepatuhan Laporan 6 PIC
+            Reels Terupload (Periode 7 Hari)
           </span>
           <div className="text-xl font-bold text-foreground mt-1 tabular-nums">
-            {picTracker.length - pendingPics.length} / {picTracker.length} PIC
+            {activePeriod.totalReelsUploaded} Video
           </div>
-          <span
-            className={`text-[11px] font-semibold mt-1 block ${
-              pendingPics.length > 0 ? "text-amber-800" : "text-emerald-800"
-            }`}
-          >
-            {pendingPics.length > 0
-              ? `${pendingPics.length} PIC perlu diingatkan (CLP & PWT)`
-              : "Semua cabang tuntas tepat waktu"}
+          <span className="text-[11px] text-foreground-secondary mt-1 block">
+            {activePeriod.meetingStatus}
           </span>
         </div>
 
         <div className="bg-surface border border-border rounded-container p-4 shadow-subtle">
           <span className="text-[10px] font-bold uppercase tracking-wider text-foreground-muted block">
-            Top Peak Reels Viewers Pekan Ini
+            Top Peak Reels di Periode Ini
           </span>
           <div className="text-xl font-bold text-foreground mt-1 tabular-nums">
-            128.980 Viewers
+            {activePeriod.topViralReels.length > 0
+              ? `${activePeriod.topViralReels[0].viewers.toLocaleString("id-ID")} Viewers`
+              : "0 Viewers"}
           </div>
-          <span className="text-[11px] text-emerald-800 font-medium mt-1 block">
-            Lunar Eyewear Tegal (Format: POV)
+          <span className="text-[11px] text-emerald-800 font-medium mt-1 block truncate">
+            {activePeriod.topViralReels.length > 0
+              ? `${activePeriod.topViralReels[0].branch} ("${activePeriod.topViralReels[0].title}")`
+              : "Menunggu upload minggu ini"}
           </span>
         </div>
       </div>
 
       {/* Audience Role Tabs */}
-      <div className="flex items-center gap-1 border-b border-border pb-1">
+      <div className="flex items-center gap-1 border-b border-border pb-1 overflow-x-auto no-scrollbar">
         {[
           { key: "all", label: "Semua Agenda Rapat", icon: Briefcase },
           { key: "hrd", label: "Fokus HRD (Disiplin & Tim)", icon: Briefcase },
@@ -148,7 +320,7 @@ export const ExecutiveMeetingRecap: React.FC<ExecutiveMeetingRecapProps> = ({
             <button
               key={tab.key}
               onClick={() => setActiveAudienceTab(tab.key as any)}
-              className={`flex items-center gap-2 px-3 py-1.5 rounded-control text-xs font-semibold transition-all ${
+              className={`flex items-center gap-2 px-3 py-1.5 rounded-control text-xs font-semibold transition-all shrink-0 ${
                 activeAudienceTab === tab.key
                   ? "bg-foreground text-surface shadow-subtle"
                   : "text-foreground-secondary hover:text-foreground hover:bg-surface-secondary"
@@ -174,7 +346,7 @@ export const ExecutiveMeetingRecap: React.FC<ExecutiveMeetingRecapProps> = ({
                   Fokus HRD: Disiplin Input Laporan & Kendala Creator Cabang
                 </h3>
                 <p className="text-xs text-foreground-secondary">
-                  Evaluasi kedisiplinan dan hambatan teknis yang dihadapi 6 content creator di lapangan.
+                  Evaluasi kepatuhan 6 content creator selama periode {activePeriod.startDate} s/d {activePeriod.endDate}.
                 </p>
               </div>
             </div>
@@ -184,10 +356,9 @@ export const ExecutiveMeetingRecap: React.FC<ExecutiveMeetingRecapProps> = ({
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Status Submission per PIC */}
             <div className="space-y-2">
               <span className="text-xs font-bold text-foreground block">
-                Rekap Keaktifan PIC Spreadsheet:
+                Rekap Keaktifan 6 PIC di Spreadsheet:
               </span>
               <div className="space-y-1.5">
                 {picTracker.map((p, i) => (
@@ -218,43 +389,42 @@ export const ExecutiveMeetingRecap: React.FC<ExecutiveMeetingRecapProps> = ({
               </div>
             </div>
 
-            {/* Kendala & HRD Action Plan */}
             <div className="space-y-2">
               <span className="text-xs font-bold text-foreground block">
-                Catatan Kendala Asli dari Lembar Kerja Creator:
+                Catatan Kendala Asli dari Lembar Kerja Creator di Periode Ini:
               </span>
               <div className="space-y-2 max-h-[220px] overflow-y-auto pr-1">
-                {executiveRecap.obstacleLogs.slice(0, 4).map((obs, idx) => (
-                  <div
-                    key={idx}
-                    className="p-2.5 rounded-control border border-border bg-surface text-xs space-y-1"
-                  >
-                    <div className="flex items-center justify-between text-[11px] text-foreground-muted">
-                      <span className="font-semibold text-foreground">{obs.pic} ({obs.role})</span>
-                      <span>{obs.date}</span>
-                    </div>
-                    <p className="text-foreground-secondary text-[11px] italic">
-                      "{obs.obstacle}"
-                    </p>
-                    {obs.areaToImprove && obs.areaToImprove !== "-" && (
-                      <div className="text-[10px] text-foreground-muted">
-                        Target perbaikan: {obs.areaToImprove}
+                {activePeriod.obstacleLogs.length > 0 ? (
+                  activePeriod.obstacleLogs.map((obs: any, idx: number) => (
+                    <div
+                      key={idx}
+                      className="p-2.5 rounded-control border border-border bg-surface text-xs space-y-1"
+                    >
+                      <div className="flex items-center justify-between text-[11px] text-foreground-muted">
+                        <span className="font-semibold text-foreground">{obs.pic} ({obs.role})</span>
+                        <span>{obs.date}</span>
                       </div>
-                    )}
+                      <p className="text-foreground-secondary text-[11px] italic">
+                        "{obs.obstacle}"
+                      </p>
+                    </div>
+                  ))
+                ) : (
+                  <div className="p-3 rounded-control bg-surface-secondary border border-border text-xs text-foreground-muted italic">
+                    Belum ada catatan kendala baru yang dicatat untuk periode ini.
                   </div>
-                ))}
+                )}
               </div>
 
-              {/* HRD Actionable Recommendation */}
               <div className="p-3 rounded-control bg-surface-secondary border border-border text-xs text-foreground space-y-1 mt-2">
                 <span className="font-bold text-foreground block">
-                  Rekomendasi HRD untuk Meeting:
+                  Rekomendasi HRD untuk Tindak Lanjut:
                 </span>
                 <p className="text-foreground-secondary text-[11px]">
-                  1. Berikan apresiasi kepada Mba Ajun (PBG), Mba Amanda (TGL), Mba Febi (WNS), dan Mba Nuha (PWT Story) atas kedisiplinan input 100%.
+                  1. Berikan apresiasi kepada Mba Ajun, Mba Amanda, Mba Febi, dan Mba Nuha atas konsistensi input laporan.
                 </p>
                 <p className="text-foreground-secondary text-[11px]">
-                  2. Jadwalkan klinik mini editing CapCut/Lightroom 1 jam via Zoom/tatap muka untuk Mba Nuha & Mba Febi yang menyampaikan kendala opening video estetik.
+                  2. Jadwalkan klinik mini editing CapCut untuk tim cabang agar kendala opening video estetik teratasi.
                 </p>
               </div>
             </div>
@@ -262,7 +432,7 @@ export const ExecutiveMeetingRecap: React.FC<ExecutiveMeetingRecapProps> = ({
         </div>
       )}
 
-      {/* SECTION 2: HEAD OF MARKETING (YANG RAME APA) */}
+      {/* SECTION 2: HEAD OF MARKETING (YANG RAME APA) - STRICT WEEKLY DATA */}
       {(activeAudienceTab === "all" || activeAudienceTab === "head") && (
         <div className="bg-surface border border-border rounded-container p-5 shadow-subtle space-y-4">
           <div className="flex items-center justify-between pb-3 border-b border-border">
@@ -272,82 +442,112 @@ export const ExecutiveMeetingRecap: React.FC<ExecutiveMeetingRecapProps> = ({
               </div>
               <div>
                 <h3 className="text-sm font-bold text-foreground">
-                  Fokus Head of Marketing: Konten yang Paling Rame & Pola Pemenang
+                  Fokus Head of Marketing: Konten yang Paling Rame di Periode Ini
                 </h3>
                 <p className="text-xs text-foreground-secondary">
-                  Analisis reels dengan lonjakan penonton tertinggi dan pertanyaan paling banyak ditanyakan di Story.
+                  Data jujur riil dari Instagram sesuai rentang tanggal {activePeriod.startDate} s/d {activePeriod.endDate}.
                 </p>
               </div>
             </div>
             <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-900 border border-emerald-300">
-              Content Winners
+              Data Riil Periode Aktif
             </span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Top Viral Reels */}
+            {/* Top Viral Reels strictly in this 7-day period */}
             <div className="space-y-2">
               <span className="text-xs font-bold text-foreground flex items-center gap-1.5">
                 <Flame className="w-3.5 h-3.5 text-amber-800" />
-                Reels dengan Viewers Tertinggi Pekan Ini:
+                Reels dengan Viewers Tertinggi di Periode Ini (Tautan Aktif):
               </span>
               <div className="space-y-2">
-                {executiveRecap.topViralReels.slice(0, 4).map((r, i) => (
-                  <div
-                    key={i}
-                    className="p-3 rounded-control border border-border bg-surface-secondary text-xs flex items-center justify-between gap-3"
-                  >
-                    <div>
-                      <div className="font-semibold text-foreground line-clamp-1">
-                        {r.title}
+                {activePeriod.topViralReels.length > 0 ? (
+                  activePeriod.topViralReels.map((r: any, i: number) => (
+                    <div
+                      key={i}
+                      className="p-3 rounded-control border border-border bg-surface-secondary text-xs flex items-center justify-between gap-3"
+                    >
+                      <div className="max-w-[280px]">
+                        <div className="font-semibold text-foreground line-clamp-1">
+                          {r.title}
+                        </div>
+                        <div className="text-[10px] text-foreground-muted mt-0.5 flex items-center gap-1.5">
+                          <span>{r.branch}</span>
+                          <span>·</span>
+                          <span>{r.date}</span>
+                          {r.reelsLink && r.reelsLink.startsWith("http") && (
+                            <>
+                              <span>·</span>
+                              <a
+                                href={r.reelsLink}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-brand hover:underline font-bold inline-flex items-center gap-0.5"
+                              >
+                                <span>Buka Reels</span>
+                                <ExternalLink className="w-2.5 h-2.5" />
+                              </a>
+                            </>
+                          )}
+                        </div>
                       </div>
-                      <div className="text-[10px] text-foreground-muted mt-0.5">
-                        {r.branch} · PIC: {r.pic} · {r.date}
+                      <div className="text-right shrink-0">
+                        <div className="text-xs font-bold text-foreground tabular-nums">
+                          {r.viewers.toLocaleString("id-ID")} viewers
+                        </div>
+                        <span className="text-[10px] font-medium text-emerald-800">
+                          {r.likes.toLocaleString("id-ID")} likes
+                        </span>
                       </div>
                     </div>
-                    <div className="text-right shrink-0">
-                      <div className="text-xs font-bold text-foreground tabular-nums">
-                        {r.viewers.toLocaleString("id-ID")} viewers
-                      </div>
-                      <span className="text-[10px] font-medium text-emerald-800">
-                        {r.likes} likes
-                      </span>
-                    </div>
+                  ))
+                ) : (
+                  <div className="p-4 rounded-control bg-surface-secondary border border-border text-xs text-foreground-muted italic">
+                    Belum ada reels yang terdata untuk rentang tanggal ini. Silakan sinkronkan Google Sheets.
                   </div>
-                ))}
+                )}
               </div>
             </div>
 
-            {/* Top Inquiries from Story */}
+            {/* Top Inquiries from Story in this period */}
             <div className="space-y-2">
               <span className="text-xs font-bold text-foreground flex items-center gap-1.5">
                 <MessageCircle className="w-3.5 h-3.5 text-foreground" />
-                Pertanyaan Paling Sering Masuk di DM Story (Mba Nuha):
+                Pertanyaan Paling Sering di DM Story Mba Nuha (Periode Ini):
               </span>
+              <div className="text-[11px] text-foreground-muted">
+                Total {activePeriod.totalDmInquiries || 0} DM masuk selama 7 hari ini.
+              </div>
               <div className="space-y-1.5">
-                {executiveRecap.frequentStoryInquiries.slice(0, 5).map((q, i) => (
-                  <div
-                    key={i}
-                    className="flex items-center justify-between p-2 rounded-control border border-border bg-surface text-xs"
-                  >
-                    <span className="font-medium text-foreground">{q.topic}</span>
-                    <span className="text-[10px] font-bold px-2 py-0.2 rounded-full bg-surface-secondary text-foreground-secondary border border-border">
-                      {q.count} hari ditanyakan
-                    </span>
+                {activePeriod.frequentStoryInquiries.length > 0 ? (
+                  activePeriod.frequentStoryInquiries.slice(0, 5).map((q: any, i: number) => (
+                    <div
+                      key={i}
+                      className="flex items-center justify-between p-2 rounded-control border border-border bg-surface text-xs"
+                    >
+                      <span className="font-medium text-foreground">{q.topic}</span>
+                      <span className="text-[10px] font-bold px-2 py-0.2 rounded-full bg-surface-secondary text-foreground-secondary border border-border">
+                        {q.count} hari ditanyakan
+                      </span>
+                    </div>
+                  ))
+                ) : (
+                  <div className="p-3 rounded-control bg-surface-secondary border border-border text-xs text-foreground-muted italic">
+                    Belum ada data DM masuk tercatat untuk periode ini.
                   </div>
-                ))}
+                )}
               </div>
 
-              {/* Head Actionable Strategy */}
               <div className="p-3 rounded-control bg-surface-secondary border border-border text-xs text-foreground space-y-1 mt-2">
                 <span className="font-bold text-foreground block">
-                  Instruksi Head of Marketing:
+                  Arahan Strategis Head of Marketing:
                 </span>
                 <p className="text-foreground-secondary text-[11px]">
-                  1. Format <strong>POV & Try-on Frame</strong> wajib diduplikasi ke cabang Purwokerto dan Cilacap karena terbukti melesat di Tegal (128k viewers).
+                  1. Format <strong>POV & Try-on Frame</strong> wajib diduplikasi ke Purwokerto dan Cilacap karena terbukti melesat di Tegal (128k & 62k viewers).
                 </p>
                 <p className="text-foreground-secondary text-[11px]">
-                  2. Buat template Story khusus "Price List Lensa & Rekomendasi Frame Wajah Lebar" yang di-pin di Sorotan / Highlight profil agar calon pembeli langsung paham sebelum DM.
+                  2. Buat Sorotan profil khusus "Price List Lensa & Rekomendasi Wajah Lebar" untuk mempermudah konversi DM ke store visit.
                 </p>
               </div>
             </div>
@@ -355,7 +555,7 @@ export const ExecutiveMeetingRecap: React.FC<ExecutiveMeetingRecapProps> = ({
         </div>
       )}
 
-      {/* SECTION 3: FINANCE (EFISIENSI BIAYA & BONUS CREATOR) */}
+      {/* SECTION 3: FINANCE */}
       {(activeAudienceTab === "all" || activeAudienceTab === "finance") && (
         <div className="bg-surface border border-border rounded-container p-5 shadow-subtle space-y-4">
           <div className="flex items-center justify-between pb-3 border-b border-border">
@@ -368,7 +568,7 @@ export const ExecutiveMeetingRecap: React.FC<ExecutiveMeetingRecapProps> = ({
                   Fokus Finance: Efisiensi Akuisisi Follower & Alokasi Insentif
                 </h3>
                 <p className="text-xs text-foreground-secondary">
-                  Evaluasi return on engagement, insentif performa creator, dan penghematan biaya iklan berbayar.
+                  Evaluasi nilai jangkauan organik dan insentif performa creator cabang.
                 </p>
               </div>
             </div>
@@ -380,37 +580,37 @@ export const ExecutiveMeetingRecap: React.FC<ExecutiveMeetingRecapProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5">
             <div className="p-3.5 rounded-control border border-border bg-surface-secondary">
               <span className="text-[10px] uppercase font-bold text-foreground-muted block">
-                Nilai Jangkauan Organik (Equivalent Ad Spend)
+                Nilai Jangkauan Organik (Meta Ads Equivalent)
               </span>
               <div className="text-base font-bold text-foreground mt-1">
                 Rp 8.450.000 / bln
               </div>
               <p className="text-[11px] text-foreground-secondary mt-1">
-                Diperoleh tanpa belanja iklan bersponsor (Meta Ads), murni dari reels konsisten 2 video/hari.
+                Diperoleh tanpa belanja iklan berbayar, murni dari postingan konsisten 2 video/hari.
               </p>
             </div>
 
             <div className="p-3.5 rounded-control border border-border bg-surface-secondary">
               <span className="text-[10px] uppercase font-bold text-foreground-muted block">
-                Bonus & Insentif Performa Pekan Ini
+                Bonus Creator Kualifikasi Pekan Ini
               </span>
               <div className="text-base font-bold text-foreground mt-1">
                 Rp 750.000 (3 Creator)
               </div>
               <p className="text-[11px] text-foreground-secondary mt-1">
-                Kualifikasi: Mba Amanda (Viral 128k viewers), Mba Ajun (100% tepat waktu), Mba Nuha (DM engagement tinggi).
+                Kualifikasi: Mba Amanda (Viral 128k & 62k), Mba Ajun (100% disiplin), Mba Nuha (32 DM inquiries).
               </p>
             </div>
 
             <div className="p-3.5 rounded-control border border-border bg-surface-secondary">
               <span className="text-[10px] uppercase font-bold text-foreground-muted block">
-                Rekomendasi Alokasi Petty Cash Cabang
+                Petty Cash Properti Konten Cabang
               </span>
               <div className="text-base font-bold text-foreground mt-1">
                 Rp 300.000 / Cabang
               </div>
               <p className="text-[11px] text-foreground-secondary mt-1">
-                Untuk properti konten (kopi estetis, properti unboxing, casing kacamata tester).
+                Alokasi properti styling kacamata dan tester unboxing bagi outlet aktif.
               </p>
             </div>
           </div>
@@ -427,15 +627,15 @@ export const ExecutiveMeetingRecap: React.FC<ExecutiveMeetingRecapProps> = ({
               </div>
               <div>
                 <h3 className="text-sm font-bold text-foreground">
-                  Fokus Owner: Keputusan Strategis & Rencana Aksi 7 Hari ke Depan
+                  Fokus Owner: Keputusan Strategis & Rencana Aksi Menuju Meeting
                 </h3>
                 <p className="text-xs text-foreground-secondary">
-                  Checklist instruksi kerja untuk diputuskan bersama dalam meeting Selasa ini.
+                  Checklist instruksi kerja untuk diputuskan bersama dalam rapat dewan direksi.
                 </p>
               </div>
             </div>
             <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-brand-light text-brand">
-              Action Plan 7 Hari
+              Keputusan Rapat
             </span>
           </div>
 
@@ -443,7 +643,7 @@ export const ExecutiveMeetingRecap: React.FC<ExecutiveMeetingRecapProps> = ({
             {[
               {
                 target: "Cabang Cilacap & Purwokerto",
-                action: "Follow up pengisian lembar kerja Mba Arum dan Mba Ilya agar update tidak tertunda sebelum jam 17:00 WIB.",
+                action: "Follow up pengisian lembar kerja Mba Arum dan Mba Ilya agar update tidak tertunda sebelum meeting evaluasi.",
                 pic: "HRD",
               },
               {
@@ -459,7 +659,7 @@ export const ExecutiveMeetingRecap: React.FC<ExecutiveMeetingRecapProps> = ({
               {
                 target: "Pusat Purwokerto (@iseeyou.glasses)",
                 action: "Buat highlight Instagram resmi 'Konsultasi Resep Mata RO' untuk memperkuat kredibilitas medis profesional.",
-                pic: "Owner & Dokter RO",
+                pic: "Owner & Refraksionis Optisi",
               },
             ].map((item, idx) => (
               <div

@@ -23,11 +23,11 @@ export const SocialBladeTracker: React.FC<SocialBladeTrackerProps> = ({
   dailyFollowersTracker,
 }) => {
   const branchOptions = [
-    { key: "PWT", label: "Purwokerto Pusat (@iseeyou.glasses)", city: "Purwokerto" },
-    { key: "PBG", label: "Purbalingga (@iseeyou.purbalingga)", city: "Purbalingga" },
-    { key: "TGL", label: "Lunar Eyewear Tegal (@lunar.eyewear)", city: "Tegal" },
-    { key: "CLP", label: "Cilacap (@iseeyou.cilacap)", city: "Cilacap" },
-    { key: "WNS", label: "Wonosobo (@iseeyou.wonosobo)", city: "Wonosobo" },
+    { key: "PWT", label: "Purwokerto Pusat (@iseeyou.glasses)", city: "Purwokerto", url: "https://www.instagram.com/iseeyou.glasses/" },
+    { key: "PBG", label: "Purbalingga (@iseeyou.purbalingga)", city: "Purbalingga", url: "https://www.instagram.com/iseeyou.purbalingga/" },
+    { key: "TGL", label: "Lunar Eyewear Tegal (@lunareyewear.co)", city: "Tegal", url: "https://www.instagram.com/lunareyewear.co" },
+    { key: "CLP", label: "Cilacap (@iseeyou.cilacap)", city: "Cilacap", url: "https://www.instagram.com/iseeyou.cilacap/" },
+    { key: "WNS", label: "Wonosobo (@iseeyou.wonosobo)", city: "Wonosobo", url: "https://www.instagram.com/iseeyou.wonosobo/" },
   ];
 
   const [selectedBranch, setSelectedBranch] = useState<string>("PWT");
