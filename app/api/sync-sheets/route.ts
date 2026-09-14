@@ -120,16 +120,58 @@ export async function POST() {
     const allBranchReels: Record<string, any[]> = {};
     const allFollowerDaily: Record<string, any[]> = {};
 
+    const resolveReelsTitle = (title1: any, title2: any) => {
+      const clean = (t: any) => String(t || "").trim();
+      const t1 = clean(title1);
+      const t2 = clean(title2);
+      const isInvalid = (t: string) =>
+        !t ||
+        t === "-" ||
+        t.toLowerCase() === "libur" ||
+        t.toLowerCase() === "tidak ada" ||
+        t.toLowerCase() === "belum ada";
+
+      if (isInvalid(t1) && !isInvalid(t2)) return t2;
+      if (!isInvalid(t1) && isInvalid(t2)) return t1;
+      if (!isInvalid(t1) && !isInvalid(t2)) return t1;
+      if (t1.toLowerCase() === "libur" || t2.toLowerCase() === "libur") return "(Libur / Off Duty)";
+      return t1 || t2 || "-";
+    };
+
     branchConfigs.forEach((cfg) => {
       const sheet = workbook.Sheets[cfg.sheetName];
       if (!sheet) return;
       const rawRows: any[] = XLSX.utils.sheet_to_json(sheet);
+
+      // Pre-pass: map known video titles to active Instagram links
+      const titleToLinkMap: Record<string, string> = {};
+      rawRows.forEach((row) => {
+        const link = String(row["Link Reels Instagram"] || "").trim();
+        if (link && link.startsWith("http")) {
+          const t1 = String(row["Judul Reels"] || "").trim().toLowerCase();
+          const t2 = String(row["Judul Reels 2"] || "").trim().toLowerCase();
+          if (t1 && t1 !== "libur" && t1 !== "-") titleToLinkMap[t1] = link;
+          if (t2 && t2 !== "libur" && t2 !== "-") titleToLinkMap[t2] = link;
+        }
+      });
 
       const parsedRows = rawRows
         .map((row, idx) => {
           const reportDate = parseExcelDate(row["Tanggal Laporan"] || row["Cap waktu"]);
           const igFollowers = normalizeFollowers(row["Jumlah Followers (Instagram)"], cfg.isKFollowers);
           const tiktokFollowers = normalizeFollowers(row["Jumlah Followers (Tik-Tok)"], cfg.isKFollowers);
+
+          const actualTitle = resolveReelsTitle(row["Judul Reels"], row["Judul Reels 2"]);
+          let actualLink = String(row["Link Reels Instagram"] || "").trim();
+          if (!actualLink.startsWith("http")) {
+            actualLink = titleToLinkMap[actualTitle.toLowerCase()] || "";
+          }
+
+          const cleanLink = (url: any) => {
+            const s = String(url || "").trim();
+            if (!s || s.toLowerCase() === "libur" || s === "-" || !s.startsWith("http")) return "";
+            return s;
+          };
 
           return {
             id: `${cfg.sheetName.toLowerCase()}-${idx}`,
@@ -140,19 +182,19 @@ export async function POST() {
             pic: row["Pengisi Laporan"] || cfg.picDefault,
             timestamp: parseExcelDate(row["Cap waktu"]),
             reportDate: reportDate,
-            reelsTitle: row["Judul Reels"] || row["Judul Reels 2"] || "-",
-            secondReelsTitle: row["Judul Reels 2"] && row["Judul Reels 2"] !== "-" ? row["Judul Reels 2"] : undefined,
+            reelsTitle: actualTitle,
+            secondReelsTitle: row["Judul Reels 2"] && row["Judul Reels 2"] !== "-" && row["Judul Reels 2"].toLowerCase() !== "libur" ? row["Judul Reels 2"] : undefined,
             contentPillar: row["Konten Pilar"] || "Umum",
-            reelsLink: row["Link Reels Instagram"] || "",
-            feedLink: row["Link Feed/Carousel Instagram"] || "",
-            threadsLink: row["  Link Instagram Threads   "] || row["Link Instagram Threads"] || "",
-            tiktokLink: row["Link Video Tik- Tok (mirorring)"] || "",
+            reelsLink: cleanLink(actualLink),
+            feedLink: cleanLink(row["Link Feed/Carousel Instagram"]),
+            threadsLink: cleanLink(row["  Link Instagram Threads   "] || row["Link Instagram Threads"]),
+            tiktokLink: cleanLink(row["Link Video Tik- Tok (mirorring)"]),
             igFollowers: igFollowers,
             tiktokFollowers: tiktokFollowers,
-            viewers: cleanNumber(row["Jumlah Viewers"]),
-            likes: cleanNumber(row["Jumlah Like"]),
+            viewers: cleanNumber(row["Jumlah Viewers"] || row["Jumlah Viewer (Reels Instagram)"]),
+            likes: cleanNumber(row["Jumlah Like"] || row["Jumlah Likes (Reels Instagram)"]),
             bonus: row["Bonus"] || "-",
-            obstacle: row["Kendala Content Creator"] || "-",
+            obstacle: (row["Kendala Content Creator"] || row["Kendala"] || "-").trim()
           };
         })
         .filter((r) => r.reportDate);
