@@ -1,0 +1,412 @@
+{
+  "Table Reels PWT": {
+    "totalRows": 7,
+    "headers": [
+      "JADWAL JUNI PURWOKERTO"
+    ],
+    "sampleRow": [
+      "Minggu",
+      "Senin",
+      "Selasa",
+      "Rabu",
+      "Kamis",
+      "Jumat",
+      "Sabtu"
+    ],
+    "lastRow": [
+      "28.    SOS EKS",
+      "29.    TREND",
+      "30.     EDUKASI"
+    ]
+  },
+  "Table Feed PWT": {
+    "totalRows": 27,
+    "headers": [
+      "Tanggal",
+      "Hari",
+      "Pilar Konten",
+      "Topik / Ide Konten",
+      "Detail Visual / Brief",
+      "Ide Caption (Singkat)"
+    ],
+    "sampleRow": [
+      46181,
+      "Senin",
+      "Foto Katalog",
+      "Professional & Clean Look",
+      "Foto model (pakaian office wear) memakai frame metal minimalis. + Teks Spesifikasi (Bahan: Stainless, Lebar Lensa: 50mm).",
+      "Awali minggu dengan look profesional. Frame seringan ini bikin Minyou nyaman kerja seharian! 👓✨"
+    ],
+    "lastRow": [
+      null,
+      null,
+      null,
+      null,
+      " "
+    ]
+  },
+  "Table Reels Cabang": {
+    "totalRows": 19,
+    "headers": [
+      "PURBALINGGA ( Laya  )"
+    ],
+    "sampleRow": [
+      "Senin",
+      "Selasa",
+      "Rabu",
+      "Kamis",
+      "Jumat",
+      "Sabtu",
+      "Minggu"
+    ],
+    "lastRow": [
+      "Adaptif / Kreatif / Trend",
+      "EDUKASI",
+      "Adaptif / Kreatif / Trend",
+      "Campaign",
+      "Adaptif / Kreatif / Trend",
+      "Sosial eksperiment",
+      "LIBUR"
+    ]
+  },
+  "Rekap Story PWT": {
+    "totalRows": 46,
+    "headers": [
+      "Cap waktu",
+      "Tanggal Laporan",
+      "Pengisi Laporan",
+      "Jumlah Story di Upload",
+      "Jumlah viewers terbanyak",
+      "Jumlah viewers paling sedikit",
+      "Jumlah DM masuk",
+      "Hal paling sering ditanyakan",
+      "Jumlah Komentar Reels Viral",
+      "Posting Saluran Instagram",
+      "Pemantauan CS dalam membalas DM",
+      "Apa pencapaian hari ini?",
+      "Apa yang perlu diperbaiki?",
+      "Kendala yang dihadapi"
+    ],
+    "sampleRow": [
+      46226.18033530093,
+      46226,
+      "Nuha",
+      14,
+      1.406,
+      905,
+      30,
+      "Frame oval",
+      5,
+      "Done, ucapan hari anak promo",
+      "Fast respon",
+      "Mengikuti event hari anak",
+      "Membuat video story lebih kreatif lagi",
+      "-"
+    ],
+    "lastRow": [
+      46278.125874108795,
+      46278,
+      "Nuha",
+      18,
+      1.355,
+      773,
+      2,
+      "Frame yg di try on",
+      8,
+      "Done",
+      "Fast respon ",
+      "Bikin review cust google maps",
+      "Bikin story lebih estetik, belajat edit, story yg menarik customer",
+      "Masih belajar dan cari ide/referensi buat story"
+    ]
+  },
+  "Rekap PWT": {
+    "totalRows": 212,
+    "headers": [
+      "Cap waktu",
+      "Tanggal Laporan",
+      "Pengisi Laporan",
+      "Column 18",
+      "Judul Reels",
+      "Konten Pilar",
+      "Link Reels Instagram",
+      "Link Feed/Carousel Instagram",
+      "Story Instagram",
+      "  Link Instagram Threads   ",
+      "Link Video Tik- Tok (mirorring)",
+      "Jumlah Followers (Instagram)",
+      "Jumlah Followers (Tik-Tok)",
+      "Kendala Content Creator",
+      "Tanggal Upload",
+      "Judul Reels 2",
+      "Jumlah Viewers",
+      "Jumlah Like",
+      "Bonus",
+      "Kolom 1"
+    ],
+    "sampleRow": [
+      46168.06086534722,
+      46168,
+      "Anggun",
+      null,
+      "Abc",
+      "Social Experiment",
+      "Abc",
+      "Abc",
+      "Sudah terupload semua",
+      "Abc",
+      "Abc",
+      "Abc",
+      "Abc",
+      "Abc"
+    ],
+    "lastRow": []
+  },
+  "Rekap PBG": {
+    "totalRows": 196,
+    "headers": [
+      "Cap waktu",
+      "Pengisi Laporan",
+      "Judul Reels",
+      "Konten Pilar",
+      "Link Reels Instagram",
+      "Link Feed/Carousel Instagram",
+      "Story Instagram",
+      "  Link Instagram Threads   ",
+      "Link Video Tik- Tok (mirorring)",
+      "Tanggal Laporan",
+      "Jumlah Followers (Instagram)",
+      "Jumlah Followers (Tik-Tok)",
+      "Kendala Content Creator",
+      "Tanggal Upload",
+      "Judul Reels 2",
+      "Jumlah Viewers",
+      "Jumlah Like",
+      "Bonus"
+    ],
+    "sampleRow": [
+      46174.16804484953,
+      "Laya",
+      "cara memperbaiki frame yang turun\"",
+      "Edukasi",
+      "https://www.instagram.com/reel/DZCmeSHCQn8/?igsh=dHN1OGN6YmhtNWQ4",
+      "https://www.instagram.com/reel/DZCmeSHCQn8/?igsh=dHN1OGN6YmhtNWQ4",
+      "Sudah terupload semua",
+      "https://www.threads.com/@iseeyou.purbalingga/post/DZCmnt2FCcY?xmt=AQG0yAWRVJXLZ-z32D1fnz_ozVrh9OSOpoaWLGn8R2oClwo3_oJvRmRJ9CSq-FAmjkFw8V7e&slof=1",
+      "https://www.threads.com/@iseeyou.purbalingga/post/DZCmnt2FCcY?xmt=AQG0yAWRVJXLZ-z32D1fnz_ozVrh9OSOpoaWLGn8R2oClwo3_oJvRmRJ9CSq-FAmjkFw8V7e&slof=1",
+      46174,
+      5871,
+      730,
+      "kendala hari ini salah liat jadwal dikarenakan store rame, jadi post tidak sesuai jadwal",
+      46174,
+      "cara memperbaiki frame yang turun\"",
+      1651,
+      25
+    ],
+    "lastRow": []
+  },
+  "Rekap TGL": {
+    "totalRows": 210,
+    "headers": [
+      "Cap waktu",
+      "Pengisi Laporan",
+      "Judul Reels",
+      "Konten Pilar",
+      "Link Reels Instagram",
+      "Link Feed/Carousel Instagram",
+      "Story Instagram",
+      "  Link Instagram Threads   ",
+      "Link Video Tik- Tok (mirorring)",
+      "Tanggal Laporan",
+      "Jumlah Followers (Instagram)",
+      "Jumlah Followers (Tik-Tok)",
+      "Kendala Content Creator",
+      "Tanggal Upload",
+      "Judul Reels 2",
+      "Jumlah Viewers",
+      "Jumlah Like",
+      "Bonus"
+    ],
+    "sampleRow": [
+      46174.13101802084,
+      "Amanda",
+      "ada yang manggil tapi mata lu minus:",
+      "Hiburan / Tren Viral",
+      "https://www.instagram.com/reel/DZCgXvPTjSy/?igsh=cXViMjN4dGVtZ2hq",
+      "https://www.instagram.com/p/DZCMcyqErBj/?igsh=MTZ1eDR3b3lwMDI1eQ==",
+      "Sudah terupload semua",
+      "https://www.threads.com/@lunareyewear.co?igshid=NTc4MTIwNjQ2YQ==",
+      "https://vt.tiktok.com/ZSxvvUswS/",
+      46174,
+      3625,
+      3176,
+      "tidak ada",
+      null,
+      "-",
+      "-",
+      "-"
+    ],
+    "lastRow": []
+  },
+  "Rekap CLP": {
+    "totalRows": 186,
+    "headers": [
+      "Cap waktu",
+      "Pengisi Laporan",
+      "Judul Reels",
+      "Konten Pilar",
+      "Link Reels Instagram",
+      "Link Feed/Carousel Instagram",
+      "Story Instagram",
+      "  Link Instagram Threads   ",
+      "Link Video Tik- Tok (mirorring)",
+      "Tanggal Laporan",
+      "Jumlah Followers (Instagram)",
+      "Jumlah Followers (Tik-Tok)",
+      "Kendala Content Creator",
+      "Tanggal Upload",
+      "Judul Reels 2",
+      "Jumlah Viewers",
+      "Jumlah Like",
+      "Bonus"
+    ],
+    "sampleRow": [
+      46174.12326170139,
+      "Salsa",
+      "Pov : nyari kacamata yang ditaro di atas kepala",
+      "Edukasi",
+      "https://www.instagram.com/reel/DZCfbdyTay3/?igsh=Nm0zaXNxNWQxOWE=",
+      "https://www.instagram.com/p/DZCV7GEFGVq/?igsh=amExeXdjYnd6cWp4",
+      "Sudah terupload semua",
+      "https://www.threads.com/@iseeyou.cilacap/post/DZB30ltk5GF?xmt=AQG09_3x4Nwx3xeGRjw484wABJivQiL-V3RIs5OVzBxSMKdNhEvloHg6JGsIrqt1mc6TMBY&slof=1",
+      "https://vt.tiktok.com/ZSxvWtfCC/",
+      46174,
+      7154,
+      963,
+      "belum ada",
+      null,
+      "-",
+      "-",
+      "-"
+    ],
+    "lastRow": []
+  },
+  "Rekap WNS": {
+    "totalRows": 194,
+    "headers": [
+      "Cap waktu",
+      "Pengisi Laporan",
+      "Judul Reels",
+      "Konten Pilar",
+      "Link Reels Instagram",
+      "Link Feed/Carousel Instagram",
+      "Story Instagram",
+      "  Link Instagram Threads   ",
+      "Link Video Tik- Tok (mirorring)",
+      "Tanggal Laporan",
+      "Jumlah Followers (Instagram)",
+      "Jumlah Followers (Tik-Tok)",
+      "Kendala Content Creator",
+      "Tanggal Upload",
+      "Judul Reels 2",
+      "Jumlah Viewers",
+      "Jumlah Like",
+      "Bonus"
+    ],
+    "sampleRow": [
+      46174.13500540509,
+      "Febi",
+      "Mata Rabun",
+      "Hiburan / Tren Viral",
+      "https://www.instagram.com/reel/DZCgkLxRenB/?igsh=ZzduNW9iNXZvY3J5",
+      "-",
+      "Sudah terupload semua",
+      "https://www.threads.com/@iseeyou.wonosobo/post/DZCgvifgTcy?xmt=AQG0hjws5RysHpDmNPCbq_PBCR6G8oxcZGJ175ar8cMOqM9pGgXqQeQeqlDtwgb3pZpVqMWF&slof=1",
+      "https://vt.tiktok.com/ZSxvcYDew/",
+      46174,
+      1118,
+      330,
+      "-"
+    ],
+    "lastRow": []
+  },
+  "Database Desain": {
+    "totalRows": 16,
+    "headers": [
+      "Cap waktu",
+      "Tanggal, Bulan",
+      "Penginput",
+      "Nama Desain *tambahkan keterangan jika hasil Revisi (Contoh : Nama File-Revisi 2)",
+      "Upload File "
+    ],
+    "sampleRow": [
+      46196.14582821759,
+      46196,
+      "Dimas",
+      "Konten FYI Instagram Revisi 1",
+      "https://drive.google.com/open?id=1NdmYbjjrt5SWwUDMO_s_nhfPs0HZkyc4, https://drive.google.com/open?id=1UEjb3GShsoDk1ZSFk3uT-RpWE1MJtu9f, https://drive.google.com/open?id=1DrB9d9R4OSsOW3V_aWbuNW2q4x1R8f7h"
+    ],
+    "lastRow": [
+      46276.79740497685,
+      46277,
+      "Yanuar",
+      "Banner Gathering ISY All Cabang dan Lunar",
+      "https://drive.google.com/open?id=1pRQeC9QkGxxFpBdwL_jV4ONJRYszvPb1, https://drive.google.com/open?id=1iV0R9XdOP90qrYntrhRJXfapMIxM0GNu"
+    ]
+  },
+  "Form Proposal": {
+    "totalRows": 147,
+    "headers": [
+      "Cap waktu",
+      "Nama Perusahaan/Sekolah/Event",
+      "Pengajuan Untuk Cabang",
+      "Nama Event/Kegiatan",
+      "Tanggal Pelaksanaan Event/Kegiatan",
+      "Deskripsi Singkat Event/Kegiatan",
+      "Banefit Yang Ditawarkan",
+      "Nama Pengaju",
+      "Nomor Hp Pengaju",
+      "File Proposal Event/Kegiatan",
+      "Kolom 1",
+      "Column 12"
+    ],
+    "sampleRow": [
+      46236.88216054398,
+      "Universitas Jenderal Soedirman (International Bandung Choral Festival)",
+      "Purwokerto",
+      "International Bandung Choral Festival",
+      46270,
+      "International Bandung Choral Festival adalah sebuah perlombaan seni tarik suara yaitu paduan suara yang tiap tahun diadakan, dalam rangka menyambut kegiatan tersebut, PSM GBS UNSOED mengadakan pertunjukan paduan suara.",
+      " Pencantuman logo perusahaan pada backdrop utama berukuran XXL (5 × 5 meter) selama acara berlangsung.  Pencantuman logo perusahaan pada pamflet publikasi media sosial berukuran XL (5 × 5) sebagai bagian dari materi promosi resmi.  Penyebutan (adlibs) nama brand oleh MC sebanyak 3 kali selama rangkaian acara.  Promosi melalui media sosial berupa 5 konten (dengan frekuensi 1 konten setiap bulan) pada akun resmi panitia (@ibcf26_psmgbs).  Pemberian ulasan (review) positif pada platform Google untuk meningkatkan citra brand.  Dukungan peningkatan engagement dengan mengikuti akun media sosial brand oleh seluruh official team dan tim penyanyi.  Kesempatan penjualan produk yang akan dibantu oleh ±40 orang dari tim selama kegiatan berlangsung",
+      "Devina Azra Fawziah",
+      "088227668528",
+      "https://drive.google.com/open?id=19xDKNLzz-cC2gMgkoSZAEfmQ-kXCPONq",
+      "-"
+    ],
+    "lastRow": []
+  },
+  "Form Pengajuan": {
+    "totalRows": 2,
+    "headers": [
+      "Cap waktu",
+      "Cabang",
+      "Nama Pengaju",
+      "Alat/barang yang diajukan (tuliskan juga jumlahnya)",
+      "Tujuan/alasan pengajuan"
+    ],
+    "sampleRow": [
+      46276.09399984954,
+      "Wonosobo",
+      "Feby",
+      "Lighting ( 1pcs )",
+      "Pengadaan lighting diperlukan untuk meningkatkan kualitas konten karena pencahayaan saat ini belum optimal, sehingga foto/video kurang terang, detail produk tidak maksimal, dan hasil visual kurang konsisten. Dengan lighting tambahan, konten dapat tampil lebih terang, jelas, dan profesional sehingga produk serta materi promosi tersampaikan dengan lebih baik"
+    ],
+    "lastRow": [
+      46276.09399984954,
+      "Wonosobo",
+      "Feby",
+      "Lighting ( 1pcs )",
+      "Pengadaan lighting diperlukan untuk meningkatkan kualitas konten karena pencahayaan saat ini belum optimal, sehingga foto/video kurang terang, detail produk tidak maksimal, dan hasil visual kurang konsisten. Dengan lighting tambahan, konten dapat tampil lebih terang, jelas, dan profesional sehingga produk serta materi promosi tersampaikan dengan lebih baik"
+    ]
+  }
+}
