@@ -26,10 +26,13 @@ import {
 } from "lucide-react";
 import { OFFICIAL_BRANCH_ACCOUNTS } from "@/lib/branch-accounts";
 import { MeetingReportModal } from "./MeetingReportModal";
+import { BranchFollowersBreakdown } from "./BranchFollowersBreakdown";
 
 interface ExecutiveMeetingRecapProps {
   executiveRecap: {
     meetingTarget: string;
+    liveFollowersByBranch?: any;
+    igLiveCache?: any;
     latestTotalNetworkFollowers: {
       instagram: number;
       tiktok: number;
@@ -41,6 +44,7 @@ interface ExecutiveMeetingRecapProps {
     topViralReels?: any[];
     frequentStoryInquiries?: { topic: string; count: number }[];
     obstacleLogs?: any[];
+    activePeriodKey?: string;
   };
   picTracker: any[];
 }
@@ -126,46 +130,8 @@ Link Akses Web: https://imi-puce.vercel.app/spreadsheet`;
         networkFollowers={executiveRecap.latestTotalNetworkFollowers}
       />
 
-      {/* Official Instagram Accounts Bar (Requested by User) */}
-      <div className="bg-surface border border-border rounded-container p-4 shadow-subtle space-y-2">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-emerald-700"></span>
-            <h3 className="text-xs font-bold uppercase tracking-wider text-foreground">
-              Direktori 5 Akun Instagram Resmi I See You & Lunar Eyewear
-            </h3>
-          </div>
-          <span className="text-[11px] text-foreground-muted">
-            Tautan Profil Resmi Aktif
-          </span>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2.5 pt-1">
-          {OFFICIAL_BRANCH_ACCOUNTS.map((acc) => (
-            <a
-              key={acc.id}
-              href={acc.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-3 rounded-control bg-surface-secondary border border-border hover:border-foreground/40 transition-all flex flex-col justify-between group shadow-2xs"
-            >
-              <div>
-                <div className="flex items-center justify-between">
-                  <span className="font-bold text-foreground text-xs">{acc.city}</span>
-                  <ExternalLink className="w-3 h-3 text-foreground-muted group-hover:text-brand transition-colors" />
-                </div>
-                <span className="font-mono text-[11px] font-semibold text-brand block mt-0.5 group-hover:underline">
-                  {acc.handle}
-                </span>
-              </div>
-              <div className="mt-2 pt-1.5 border-t border-border/60 text-[10px] text-foreground-muted flex items-center justify-between">
-                <span>{acc.picName.split(" ")[0]} {acc.picName.split(" ")[1] || ""}</span>
-                <span className="font-medium text-foreground-secondary">{acc.tag}</span>
-              </div>
-            </a>
-          ))}
-        </div>
-      </div>
+      {/* Breakdown Followers 1 per 1 Akun Cabang (Realtime Instagram 1 Jam) */}
+      <BranchFollowersBreakdown initialCache={executiveRecap.igLiveCache} />
 
       {/* Top Meeting Header & Cadence Switcher */}
       <div className="bg-surface border border-border rounded-container p-5 shadow-subtle flex flex-col lg:flex-row lg:items-center justify-between gap-4">
@@ -466,13 +432,24 @@ Link Akses Web: https://imi-puce.vercel.app/spreadsheet`;
                   activePeriod.topViralReels.map((r: any, i: number) => (
                     <div
                       key={i}
-                      className="p-3 rounded-control border border-border bg-surface-secondary text-xs flex items-center justify-between gap-3"
+                      className="p-3.5 rounded-control border border-border bg-surface-secondary text-xs flex flex-col sm:flex-row sm:items-start justify-between gap-3"
                     >
-                      <div className="max-w-[280px]">
+                      <div className="max-w-[340px]">
                         <div className="font-semibold text-foreground line-clamp-1">
                           {r.title}
                         </div>
-                        <div className="text-[10px] text-foreground-muted mt-0.5 flex items-center gap-1.5">
+                        {r.igCaption && (
+                          <p
+                            className="text-[11px] text-foreground-secondary line-clamp-2 italic mt-1 bg-surface p-2 rounded border border-border/70"
+                            title={r.igCaption}
+                          >
+                            <span className="font-bold not-italic text-[9px] uppercase tracking-wider text-brand block">
+                              Caption Asli Instagram:
+                            </span>
+                            &quot;{r.igCaption.replace(/\n+/g, " ").slice(0, 110)}...&quot;
+                          </p>
+                        )}
+                        <div className="text-[10px] text-foreground-muted mt-1.5 flex items-center gap-1.5">
                           <span>{r.branch}</span>
                           <span>·</span>
                           <span>{r.date}</span>
@@ -492,13 +469,19 @@ Link Akses Web: https://imi-puce.vercel.app/spreadsheet`;
                           )}
                         </div>
                       </div>
-                      <div className="text-right shrink-0">
+                      <div className="text-left sm:text-right shrink-0 pt-1">
                         <div className="text-xs font-bold text-foreground tabular-nums">
                           {r.viewers.toLocaleString("id-ID")} viewers
                         </div>
-                        <span className="text-[10px] font-medium text-emerald-800">
-                          {r.likes.toLocaleString("id-ID")} likes
-                        </span>
+                        <div className="text-[10px] font-semibold text-emerald-800 flex items-center sm:justify-end gap-1 mt-0.5">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                          <span>{r.igLikesFormatted ? `${r.igLikesFormatted} likes (IG)` : `${r.likes.toLocaleString("id-ID")} likes`}</span>
+                        </div>
+                        {r.igComments !== undefined && (
+                          <span className="text-[9px] text-foreground-muted block mt-0.5">
+                            {r.igComments} komentar
+                          </span>
+                        )}
                       </div>
                     </div>
                   ))

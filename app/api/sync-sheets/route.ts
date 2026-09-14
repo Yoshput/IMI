@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
 import * as XLSX from "xlsx";
+import { getCachedInstagramData } from "@/lib/instagram-realtime";
 
 function parseExcelDate(serial: any): string | null {
   if (!serial) return null;
@@ -266,12 +267,22 @@ export async function POST() {
       };
     });
 
-    // Extract weekly evaluation data
+    const igLiveCache = getCachedInstagramData();
+
+    // Helper: Extract weekly evaluation data for a given 7-day period
     const buildPeriodRecap = (startDate: string, endDate: string, meetingDateTitle: string, meetingStatus: string) => {
       const weeklyReels: any[] = [];
       Object.entries(allBranchReels).forEach(([sheet, rows]) => {
         rows.forEach((r) => {
           if (r.reportDate >= startDate && r.reportDate <= endDate) {
+            let liveIg: any = null;
+            if (igLiveCache && igLiveCache.reels && r.reelsLink) {
+              const shortcode = (r.reelsLink.match(/\/reel\/([A-Za-z0-9_-]+)/) || [])[1];
+              if (shortcode) {
+                liveIg = Object.entries(igLiveCache.reels).find(([k]) => k.includes(shortcode))?.[1];
+              }
+            }
+
             weeklyReels.push({
               branch: r.branch,
               sheetKey: sheet,
@@ -281,13 +292,17 @@ export async function POST() {
               secondTitle: r.secondReelsTitle,
               pillar: r.contentPillar,
               viewers: r.viewers,
-              likes: r.likes,
+              likes: liveIg && liveIg.likes ? liveIg.likes : r.likes,
+              igLikesFormatted: liveIg?.likesFormatted,
+              igComments: liveIg?.comments,
+              igCaption: liveIg?.caption || "",
               reelsLink: r.reelsLink,
               tiktokLink: r.tiktokLink,
             });
           }
         });
       });
+      // Sort by viewers descending
       weeklyReels.sort((a, b) => b.viewers - a.viewers);
 
       const weeklyStories = storyItems.filter((s) => s.reportDate && s.reportDate >= startDate && s.reportDate <= endDate);
@@ -376,6 +391,8 @@ export async function POST() {
       dailyFollowersTracker: allFollowerDaily,
       executiveRecap: {
         meetingTarget: "Selasa Depan (Weekly Executive Board: HRD, Head, Finance, Owner)",
+        liveFollowersByBranch: igLiveCache?.accounts || null,
+        igLiveCache: igLiveCache || null,
         latestTotalNetworkFollowers: {
           instagram: 226581 + 6195 + 3946 + 7361 + 1248,
           tiktok: 87200 + 979 + 3031 + 42 + 541,

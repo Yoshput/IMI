@@ -239,12 +239,31 @@ const picTracker = [
   };
 });
 
+let igLiveCache = null;
+try {
+  const cachePath = path.join(__dirname, '../lib/instagram-live-cache.json');
+  if (fs.existsSync(cachePath)) {
+    igLiveCache = JSON.parse(fs.readFileSync(cachePath, 'utf-8'));
+  }
+} catch (e) {
+  console.log('No IG live cache found yet');
+}
+
 // Helper: Extract weekly evaluation data for a given 7-day period
 function buildPeriodRecap(startDate, endDate, meetingDateTitle, meetingStatus) {
   const weeklyReels = [];
   Object.entries(allBranchReels).forEach(([sheet, rows]) => {
     rows.forEach(r => {
       if (r.reportDate >= startDate && r.reportDate <= endDate) {
+        // Find matching live reel metadata from Instagram
+        let liveIg = null;
+        if (igLiveCache && igLiveCache.reels && r.reelsLink) {
+          const shortcode = (r.reelsLink.match(/\/reel\/([A-Za-z0-9_-]+)/) || [])[1];
+          if (shortcode) {
+            liveIg = Object.entries(igLiveCache.reels).find(([k]) => k.includes(shortcode))?.[1];
+          }
+        }
+
         weeklyReels.push({
           branch: r.branch,
           sheetKey: sheet,
@@ -254,7 +273,10 @@ function buildPeriodRecap(startDate, endDate, meetingDateTitle, meetingStatus) {
           secondTitle: r.secondReelsTitle,
           pillar: r.contentPillar,
           viewers: r.viewers,
-          likes: r.likes,
+          likes: liveIg && liveIg.likes ? liveIg.likes : r.likes,
+          igLikesFormatted: liveIg?.likesFormatted,
+          igComments: liveIg?.comments,
+          igCaption: liveIg?.caption || '',
           reelsLink: r.reelsLink,
           tiktokLink: r.tiktokLink
         });
@@ -353,6 +375,8 @@ const output = {
   dailyFollowersTracker: allFollowerDaily,
   executiveRecap: {
     meetingTarget: 'Selasa Depan (Weekly Executive Board: HRD, Head, Finance, Owner)',
+    liveFollowersByBranch: igLiveCache?.accounts || null,
+    igLiveCache: igLiveCache || null,
     latestTotalNetworkFollowers: {
       instagram: 226581 + 6195 + 3946 + 7361 + 1248,
       tiktok: 87200 + 979 + 3031 + 42 + 541

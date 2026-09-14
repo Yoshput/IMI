@@ -1,5 +1,5 @@
 {
-  "syncTimestamp": "2026-09-14T09:52:58.510Z",
+  "syncTimestamp": "2026-09-14T10:01:48.445Z",
   "sourceUrl": "https://docs.google.com/spreadsheets/d/1BU0fIDP656Y-eue55bWVSxeaixSeFJwR3GP1n8kwBYc/edit?usp=sharing",
   "officialAccounts": [
     {
@@ -17052,6 +17052,204 @@
   },
   "executiveRecap": {
     "meetingTarget": "Selasa Depan (Weekly Executive Board: HRD, Head, Finance, Owner)",
+    "liveFollowersByBranch": {
+      "pwt-pusat": {
+        "id": "pwt-pusat",
+        "name": "Optik I See You Purwokerto (Pusat)",
+        "handle": "@iseeyou.glasses",
+        "url": "https://www.instagram.com/iseeyou.glasses/",
+        "city": "Purwokerto",
+        "picName": "Mba Ilya & Mba Nuha",
+        "followers": 226000,
+        "followersFormatted": "226K",
+        "following": 112,
+        "posts": 2940,
+        "bioTitle": "kacamata purwokerto murah (&#064;iseeyou.glasses) • Instagram photos and videos",
+        "lastUpdated": "2026-09-14T10:01:16.469Z"
+      },
+      "pbg": {
+        "id": "pbg",
+        "name": "Optik I See You Purbalingga",
+        "handle": "@iseeyou.purbalingga",
+        "url": "https://www.instagram.com/iseeyou.purbalingga/",
+        "city": "Purbalingga",
+        "picName": "Mba Ajun",
+        "followers": 6194,
+        "followersFormatted": "6,194",
+        "following": 6,
+        "posts": 567,
+        "bioTitle": "Optik Purbalingga (&#064;iseeyou.purbalingga) • Instagram photos and videos",
+        "lastUpdated": "2026-09-14T10:01:16.469Z"
+      },
+      "clp": {
+        "id": "clp",
+        "name": "Optik I See You Cilacap",
+        "handle": "@iseeyou.cilacap",
+        "url": "https://www.instagram.com/iseeyou.cilacap/",
+        "city": "Cilacap",
+        "picName": "Mba Arum",
+        "followers": 7387,
+        "followersFormatted": "7,387",
+        "following": 6,
+        "posts": 1403,
+        "bioTitle": " (&#064;iseeyou.cilacap) • Instagram photos and videos",
+        "lastUpdated": "2026-09-14T10:01:16.469Z"
+      },
+      "wns": {
+        "id": "wns",
+        "name": "Optik I See You Wonosobo",
+        "handle": "@iseeyou.wonosobo",
+        "url": "https://www.instagram.com/iseeyou.wonosobo/",
+        "city": "Wonosobo",
+        "picName": "Mba Febi",
+        "followers": 1248,
+        "followersFormatted": "1,248",
+        "following": 6,
+        "posts": 339,
+        "bioTitle": "Kacamata Murah Wonosobo (&#064;iseeyou.wonosobo) • Instagram photos and videos",
+        "lastUpdated": "2026-09-14T10:01:16.469Z"
+      },
+      "tgl": {
+        "id": "tgl",
+        "name": "Lunar Eyewear Tegal (Second Brand)",
+        "handle": "@lunareyewear.co",
+        "url": "https://www.instagram.com/lunareyewear.co",
+        "city": "Tegal",
+        "picName": "Mba Amanda",
+        "followers": 3943,
+        "followersFormatted": "3,943",
+        "following": 5,
+        "posts": 357,
+        "bioTitle": "Kacamata Tegal Murah (&#064;lunareyewear.co) • Instagram photos and videos",
+        "lastUpdated": "2026-09-14T10:01:16.469Z"
+      }
+    },
+    "igLiveCache": {
+      "lastSync": "2026-09-14T10:01:16.469Z",
+      "nextSyncEstimated": "2026-09-14T11:01:16.469Z",
+      "accounts": {
+        "pwt-pusat": {
+          "id": "pwt-pusat",
+          "name": "Optik I See You Purwokerto (Pusat)",
+          "handle": "@iseeyou.glasses",
+          "url": "https://www.instagram.com/iseeyou.glasses/",
+          "city": "Purwokerto",
+          "picName": "Mba Ilya & Mba Nuha",
+          "followers": 226000,
+          "followersFormatted": "226K",
+          "following": 112,
+          "posts": 2940,
+          "bioTitle": "kacamata purwokerto murah (&#064;iseeyou.glasses) • Instagram photos and videos",
+          "lastUpdated": "2026-09-14T10:01:16.469Z"
+        },
+        "pbg": {
+          "id": "pbg",
+          "name": "Optik I See You Purbalingga",
+          "handle": "@iseeyou.purbalingga",
+          "url": "https://www.instagram.com/iseeyou.purbalingga/",
+          "city": "Purbalingga",
+          "picName": "Mba Ajun",
+          "followers": 6194,
+          "followersFormatted": "6,194",
+          "following": 6,
+          "posts": 567,
+          "bioTitle": "Optik Purbalingga (&#064;iseeyou.purbalingga) • Instagram photos and videos",
+          "lastUpdated": "2026-09-14T10:01:16.469Z"
+        },
+        "clp": {
+          "id": "clp",
+          "name": "Optik I See You Cilacap",
+          "handle": "@iseeyou.cilacap",
+          "url": "https://www.instagram.com/iseeyou.cilacap/",
+          "city": "Cilacap",
+          "picName": "Mba Arum",
+          "followers": 7387,
+          "followersFormatted": "7,387",
+          "following": 6,
+          "posts": 1403,
+          "bioTitle": " (&#064;iseeyou.cilacap) • Instagram photos and videos",
+          "lastUpdated": "2026-09-14T10:01:16.469Z"
+        },
+        "wns": {
+          "id": "wns",
+          "name": "Optik I See You Wonosobo",
+          "handle": "@iseeyou.wonosobo",
+          "url": "https://www.instagram.com/iseeyou.wonosobo/",
+          "city": "Wonosobo",
+          "picName": "Mba Febi",
+          "followers": 1248,
+          "followersFormatted": "1,248",
+          "following": 6,
+          "posts": 339,
+          "bioTitle": "Kacamata Murah Wonosobo (&#064;iseeyou.wonosobo) • Instagram photos and videos",
+          "lastUpdated": "2026-09-14T10:01:16.469Z"
+        },
+        "tgl": {
+          "id": "tgl",
+          "name": "Lunar Eyewear Tegal (Second Brand)",
+          "handle": "@lunareyewear.co",
+          "url": "https://www.instagram.com/lunareyewear.co",
+          "city": "Tegal",
+          "picName": "Mba Amanda",
+          "followers": 3943,
+          "followersFormatted": "3,943",
+          "following": 5,
+          "posts": 357,
+          "bioTitle": "Kacamata Tegal Murah (&#064;lunareyewear.co) • Instagram photos and videos",
+          "lastUpdated": "2026-09-14T10:01:16.469Z"
+        }
+      },
+      "reels": {
+        "https://www.instagram.com/reel/DdD9h3wzCxw/": {
+          "url": "https://www.instagram.com/reel/DdD9h3wzCxw/",
+          "likes": 10000,
+          "likesFormatted": "10K",
+          "comments": 86,
+          "caption": "\"pengen normal lagi😭\n\nYuk order kacamata di Lunar Eyewear🤗❤️‍🔥\nOrder Online : 085258687315\nBuka setiap hari pukul : 11.00 - 20.00 WIB\n✅ Gratis cek mata\n✅ Bisa ditunggu 15 menit \n✅ Harga terjangkau \n✅ Bebas pilih frame & lensa sepuasnya\n\nAlamat Store \n📍Jln Werkudoro, Ruko Langon Square No. 2 Tegal Timur, Kota Tegal, Jawa Tegah\nMaps: Lunar Eyewear\n\n#optiktegal #kacamatamurah #kacamataminus #kacamatategal #infotegal\". ",
+          "lastUpdated": "2026-09-14T10:01:16.469Z"
+        },
+        "https://www.instagram.com/reel/DdGiT0OzQ_7/": {
+          "url": "https://www.instagram.com/reel/DdGiT0OzQ_7/",
+          "likes": 419,
+          "likesFormatted": "419",
+          "comments": 2,
+          "caption": "\"&#x201c;jgn maen hp trs tar ky dia matanya minus&#x201d;\n\nYuk order kacamata di Lunar Eyewear🤗❤️‍🔥\nOrder Online : 085258687315\nBuka setiap hari pukul : 11.00 - 20.00 WIB\n✅ Gratis cek mata\n✅ Bisa ditunggu 15 menit \n✅ Harga terjangkau \n✅ Bebas pilih frame & lensa sepuasnya\n\nAlamat Store \n📍Jln Werkudoro, Ruko Langon Square No. 2 Tegal Timur, Kota Tegal, Jawa Tegah\nMaps: Lunar Eyewear\n\n#optiktegal #kacamatamurah #kacamataminus #kacamatategal #infotegal\". ",
+          "lastUpdated": "2026-09-14T10:01:16.469Z"
+        },
+        "https://www.instagram.com/reel/DdGmCEvvB-X/": {
+          "url": "https://www.instagram.com/reel/DdGmCEvvB-X/",
+          "likes": 418,
+          "likesFormatted": "418",
+          "comments": 1,
+          "caption": "\"Ku kira normal ternyataaa....\nAda yang sama gasii?? plss ga enak bangett kalo nyetir malem\" gini penglihatannya hhhhh&#x1f616;\n\nBuat yang ngerasain hal yang sama cuss cek mata kalian ke Optik I See You Glasses cabang terdekatt GRATISS!!&#x1f60e;&#x2728;\n\n#trending #iseeyouglasses #optik #kacamata #kacamatamurah\". ",
+          "lastUpdated": "2026-09-14T10:01:16.469Z"
+        },
+        "https://www.instagram.com/reel/DdBa28YijET/": {
+          "url": "https://www.instagram.com/reel/DdBa28YijET/",
+          "likes": 8,
+          "likesFormatted": "8",
+          "comments": 0,
+          "caption": "\"rasanya ingin membersihkan &#x1f4c8;\n\nYUK! order kacamata di I See You Glasses ya&#x1f929;&#x1f970;\n✅Cek Mata Gratis \n✅Proses bisa di tunggu \n✅Banyak Promo Menarik \n✅Gratis Ongkir khusus area Jawa iTengah \n\n#pov #kacamata #relatable #iseeyou #fyp\". ",
+          "lastUpdated": "2026-09-14T10:01:16.469Z"
+        },
+        "https://www.instagram.com/reel/DdOQvBbT45k/": {
+          "url": "https://www.instagram.com/reel/DdOQvBbT45k/",
+          "likes": 11,
+          "likesFormatted": "11",
+          "comments": 0,
+          "caption": "\"daily vlog&#x2728;\n\nYuk order kacamata di Lunar Eyewear🤗❤️‍🔥\nOrder Online : 085258687315\nBuka setiap hari pukul : 11.00 - 20.00 WIB\n✅ Gratis cek mata\n✅ Bisa ditunggu 15 menit \n✅ Harga terjangkau \n✅ Bebas pilih frame & lensa sepuasnya\n\nAlamat Store \n📍Jln Werkudoro, Ruko Langon Square No. 2 Tegal Timur, Kota Tegal, Jawa Tegah\nMaps: Lunar Eyewear\n\n#optiktegal #kacamatamurah #kacamataminus #kacamatategal #infotegal\". ",
+          "lastUpdated": "2026-09-14T10:01:16.469Z"
+        },
+        "https://www.instagram.com/reel/DdJHG_jTUGa/": {
+          "url": "https://www.instagram.com/reel/DdJHG_jTUGa/",
+          "likes": 163,
+          "likesFormatted": "163",
+          "comments": 0,
+          "caption": "\"derita minus+silinder&#x1f972;\n\nYuk order kacamata di Lunar Eyewear🤗❤️‍🔥\nOrder Online : 085258687315\nBuka setiap hari pukul : 11.00 - 20.00 WIB\n✅ Gratis cek mata\n✅ Bisa ditunggu 15 menit \n✅ Harga terjangkau \n✅ Bebas pilih frame & lensa sepuasnya\n\nAlamat Store \n📍Jln Werkudoro, Ruko Langon Square No. 2 Tegal Timur, Kota Tegal, Jawa Tegah\nMaps: Lunar Eyewear\n\n#optiktegal #kacamatamurah #kacamataminus #kacamatategal #infotegal\". ",
+          "lastUpdated": "2026-09-14T10:01:16.469Z"
+        }
+      }
+    },
     "latestTotalNetworkFollowers": {
       "instagram": 245331,
       "tiktok": 91793
@@ -17077,6 +17275,9 @@
             "pillar": "Testimoni / Review",
             "viewers": 128980,
             "likes": 10000,
+            "igLikesFormatted": "10K",
+            "igComments": 86,
+            "igCaption": "\"pengen normal lagi😭\n\nYuk order kacamata di Lunar Eyewear🤗❤️‍🔥\nOrder Online : 085258687315\nBuka setiap hari pukul : 11.00 - 20.00 WIB\n✅ Gratis cek mata\n✅ Bisa ditunggu 15 menit \n✅ Harga terjangkau \n✅ Bebas pilih frame & lensa sepuasnya\n\nAlamat Store \n📍Jln Werkudoro, Ruko Langon Square No. 2 Tegal Timur, Kota Tegal, Jawa Tegah\nMaps: Lunar Eyewear\n\n#optiktegal #kacamatamurah #kacamataminus #kacamatategal #infotegal\". ",
             "reelsLink": "https://www.instagram.com/reel/DdD9h3wzCxw/?stkn=MTBleHplemgyYzBydA==",
             "tiktokLink": ""
           },
@@ -17089,7 +17290,10 @@
             "secondTitle": "jadi dewasa",
             "pillar": "Promosi / Soft Sell",
             "viewers": 62469,
-            "likes": 5860,
+            "likes": 419,
+            "igLikesFormatted": "419",
+            "igComments": 2,
+            "igCaption": "\"&#x201c;jgn maen hp trs tar ky dia matanya minus&#x201d;\n\nYuk order kacamata di Lunar Eyewear🤗❤️‍🔥\nOrder Online : 085258687315\nBuka setiap hari pukul : 11.00 - 20.00 WIB\n✅ Gratis cek mata\n✅ Bisa ditunggu 15 menit \n✅ Harga terjangkau \n✅ Bebas pilih frame & lensa sepuasnya\n\nAlamat Store \n📍Jln Werkudoro, Ruko Langon Square No. 2 Tegal Timur, Kota Tegal, Jawa Tegah\nMaps: Lunar Eyewear\n\n#optiktegal #kacamatamurah #kacamataminus #kacamatategal #infotegal\". ",
             "reelsLink": "https://www.instagram.com/reel/DdGiT0OzQ_7/?stkn=MW8xbThsMXN6ODh2bg==",
             "tiktokLink": "https://vt.tiktok.com/ZSqUNXnyJ/"
           },
@@ -17102,7 +17306,10 @@
             "secondTitle": "Recap ISY open di RSM",
             "pillar": "Edukasi",
             "viewers": 19547,
-            "likes": 280,
+            "likes": 418,
+            "igLikesFormatted": "418",
+            "igComments": 1,
+            "igCaption": "\"Ku kira normal ternyataaa....\nAda yang sama gasii?? plss ga enak bangett kalo nyetir malem\" gini penglihatannya hhhhh&#x1f616;\n\nBuat yang ngerasain hal yang sama cuss cek mata kalian ke Optik I See You Glasses cabang terdekatt GRATISS!!&#x1f60e;&#x2728;\n\n#trending #iseeyouglasses #optik #kacamata #kacamatamurah\". ",
             "reelsLink": "https://www.instagram.com/reel/DdGmCEvvB-X/?stkn=Y3NwNzMwNmdkY3Uw",
             "tiktokLink": "https://vt.tiktok.com/ZSqfwADRJ/"
           },
@@ -17115,7 +17322,10 @@
             "secondTitle": "Tanya lagu favorit ",
             "pillar": "Hiburan / Tren Viral",
             "viewers": 6181,
-            "likes": 141,
+            "likes": 8,
+            "igLikesFormatted": "8",
+            "igComments": 0,
+            "igCaption": "\"rasanya ingin membersihkan &#x1f4c8;\n\nYUK! order kacamata di I See You Glasses ya&#x1f929;&#x1f970;\n✅Cek Mata Gratis \n✅Proses bisa di tunggu \n✅Banyak Promo Menarik \n✅Gratis Ongkir khusus area Jawa iTengah \n\n#pov #kacamata #relatable #iseeyou #fyp\". ",
             "reelsLink": "https://www.instagram.com/reel/DdBa28YijET/?stkn=ZWhkdHd2NmV2NnUw",
             "tiktokLink": "https://vt.tiktok.com/ZSqhSYY6r/"
           },
@@ -17128,7 +17338,10 @@
             "secondTitle": "pov: teryata cuma lo",
             "pillar": "Promosi / Soft Sell",
             "viewers": 5484,
-            "likes": 409,
+            "likes": 11,
+            "igLikesFormatted": "11",
+            "igComments": 0,
+            "igCaption": "\"daily vlog&#x2728;\n\nYuk order kacamata di Lunar Eyewear🤗❤️‍🔥\nOrder Online : 085258687315\nBuka setiap hari pukul : 11.00 - 20.00 WIB\n✅ Gratis cek mata\n✅ Bisa ditunggu 15 menit \n✅ Harga terjangkau \n✅ Bebas pilih frame & lensa sepuasnya\n\nAlamat Store \n📍Jln Werkudoro, Ruko Langon Square No. 2 Tegal Timur, Kota Tegal, Jawa Tegah\nMaps: Lunar Eyewear\n\n#optiktegal #kacamatamurah #kacamataminus #kacamatategal #infotegal\". ",
             "reelsLink": "https://www.instagram.com/reel/DdOQvBbT45k/?stkn=MTU5NjRrZHFwOHEwNg==",
             "tiktokLink": "https://vt.tiktok.com/ZSqHmjNwd/"
           },
@@ -17141,7 +17354,10 @@
             "secondTitle": "close 1 eyes",
             "pillar": "Hiburan / Tren Viral",
             "viewers": 4454,
-            "likes": 47,
+            "likes": 163,
+            "igLikesFormatted": "163",
+            "igComments": 0,
+            "igCaption": "\"derita minus+silinder&#x1f972;\n\nYuk order kacamata di Lunar Eyewear🤗❤️‍🔥\nOrder Online : 085258687315\nBuka setiap hari pukul : 11.00 - 20.00 WIB\n✅ Gratis cek mata\n✅ Bisa ditunggu 15 menit \n✅ Harga terjangkau \n✅ Bebas pilih frame & lensa sepuasnya\n\nAlamat Store \n📍Jln Werkudoro, Ruko Langon Square No. 2 Tegal Timur, Kota Tegal, Jawa Tegah\nMaps: Lunar Eyewear\n\n#optiktegal #kacamatamurah #kacamataminus #kacamatategal #infotegal\". ",
             "reelsLink": "https://www.instagram.com/reel/DdJHG_jTUGa/?stkn=MW0yY21uazVoOGFndQ==",
             "tiktokLink": "https://vt.tiktok.com/ZSqP1YHDd/"
           },
@@ -17155,6 +17371,7 @@
             "pillar": "Edukasi",
             "viewers": 3247,
             "likes": 142,
+            "igCaption": "",
             "reelsLink": "https://www.instagram.com/reel/DdBYtrkzhW4/?stkn=MWQ0ZXd5eG9iOWI5aw==",
             "tiktokLink": "https://vt.tiktok.com/ZSqhSDrhG/"
           },
@@ -17168,6 +17385,7 @@
             "pillar": "Hiburan / Tren Viral",
             "viewers": 2410,
             "likes": 34,
+            "igCaption": "",
             "reelsLink": "https://www.instagram.com/reel/DdGjgEbNByA/?stkn=NW0yM2x2cXpvZDZo",
             "tiktokLink": "https://vt.tiktok.com/ZSqUFxQ8t/"
           }
@@ -17183,6 +17401,9 @@
             "pillar": "Testimoni / Review",
             "viewers": 128980,
             "likes": 10000,
+            "igLikesFormatted": "10K",
+            "igComments": 86,
+            "igCaption": "\"pengen normal lagi😭\n\nYuk order kacamata di Lunar Eyewear🤗❤️‍🔥\nOrder Online : 085258687315\nBuka setiap hari pukul : 11.00 - 20.00 WIB\n✅ Gratis cek mata\n✅ Bisa ditunggu 15 menit \n✅ Harga terjangkau \n✅ Bebas pilih frame & lensa sepuasnya\n\nAlamat Store \n📍Jln Werkudoro, Ruko Langon Square No. 2 Tegal Timur, Kota Tegal, Jawa Tegah\nMaps: Lunar Eyewear\n\n#optiktegal #kacamatamurah #kacamataminus #kacamatategal #infotegal\". ",
             "reelsLink": "https://www.instagram.com/reel/DdD9h3wzCxw/?stkn=MTBleHplemgyYzBydA==",
             "tiktokLink": ""
           },
@@ -17195,7 +17416,10 @@
             "secondTitle": "jadi dewasa",
             "pillar": "Promosi / Soft Sell",
             "viewers": 62469,
-            "likes": 5860,
+            "likes": 419,
+            "igLikesFormatted": "419",
+            "igComments": 2,
+            "igCaption": "\"&#x201c;jgn maen hp trs tar ky dia matanya minus&#x201d;\n\nYuk order kacamata di Lunar Eyewear🤗❤️‍🔥\nOrder Online : 085258687315\nBuka setiap hari pukul : 11.00 - 20.00 WIB\n✅ Gratis cek mata\n✅ Bisa ditunggu 15 menit \n✅ Harga terjangkau \n✅ Bebas pilih frame & lensa sepuasnya\n\nAlamat Store \n📍Jln Werkudoro, Ruko Langon Square No. 2 Tegal Timur, Kota Tegal, Jawa Tegah\nMaps: Lunar Eyewear\n\n#optiktegal #kacamatamurah #kacamataminus #kacamatategal #infotegal\". ",
             "reelsLink": "https://www.instagram.com/reel/DdGiT0OzQ_7/?stkn=MW8xbThsMXN6ODh2bg==",
             "tiktokLink": "https://vt.tiktok.com/ZSqUNXnyJ/"
           },
@@ -17208,7 +17432,10 @@
             "secondTitle": "Recap ISY open di RSM",
             "pillar": "Edukasi",
             "viewers": 19547,
-            "likes": 280,
+            "likes": 418,
+            "igLikesFormatted": "418",
+            "igComments": 1,
+            "igCaption": "\"Ku kira normal ternyataaa....\nAda yang sama gasii?? plss ga enak bangett kalo nyetir malem\" gini penglihatannya hhhhh&#x1f616;\n\nBuat yang ngerasain hal yang sama cuss cek mata kalian ke Optik I See You Glasses cabang terdekatt GRATISS!!&#x1f60e;&#x2728;\n\n#trending #iseeyouglasses #optik #kacamata #kacamatamurah\". ",
             "reelsLink": "https://www.instagram.com/reel/DdGmCEvvB-X/?stkn=Y3NwNzMwNmdkY3Uw",
             "tiktokLink": "https://vt.tiktok.com/ZSqfwADRJ/"
           },
@@ -17221,7 +17448,10 @@
             "secondTitle": "Tanya lagu favorit ",
             "pillar": "Hiburan / Tren Viral",
             "viewers": 6181,
-            "likes": 141,
+            "likes": 8,
+            "igLikesFormatted": "8",
+            "igComments": 0,
+            "igCaption": "\"rasanya ingin membersihkan &#x1f4c8;\n\nYUK! order kacamata di I See You Glasses ya&#x1f929;&#x1f970;\n✅Cek Mata Gratis \n✅Proses bisa di tunggu \n✅Banyak Promo Menarik \n✅Gratis Ongkir khusus area Jawa iTengah \n\n#pov #kacamata #relatable #iseeyou #fyp\". ",
             "reelsLink": "https://www.instagram.com/reel/DdBa28YijET/?stkn=ZWhkdHd2NmV2NnUw",
             "tiktokLink": "https://vt.tiktok.com/ZSqhSYY6r/"
           },
@@ -17234,7 +17464,10 @@
             "secondTitle": "pov: teryata cuma lo",
             "pillar": "Promosi / Soft Sell",
             "viewers": 5484,
-            "likes": 409,
+            "likes": 11,
+            "igLikesFormatted": "11",
+            "igComments": 0,
+            "igCaption": "\"daily vlog&#x2728;\n\nYuk order kacamata di Lunar Eyewear🤗❤️‍🔥\nOrder Online : 085258687315\nBuka setiap hari pukul : 11.00 - 20.00 WIB\n✅ Gratis cek mata\n✅ Bisa ditunggu 15 menit \n✅ Harga terjangkau \n✅ Bebas pilih frame & lensa sepuasnya\n\nAlamat Store \n📍Jln Werkudoro, Ruko Langon Square No. 2 Tegal Timur, Kota Tegal, Jawa Tegah\nMaps: Lunar Eyewear\n\n#optiktegal #kacamatamurah #kacamataminus #kacamatategal #infotegal\". ",
             "reelsLink": "https://www.instagram.com/reel/DdOQvBbT45k/?stkn=MTU5NjRrZHFwOHEwNg==",
             "tiktokLink": "https://vt.tiktok.com/ZSqHmjNwd/"
           },
@@ -17247,7 +17480,10 @@
             "secondTitle": "close 1 eyes",
             "pillar": "Hiburan / Tren Viral",
             "viewers": 4454,
-            "likes": 47,
+            "likes": 163,
+            "igLikesFormatted": "163",
+            "igComments": 0,
+            "igCaption": "\"derita minus+silinder&#x1f972;\n\nYuk order kacamata di Lunar Eyewear🤗❤️‍🔥\nOrder Online : 085258687315\nBuka setiap hari pukul : 11.00 - 20.00 WIB\n✅ Gratis cek mata\n✅ Bisa ditunggu 15 menit \n✅ Harga terjangkau \n✅ Bebas pilih frame & lensa sepuasnya\n\nAlamat Store \n📍Jln Werkudoro, Ruko Langon Square No. 2 Tegal Timur, Kota Tegal, Jawa Tegah\nMaps: Lunar Eyewear\n\n#optiktegal #kacamatamurah #kacamataminus #kacamatategal #infotegal\". ",
             "reelsLink": "https://www.instagram.com/reel/DdJHG_jTUGa/?stkn=MW0yY21uazVoOGFndQ==",
             "tiktokLink": "https://vt.tiktok.com/ZSqP1YHDd/"
           },
@@ -17261,6 +17497,7 @@
             "pillar": "Edukasi",
             "viewers": 3247,
             "likes": 142,
+            "igCaption": "",
             "reelsLink": "https://www.instagram.com/reel/DdBYtrkzhW4/?stkn=MWQ0ZXd5eG9iOWI5aw==",
             "tiktokLink": "https://vt.tiktok.com/ZSqhSDrhG/"
           },
@@ -17274,6 +17511,7 @@
             "pillar": "Hiburan / Tren Viral",
             "viewers": 2410,
             "likes": 34,
+            "igCaption": "",
             "reelsLink": "https://www.instagram.com/reel/DdGjgEbNByA/?stkn=NW0yM2x2cXpvZDZo",
             "tiktokLink": "https://vt.tiktok.com/ZSqUFxQ8t/"
           },
@@ -17287,6 +17525,7 @@
             "pillar": "Hiburan / Tren Viral",
             "viewers": 2000,
             "likes": 22,
+            "igCaption": "",
             "reelsLink": "https://www.instagram.com/reel/DdOUTEPCNku/?stkn=MTBqemVkMWY2czl0NA==",
             "tiktokLink": "https://vt.tiktok.com/ZSqHu1wyc/"
           },
@@ -17300,6 +17539,7 @@
             "pillar": "Hiburan / Tren Viral",
             "viewers": 1500,
             "likes": 54,
+            "igCaption": "",
             "reelsLink": "https://www.instagram.com/reel/DdJI6QjKTdw/?stkn=MTM2dXJxaHJ0MDl2MA==",
             "tiktokLink": "https://vt.tiktok.com/ZSqPeduyD/"
           },
@@ -17313,6 +17553,7 @@
             "pillar": "Edukasi",
             "viewers": 865,
             "likes": 4,
+            "igCaption": "",
             "reelsLink": "https://www.instagram.com/reel/DdOSPwpRkG2/?stkn=MXc5eDg2M282ZTJrcQ==",
             "tiktokLink": "https://vt.tiktok.com/ZSqHmURs5/"
           },
@@ -17326,6 +17567,7 @@
             "pillar": "Hiburan / Tren Viral",
             "viewers": 864,
             "likes": 30,
+            "igCaption": "",
             "reelsLink": "https://www.instagram.com/reel/DdLu3AZspl0/?stkn=ajVkY3lkdXY5cGs2",
             "tiktokLink": "https://vt.tiktok.com/ZSqacaokD/"
           },
@@ -17339,6 +17581,7 @@
             "pillar": "Hiburan / Tren Viral",
             "viewers": 700,
             "likes": 10,
+            "igCaption": "",
             "reelsLink": "https://www.instagram.com/reel/DdD-azSCjXC/?stkn=eTA2czhjam45M2Jp",
             "tiktokLink": "https://vt.tiktok.com/ZSqSMke5m/"
           },
@@ -17352,6 +17595,7 @@
             "pillar": "Promosi / Soft Sell",
             "viewers": 506,
             "likes": 21,
+            "igCaption": "",
             "reelsLink": "https://www.instagram.com/reel/DdJId_eObUS/?stkn=cGxieGszbjhobHVo",
             "tiktokLink": "https://vt.tiktok.com/ZSqPeg5tA/"
           },
@@ -17365,6 +17609,7 @@
             "pillar": "Hiburan / Tren Viral",
             "viewers": 447,
             "likes": 19,
+            "igCaption": "",
             "reelsLink": "https://www.instagram.com/reel/DdD_Jiztp2F/?stkn=MWNoOGtjMTRkaGRtdQ==",
             "tiktokLink": "https://vt.tiktok.com/ZSqSrDfHr/"
           },
@@ -17377,6 +17622,7 @@
             "pillar": "Edukasi",
             "viewers": 0,
             "likes": 0,
+            "igCaption": "",
             "reelsLink": "",
             "tiktokLink": ""
           },
@@ -17389,6 +17635,7 @@
             "pillar": "Promosi / Soft Sell",
             "viewers": 0,
             "likes": 0,
+            "igCaption": "",
             "reelsLink": "https://www.instagram.com/reel/DdEMOs3zjfL/?stkn=NHFybzJiZ3NqYzdh",
             "tiktokLink": "https://vt.tiktok.com/ZSqfwywge/"
           },
@@ -17401,6 +17648,7 @@
             "pillar": "Promosi / Soft Sell",
             "viewers": 0,
             "likes": 0,
+            "igCaption": "",
             "reelsLink": "https://www.instagram.com/reel/DdLrx4oq5JP/?stkn=ZmZjbW95ZTM4NWEz",
             "tiktokLink": "https://vt.tiktok.com/ZSqa7seka/"
           },
@@ -17412,7 +17660,10 @@
             "title": "padahal dunia seindah ini",
             "pillar": "Hiburan / Tren Viral",
             "viewers": 0,
-            "likes": 0,
+            "likes": 10000,
+            "igLikesFormatted": "10K",
+            "igComments": 86,
+            "igCaption": "\"pengen normal lagi😭\n\nYuk order kacamata di Lunar Eyewear🤗❤️‍🔥\nOrder Online : 085258687315\nBuka setiap hari pukul : 11.00 - 20.00 WIB\n✅ Gratis cek mata\n✅ Bisa ditunggu 15 menit \n✅ Harga terjangkau \n✅ Bebas pilih frame & lensa sepuasnya\n\nAlamat Store \n📍Jln Werkudoro, Ruko Langon Square No. 2 Tegal Timur, Kota Tegal, Jawa Tegah\nMaps: Lunar Eyewear\n\n#optiktegal #kacamatamurah #kacamataminus #kacamatategal #infotegal\". ",
             "reelsLink": "https://www.instagram.com/reel/DdD9h3wzCxw/?stkn=MTBleHplemgyYzBydA==",
             "tiktokLink": "https://vt.tiktok.com/ZSqSMYGVy/"
           }
