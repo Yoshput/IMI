@@ -36,6 +36,19 @@ function cleanNumber(val) {
   return isNaN(n) ? 0 : n;
 }
 
+function cleanMetric(val) {
+  if (val === null || val === undefined || val === '-' || val === '') return 0;
+  if (typeof val === 'number') return Math.round(val);
+  let str = String(val).toLowerCase().trim();
+  if (str === 'libur' || str === 'tidak ada' || str === 'belum ada') return 0;
+  if (str.includes('rb') || str.includes('k')) {
+    const num = parseFloat(str.replace(/,/g, '.').replace(/[^0-9.]/g, ''));
+    return isNaN(num) ? 0 : Math.round(num * 1000);
+  }
+  const n = parseInt(str.replace(/[,.]/g, '').replace(/[^0-9-]/g, ''), 10);
+  return isNaN(n) ? 0 : n;
+}
+
 function normalizeFollowers(val, isKNotation = false) {
   if (val === null || val === undefined || val === '-') return 0;
   if (typeof val === 'number') {
@@ -162,8 +175,8 @@ branchConfigs.forEach(cfg => {
       tiktokLink: cleanLink(row['Link Video Tik- Tok (mirorring)']),
       igFollowers: igFollowers,
       tiktokFollowers: tiktokFollowers,
-      viewers: cleanNumber(row['Jumlah Viewers']),
-      likes: cleanNumber(row['Jumlah Like']),
+      viewers: cleanMetric(row['Jumlah Viewers']),
+      likes: cleanMetric(row['Jumlah Like']),
       bonus: row['Bonus'] || '-',
       obstacle: row['Kendala Content Creator'] || '-'
     };
@@ -273,10 +286,14 @@ function buildPeriodRecap(startDate, endDate, meetingDateTitle, meetingStatus) {
           secondTitle: r.secondReelsTitle,
           pillar: r.contentPillar,
           viewers: r.viewers,
+          sheetViewers: r.viewers,
           likes: liveIg && liveIg.likes ? liveIg.likes : r.likes,
+          sheetLikes: r.likes,
+          liveIgLikes: liveIg?.likes || null,
           igLikesFormatted: liveIg?.likesFormatted,
           igComments: liveIg?.comments,
           igCaption: liveIg?.caption || '',
+          bonus: r.bonus,
           reelsLink: r.reelsLink,
           tiktokLink: r.tiktokLink
         });
@@ -359,6 +376,78 @@ const periodNextTuesday = buildPeriodRecap(
   'Pemantauan Berjalan (Live Monitor H-7)'
 );
 
+// Extract spreadsheet followers per branch (H+3 latest recorded)
+const spreadsheetFollowersByBranch = {};
+branchConfigs.forEach(cfg => {
+  const sheet = workbook.Sheets[cfg.sheetName];
+  if (!sheet) return;
+  const rawRows = XLSX.utils.sheet_to_json(sheet);
+  const withFollowers = rawRows.filter(r => r['Jumlah Followers (Instagram)'] && r['Jumlah Followers (Instagram)'] !== '-');
+  const last = withFollowers[withFollowers.length - 1];
+  const followersCount = last ? normalizeFollowers(last['Jumlah Followers (Instagram)'], cfg.isKFollowers) : 0;
+  const lastDate = last ? parseExcelDate(last['Tanggal Laporan'] || last['Cap waktu'] || last['Tanggal Upload']) : null;
+  spreadsheetFollowersByBranch[cfg.branchKey] = {
+    branchName: cfg.branchName,
+    city: cfg.city,
+    followers: followersCount,
+    followersFormatted: followersCount >= 100000 ? Math.round(followersCount / 1000) + 'K' : followersCount.toLocaleString('id-ID'),
+    lastRecordedDate: lastDate,
+    pic: cfg.picDefault
+  };
+});
+
+// Extract all Bonus rows from Spreadsheet (Bonus Gaji Tim Konten per 3 hari)
+const allBonusEntries = [];
+branchConfigs.forEach(cfg => {
+  const sheet = workbook.Sheets[cfg.sheetName];
+  if (!sheet) return;
+  const rawRows = XLSX.utils.sheet_to_json(sheet);
+  rawRows.forEach((r, idx) => {
+    const b = r['Bonus'];
+    const numB = typeof b === 'number' ? b : parseInt(String(b).replace(/[^0-9]/g, '')) || 0;
+    if (numB > 0) {
+      const formatPic = (p) => {
+        const s = String(p || '').trim();
+        if (!s) return cfg.picDefault;
+        return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
+      };
+      allBonusEntries.push({
+        id: `${cfg.sheetName.toLowerCase()}-bonus-${idx}`,
+        branch: cfg.branchName,
+        city: cfg.city,
+        pic: formatPic(r['Pengisi Laporan'] || cfg.picDefault),
+        title: r['Judul Reels 2'] || r['Judul Reels'] || '-',
+        uploadDate: parseExcelDate(r['Tanggal Upload']),
+        reviewDate: parseExcelDate(r['Tanggal Laporan']),
+        viewersH3: cleanMetric(r['Jumlah Viewers']),
+        likesH3: cleanMetric(r['Jumlah Like']),
+        bonusAmount: numB,
+        bonusFormatted: 'Rp ' + numB.toLocaleString('id-ID')
+      });
+    }
+  });
+});
+
+allBonusEntries.sort((a, b) => (b.reviewDate || '').localeCompare(a.reviewDate || ''));
+
+const byPicSummary = {};
+allBonusEntries.forEach(item => {
+  if (!byPicSummary[item.pic]) {
+    byPicSummary[item.pic] = { pic: item.pic, branch: item.branch, count: 0, totalAmount: 0, totalAmountFormatted: '' };
+  }
+  byPicSummary[item.pic].count++;
+  byPicSummary[item.pic].totalAmount += item.bonusAmount;
+  byPicSummary[item.pic].totalAmountFormatted = 'Rp ' + byPicSummary[item.pic].totalAmount.toLocaleString('id-ID');
+});
+
+const bonusSummary = {
+  totalBonusPaid: allBonusEntries.reduce((sum, item) => sum + item.bonusAmount, 0),
+  totalBonusPaidFormatted: 'Rp ' + allBonusEntries.reduce((sum, item) => sum + item.bonusAmount, 0).toLocaleString('id-ID'),
+  totalEligibleVideos: allBonusEntries.length,
+  byPic: Object.values(byPicSummary).sort((a, b) => b.totalAmount - a.totalAmount),
+  entries: allBonusEntries
+};
+
 const output = {
   syncTimestamp: new Date().toISOString(),
   sourceUrl: 'https://docs.google.com/spreadsheets/d/1BU0fIDP656Y-eue55bWVSxeaixSeFJwR3GP1n8kwBYc/edit?usp=sharing',
@@ -373,10 +462,14 @@ const output = {
   storyData: storyItems,
   branchReels: allBranchReels,
   dailyFollowersTracker: allFollowerDaily,
+  spreadsheetFollowersByBranch: spreadsheetFollowersByBranch,
+  bonusSummary: bonusSummary,
   executiveRecap: {
     meetingTarget: 'Selasa Depan (Weekly Executive Board: HRD, Head, Finance, Owner)',
     liveFollowersByBranch: igLiveCache?.accounts || null,
+    spreadsheetFollowersByBranch: spreadsheetFollowersByBranch,
     igLiveCache: igLiveCache || null,
+    bonusSummary: bonusSummary,
     latestTotalNetworkFollowers: {
       instagram: 226581 + 6195 + 3946 + 7361 + 1248,
       tiktok: 87200 + 979 + 3031 + 42 + 541

@@ -312,11 +312,10 @@ export const CompetitorRadarView: React.FC = () => {
             <button
               key={tag.key}
               onClick={() => setSelectedTag(tag.key)}
-              className={`px-3 py-1.5 rounded-control text-xs font-semibold whitespace-nowrap transition-all ${
-                selectedTag === tag.key
+              className={`px-3 py-1.5 rounded-control text-xs font-semibold whitespace-nowrap transition-all ${selectedTag === tag.key
                   ? "bg-foreground text-surface shadow-subtle"
                   : "bg-surface-secondary text-foreground-secondary hover:text-foreground border border-border"
-              }`}
+                }`}
             >
               {tag.label}
             </button>
@@ -331,9 +330,8 @@ export const CompetitorRadarView: React.FC = () => {
           return (
             <div
               key={comp.id}
-              className={`bg-surface border rounded-container transition-all shadow-subtle overflow-hidden ${
-                isExpanded ? "border-foreground/40 ring-1 ring-border" : "border-border hover:border-foreground/20"
-              }`}
+              className={`bg-surface border rounded-container transition-all shadow-subtle overflow-hidden ${isExpanded ? "border-foreground/40 ring-1 ring-border" : "border-border hover:border-foreground/20"
+                }`}
             >
               {/* Header Bar */}
               <div

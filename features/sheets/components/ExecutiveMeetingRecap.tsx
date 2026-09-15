@@ -45,6 +45,20 @@ interface ExecutiveMeetingRecapProps {
     frequentStoryInquiries?: { topic: string; count: number }[];
     obstacleLogs?: any[];
     activePeriodKey?: string;
+    bonusSummary?: {
+      totalBonusPaid?: number;
+      totalBonusPaidFormatted?: string;
+      totalEligibleVideos?: number;
+      byPic?: { pic: string; branch: string; count: number; totalAmount: number; totalAmountFormatted: string }[];
+    };
+    spreadsheetFollowersByBranch?: Record<string, {
+      branchName: string;
+      city: string;
+      followers: number;
+      followersFormatted: string;
+      lastRecordedDate?: string;
+      pic?: string;
+    }>;
   };
   picTracker: any[];
 }
@@ -128,10 +142,15 @@ Link Akses Web: https://imi-puce.vercel.app/spreadsheet`;
         onSelectPeriod={(k) => setSelectedPeriodKey(k as any)}
         picTracker={picTracker}
         networkFollowers={executiveRecap.latestTotalNetworkFollowers}
+        bonusSummary={executiveRecap.bonusSummary}
+        spreadsheetFollowersByBranch={executiveRecap.spreadsheetFollowersByBranch}
       />
 
-      {/* Breakdown Followers 1 per 1 Akun Cabang (Realtime Instagram 1 Jam) */}
-      <BranchFollowersBreakdown initialCache={executiveRecap.igLiveCache} />
+      {/* Breakdown Followers 1 per 1 Akun Cabang (Realtime Instagram 1 Jam & Spreadsheet H+3) */}
+      <BranchFollowersBreakdown
+        initialCache={executiveRecap.igLiveCache}
+        spreadsheetFollowers={executiveRecap.spreadsheetFollowersByBranch}
+      />
 
       {/* Top Meeting Header & Cadence Switcher */}
       <div className="bg-surface border border-border rounded-container p-5 shadow-subtle flex flex-col lg:flex-row lg:items-center justify-between gap-4">
@@ -226,9 +245,17 @@ Link Akses Web: https://imi-puce.vercel.app/spreadsheet`;
           <div className="text-xl font-bold text-foreground mt-1 tabular-nums">
             {executiveRecap.latestTotalNetworkFollowers.instagram.toLocaleString("id-ID")}
           </div>
-          <span className="text-[11px] text-emerald-800 font-medium mt-1 block">
-            Pusat: 226k · PBG: 6.1k · CLP: 7.3k · TGL: 3.9k · WNS: 1.2k
-          </span>
+          {executiveRecap.spreadsheetFollowersByBranch ? (
+            <span className="text-[11px] text-emerald-800 font-medium mt-1 block">
+              {Object.entries(executiveRecap.spreadsheetFollowersByBranch)
+                .map(([key, b]) => `${key}: ${b.followersFormatted}`)
+                .join(" · ")}
+            </span>
+          ) : (
+            <span className="text-[11px] text-emerald-800 font-medium mt-1 block">
+              Pusat: 226k · PBG: 6.1k · CLP: 7.3k · TGL: 3.9k · WNS: 1.2k
+            </span>
+          )}
         </div>
 
         <div className="bg-surface border border-border rounded-container p-4 shadow-subtle">
@@ -469,16 +496,29 @@ Link Akses Web: https://imi-puce.vercel.app/spreadsheet`;
                           )}
                         </div>
                       </div>
-                      <div className="text-left sm:text-right shrink-0 pt-1">
+                      <div className="text-left sm:text-right shrink-0 pt-1 space-y-1">
                         <div className="text-xs font-bold text-foreground tabular-nums">
                           {r.viewers.toLocaleString("id-ID")} viewers
                         </div>
-                        <div className="text-[10px] font-semibold text-emerald-800 flex items-center sm:justify-end gap-1 mt-0.5">
-                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
-                          <span>{r.igLikesFormatted ? `${r.igLikesFormatted} likes (IG)` : `${r.likes.toLocaleString("id-ID")} likes`}</span>
+                        {/* Dual Likes: Live IG vs Sheet H+3 */}
+                        <div className="flex flex-col sm:items-end gap-0.5 text-[10px]">
+                          <div className="font-semibold text-emerald-800 flex items-center sm:justify-end gap-1">
+                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                            <span>{r.igLikesFormatted ? `${r.igLikesFormatted} likes (IG Live)` : `${r.likes.toLocaleString("id-ID")} likes (IG)`}</span>
+                          </div>
+                          <div className="font-medium text-brand">
+                            <span>{r.sheetLikes ? `${r.sheetLikes.toLocaleString("id-ID")} likes (Sheet H+3)` : `${r.likes.toLocaleString("id-ID")} likes (Sheet)`}</span>
+                          </div>
                         </div>
+                        {r.bonus && r.bonus !== '-' && (
+                          <div className="mt-1">
+                            <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-900 border border-emerald-300">
+                              Bonus: {r.bonus}
+                            </span>
+                          </div>
+                        )}
                         {r.igComments !== undefined && (
-                          <span className="text-[9px] text-foreground-muted block mt-0.5">
+                          <span className="text-[9px] text-foreground-muted block">
                             {r.igComments} komentar
                           </span>
                         )}
@@ -548,55 +588,103 @@ Link Akses Web: https://imi-puce.vercel.app/spreadsheet`;
               </div>
               <div>
                 <h3 className="text-sm font-bold text-foreground">
-                  Fokus Finance: Efisiensi Akuisisi Follower & Alokasi Insentif
+                  Fokus Finance: Rekapitulasi Bonus Gaji Tim Konten (Spreadsheet Per 3 Hari)
                 </h3>
                 <p className="text-xs text-foreground-secondary">
-                  Evaluasi nilai jangkauan organik dan insentif performa creator cabang.
+                  Data riil dari spreadsheet Google Sheets. Bonus dihitung per video yang memenuhi threshold viewer.
                 </p>
               </div>
             </div>
             <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-surface-secondary text-foreground-secondary">
-              Budget & Cost Efficiency
+              Bonus Gaji Konten
             </span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5">
+          {/* Summary KPIs */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div className="p-3.5 rounded-control border border-border bg-surface-secondary">
               <span className="text-[10px] uppercase font-bold text-foreground-muted block">
-                Nilai Jangkauan Organik (Meta Ads Equivalent)
+                Total Bonus Dibayarkan (Semua Periode)
               </span>
-              <div className="text-base font-bold text-foreground mt-1">
-                Rp 8.450.000 / bln
+              <div className="text-base font-bold text-foreground mt-1 tabular-nums">
+                {executiveRecap.bonusSummary?.totalBonusPaidFormatted || "–"}
               </div>
               <p className="text-[11px] text-foreground-secondary mt-1">
-                Diperoleh tanpa belanja iklan berbayar, murni dari postingan konsisten 2 video/hari.
+                Untuk {executiveRecap.bonusSummary?.totalEligibleVideos || 0} video yang lolos threshold dari semua cabang.
               </p>
             </div>
 
             <div className="p-3.5 rounded-control border border-border bg-surface-secondary">
               <span className="text-[10px] uppercase font-bold text-foreground-muted block">
-                Bonus Creator Kualifikasi Pekan Ini
+                Jumlah Creator Berkualifikasi
               </span>
               <div className="text-base font-bold text-foreground mt-1">
-                Rp 750.000 (3 Creator)
+                {executiveRecap.bonusSummary?.byPic?.length || 0} Creator
               </div>
               <p className="text-[11px] text-foreground-secondary mt-1">
-                Kualifikasi: Mba Amanda (Viral 128k & 62k), Mba Ajun (100% disiplin), Mba Nuha (32 DM inquiries).
+                {executiveRecap.bonusSummary?.byPic?.map(p => `Mba ${p.pic}`).join(", ") || "–"}
               </p>
             </div>
 
             <div className="p-3.5 rounded-control border border-border bg-surface-secondary">
               <span className="text-[10px] uppercase font-bold text-foreground-muted block">
-                Petty Cash Properti Konten Cabang
+                Total Video Lolos Bonus
               </span>
               <div className="text-base font-bold text-foreground mt-1">
-                Rp 300.000 / Cabang
+                {executiveRecap.bonusSummary?.totalEligibleVideos || 0} Video
               </div>
               <p className="text-[11px] text-foreground-secondary mt-1">
-                Alokasi properti styling kacamata dan tester unboxing bagi outlet aktif.
+                Dihitung dari data spreadsheet aktual per 3 hari.
               </p>
             </div>
           </div>
+
+          {/* Per-PIC Breakdown */}
+          {(executiveRecap.bonusSummary?.byPic || []).length > 0 && (
+            <div className="space-y-2">
+              <span className="text-xs font-bold text-foreground block">Rincian Bonus Per Creator (Total Kumulatif):</span>
+              <div className="space-y-1.5">
+                {(executiveRecap.bonusSummary?.byPic || []).map((p, i) => (
+                  <div
+                    key={i}
+                    className="flex items-center justify-between p-2.5 rounded-control border border-border bg-surface-secondary text-xs"
+                  >
+                    <div className="flex items-center gap-2">
+                      <span className="w-5 h-5 rounded-full bg-surface border border-border flex items-center justify-center text-[10px] font-bold shrink-0">
+                        {i + 1}
+                      </span>
+                      <div>
+                        <span className="font-semibold text-foreground">Mba {p.pic}</span>
+                        <span className="text-foreground-muted ml-1.5 text-[11px]">({p.branch})</span>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="font-bold text-foreground tabular-nums">{p.totalAmountFormatted}</div>
+                      <div className="text-[10px] text-foreground-muted">{p.count} video lolos</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Followers per branch from spreadsheet */}
+          {executiveRecap.spreadsheetFollowersByBranch && (
+            <div className="space-y-2">
+              <span className="text-xs font-bold text-foreground block">Followers Instagram Per Cabang (Data Spreadsheet):</span>
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
+                {Object.values(executiveRecap.spreadsheetFollowersByBranch).map((b, i) => (
+                  <div key={i} className="p-2.5 rounded-control border border-border bg-surface-secondary text-center">
+                    <div className="text-xs font-bold text-foreground tabular-nums">{b.followersFormatted}</div>
+                    <div className="text-[10px] text-foreground-muted truncate mt-0.5">{b.city}</div>
+                    {b.lastRecordedDate && (
+                      <div className="text-[9px] text-foreground-muted/70 mt-0.5">{b.lastRecordedDate}</div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       )}
 

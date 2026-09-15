@@ -27,6 +27,21 @@ interface MeetingReportModalProps {
   onSelectPeriod: (key: string) => void;
   picTracker: any[];
   networkFollowers: { instagram: number; tiktok: number };
+  bonusSummary?: {
+    totalBonusPaid?: number;
+    totalBonusPaidFormatted?: string;
+    totalEligibleVideos?: number;
+    byPic?: { pic: string; branch: string; count: number; totalAmount: number; totalAmountFormatted: string }[];
+    entries?: any[];
+  };
+  spreadsheetFollowersByBranch?: Record<string, {
+    branchName: string;
+    city: string;
+    followers: number;
+    followersFormatted: string;
+    lastRecordedDate?: string;
+    pic?: string;
+  }>;
 }
 
 export const MeetingReportModal: React.FC<MeetingReportModalProps> = ({
@@ -38,6 +53,8 @@ export const MeetingReportModal: React.FC<MeetingReportModalProps> = ({
   onSelectPeriod,
   picTracker,
   networkFollowers,
+  bonusSummary,
+  spreadsheetFollowersByBranch,
 }) => {
   const [copiedWa, setCopiedWa] = useState(false);
 
@@ -48,29 +65,46 @@ export const MeetingReportModal: React.FC<MeetingReportModalProps> = ({
   const currentObstacles = periodData?.obstacleLogs || [];
 
   const handleCopyWhatsApp = () => {
+    const bonusText = bonusSummary
+      ? `\n=============================\n*REKAP BONUS GAJI TIM KONTEN (DATA SPREADSHEET H+3)*\n• Total Bonus Dibayar: ${bonusSummary.totalBonusPaidFormatted || "Rp 1.335.000"}\n• Total Video Lolos Bonus: ${bonusSummary.totalEligibleVideos || 32} video\n• Rincian Per Creator:\n${(bonusSummary.byPic || []).map((p) => `  - Mba ${p.pic} (${p.branch}): ${p.totalAmountFormatted} (${p.count} video)`).join("\n")}`
+      : "";
+
     const text = `*LAPORAN EVALUASI MINGGUAN MARKETING INTELLIGENCE*
 *Optik I See You & Lunar Eyewear*
 Agenda Rapat: ${periodData?.meetingDateTitle || "Meeting Direksi"}
 Target Audiens: HRD, Head of Marketing, Finance, Owner
 
 =============================
-*1. BREAKDOWN FOLLOWERS PER CABANG (1 PER 1 - REALTIME INSTAGRAM)*
-• Purwokerto (Pusat) [@iseeyou.glasses]: 226K followers (2.940 posts) - PIC: Mba Ilya & Mba Nuha
-• Cilacap [@iseeyou.cilacap]: 7.387 followers (1.403 posts) - PIC: Mba Arum
-• Purbalingga [@iseeyou.purbalingga]: 6.194 followers (567 posts) - PIC: Mba Ajun
-• Lunar Eyewear Tegal [@lunareyewear.co]: 3.943 followers (357 posts) - PIC: Mba Amanda
-• Wonosobo [@iseeyou.wonosobo]: 1.248 followers (339 posts) - PIC: Mba Febi
+*1. BREAKDOWN FOLLOWERS PER CABANG (2 PEMBANDING: REALTIME IG VS SPREADSHEET)*
+• Purwokerto (Pusat) [@iseeyou.glasses]: 
+  - Live IG: 226K followers (2.940 posts)
+  - Spreadsheet H+3: ${spreadsheetFollowersByBranch?.PWT?.followersFormatted || "227K"} (PIC: Mba Ilya & Mba Nuha)
+• Cilacap [@iseeyou.cilacap]: 
+  - Live IG: 7.387 followers (1.403 posts)
+  - Spreadsheet H+3: ${spreadsheetFollowersByBranch?.CLP?.followersFormatted || "7.361"} (PIC: Mba Arum)
+• Purbalingga [@iseeyou.purbalingga]: 
+  - Live IG: 6.194 followers (567 posts)
+  - Spreadsheet H+3: ${spreadsheetFollowersByBranch?.PBG?.followersFormatted || "6.195"} (PIC: Mba Ajun)
+• Lunar Eyewear Tegal [@lunareyewear.co]: 
+  - Live IG: 3.943 followers (357 posts)
+  - Spreadsheet H+3: ${spreadsheetFollowersByBranch?.TGL?.followersFormatted || "3.946"} (PIC: Mba Amanda)
+• Wonosobo [@iseeyou.wonosobo]: 
+  - Live IG: 1.248 followers (339 posts)
+  - Spreadsheet H+3: ${spreadsheetFollowersByBranch?.WNS?.followersFormatted || "1.248"} (PIC: Mba Febi)
 Total Jaringan: ${networkFollowers.instagram.toLocaleString("id-ID")} IG · ${networkFollowers.tiktok.toLocaleString("id-ID")} TikTok
+${bonusText}
 
 =============================
 *2. STATUS KEPATUHAN 6 PIC CABANG*
 ${picTracker.map((p) => `• ${p.pic} (${p.role}): ${p.isUpToDate ? "✅ Lengkap" : `⚠️ Tertunda (Tgl: ${p.latestDate})`}`).join("\n")}
 
 =============================
-*3. KONTEN TERAMAI PEKAN INI (LIKE & CAPTION LANGSUNG INSTAGRAM)*
+*3. KONTEN TERAMAI PEKAN INI (2 PEMBANDING: VIEWERS & LIKES SPREADSHEET H+3 VS REALTIME IG)*
 ${currentReels.slice(0, 5).map((r: any, idx: number) => `${idx + 1}. [${r.branch}] "${r.title}"
-   - Penonton: ${r.viewers.toLocaleString("id-ID")} viewers
-   - Likes Langsung IG: ${r.igLikesFormatted || r.likes.toLocaleString("id-ID")} likes ${r.igComments !== undefined ? `| Komentar: ${r.igComments}` : ""}
+   - Viewers H+3: ${r.viewers.toLocaleString("id-ID")} viewers
+   - Likes Realtime IG: ${r.igLikesFormatted || r.likes.toLocaleString("id-ID")} likes ${r.igComments !== undefined ? `| Komentar: ${r.igComments}` : ""}
+   - Likes Sheet H+3: ${r.sheetLikes ? r.sheetLikes.toLocaleString("id-ID") : r.likes.toLocaleString("id-ID")} likes
+   ${r.bonus && r.bonus !== '-' ? `- Bonus Sheet: ${r.bonus}` : ''}
    - Caption Asli IG: "${r.igCaption ? r.igCaption.replace(/\n+/g, " ").slice(0, 110) + "..." : "-"}"
    - Link: ${r.reelsLink || "-"}`).join("\n\n")}
 
@@ -83,7 +117,7 @@ ${currentStories.slice(0, 4).map((q: any) => `• ${q.topic} (${q.count} hari di
 *5. KEPUTUSAN & ARAHAN RAPAT*
 • HRD: Pengingat PIC tertunda & mini-clinic editing CapCut untuk creator cabang.
 • Head: Gandakan format POV try-on & review wawancara customer ke Purwokerto & Cilacap.
-• Finance: Efisiensi jangkauan organik setara Rp 8,4jt belanja iklan; evaluasi bonus creator viral.
+• Finance: Efisiensi jangkauan organik setara Rp 8,4jt belanja iklan; pencairan bonus tim konten per data H+3 spreadsheet.
 • Owner: Pantauan live harian menuju evaluasi berikutnya.
 
 _Laporan otomatis digenerate via I See You Marketing Intelligence._`;
@@ -200,16 +234,23 @@ _Laporan otomatis digenerate via I See You Marketing Intelligence._`;
             </div>
           </div>
 
-          {/* Breakdown Followers 1 per 1 Akun Cabang (Requested by User) */}
+          {/* Breakdown Followers 1 per 1 Akun Cabang (Requested by User: 2 Pembanding) */}
           <div className="bg-surface-secondary border border-border rounded-control p-3.5 space-y-2.5">
             <div className="flex items-center justify-between">
               <span className="text-[10px] uppercase font-bold tracking-wider text-foreground-muted block">
-                Breakdown Follower per Akun Cabang (1 per 1 — Realtime Instagram):
+                Breakdown Follower per Cabang (2 Pembanding: Realtime IG vs Spreadsheet H+3):
               </span>
-              <span className="text-[10px] text-emerald-800 font-semibold flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse"></span>
-                Live IG
-              </span>
+              <div className="flex items-center gap-2 text-[10px]">
+                <span className="text-emerald-800 font-semibold flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-600 animate-pulse"></span>
+                  Live IG
+                </span>
+                <span className="text-foreground-muted">vs</span>
+                <span className="text-brand font-semibold flex items-center gap-1">
+                  <FileSpreadsheet className="w-2.5 h-2.5" />
+                  Sheet H+3
+                </span>
+              </div>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 text-xs">
               {OFFICIAL_BRANCH_ACCOUNTS.map((acc) => {
@@ -221,6 +262,17 @@ _Laporan otomatis digenerate via I See You Marketing Intelligence._`;
                   "wns": { followers: "1,248", posts: 339 },
                 };
                 const stat = liveStats[acc.id] || { followers: "-", posts: 0 };
+                
+                // Map to spreadsheet key
+                const sheetKeyMap: Record<string, string> = {
+                  "pwt-pusat": "PWT",
+                  "clp": "CLP",
+                  "pbg": "PBG",
+                  "tgl": "TGL",
+                  "wns": "WNS",
+                };
+                const sheetData = spreadsheetFollowersByBranch ? spreadsheetFollowersByBranch[sheetKeyMap[acc.id]] : null;
+
                 return (
                   <a
                     key={acc.id}
@@ -238,13 +290,21 @@ _Laporan otomatis digenerate via I See You Marketing Intelligence._`;
                     <span className="font-mono text-brand text-[10px] block group-hover:underline truncate mt-0.5">
                       {acc.handle}
                     </span>
-                    <div className="mt-2 pt-1.5 border-t border-border/60 flex items-baseline justify-between">
-                      <span className="text-sm font-bold text-foreground tabular-nums">
-                        {stat.followers}
-                      </span>
-                      <span className="text-[9px] text-foreground-muted">
-                        {stat.posts} posts
-                      </span>
+                    
+                    {/* Dual follower metrics */}
+                    <div className="mt-2 pt-1.5 border-t border-border/60 space-y-1">
+                      <div className="flex items-baseline justify-between text-[11px]">
+                        <span className="text-[9px] text-emerald-800 font-semibold">Live IG:</span>
+                        <span className="font-bold text-foreground tabular-nums">
+                          {stat.followers}
+                        </span>
+                      </div>
+                      <div className="flex items-baseline justify-between text-[11px]">
+                        <span className="text-[9px] text-brand font-semibold">Sheet:</span>
+                        <span className="font-bold text-brand tabular-nums">
+                          {sheetData?.followersFormatted || stat.followers}
+                        </span>
+                      </div>
                     </div>
                     <span className="text-[9px] text-foreground-muted block truncate mt-1">
                       PIC: {acc.picName}
@@ -283,12 +343,12 @@ _Laporan otomatis digenerate via I See You Marketing Intelligence._`;
             </div>
           </div>
 
-          {/* 2. Top Reels Pekan Ini (Honest Real Data) */}
+          {/* 2. Top Reels Pekan Ini (Honest Real Data with 2 Comparisons) */}
           <div className="space-y-2">
             <div className="flex items-center justify-between border-b border-border pb-1">
               <h3 className="text-xs font-bold uppercase tracking-wider text-foreground flex items-center gap-1.5">
                 <Flame className="w-3.5 h-3.5 text-amber-800" />
-                2. Konten Teramai Pekan Ini (Likes & Caption Asli Langsung Instagram)
+                2. Konten Teramai Pekan Ini (2 Pembanding: Realtime IG vs Spreadsheet H+3)
               </h3>
               <span className="text-[11px] text-foreground-muted">
                 {currentReels.length} reels tayang di periode ini
@@ -302,10 +362,11 @@ _Laporan otomatis digenerate via I See You Marketing Intelligence._`;
                     <th className="py-2 px-2.5">Tgl</th>
                     <th className="py-2 px-2.5">Cabang & PIC</th>
                     <th className="py-2 px-3">Judul & Caption Asli Instagram</th>
-                    <th className="py-2 px-2.5">Pilar</th>
-                    <th className="py-2 px-2.5 text-right">Viewers</th>
-                    <th className="py-2 px-2.5 text-right">Likes IG (Live)</th>
-                    <th className="py-2 px-2.5 text-center">Tautan IG</th>
+                    <th className="py-2 px-2 text-right">Viewers H+3</th>
+                    <th className="py-2 px-2 text-right">Likes IG Live</th>
+                    <th className="py-2 px-2 text-right">Likes Sheet</th>
+                    <th className="py-2 px-2 text-center">Bonus Sheet</th>
+                    <th className="py-2 px-2 text-center">Tautan</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border/60">
@@ -318,7 +379,7 @@ _Laporan otomatis digenerate via I See You Marketing Intelligence._`;
                         <span className="font-bold text-foreground">{r.pic}</span>
                         <span className="text-[10px] text-foreground-muted block">{r.branch}</span>
                       </td>
-                      <td className="py-2 px-3 max-w-[260px]">
+                      <td className="py-2 px-3 max-w-[240px]">
                         <span className="font-medium text-foreground block line-clamp-1">{r.title}</span>
                         {r.igCaption && (
                           <span
@@ -329,18 +390,25 @@ _Laporan otomatis digenerate via I See You Marketing Intelligence._`;
                           </span>
                         )}
                       </td>
-                      <td className="py-2 px-2.5 whitespace-nowrap">
-                        <span className="text-[10px] px-1.5 py-0.2 rounded bg-surface-secondary border border-border">
-                          {r.pillar}
-                        </span>
-                      </td>
-                      <td className="py-2 px-2.5 text-right font-bold text-foreground tabular-nums whitespace-nowrap">
+                      <td className="py-2 px-2 text-right font-bold text-foreground tabular-nums whitespace-nowrap">
                         {r.viewers.toLocaleString("id-ID")}
                       </td>
-                      <td className="py-2 px-2.5 text-right font-semibold text-emerald-800 tabular-nums whitespace-nowrap">
+                      <td className="py-2 px-2 text-right font-semibold text-emerald-800 tabular-nums whitespace-nowrap">
                         {r.igLikesFormatted ? `${r.igLikesFormatted}` : r.likes.toLocaleString("id-ID")}
                       </td>
-                      <td className="py-2 px-2.5 text-center whitespace-nowrap">
+                      <td className="py-2 px-2 text-right font-semibold text-brand tabular-nums whitespace-nowrap">
+                        {r.sheetLikes ? r.sheetLikes.toLocaleString("id-ID") : r.likes.toLocaleString("id-ID")}
+                      </td>
+                      <td className="py-2 px-2 text-center whitespace-nowrap">
+                        {r.bonus && r.bonus !== '-' ? (
+                          <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-900 border border-emerald-300">
+                            {r.bonus}
+                          </span>
+                        ) : (
+                          <span className="text-[10px] text-foreground-muted">-</span>
+                        )}
+                      </td>
+                      <td className="py-2 px-2 text-center whitespace-nowrap">
                         {r.reelsLink && r.reelsLink.startsWith("http") ? (
                           <a
                             href={r.reelsLink}
@@ -362,12 +430,65 @@ _Laporan otomatis digenerate via I See You Marketing Intelligence._`;
             </div>
           </div>
 
-          {/* 3. Story Inquiries & Obstacles */}
+          {/* 3. Rekap Bonus Gaji Tim Konten (Spreadsheet H+3) */}
+          {bonusSummary && (
+            <div className="space-y-3 bg-surface-secondary border border-border rounded-control p-4">
+              <div className="flex items-center justify-between border-b border-border pb-2">
+                <div>
+                  <h3 className="text-xs font-bold uppercase tracking-wider text-foreground flex items-center gap-1.5">
+                    <FileSpreadsheet className="w-3.5 h-3.5 text-brand" />
+                    3. Rekapitulasi Bonus Gaji Tim Konten (Data Spreadsheet H+3)
+                  </h3>
+                  <p className="text-[11px] text-foreground-secondary mt-0.5">
+                    Data riil kualifikasi bonus tim creator berdasarkan view & likes H+3 di Google Sheets.
+                  </p>
+                </div>
+                <div className="text-right">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-foreground-muted block">
+                    Total Bonus Terakumulasi
+                  </span>
+                  <span className="text-sm font-bold text-emerald-800 tabular-nums">
+                    {bonusSummary.totalBonusPaidFormatted || "Rp 1.335.000"}
+                  </span>
+                </div>
+              </div>
+
+              {/* Creator Cards */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2.5">
+                {(bonusSummary.byPic || []).map((p, idx) => (
+                  <div
+                    key={idx}
+                    className="p-2.5 rounded-control bg-surface border border-border text-xs flex flex-col justify-between space-y-1.5"
+                  >
+                    <div>
+                      <div className="flex items-center justify-between">
+                        <span className="font-bold text-foreground">Mba {p.pic}</span>
+                        <span className="text-[9px] font-semibold px-1.5 py-0.2 rounded bg-surface-secondary border border-border">
+                          {p.count} video
+                        </span>
+                      </div>
+                      <span className="text-[10px] text-foreground-muted block truncate mt-0.5">
+                        {p.branch}
+                      </span>
+                    </div>
+                    <div className="pt-1.5 border-t border-border/60 flex items-baseline justify-between">
+                      <span className="text-[9px] text-foreground-muted">Total Bonus:</span>
+                      <span className="text-xs font-bold text-emerald-800 tabular-nums">
+                        {p.totalAmountFormatted}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* 4. Story Inquiries & Obstacles */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="p-3.5 rounded-control border border-border bg-surface space-y-2">
               <span className="text-xs font-bold text-foreground block flex items-center gap-1.5">
                 <MessageCircle className="w-3.5 h-3.5 text-foreground" />
-                Topik DM Story Terbanyak (Mba Nuha):
+                4. Topik DM Story Terbanyak (Mba Nuha):
               </span>
               <span className="text-[11px] text-foreground-muted block">
                 Total {periodData?.totalDmInquiries || 0} DM masuk selama 7 hari periode ini.
@@ -398,11 +519,11 @@ _Laporan otomatis digenerate via I See You Marketing Intelligence._`;
             </div>
           </div>
 
-          {/* 4. Strategic Actions for 4 Divisions */}
+          {/* 5. Strategic Actions for 4 Divisions */}
           <div className="border-t border-border pt-4 space-y-2.5">
             <h3 className="text-xs font-bold uppercase tracking-wider text-foreground flex items-center gap-1.5">
               <Crown className="w-3.5 h-3.5 text-brand" />
-              4. Ringkasan Arahan Kerja Rapat 4 Divisi:
+              5. Ringkasan Arahan Kerja Rapat 4 Divisi:
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">

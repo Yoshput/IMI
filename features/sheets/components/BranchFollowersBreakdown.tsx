@@ -16,11 +16,20 @@ import { IgAccountLive, IgLiveCache } from "@/lib/instagram-realtime";
 interface BranchFollowersBreakdownProps {
   initialCache?: IgLiveCache;
   onRefreshSuccess?: (newCache: IgLiveCache) => void;
+  spreadsheetFollowers?: Record<string, {
+    branchName: string;
+    city: string;
+    followers: number;
+    followersFormatted: string;
+    lastRecordedDate?: string;
+    pic?: string;
+  }>;
 }
 
 export const BranchFollowersBreakdown: React.FC<BranchFollowersBreakdownProps> = ({
   initialCache,
   onRefreshSuccess,
+  spreadsheetFollowers,
 }) => {
   const [cache, setCache] = useState<IgLiveCache | undefined>(initialCache);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -212,16 +221,49 @@ export const BranchFollowersBreakdown: React.FC<BranchFollowersBreakdownProps> =
                 {acc.handle}
               </a>
 
-              {/* Live Followers Big Number */}
-              <div className="mt-3 pt-3 border-t border-border/70">
-                <span className="text-[10px] uppercase font-semibold text-foreground-muted block">
-                  Followers Riil IG
-                </span>
-                <div className="text-2xl font-bold text-foreground tabular-nums tracking-tight mt-0.5 flex items-baseline gap-1.5">
-                  <span>{acc.followersFormatted}</span>
-                  <span className="text-[11px] font-normal text-foreground-muted">followers</span>
-                </div>
-              </div>
+              {/* Dual Followers Comparison: Realtime IG vs Spreadsheet H+3 */}
+              {(() => {
+                const sheetKeyMap: Record<string, string> = {
+                  "pwt-pusat": "PWT",
+                  "clp": "CLP",
+                  "pbg": "PBG",
+                  "tgl": "TGL",
+                  "wns": "WNS",
+                };
+                const sheetData = spreadsheetFollowers ? spreadsheetFollowers[sheetKeyMap[acc.id]] : null;
+
+                return (
+                  <div className="mt-3 pt-2.5 border-t border-border/70 space-y-2">
+                    {/* Realtime IG */}
+                    <div className="flex items-baseline justify-between">
+                      <div>
+                        <span className="text-[9px] uppercase font-bold text-emerald-800 flex items-center gap-1">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                          Realtime IG
+                        </span>
+                        <div className="text-xl font-bold text-foreground tabular-nums tracking-tight mt-0.5">
+                          {acc.followersFormatted}
+                        </div>
+                      </div>
+
+                      {/* Spreadsheet per 3 hari */}
+                      <div className="text-right">
+                        <span className="text-[9px] uppercase font-bold text-brand block">
+                          Sheet (H+3)
+                        </span>
+                        <div className="text-sm font-bold text-brand tabular-nums tracking-tight mt-0.5">
+                          {sheetData?.followersFormatted || acc.followersFormatted}
+                        </div>
+                        {sheetData?.lastRecordedDate && (
+                          <span className="text-[8px] text-foreground-muted block mt-0.5">
+                            {sheetData.lastRecordedDate}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })()}
 
               {/* Secondary Details: Posts & Following */}
               <div className="grid grid-cols-2 gap-2 mt-3 pt-2.5 border-t border-border/50 text-[11px]">
