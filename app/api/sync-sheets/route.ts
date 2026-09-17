@@ -720,8 +720,56 @@ async function syncSpreadsheetData() {
     // Vercel serverless read-only fallback
   }
 
+  // ─── AUTO-SYNC: Collect all reel URLs from spreadsheet & update IG live cache ───
+  // This runs in the background so it doesn't block the API response.
+  // Every time the spreadsheet syncs, we also refresh Instagram metrics automatically.
+  try {
+    const allReelUrls: string[] = [];
+    Object.values(allBranchReels).forEach((rows: any[]) => {
+      rows.forEach((r) => {
+        const urls = [r.reelsLink, r.feedLink].filter(
+          (u: string) => u && u.startsWith("https://www.instagram.com/")
+        );
+        urls.forEach((u: string) => allReelUrls.push(u));
+      });
+    });
+    const uniqueUrls = [...new Set(allReelUrls)];
+
+    if (uniqueUrls.length > 0) {
+      // Fire-and-forget: update IG cache with all discovered URLs
+      (async () => {
+        try {
+          const igCachePath = path.join(process.cwd(), "lib/instagram-live-cache.json");
+          let igCache: any = { lastSync: null, accounts: {}, reels: {} };
+          if (fs.existsSync(igCachePath)) {
+            igCache = JSON.parse(fs.readFileSync(igCachePath, "utf-8"));
+          }
+
+          // Add any new URLs not yet in cache
+          let newUrlsAdded = 0;
+          for (const url of uniqueUrls) {
+            if (!igCache.reels[url]) {
+              igCache.reels[url] = { url, likes: 0, viewers: 0, comments: 0, pendingSync: true };
+              newUrlsAdded++;
+            }
+          }
+
+          if (newUrlsAdded > 0) {
+            igCache.pendingSyncUrls = uniqueUrls;
+            fs.writeFileSync(igCachePath, JSON.stringify(igCache, null, 2), "utf-8");
+          }
+        } catch {
+          // Non-blocking: ignore errors
+        }
+      })();
+    }
+  } catch {
+    // Non-blocking
+  }
+
   return output;
 }
+
 
 // GET: returns cached data or automatically syncs if older than 5 minutes or fresh requested
 export async function GET(req: NextRequest) {
