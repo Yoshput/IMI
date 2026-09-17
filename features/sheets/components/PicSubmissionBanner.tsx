@@ -26,11 +26,29 @@ export const PicSubmissionBanner: React.FC<PicSubmissionBannerProps> = ({
   lastSync = realSheetsData.syncTimestamp,
   onRefresh,
 }) => {
+  const [currentTracker, setCurrentTracker] = useState<PicStatus[]>(picTracker);
+  const [currentSyncTime, setCurrentSyncTime] = useState<string>(lastSync);
   const [isSyncing, setIsSyncing] = useState(false);
   const [syncMessage, setSyncMessage] = useState<string | null>(null);
 
-  const pendingPics = picTracker.filter((p) => !p.isUpToDate);
-  const completedCount = picTracker.length - pendingPics.length;
+  React.useEffect(() => {
+    let isMounted = true;
+    fetch("/api/sync-sheets")
+      .then((res) => res.json())
+      .then((res) => {
+        if (isMounted && res.success && res.data) {
+          if (res.data.picTracker) setCurrentTracker(res.data.picTracker);
+          if (res.data.syncTimestamp) setCurrentSyncTime(res.data.syncTimestamp);
+        }
+      })
+      .catch(() => {});
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const pendingPics = currentTracker.filter((p) => !p.isUpToDate);
+  const completedCount = currentTracker.length - pendingPics.length;
 
   const handleSyncNow = async () => {
     setIsSyncing(true);
@@ -38,13 +56,12 @@ export const PicSubmissionBanner: React.FC<PicSubmissionBannerProps> = ({
     try {
       const res = await fetch("/api/sync-sheets", { method: "POST" });
       const data = await res.json();
-      if (data.success) {
+      if (data.success && data.data) {
         setSyncMessage("Spreadsheet berhasil disinkronkan langsung dari Google Sheets!");
+        if (data.data.picTracker) setCurrentTracker(data.data.picTracker);
+        if (data.data.syncTimestamp) setCurrentSyncTime(data.data.syncTimestamp);
         if (onRefresh) onRefresh();
-        setTimeout(() => {
-          setSyncMessage(null);
-          window.location.reload();
-        }, 1200);
+        setTimeout(() => setSyncMessage(null), 3000);
       } else {
         setSyncMessage(`Gagal sinkron: ${data.error}`);
       }
@@ -84,7 +101,7 @@ export const PicSubmissionBanner: React.FC<PicSubmissionBannerProps> = ({
                     : "bg-emerald-100 text-emerald-900"
                 }`}
               >
-                {completedCount}/{picTracker.length} PIC Up-to-date
+                {completedCount}/{currentTracker.length} PIC Up-to-date
               </span>
             </div>
             <p className="text-xs text-foreground-secondary mt-0.5">
@@ -132,7 +149,7 @@ export const PicSubmissionBanner: React.FC<PicSubmissionBannerProps> = ({
 
       {/* PIC Status Pills Bar */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 pt-1">
-        {picTracker.map((p) => (
+        {currentTracker.map((p) => (
           <div
             key={p.sheetKey}
             className={`p-2.5 rounded-control border text-xs flex flex-col justify-between transition-all ${
