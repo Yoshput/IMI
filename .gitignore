@@ -34,3 +34,6 @@ yarn-error.log*
 next-env.d.ts
 
 .vercel
+
+# generated data files (too large, regenerated on sync)
+google_sheets_data.xlsx
