@@ -114,11 +114,11 @@ async function syncSpreadsheetData() {
   // 2. Process Branch Reels Sheets
   // 2. Process Branch Reels Sheets
   const branchConfigs = [
-    { sheetName: "Rekap PWT", picDefault: "Mba Ilya", branchName: "Purwokerto (Pusat)", city: "Purwokerto", branchKey: "PWT", isKFollowers: true, isPWT: true },
-    { sheetName: "Rekap PBG", picDefault: "Mba Ajun", branchName: "Purbalingga", city: "Purbalingga", branchKey: "PBG", isKFollowers: false },
-    { sheetName: "Rekap TGL", picDefault: "Mba Amanda", branchName: "Lunar Eyewear Tegal (Second Brand)", city: "Tegal", branchKey: "TGL", isKFollowers: false },
-    { sheetName: "Rekap CLP", picDefault: "Mba Arum", branchName: "Cilacap", city: "Cilacap", branchKey: "CLP", isKFollowers: false },
-    { sheetName: "Rekap WNS", picDefault: "Mba Febi", branchName: "Wonosobo", city: "Wonosobo", branchKey: "WNS", isKFollowers: false },
+    { sheetName: "Rekap PWT", picDefault: "Ilya", branchName: "Purwokerto (Pusat)", city: "Purwokerto", branchKey: "PWT", isKFollowers: true, isPWT: true },
+    { sheetName: "Rekap PBG", picDefault: "Ajun", branchName: "Purbalingga", city: "Purbalingga", branchKey: "PBG", isKFollowers: false },
+    { sheetName: "Rekap TGL", picDefault: "Amanda", branchName: "Lunar Eyewear Tegal (Second Brand)", city: "Tegal", branchKey: "TGL", isKFollowers: false },
+    { sheetName: "Rekap CLP", picDefault: "Arum", branchName: "Cilacap", city: "Cilacap", branchKey: "CLP", isKFollowers: false },
+    { sheetName: "Rekap WNS", picDefault: "Febi", branchName: "Wonosobo", city: "Wonosobo", branchKey: "WNS", isKFollowers: false },
   ];
 
   const allBranchReels: Record<string, any[]> = {};
@@ -197,7 +197,10 @@ async function syncSpreadsheetData() {
       const row = rawRows[i];
       if (!row || row.length === 0) continue;
 
-      const reportDate = parseExcelDate(cfg.isPWT ? row[1] : row[9]);
+      // For PWT: row[0] is the report submission timestamp, row[1] is the upload date
+      // Use row[0] as reportDate (when they filed) so latestDate tracks actual filing date
+      const reportDate = parseExcelDate(cfg.isPWT ? row[0] : row[9]);
+      const uploadDate = parseExcelDate(cfg.isPWT ? row[1] : row[9]);
       const pic = (cfg.isPWT ? row[2] : row[1]) || cfg.picDefault;
       const rawTitle = String((cfg.isPWT ? row[4] : row[2]) || "").trim();
       const pillar = String((cfg.isPWT ? row[5] : row[3]) || "Umum").trim();
@@ -223,7 +226,7 @@ async function syncSpreadsheetData() {
           pic,
           timestamp: reportDate,
           reportDate,
-          uploadDate: reportDate,
+          uploadDate: cfg.isPWT ? uploadDate : reportDate,
           evalReportDate: null,
           reelsTitle: "(Libur / Off Duty)",
           secondReelsTitle: undefined,
@@ -246,14 +249,16 @@ async function syncSpreadsheetData() {
       }
 
       // Real video upload: match with H+3 evaluation
+      // For PWT, use uploadDate for evaluation matching (the actual video date)
+      const evalMatchDate = cfg.isPWT ? uploadDate : reportDate;
       let matchedEval: any = null;
-      const dateEvals = evaluationsByDate[reportDate];
+      const dateEvals = evaluationsByDate[evalMatchDate];
       if (dateEvals && dateEvals.length > 0) {
         matchedEval = dateEvals[0];
       } else {
         matchedEval = evaluationsList.find((e) => {
-          if (!e.evalReportDate || !reportDate) return false;
-          const daysDiff = Math.abs((new Date(e.evalReportDate).getTime() - new Date(reportDate).getTime()) / (1000 * 3600 * 24));
+          if (!e.evalReportDate || !evalMatchDate) return false;
+          const daysDiff = Math.abs((new Date(e.evalReportDate).getTime() - new Date(evalMatchDate).getTime()) / (1000 * 3600 * 24));
           if (daysDiff > 7) return false;
           const t1 = e.evalTitle.toLowerCase();
           const t2 = rawTitle.toLowerCase();
@@ -286,7 +291,7 @@ async function syncSpreadsheetData() {
         pic,
         timestamp: reportDate,
         reportDate,
-        uploadDate: reportDate,
+        uploadDate: cfg.isPWT ? uploadDate : reportDate,
         evalReportDate: matchedEval ? matchedEval.evalReportDate : null,
         reelsTitle: rawTitle,
         secondReelsTitle: matchedEval ? matchedEval.evalTitle : undefined,
@@ -378,12 +383,12 @@ async function syncSpreadsheetData() {
 
   const todayStr = new Date().toISOString().split("T")[0];
   const picTracker = [
-    { pic: "Mba Nuha", role: "Rekap Story PWT", branch: "Purwokerto (Pusat)", sheetKey: "Rekap Story PWT", data: storyItems },
-    { pic: "Mba Ilya", role: "Rekap Reels PWT", branch: "Purwokerto (Pusat)", sheetKey: "Rekap PWT", data: allBranchReels["Rekap PWT"] || [] },
-    { pic: "Mba Ajun", role: "Rekap Reels PBG", branch: "Purbalingga", sheetKey: "Rekap PBG", data: allBranchReels["Rekap PBG"] || [] },
-    { pic: "Mba Amanda", role: "Rekap Reels TGL", branch: "Lunar Eyewear Tegal (Second Brand)", sheetKey: "Rekap TGL", data: allBranchReels["Rekap TGL"] || [] },
-    { pic: "Mba Arum", role: "Rekap Reels CLP", branch: "Cilacap", sheetKey: "Rekap CLP", data: allBranchReels["Rekap CLP"] || [] },
-    { pic: "Mba Febi", role: "Rekap Reels WNS", branch: "Wonosobo", sheetKey: "Rekap WNS", data: allBranchReels["Rekap WNS"] || [] },
+    { pic: "Nuha", role: "Rekap Story PWT", branch: "Purwokerto (Pusat)", sheetKey: "Rekap Story PWT", data: storyItems },
+    { pic: "Ilya", role: "Rekap Reels PWT", branch: "Purwokerto (Pusat)", sheetKey: "Rekap PWT", data: allBranchReels["Rekap PWT"] || [] },
+    { pic: "Ajun", role: "Rekap Reels PBG", branch: "Purbalingga", sheetKey: "Rekap PBG", data: allBranchReels["Rekap PBG"] || [] },
+    { pic: "Amanda", role: "Rekap Reels TGL", branch: "Lunar Eyewear Tegal (Second Brand)", sheetKey: "Rekap TGL", data: allBranchReels["Rekap TGL"] || [] },
+    { pic: "Arum", role: "Rekap Reels CLP", branch: "Cilacap", sheetKey: "Rekap CLP", data: allBranchReels["Rekap CLP"] || [] },
+    { pic: "Febi", role: "Rekap Reels WNS", branch: "Wonosobo", sheetKey: "Rekap WNS", data: allBranchReels["Rekap WNS"] || [] },
   ].map((p) => {
     const dates = p.data
       .map((d: any) => d.reportDate)
