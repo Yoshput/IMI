@@ -80,7 +80,7 @@ async function syncSpreadsheetData() {
   const buffer = Buffer.from(arrayBuffer);
   const workbook = XLSX.read(buffer, { type: "buffer" });
 
-  // 1. Process Rekap Story PWT (Mba Nuha)
+  // 1. Process Rekap Story PWT (Nuha)
   const storySheet = workbook.Sheets["Rekap Story PWT"];
   const rawStory: any[] = storySheet ? XLSX.utils.sheet_to_json(storySheet) : [];
   const storyItems = rawStory
@@ -663,11 +663,11 @@ async function syncSpreadsheetData() {
     sourceUrl:
       "https://docs.google.com/spreadsheets/d/1BU0fIDP656Y-eue55bWVSxeaixSeFJwR3GP1n8kwBYc/edit?usp=sharing",
     officialAccounts: [
-      { name: "Optik I See You Purwokerto (Pusat)", handle: "@iseeyou.glasses", url: "https://www.instagram.com/iseeyou.glasses/", city: "Purwokerto", pic: "Mba Ilya & Mba Nuha" },
-      { name: "Optik I See You Purbalingga", handle: "@iseeyou.purbalingga", url: "https://www.instagram.com/iseeyou.purbalingga/", city: "Purbalingga", pic: "Mba Ajun" },
-      { name: "Optik I See You Cilacap", handle: "@iseeyou.cilacap", url: "https://www.instagram.com/iseeyou.cilacap/", city: "Cilacap", pic: "Mba Arum" },
-      { name: "Optik I See You Wonosobo", handle: "@iseeyou.wonosobo", url: "https://www.instagram.com/iseeyou.wonosobo/", city: "Wonosobo", pic: "Mba Febi" },
-      { name: "Lunar Eyewear Tegal (Second Brand)", handle: "@lunareyewear.co", url: "https://www.instagram.com/lunareyewear.co", city: "Tegal", pic: "Mba Amanda" },
+      { name: "Optik I See You Purwokerto (Pusat)", handle: "@iseeyou.glasses", url: "https://www.instagram.com/iseeyou.glasses/", city: "Purwokerto", pic: "Ilya & Nuha" },
+      { name: "Optik I See You Purbalingga", handle: "@iseeyou.purbalingga", url: "https://www.instagram.com/iseeyou.purbalingga/", city: "Purbalingga", pic: "Ajun" },
+      { name: "Optik I See You Cilacap", handle: "@iseeyou.cilacap", url: "https://www.instagram.com/iseeyou.cilacap/", city: "Cilacap", pic: "Arum" },
+      { name: "Optik I See You Wonosobo", handle: "@iseeyou.wonosobo", url: "https://www.instagram.com/iseeyou.wonosobo/", city: "Wonosobo", pic: "Febi" },
+      { name: "Lunar Eyewear Tegal (Second Brand)", handle: "@lunareyewear.co", url: "https://www.instagram.com/lunareyewear.co", city: "Tegal", pic: "Amanda" },
     ],
     picTracker: picTracker,
     storyData: storyItems,

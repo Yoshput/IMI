@@ -12,11 +12,13 @@ import {
   ArrowUpRight,
   Sparkles,
   CheckCircle2,
+  Calendar,
 } from "lucide-react";
 import { PicComplianceTracker, PicStatus } from "./PicComplianceTracker";
 import { RawSheetsTable } from "./RawSheetsTable";
 import { ExecutiveMeetingRecap } from "./ExecutiveMeetingRecap";
 import { SocialBladeTracker } from "./SocialBladeTracker";
+import { ThreeDayCadenceRecap } from "./ThreeDayCadenceRecap";
 
 interface SpreadsheetHubViewProps {
   initialData: {
@@ -27,13 +29,14 @@ interface SpreadsheetHubViewProps {
     branchReels: Record<string, any[]>;
     dailyFollowersTracker: Record<string, any[]>;
     executiveRecap: any;
+    spreadsheetFollowersByBranch?: Record<string, any>;
   };
 }
 
 export const SpreadsheetHubView: React.FC<SpreadsheetHubViewProps> = ({
   initialData,
 }) => {
-  const [activeTab, setActiveTab] = useState<"compliance" | "raw" | "executive" | "socialblade">("executive");
+  const [activeTab, setActiveTab] = useState<"cadence" | "compliance" | "raw" | "executive" | "socialblade">("cadence");
   const [data, setData] = useState(initialData);
   const [isSyncing, setIsSyncing] = useState(false);
   const [syncStatus, setSyncStatus] = useState<string | null>(null);
@@ -100,6 +103,12 @@ export const SpreadsheetHubView: React.FC<SpreadsheetHubViewProps> = ({
   };
 
   const tabs = [
+    {
+      key: "cadence",
+      label: "Rekap 3 Hari & Meeting Selasa",
+      icon: Calendar,
+      badge: "Story & Reels",
+    },
     {
       key: "executive",
       label: "Versi Siap Saji (Meeting Direksi)",
@@ -222,7 +231,7 @@ export const SpreadsheetHubView: React.FC<SpreadsheetHubViewProps> = ({
                   ⚡ Opsi Lanjutan: Push Instan dari Google Sheets (Opsional)
                 </p>
                 <p>
-                  Jika Anda ingin setiap kali PIC (Mba Ilya, Mba Ajun, dsb) mengisi baris baru di spreadsheet langsung detik itu juga terkirim ke dashboard, Anda cukup menambahkan skrip berikut ke Google Spreadsheet:
+                  Jika Anda ingin setiap kali PIC (Ilya, Ajun, dsb) mengisi baris baru di spreadsheet langsung detik itu juga terkirim ke dashboard, Anda cukup menambahkan skrip berikut ke Google Spreadsheet:
                 </p>
                 <ol className="list-decimal list-inside space-y-1 pl-1">
                   <li>Buka spreadsheet Google Sheets Anda.</li>
@@ -304,6 +313,16 @@ export const SpreadsheetHubView: React.FC<SpreadsheetHubViewProps> = ({
       </div>
 
       {/* Tab Panels */}
+      {activeTab === "cadence" && (
+        <ThreeDayCadenceRecap
+          storyData={data.storyData}
+          branchReels={data.branchReels}
+          picTracker={data.picTracker}
+          bonusSummary={data.executiveRecap?.bonusSummary}
+          spreadsheetFollowersByBranch={data.spreadsheetFollowersByBranch || data.executiveRecap?.spreadsheetFollowersByBranch}
+        />
+      )}
+
       {activeTab === "executive" && (
         <ExecutiveMeetingRecap
           executiveRecap={data.executiveRecap}

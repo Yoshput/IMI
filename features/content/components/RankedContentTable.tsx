@@ -1,7 +1,7 @@
 import React from "react";
 import { ContentItem } from "@/types";
 import { formatNumber } from "@/lib/utils";
-import { Eye, Bookmark, MessageSquare, ThumbsUp, Layers, Video, Image as ImageIcon } from "lucide-react";
+import { Eye, Bookmark, MessageSquare, ThumbsUp, Layers, Video, Image as ImageIcon, ExternalLink } from "lucide-react";
 import { ProvenanceBadge } from "@/components/shared/ProvenanceBadge";
 
 interface RankedContentTableProps {
@@ -28,7 +28,7 @@ export const RankedContentTable: React.FC<RankedContentTableProps> = ({ items })
           <thead>
             <tr className="border-b border-border bg-surface-secondary text-[11px] font-bold uppercase tracking-wider text-foreground-secondary">
               <th className="py-3.5 px-4 w-12 text-center">Rank</th>
-              <th className="py-3.5 px-4">Konten & Kategori</th>
+              <th className="py-3.5 px-4">Konten & Cover Instagram</th>
               <th className="py-3.5 px-3">Format</th>
               <th className="py-3.5 px-3 text-right">Reach</th>
               <th className="py-3.5 px-3 text-right">Saves</th>
@@ -62,23 +62,52 @@ export const RankedContentTable: React.FC<RankedContentTableProps> = ({ items })
                 <td className="py-4 px-4 max-w-sm">
                   <div className="flex items-start gap-3">
                     {item.thumbnail && (
-                      <div className="w-12 h-12 rounded-control overflow-hidden bg-surface-subtle shrink-0 border border-border/80 relative">
+                      <div className="w-14 h-14 rounded-control overflow-hidden bg-surface-subtle shrink-0 border border-border/80 relative shadow-subtle group/thumb">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                           src={item.thumbnail}
                           alt={item.title}
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-cover transition-transform duration-300 group-hover/thumb:scale-110"
+                          loading="lazy"
                         />
+                        {item.postUrl && (
+                          <a
+                            href={item.postUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="absolute inset-0 bg-black/40 opacity-0 group-hover/thumb:opacity-100 transition-opacity flex items-center justify-center text-white"
+                            title="Buka Postingan Instagram Asli"
+                          >
+                            <ExternalLink className="w-4 h-4" />
+                          </a>
+                        )}
                       </div>
                     )}
                     <div className="space-y-1 min-w-0">
-                      <span className="font-semibold text-foreground group-hover:text-brand transition-colors block text-xs leading-snug line-clamp-2">
-                        {item.title}
-                      </span>
+                      {item.postUrl ? (
+                        <a
+                          href={item.postUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-semibold text-foreground group-hover:text-brand transition-colors block text-xs leading-snug line-clamp-2 hover:underline inline-flex items-baseline gap-1"
+                        >
+                          <span>{item.title}</span>
+                          <ExternalLink className="w-2.5 h-2.5 shrink-0 opacity-60" />
+                        </a>
+                      ) : (
+                        <span className="font-semibold text-foreground group-hover:text-brand transition-colors block text-xs leading-snug line-clamp-2">
+                          {item.title}
+                        </span>
+                      )}
                       <div className="flex flex-wrap items-center gap-1.5 text-[11px] text-foreground-muted">
                         {item.branchName && (
                           <span className="px-1.5 py-0.2 rounded bg-brand-light text-brand font-semibold text-[10px]">
                             {item.branchName}
+                          </span>
+                        )}
+                        {item.pic && (
+                          <span className="px-1.5 py-0.2 rounded bg-surface-subtle text-foreground font-semibold text-[10px] border border-border">
+                            PIC: {item.pic}
                           </span>
                         )}
                         <span className="px-1.5 py-0.2 rounded bg-surface-subtle text-foreground-secondary font-medium">

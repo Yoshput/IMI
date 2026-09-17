@@ -168,7 +168,7 @@ const competitorsData: Competitor[] = [
       "Perlu penguatan konsistensi identitas branding agar tetap sinergis dengan grup I See You"
     ],
     tacticalStealForISeeYou:
-      "Format reels POV Mba Amanda di Tegal yang tembus 128k viewers harus segera dibuatkan SOP dan direplikasi ke Purwokerto, Purbalingga, dan Cilacap.",
+      "Format reels POV Amanda di Tegal yang tembus 128k viewers harus segera dibuatkan SOP dan direplikasi ke Purwokerto, Purbalingga, dan Cilacap.",
     primaryChannel: "Instagram Reels & TikTok",
     tag: "Internal Sibling"
   },

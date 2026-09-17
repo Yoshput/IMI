@@ -414,7 +414,7 @@ Link Akses Web: https://imi-puce.vercel.app/spreadsheet`;
                   Rekomendasi HRD untuk Tindak Lanjut:
                 </span>
                 <p className="text-foreground-secondary text-[11px]">
-                  1. Berikan apresiasi kepada Mba Ajun, Mba Amanda, Mba Febi, dan Mba Nuha atas konsistensi input laporan.
+                  1. Berikan apresiasi kepada Ajun, Amanda, Febi, dan Nuha atas konsistensi input laporan.
                 </p>
                 <p className="text-foreground-secondary text-[11px]">
                   2. Jadwalkan klinik mini editing CapCut untuk tim cabang agar kendala opening video estetik teratasi.
@@ -537,7 +537,7 @@ Link Akses Web: https://imi-puce.vercel.app/spreadsheet`;
             <div className="space-y-2">
               <span className="text-xs font-bold text-foreground flex items-center gap-1.5">
                 <MessageCircle className="w-3.5 h-3.5 text-foreground" />
-                Pertanyaan Paling Sering di DM Story Mba Nuha (Periode Ini):
+                Pertanyaan Paling Sering di DM Story Nuha (Periode Ini):
               </span>
               <div className="text-[11px] text-foreground-muted">
                 Total {activePeriod.totalDmInquiries || 0} DM masuk selama 7 hari ini.
@@ -622,7 +622,7 @@ Link Akses Web: https://imi-puce.vercel.app/spreadsheet`;
                 {executiveRecap.bonusSummary?.byPic?.length || 0} Creator
               </div>
               <p className="text-[11px] text-foreground-secondary mt-1">
-                {executiveRecap.bonusSummary?.byPic?.map(p => `Mba ${p.pic}`).join(", ") || "–"}
+                {executiveRecap.bonusSummary?.byPic?.map(p => `${p.pic}`).join(", ") || "–"}
               </p>
             </div>
 
@@ -654,7 +654,7 @@ Link Akses Web: https://imi-puce.vercel.app/spreadsheet`;
                         {i + 1}
                       </span>
                       <div>
-                        <span className="font-semibold text-foreground">Mba {p.pic}</span>
+                        <span className="font-semibold text-foreground">{p.pic}</span>
                         <span className="text-foreground-muted ml-1.5 text-[11px]">({p.branch})</span>
                       </div>
                     </div>
@@ -714,7 +714,7 @@ Link Akses Web: https://imi-puce.vercel.app/spreadsheet`;
             {[
               {
                 target: "Cabang Cilacap & Purwokerto",
-                action: "Follow up pengisian lembar kerja Mba Arum dan Mba Ilya agar update tidak tertunda sebelum meeting evaluasi.",
+                action: "Follow up pengisian lembar kerja Arum dan Ilya agar update tidak tertunda sebelum meeting evaluasi.",
                 pic: "HRD",
               },
               {

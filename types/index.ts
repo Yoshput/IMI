@@ -49,6 +49,8 @@ export interface ContentItem {
   isDemo: boolean;
   thumbnail?: string;
   branchName?: string;
+  postUrl?: string;
+  pic?: string;
 }
 
 export interface PriorityIssue {

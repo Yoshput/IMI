@@ -30,15 +30,15 @@ export const DominantPerformer: React.FC<DominantPerformerProps> = ({ item }) =>
         <div className="lg:col-span-4 aspect-[4/5] rounded-control flex flex-col justify-between p-5 text-white shadow-subtle relative overflow-hidden group">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/lokasi/purwokerto/IMG_1544.webp"
-            alt="Lokasi Optik I See You Purwokerto"
+            src={item.thumbnail || "/covers/trend-dewasa-passwordnya.png"}
+            alt={item.title}
             className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/30" />
 
           <div className="relative z-10 flex items-center justify-between">
             <span className="text-[10px] font-bold tracking-wider px-2.5 py-1 rounded bg-black/60 backdrop-blur-md uppercase border border-white/10">
-              Reels @ Lokasi Purwokerto
+              {item.branchName ? `Reels @ ${item.branchName}` : "Reels Instagram"}
             </span>
             <span className="text-xs font-bold text-amber-300 px-2 py-0.5 rounded bg-black/50 backdrop-blur-sm">
               Save Rate {item.saveRate}%
@@ -47,7 +47,7 @@ export const DominantPerformer: React.FC<DominantPerformerProps> = ({ item }) =>
 
           <div className="relative z-10 space-y-1.5">
             <div className="text-[11px] font-semibold text-emerald-300 uppercase tracking-wider flex items-center gap-1.5">
-              <span>Optik I See You (Pusat HR Boenyamin)</span>
+              <span>{item.branchName || "Optik I See You"} {item.pic ? `(PIC: ${item.pic})` : ""}</span>
             </div>
             <p className="text-sm font-bold line-clamp-3 leading-snug drop-shadow-sm">
               &ldquo;{item.title}&rdquo;
@@ -56,7 +56,17 @@ export const DominantPerformer: React.FC<DominantPerformerProps> = ({ item }) =>
 
           <div className="relative z-10 flex items-center justify-between text-[11px] text-white/90 pt-2 border-t border-white/20">
             <span>Terbit: {item.publishDate}</span>
-            <span className="font-semibold text-emerald-300">Set: Area Display Kacamata</span>
+            {item.postUrl && (
+              <a
+                href={item.postUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-semibold text-emerald-300 hover:text-white underline inline-flex items-center gap-1"
+              >
+                <span>Buka Instagram</span>
+                <Eye className="w-3 h-3" />
+              </a>
+            )}
           </div>
         </div>
 

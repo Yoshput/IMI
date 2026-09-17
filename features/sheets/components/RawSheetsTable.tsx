@@ -169,12 +169,12 @@ export const RawSheetsTable: React.FC<RawSheetsTableProps> = ({
 
   const filterButtons = [
     { key: "all", label: "Semua Cabang & PIC", count: combinedRows.length },
-    { key: "story", label: "Mba Nuha (Story PWT)", count: storyData.length },
-    { key: "pwt", label: "Mba Ilya (Reels PWT)", count: (branchReels["Rekap PWT"] || []).length },
-    { key: "pbg", label: "Mba Ajun (Reels PBG)", count: (branchReels["Rekap PBG"] || []).length },
-    { key: "tgl", label: "Mba Amanda (Lunar TGL)", count: (branchReels["Rekap TGL"] || []).length },
-    { key: "clp", label: "Mba Arum (Reels CLP)", count: (branchReels["Rekap CLP"] || []).length },
-    { key: "wns", label: "Mba Febi (Reels WNS)", count: (branchReels["Rekap WNS"] || []).length },
+    { key: "story", label: "Nuha (Story PWT)", count: storyData.length },
+    { key: "pwt", label: "Ilya (Reels PWT)", count: (branchReels["Rekap PWT"] || []).length },
+    { key: "pbg", label: "Ajun (Reels PBG)", count: (branchReels["Rekap PBG"] || []).length },
+    { key: "tgl", label: "Amanda (Lunar TGL)", count: (branchReels["Rekap TGL"] || []).length },
+    { key: "clp", label: "Arum (Reels CLP)", count: (branchReels["Rekap CLP"] || []).length },
+    { key: "wns", label: "Febi (Reels WNS)", count: (branchReels["Rekap WNS"] || []).length },
   ];
 
   return (

@@ -66,7 +66,7 @@ export const MeetingReportModal: React.FC<MeetingReportModalProps> = ({
 
   const handleCopyWhatsApp = () => {
     const bonusText = bonusSummary
-      ? `\n=============================\n*REKAP BONUS GAJI TIM KONTEN (DATA SPREADSHEET H+3)*\n• Total Bonus Dibayar: ${bonusSummary.totalBonusPaidFormatted || "Rp 1.335.000"}\n• Total Video Lolos Bonus: ${bonusSummary.totalEligibleVideos || 32} video\n• Rincian Per Creator:\n${(bonusSummary.byPic || []).map((p) => `  - Mba ${p.pic} (${p.branch}): ${p.totalAmountFormatted} (${p.count} video)`).join("\n")}`
+      ? `\n=============================\n*REKAP BONUS GAJI TIM KONTEN (DATA SPREADSHEET H+3)*\n• Total Bonus Dibayar: ${bonusSummary.totalBonusPaidFormatted || "Rp 1.335.000"}\n• Total Video Lolos Bonus: ${bonusSummary.totalEligibleVideos || 32} video\n• Rincian Per Creator:\n${(bonusSummary.byPic || []).map((p) => `  - ${p.pic} (${p.branch}): ${p.totalAmountFormatted} (${p.count} video)`).join("\n")}`
       : "";
 
     const text = `*LAPORAN EVALUASI MINGGUAN MARKETING INTELLIGENCE*
@@ -78,19 +78,19 @@ Target Audiens: HRD, Head of Marketing, Finance, Owner
 *1. BREAKDOWN FOLLOWERS PER CABANG (2 PEMBANDING: REALTIME IG VS SPREADSHEET)*
 • Purwokerto (Pusat) [@iseeyou.glasses]: 
   - Live IG: 226K followers (2.940 posts)
-  - Spreadsheet H+3: ${spreadsheetFollowersByBranch?.PWT?.followersFormatted || "227K"} (PIC: Mba Ilya & Mba Nuha)
+  - Spreadsheet H+3: ${spreadsheetFollowersByBranch?.PWT?.followersFormatted || "227K"} (PIC: Ilya & Nuha)
 • Cilacap [@iseeyou.cilacap]: 
   - Live IG: 7.387 followers (1.403 posts)
-  - Spreadsheet H+3: ${spreadsheetFollowersByBranch?.CLP?.followersFormatted || "7.361"} (PIC: Mba Arum)
+  - Spreadsheet H+3: ${spreadsheetFollowersByBranch?.CLP?.followersFormatted || "7.361"} (PIC: Arum)
 • Purbalingga [@iseeyou.purbalingga]: 
   - Live IG: 6.194 followers (567 posts)
-  - Spreadsheet H+3: ${spreadsheetFollowersByBranch?.PBG?.followersFormatted || "6.195"} (PIC: Mba Ajun)
+  - Spreadsheet H+3: ${spreadsheetFollowersByBranch?.PBG?.followersFormatted || "6.195"} (PIC: Ajun)
 • Lunar Eyewear Tegal [@lunareyewear.co]: 
   - Live IG: 3.943 followers (357 posts)
-  - Spreadsheet H+3: ${spreadsheetFollowersByBranch?.TGL?.followersFormatted || "3.946"} (PIC: Mba Amanda)
+  - Spreadsheet H+3: ${spreadsheetFollowersByBranch?.TGL?.followersFormatted || "3.946"} (PIC: Amanda)
 • Wonosobo [@iseeyou.wonosobo]: 
   - Live IG: 1.248 followers (339 posts)
-  - Spreadsheet H+3: ${spreadsheetFollowersByBranch?.WNS?.followersFormatted || "1.248"} (PIC: Mba Febi)
+  - Spreadsheet H+3: ${spreadsheetFollowersByBranch?.WNS?.followersFormatted || "1.248"} (PIC: Febi)
 Total Jaringan: ${networkFollowers.instagram.toLocaleString("id-ID")} IG · ${networkFollowers.tiktok.toLocaleString("id-ID")} TikTok
 ${bonusText}
 
@@ -109,7 +109,7 @@ ${currentReels.slice(0, 5).map((r: any, idx: number) => `${idx + 1}. [${r.branch
    - Link: ${r.reelsLink || "-"}`).join("\n\n")}
 
 =============================
-*4. DM STORY PALING BANYAK DITANYAKAN (Mba Nuha)*
+*4. DM STORY PALING BANYAK DITANYAKAN (Nuha)*
 Total DM Masuk Pekan Ini: ${periodData?.totalDmInquiries || 0} DM
 ${currentStories.slice(0, 4).map((q: any) => `• ${q.topic} (${q.count} hari ditanyakan)`).join("\n")}
 
@@ -462,7 +462,7 @@ _Laporan otomatis digenerate via I See You Marketing Intelligence._`;
                   >
                     <div>
                       <div className="flex items-center justify-between">
-                        <span className="font-bold text-foreground">Mba {p.pic}</span>
+                        <span className="font-bold text-foreground">{p.pic}</span>
                         <span className="text-[9px] font-semibold px-1.5 py-0.2 rounded bg-surface-secondary border border-border">
                           {p.count} video
                         </span>
@@ -488,7 +488,7 @@ _Laporan otomatis digenerate via I See You Marketing Intelligence._`;
             <div className="p-3.5 rounded-control border border-border bg-surface space-y-2">
               <span className="text-xs font-bold text-foreground block flex items-center gap-1.5">
                 <MessageCircle className="w-3.5 h-3.5 text-foreground" />
-                4. Topik DM Story Terbanyak (Mba Nuha):
+                4. Topik DM Story Terbanyak (Nuha):
               </span>
               <span className="text-[11px] text-foreground-muted block">
                 Total {periodData?.totalDmInquiries || 0} DM masuk selama 7 hari periode ini.
