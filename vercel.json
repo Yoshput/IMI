@@ -2,7 +2,7 @@
   "crons": [
     {
       "path": "/api/instagram-realtime",
-      "schedule": "0 * * * *"
+      "schedule": "0 0 * * *"
     }
   ]
 }
