@@ -135,6 +135,31 @@ async function main() {
     { sheetName: 'Rekap WNS', picDefault: 'Febi', branchName: 'Wonosobo', city: 'Wonosobo', branchKey: 'WNS', isKFollowers: false },
   ];
 
+  // Load IG live cache for live metric fallback
+  let igLiveCache = null;
+  try {
+    const igCachePath = path.join(__dirname, '../lib/instagram-live-cache.json');
+    if (fs.existsSync(igCachePath)) {
+      igLiveCache = JSON.parse(fs.readFileSync(igCachePath, 'utf-8'));
+    }
+  } catch (e) {
+    // ignore
+  }
+
+  function findLiveReel(url, igCache) {
+    if (!url || !igCache?.reels) return null;
+    const clean = String(url).trim();
+    if (igCache.reels[clean]) return igCache.reels[clean];
+    const m = clean.match(/\/(?:reel|p)\/([A-Za-z0-9_-]+)/);
+    if (m) {
+      const code = m[1];
+      for (const [k, v] of Object.entries(igCache.reels)) {
+        if (k.includes(code)) return v;
+      }
+    }
+    return null;
+  }
+
   const allBranchReels = {};
   const allFollowerDaily = {};
 
@@ -316,13 +341,18 @@ async function main() {
         tiktokLink: cleanLink(tiktokLink),
         igFollowers,
         tiktokFollowers,
-        viewers: matchedEval ? matchedEval.viewers : 0,
-        likes: matchedEval ? matchedEval.likes : 0,
+        viewers: (matchedEval && matchedEval.viewers > 0) ? matchedEval.viewers : (findLiveReel(actualLink, igLiveCache)?.viewers || 0),
+        likes: (matchedEval && matchedEval.likes > 0) ? matchedEval.likes : (findLiveReel(actualLink, igLiveCache)?.likes || 0),
         bonus: matchedEval ? matchedEval.bonus : '-',
         obstacle: obstacle !== 'tidak ada' && obstacle !== 'belum ada' ? obstacle : '-',
         isDayOff: false,
-        isEvaluated: !!matchedEval,
-        evaluationCadence: matchedEval ? 'H+3 Selesai' : 'Menunggu H+3',
+        isEvaluated: !!matchedEval || !!(findLiveReel(actualLink, igLiveCache)?.likes > 0 || findLiveReel(actualLink, igLiveCache)?.viewers > 0),
+        isLiveMetric: !matchedEval && !!(findLiveReel(actualLink, igLiveCache)?.likes > 0 || findLiveReel(actualLink, igLiveCache)?.viewers > 0),
+        evaluationCadence: (matchedEval && matchedEval.viewers > 0)
+          ? 'H+3 Selesai'
+          : (findLiveReel(actualLink, igLiveCache)?.likes > 0 || findLiveReel(actualLink, igLiveCache)?.viewers > 0)
+          ? 'Live Instagram (H-1/H-2)'
+          : 'Menunggu H+3',
       });
     }
 
@@ -434,17 +464,6 @@ async function main() {
     };
   });
 
-  // Check IG live cache if exists
-  let igLiveCache = null;
-  try {
-    const igCachePath = path.join(__dirname, '../lib/instagram-cache.json');
-    if (fs.existsSync(igCachePath)) {
-      igLiveCache = JSON.parse(fs.readFileSync(igCachePath, 'utf-8'));
-    }
-  } catch (e) {
-    // ignore
-  }
-
   // Helper: Extract weekly evaluation data for a given 7-day period
   const buildPeriodRecap = (startDate, endDate, meetingDateTitle, meetingStatus) => {
     const weeklyReels = [];
@@ -454,13 +473,10 @@ async function main() {
         const uploadedInPeriod = r.uploadDate && r.uploadDate >= startDate && r.uploadDate <= endDate;
 
         if (!r.isDayOff && (evaluatedInPeriod || uploadedInPeriod)) {
-          let liveIg = null;
-          if (igLiveCache && igLiveCache.reels && r.reelsLink) {
-            const shortcode = (r.reelsLink.match(/\/reel\/([A-Za-z0-9_-]+)/) || [])[1];
-            if (shortcode) {
-              liveIg = Object.entries(igLiveCache.reels).find(([k]) => k.includes(shortcode))?.[1];
-            }
-          }
+          let liveIg = findLiveReel(r.reelsLink, igLiveCache);
+
+          const finalV = r.viewers > 0 ? r.viewers : (liveIg?.viewers || 0);
+          const finalL = (liveIg && liveIg.likes) ? Math.max(liveIg.likes, r.likes) : r.likes;
 
           weeklyReels.push({
             branch: r.branch,
@@ -472,9 +488,9 @@ async function main() {
             title: r.reelsTitle,
             secondTitle: r.secondReelsTitle,
             pillar: r.contentPillar,
-            viewers: r.viewers,
+            viewers: finalV,
             sheetViewers: r.viewers,
-            likes: liveIg && liveIg.likes ? liveIg.likes : r.likes,
+            likes: finalL,
             sheetLikes: r.likes,
             liveIgLikes: liveIg?.likes || null,
             igLikesFormatted: liveIg?.likesFormatted,
@@ -483,8 +499,9 @@ async function main() {
             bonus: r.bonus,
             reelsLink: r.reelsLink,
             tiktokLink: r.tiktokLink,
-            isEvaluated: r.isEvaluated,
-            evaluationStatus: r.isEvaluated ? 'Evaluasi H+3 Selesai' : 'Menunggu Evaluasi H+3',
+            isEvaluated: r.isEvaluated || finalV > 0 || finalL > 0,
+            isLiveMetric: r.isLiveMetric || (!r.evalReportDate && (finalV > 0 || finalL > 0)),
+            evaluationStatus: r.evalReportDate ? 'Evaluasi H+3 Selesai' : (finalV > 0 || finalL > 0 ? 'Live Instagram (H-1/H-2)' : 'Menunggu Evaluasi H+3'),
           });
         }
       });

@@ -571,6 +571,12 @@ Akses Dashboard Lengkap: https://iseeyou-intelligence.vercel.app/spreadsheet`;
                                   <span className="tabular-nums">
                                     {Number(r.likes || 0).toLocaleString("id-ID")} likes
                                   </span>
+                                  {r.isLiveMetric && (
+                                    <span className="px-1.5 py-0.2 rounded-full bg-rose-500/10 text-rose-600 dark:text-rose-400 font-bold text-[9px] border border-rose-500/20 flex items-center gap-1">
+                                      <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
+                                      Live IG
+                                    </span>
+                                  )}
                                   {r.contentPillar && (
                                     <>
                                       <span>·</span>
