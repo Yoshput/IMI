@@ -341,8 +341,8 @@ async function main() {
         tiktokLink: cleanLink(tiktokLink),
         igFollowers,
         tiktokFollowers,
-        viewers: (matchedEval && matchedEval.viewers > 0) ? matchedEval.viewers : (findLiveReel(actualLink, igLiveCache)?.viewers || 0),
-        likes: (matchedEval && matchedEval.likes > 0) ? matchedEval.likes : (findLiveReel(actualLink, igLiveCache)?.likes || 0),
+        viewers: Math.max((matchedEval && matchedEval.viewers > 0) ? matchedEval.viewers : 0, findLiveReel(actualLink, igLiveCache)?.viewers || 0),
+        likes: Math.max((matchedEval && matchedEval.likes > 0) ? matchedEval.likes : 0, findLiveReel(actualLink, igLiveCache)?.likes || 0),
         bonus: matchedEval ? matchedEval.bonus : '-',
         obstacle: obstacle !== 'tidak ada' && obstacle !== 'belum ada' ? obstacle : '-',
         isDayOff: false,
@@ -475,8 +475,8 @@ async function main() {
         if (!r.isDayOff && (evaluatedInPeriod || uploadedInPeriod)) {
           let liveIg = findLiveReel(r.reelsLink, igLiveCache);
 
-          const finalV = r.viewers > 0 ? r.viewers : (liveIg?.viewers || 0);
-          const finalL = (liveIg && liveIg.likes) ? Math.max(liveIg.likes, r.likes) : r.likes;
+          const finalV = Math.max(r.viewers || 0, liveIg?.viewers || 0);
+          const finalL = Math.max(r.likes || 0, liveIg?.likes || 0);
 
           weeklyReels.push({
             branch: r.branch,

@@ -99,18 +99,18 @@ export async function POST(req: NextRequest) {
       const existing = cache.reels[url] || {};
       const isNew = !cache.reels[url];
       const existingViewers = existing.viewers || 0;
-      // Preserve manually set viewers if > estimated, else update
-      const viewers = existingViewers > estimateViewers(meta.likes)
-        ? existingViewers
-        : estimateViewers(meta.likes);
+      const finalLikes = Math.max(existing.likes || 0, meta.likes || 0);
+      const finalComments = Math.max(existing.comments || 0, meta.comments || 0);
+      // Preserve verified viewers if already set, else estimate
+      const viewers = existingViewers > 0 ? existingViewers : estimateViewers(finalLikes);
 
       cache.reels[url] = {
         url,
-        likes: meta.likes,
-        likesFormatted: formatNumber(meta.likes),
+        likes: finalLikes,
+        likesFormatted: formatNumber(finalLikes),
         viewers,
         viewersFormatted: formatNumber(viewers),
-        comments: meta.comments,
+        comments: finalComments,
         caption: meta.caption || existing.caption || "",
         lastUpdated: new Date().toISOString(),
       };

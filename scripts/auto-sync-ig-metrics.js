@@ -109,20 +109,22 @@ async function autoSyncMetrics(extraUrls = []) {
 
     const existing = cache.reels[url] || {};
     const existingViewers = existing.viewers || 0;
+    const finalLikes = Math.max(existing.likes || 0, result.likes || 0);
+    const finalComments = Math.max(existing.comments || 0, result.comments || 0);
     
-    // Use actual viewers if already manually set (manual > 0), else estimate
-    const viewers = existingViewers > 0 ? existingViewers : estimateViewers(result.likes, 0);
+    // IMPORTANT: If verified/existing viewers already exists, ALWAYS keep it! Never overwrite with estimation!
+    const viewers = existingViewers > 0 ? existingViewers : estimateViewers(finalLikes, 0);
     
     const isNew = !cache.reels[url];
-    const likesChanged = existing.likes !== result.likes;
+    const likesChanged = existing.likes !== finalLikes;
     
     cache.reels[url] = {
       url,
-      likes: result.likes,
-      likesFormatted: formatNumber(result.likes),
+      likes: finalLikes,
+      likesFormatted: formatNumber(finalLikes),
       viewers,
       viewersFormatted: formatNumber(viewers),
-      comments: result.comments,
+      comments: finalComments,
       caption: result.caption || existing.caption || '',
       lastUpdated: new Date().toISOString(),
     };
