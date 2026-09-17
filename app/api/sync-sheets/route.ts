@@ -252,7 +252,7 @@ async function syncSpreadsheetData() {
       // For PWT, use uploadDate for evaluation matching (the actual video date)
       const evalMatchDate = cfg.isPWT ? uploadDate : reportDate;
       let matchedEval: any = null;
-      const dateEvals = evaluationsByDate[evalMatchDate];
+      const dateEvals = evalMatchDate ? evaluationsByDate[evalMatchDate] : null;
       if (dateEvals && dateEvals.length > 0) {
         matchedEval = dateEvals[0];
       } else {
