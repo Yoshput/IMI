@@ -21,8 +21,10 @@ import {
   Building2,
   Clock,
   Layers,
+  ZoomIn,
 } from "lucide-react";
 import { formatNumber } from "@/lib/utils";
+import { AppleMediaSheet, AppleMediaItem } from "@/components/shared/AppleMediaSheet";
 
 interface ThreeDayCadenceRecapProps {
   storyData: any[];
@@ -42,6 +44,7 @@ export const ThreeDayCadenceRecap: React.FC<ThreeDayCadenceRecapProps> = ({
   const [selectedCycle, setSelectedCycle] = useState<"cycle-1" | "cycle-2" | "cycle-current" | "full-week">("cycle-current");
   const [copiedText, setCopiedText] = useState(false);
   const [isPresentationMode, setIsPresentationMode] = useState(false);
+  const [selectedMediaItem, setSelectedMediaItem] = useState<AppleMediaItem | null>(null);
 
   // Cycle definitions
   const cycles = {
@@ -495,30 +498,56 @@ Akses Dashboard Lengkap: https://iseeyou-intelligence.vercel.app/spreadsheet`;
                       <div className="space-y-2">
                         {list.map((r, idx) => {
                           const thumbUrl = r.reelsLink
-                            ? `/api/ig-thumbnail?url=${encodeURIComponent(r.reelsLink)}`
+                            ? `/api/ig-thumbnail?url=${encodeURIComponent(r.reelsLink)}&tier=thumb`
                             : key === "TGL"
                             ? "/covers/trend-dewasa-passwordnya.png"
                             : "/covers/edukasi-lupa-kedip.png";
 
+                          const mediaItem: AppleMediaItem = {
+                            id: `reels-${key}-${idx}`,
+                            title: r.reelsTitle,
+                            category: r.contentPillar || "Reels Cabang",
+                            publishDate: r.uploadDate || r.evalDate,
+                            branchName: b.name,
+                            pic: b.pic,
+                            reach: Number(r.viewers || 0),
+                            likes: Number(r.likes || 0),
+                            comments: Number(r.comments || 0),
+                            saves: Number(r.saves || 0),
+                            postUrl: r.reelsLink,
+                            thumbnail: thumbUrl,
+                          };
+
                           return (
                             <div
                               key={idx}
-                              className="p-2.5 rounded-control bg-surface border border-border/80 flex items-start gap-3 hover:border-brand/50 transition-colors"
+                              className="p-2.5 rounded-control bg-surface border border-border/80 flex items-start gap-3 hover:border-brand/50 transition-colors group/item"
                             >
-                              {/* Thumbnail cover from Instagram */}
-                              <div className="w-12 h-12 rounded-control overflow-hidden bg-surface-secondary shrink-0 border border-border relative">
+                              {/* Thumbnail cover from Instagram (Apple iOS 3-tier click) */}
+                              <div
+                                onClick={() => setSelectedMediaItem(mediaItem)}
+                                className="w-12 h-12 rounded-xl overflow-hidden bg-surface-secondary shrink-0 border border-border relative cursor-pointer group/thumb shadow-subtle hover:ring-2 hover:ring-brand/40 transition-all"
+                                title="Klik untuk Preview & Zoom (Apple iOS Sheet)"
+                              >
                                 {/* eslint-disable-next-line @next/next/no-img-element */}
                                 <img
                                   src={thumbUrl}
                                   alt={r.reelsTitle}
-                                  className="w-full h-full object-cover"
+                                  className="w-full h-full object-cover group-hover/thumb:scale-110 transition-transform duration-300"
                                   loading="lazy"
                                 />
+                                <div className="absolute inset-0 bg-black/30 opacity-0 group-hover/thumb:opacity-100 transition-opacity flex items-center justify-center text-white">
+                                  <ZoomIn className="w-3.5 h-3.5 text-white drop-shadow" />
+                                </div>
                               </div>
 
                               <div className="flex-1 min-w-0 space-y-1">
                                 <div className="flex items-start justify-between gap-2">
-                                  <span className="font-semibold text-xs text-foreground line-clamp-1">
+                                  <span
+                                    onClick={() => setSelectedMediaItem(mediaItem)}
+                                    className="font-semibold text-xs text-foreground line-clamp-1 cursor-pointer hover:text-brand transition-colors"
+                                    title="Klik untuk Preview Apple Style"
+                                  >
                                     {r.reelsTitle}
                                   </span>
                                   {r.reelsLink && (
@@ -579,6 +608,13 @@ Akses Dashboard Lengkap: https://iseeyou-intelligence.vercel.app/spreadsheet`;
           </div>
         </div>
       </div>
+
+      {/* Apple iOS Preview Sheet */}
+      <AppleMediaSheet
+        isOpen={Boolean(selectedMediaItem)}
+        onClose={() => setSelectedMediaItem(null)}
+        item={selectedMediaItem}
+      />
     </div>
   );
 };

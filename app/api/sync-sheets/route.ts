@@ -653,7 +653,7 @@ async function syncSpreadsheetData() {
     id: `pengajuan-${i}`,
     timestamp: parseExcelDate(r["Cap waktu"]),
     branch: r["Cabang"] || "-",
-    applicantName: r["Nama Pengaju"] || "-",
+    applicantName: (r["Nama Pengaju"] || "-").replace(/^(Mba|Mas|Pak|Bu|Kak)\s+/i, "").trim(),
     requestedItems: r["Alat/barang yang diajukan (tuliskan juga jumlahnya)"] || "-",
     purpose: r["Tujuan/alasan pengajuan"] || "-",
   }));

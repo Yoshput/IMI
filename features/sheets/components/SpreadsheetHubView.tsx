@@ -13,12 +13,14 @@ import {
   Sparkles,
   CheckCircle2,
   Calendar,
+  PackageCheck,
 } from "lucide-react";
 import { PicComplianceTracker, PicStatus } from "./PicComplianceTracker";
 import { RawSheetsTable } from "./RawSheetsTable";
 import { ExecutiveMeetingRecap } from "./ExecutiveMeetingRecap";
 import { SocialBladeTracker } from "./SocialBladeTracker";
 import { ThreeDayCadenceRecap } from "./ThreeDayCadenceRecap";
+import { FormPengajuanTable } from "./FormPengajuanTable";
 
 interface SpreadsheetHubViewProps {
   initialData: {
@@ -30,13 +32,16 @@ interface SpreadsheetHubViewProps {
     dailyFollowersTracker: Record<string, any[]>;
     executiveRecap: any;
     spreadsheetFollowersByBranch?: Record<string, any>;
+    formPengajuan?: any[];
+    formProposal?: any[];
+    databaseDesain?: any[];
   };
 }
 
 export const SpreadsheetHubView: React.FC<SpreadsheetHubViewProps> = ({
   initialData,
 }) => {
-  const [activeTab, setActiveTab] = useState<"cadence" | "compliance" | "raw" | "executive" | "socialblade">("cadence");
+  const [activeTab, setActiveTab] = useState<"cadence" | "pengajuan" | "compliance" | "raw" | "executive" | "socialblade">("cadence");
   const [data, setData] = useState(initialData);
   const [isSyncing, setIsSyncing] = useState(false);
   const [syncStatus, setSyncStatus] = useState<string | null>(null);
@@ -105,13 +110,19 @@ export const SpreadsheetHubView: React.FC<SpreadsheetHubViewProps> = ({
   const tabs = [
     {
       key: "cadence",
-      label: "Rekap 3 Hari & Meeting Selasa",
+      label: "Rekap 3 Hari & Meeting",
       icon: Calendar,
       badge: "Story & Reels",
     },
     {
+      key: "pengajuan",
+      label: "List Pengajuan Alat",
+      icon: PackageCheck,
+      badge: `${(data.formPengajuan || []).length} Alat`,
+    },
+    {
       key: "executive",
-      label: "Versi Siap Saji (Meeting Direksi)",
+      label: "Versi Siap Saji (Direksi)",
       icon: Presentation,
       badge: "Meeting Selasa",
     },
@@ -320,6 +331,14 @@ export const SpreadsheetHubView: React.FC<SpreadsheetHubViewProps> = ({
           picTracker={data.picTracker}
           bonusSummary={data.executiveRecap?.bonusSummary}
           spreadsheetFollowersByBranch={data.spreadsheetFollowersByBranch || data.executiveRecap?.spreadsheetFollowersByBranch}
+        />
+      )}
+
+      {activeTab === "pengajuan" && (
+        <FormPengajuanTable
+          items={data.formPengajuan || []}
+          onSync={handleLiveSync}
+          isSyncing={isSyncing}
         />
       )}
 

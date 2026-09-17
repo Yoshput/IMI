@@ -1,14 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import { ContentItem } from "@/types";
 import { formatNumber } from "@/lib/utils";
-import { Trophy, Bookmark, MessageCircle, Eye, Share2, Sparkles, Heart } from "lucide-react";
+import { Trophy, Bookmark, MessageCircle, Eye, Share2, Sparkles, Heart, ZoomIn } from "lucide-react";
 import { ProvenanceBadge } from "@/components/shared/ProvenanceBadge";
+import { AppleMediaSheet } from "@/components/shared/AppleMediaSheet";
 
 interface DominantPerformerProps {
   item: ContentItem;
 }
 
 export const DominantPerformer: React.FC<DominantPerformerProps> = ({ item }) => {
+  const [isOpenPreview, setIsOpenPreview] = useState(false);
+
   return (
     <div className="p-6 md:p-8 rounded-container bg-surface border border-brand/20 shadow-elevated mb-8 relative overflow-hidden">
       {/* Top Banner Tag */}
@@ -27,7 +30,11 @@ export const DominantPerformer: React.FC<DominantPerformerProps> = ({ item }) =>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Visual Real Store Footage Preview */}
-        <div className="lg:col-span-4 aspect-[4/5] rounded-control flex flex-col justify-between p-5 text-white shadow-subtle relative overflow-hidden group">
+        <div
+          onClick={() => setIsOpenPreview(true)}
+          className="lg:col-span-4 aspect-[4/5] rounded-control flex flex-col justify-between p-5 text-white shadow-subtle relative overflow-hidden group cursor-pointer hover:ring-2 hover:ring-brand/50 transition-all"
+          title="Klik untuk Preview & Zoom (Apple iOS Sheet)"
+        >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={item.thumbnail || "/covers/trend-dewasa-passwordnya.png"}
@@ -152,6 +159,13 @@ export const DominantPerformer: React.FC<DominantPerformerProps> = ({ item }) =>
           </div>
         </div>
       </div>
+
+      {/* Apple iOS Preview Sheet */}
+      <AppleMediaSheet
+        isOpen={isOpenPreview}
+        onClose={() => setIsOpenPreview(false)}
+        item={item}
+      />
     </div>
   );
 };

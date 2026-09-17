@@ -1,14 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import { ContentItem } from "@/types";
 import { formatNumber } from "@/lib/utils";
-import { Eye, Bookmark, MessageSquare, ThumbsUp, Layers, Video, Image as ImageIcon, ExternalLink } from "lucide-react";
+import { Eye, Bookmark, MessageSquare, ThumbsUp, Layers, Video, Image as ImageIcon, ExternalLink, ZoomIn } from "lucide-react";
 import { ProvenanceBadge } from "@/components/shared/ProvenanceBadge";
+import { AppleMediaSheet } from "@/components/shared/AppleMediaSheet";
 
 interface RankedContentTableProps {
   items: ContentItem[];
 }
 
 export const RankedContentTable: React.FC<RankedContentTableProps> = ({ items }) => {
+  const [selectedMediaItem, setSelectedMediaItem] = useState<ContentItem | null>(null);
+
   const getFormatIcon = (format: ContentItem["format"]) => {
     switch (format) {
       case "reels":
@@ -62,43 +65,35 @@ export const RankedContentTable: React.FC<RankedContentTableProps> = ({ items })
                 <td className="py-4 px-4 max-w-sm">
                   <div className="flex items-start gap-3">
                     {item.thumbnail && (
-                      <div className="w-14 h-14 rounded-control overflow-hidden bg-surface-subtle shrink-0 border border-border/80 relative shadow-subtle group/thumb">
+                      <div
+                        onClick={() => setSelectedMediaItem(item)}
+                        className="w-14 h-14 rounded-2xl overflow-hidden bg-surface-subtle shrink-0 border border-border/80 relative shadow-subtle group/thumb cursor-pointer hover:ring-2 hover:ring-brand/40 transition-all"
+                        title="Klik untuk Preview & Zoom (Apple iOS Sheet)"
+                      >
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
-                          src={item.thumbnail}
+                          src={
+                            item.thumbnail.includes("/api/ig-thumbnail") && !item.thumbnail.includes("tier=")
+                              ? `${item.thumbnail}&tier=thumb`
+                              : item.thumbnail
+                          }
                           alt={item.title}
                           className="w-full h-full object-cover transition-transform duration-300 group-hover/thumb:scale-110"
                           loading="lazy"
                         />
-                        {item.postUrl && (
-                          <a
-                            href={item.postUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="absolute inset-0 bg-black/40 opacity-0 group-hover/thumb:opacity-100 transition-opacity flex items-center justify-center text-white"
-                            title="Buka Postingan Instagram Asli"
-                          >
-                            <ExternalLink className="w-4 h-4" />
-                          </a>
-                        )}
+                        <div className="absolute inset-0 bg-black/30 opacity-0 group-hover/thumb:opacity-100 transition-opacity flex items-center justify-center text-white">
+                          <ZoomIn className="w-4 h-4 text-white drop-shadow" />
+                        </div>
                       </div>
                     )}
                     <div className="space-y-1 min-w-0">
-                      {item.postUrl ? (
-                        <a
-                          href={item.postUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="font-semibold text-foreground group-hover:text-brand transition-colors block text-xs leading-snug line-clamp-2 hover:underline inline-flex items-baseline gap-1"
-                        >
-                          <span>{item.title}</span>
-                          <ExternalLink className="w-2.5 h-2.5 shrink-0 opacity-60" />
-                        </a>
-                      ) : (
-                        <span className="font-semibold text-foreground group-hover:text-brand transition-colors block text-xs leading-snug line-clamp-2">
-                          {item.title}
-                        </span>
-                      )}
+                      <div
+                        onClick={() => setSelectedMediaItem(item)}
+                        className="font-semibold text-foreground group-hover:text-brand transition-colors block text-xs leading-snug line-clamp-2 cursor-pointer hover:underline"
+                        title="Buka Preview Apple Style"
+                      >
+                        {item.title}
+                      </div>
                       <div className="flex flex-wrap items-center gap-1.5 text-[11px] text-foreground-muted">
                         {item.branchName && (
                           <span className="px-1.5 py-0.2 rounded bg-brand-light text-brand font-semibold text-[10px]">
@@ -182,6 +177,13 @@ export const RankedContentTable: React.FC<RankedContentTableProps> = ({ items })
           </tbody>
         </table>
       </div>
+
+      {/* Apple iOS Style Interactive Media Sheet (Tier 2 & Tier 3 Zoom) */}
+      <AppleMediaSheet
+        isOpen={!!selectedMediaItem}
+        onClose={() => setSelectedMediaItem(null)}
+        item={selectedMediaItem}
+      />
     </div>
   );
 };
