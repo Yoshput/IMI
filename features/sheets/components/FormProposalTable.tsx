@@ -245,6 +245,76 @@ const formatWhatsAppUrl = (
   return `https://wa.me/${clean}?text=${encodeURIComponent(lines.join("\n"))}`;
 };
 
+export interface BarterEvaluation {
+  isViable: boolean;
+  tier: "approved" | "priority" | "negotiable" | "unlikely";
+  tierLabel: string;
+  badgeClass: string;
+  reason: string;
+}
+
+export const evaluateBarterVoucher = (item: FormProposalItem): BarterEvaluation => {
+  const note = (item.sheetNote || "").toLowerCase();
+  const benefit = (item.benefit || "").toLowerCase();
+  const desc = (item.description || "").toLowerCase();
+  const name = (item.eventName || "").toLowerCase();
+  const combined = `${name} ${benefit} ${desc} ${note}`;
+
+  // 1. Sudah disetujui voucher di catatan spreadsheet oleh atasan
+  if (note.includes("vou") || note.includes("voucher")) {
+    return {
+      isViable: true,
+      tier: "approved",
+      tierLabel: "Disetujui Voucher",
+      badgeClass: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/25",
+      reason: `Catatan resmi spreadsheet: ${item.sheetNote}`,
+    };
+  }
+
+  // 2. Terbuka secara tertulis atau benefit in-kind/branding jelas (Google review, sawalla, in-kind)
+  if (
+    combined.includes("in-kind") ||
+    combined.includes("inkind") ||
+    combined.includes("fleksibel") ||
+    combined.includes("google review") ||
+    combined.includes("ulasan") ||
+    item.id === "proposal-33" ||
+    item.id === "proposal-47" ||
+    item.id === "proposal-9"
+  ) {
+    return {
+      isViable: true,
+      tier: "priority",
+      tierLabel: "Prioritas Barter",
+      badgeClass: "bg-violet-500/10 text-violet-700 dark:text-violet-300 border-violet-500/25",
+      reason: "Tersedia paket In-Kind resmi / benefit barter branding riil (Google review, fleksibilitas kerja sama).",
+    };
+  }
+
+  // 3. Hanya menuntut dana tunai tetap tanpa opsi barter & skala kecil
+  if (
+    item.id === "proposal-27" ||
+    (benefit.includes("mulai dari rp") && !benefit.includes("in-kind") && !combined.includes("adlibs") && !combined.includes("booth"))
+  ) {
+    return {
+      isViable: false,
+      tier: "unlikely",
+      tierLabel: "Kurang Sesuai",
+      badgeClass: "bg-neutral-500/10 text-neutral-600 dark:text-neutral-400 border-neutral-500/20",
+      reason: "Penawaran terfokus pada donasi dana tunai tetap, tidak mencantumkan paket barter produk/voucher.",
+    };
+  }
+
+  // 4. Potensial ditawarkan barter voucher (Event mahasiswa, ada logo/adlibs MC/booth/pembagian voucher)
+  return {
+    isViable: true,
+    tier: "negotiable",
+    tierLabel: "Potensial Barter",
+    badgeClass: "bg-blue-500/10 text-blue-700 dark:text-blue-300 border-blue-500/25",
+    reason: "Segmen mahasiswa/pelajar relevan kacamata; dapat diajukan paket voucher sponsorship / hadiah doorprize.",
+  };
+};
+
 const STORAGE_KEY = "proposal-decisions-v1";
 
 const loadDecisions = (): ProposalDecision => {
@@ -292,6 +362,7 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
   const [selectedBranch, setSelectedBranch] = useState("all");
   const [selectedStatus, setSelectedStatus] = useState<"all" | DecisionStatus>("all");
   const [timeFilter, setTimeFilter] = useState<"upcoming" | "all" | "past">("upcoming");
+  const [barterOnly, setBarterOnly] = useState(false);
   const [viewMode, setViewMode] = useState<"cards" | "table">("cards");
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
@@ -396,9 +467,14 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
         matchTime = days !== null && days < 0;
       }
 
+      if (barterOnly) {
+        const barter = evaluateBarterVoucher(item);
+        if (!barter.isViable) return false;
+      }
+
       return matchSearch && matchBranch && matchStatus && matchTime;
     });
-  }, [validItems, searchQuery, selectedBranch, selectedStatus, timeFilter, decisions]);
+  }, [validItems, searchQuery, selectedBranch, selectedStatus, timeFilter, barterOnly, decisions]);
 
   const stats = useMemo(() => {
     const all = validItems.length;
@@ -421,8 +497,13 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
     const rejected = validItems.filter((i) => decisions[i.id]?.status === "rejected").length;
     const negotiate = validItems.filter((i) => decisions[i.id]?.status === "negotiate").length;
     const contact = validItems.filter((i) => decisions[i.id]?.status === "contact").length;
+    const barterViable = validItems.filter((i) => {
+      const d = getDaysUntilEvent(i.eventDate);
+      const isUpcoming = d === null || d >= 0;
+      return isUpcoming && evaluateBarterVoucher(i).isViable;
+    }).length;
 
-    return { all, upcoming, past, urgent, approved, pending, rejected, negotiate, contact };
+    return { all, upcoming, past, urgent, approved, pending, rejected, negotiate, contact, barterViable };
   }, [validItems, decisions]);
 
   const openPreview = (fileUrl: string, title: string) => {
@@ -581,6 +662,33 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
           </button>
         </div>
 
+        {/* Mobile Quick Barter Voucher Filter */}
+        <button
+          onClick={() => {
+            setBarterOnly(!barterOnly);
+            if (!barterOnly) setTimeFilter("upcoming");
+          }}
+          className={`w-full min-h-[42px] flex items-center justify-between px-4 py-2.5 rounded-2xl border text-xs font-bold transition-all shadow-subtle ${
+            barterOnly
+              ? "bg-violet-600 text-white border-violet-500 shadow-subtle"
+              : "bg-surface border-border text-foreground hover:bg-surface-secondary"
+          }`}
+        >
+          <span className="flex items-center gap-2">
+            <Tag className="w-3.5 h-3.5" />
+            <span>Seleksi Barter Voucher (Arahan Atasan)</span>
+          </span>
+          <span
+            className={`text-[11px] px-2.5 py-0.5 rounded-full font-extrabold ${
+              barterOnly
+                ? "bg-white/20 text-white"
+                : "bg-violet-500/10 text-violet-700 dark:text-violet-300 border border-violet-500/20"
+            }`}
+          >
+            {stats.barterViable} Proposal
+          </span>
+        </button>
+
         {/* Mobile Search & Branch Filter */}
         <div className="space-y-2">
           <div className="relative">
@@ -644,6 +752,7 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
               const days = getDaysUntilEvent(item.eventDate);
               const urgency = getUrgencyBadge(days);
               const category = extractEventCategory(item.eventName, item.description);
+              const barter = evaluateBarterVoucher(item);
               const isExpanded = expandedId === item.id;
               const isEditingNote = noteEditing === item.id;
               const waUrl = formatWhatsAppUrl(
@@ -678,6 +787,9 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
                           {urgency.label}
                         </span>
                       )}
+                      <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full border ${barter.badgeClass}`}>
+                        {barter.tierLabel}
+                      </span>
                     </div>
 
                     <button
@@ -704,6 +816,15 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
                   <div className="flex items-center gap-2 p-2.5 rounded-2xl bg-surface-secondary/70 border border-border/50 text-xs text-foreground font-semibold">
                     <Calendar className="w-4 h-4 text-violet-500 shrink-0" />
                     <span>Jadwal: {formatDate(item.eventDate)}</span>
+                  </div>
+
+                  {/* Barter Analysis Chip */}
+                  <div className="flex items-start gap-2 p-2.5 rounded-2xl bg-surface-secondary/50 border border-border/60 text-xs">
+                    <Tag className="w-3.5 h-3.5 text-violet-500 shrink-0 mt-0.5" />
+                    <div className="space-y-0.5">
+                      <span className="font-bold text-foreground block">Analisis Barter Voucher:</span>
+                      <span className="text-foreground-secondary leading-relaxed block">{barter.reason}</span>
+                    </div>
                   </div>
 
                   {/* Note from Sheet if exists */}
@@ -1116,6 +1237,29 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
                   </option>
                 ))}
               </select>
+
+              <button
+                onClick={() => {
+                  setBarterOnly(!barterOnly);
+                  if (!barterOnly) setTimeFilter("upcoming");
+                }}
+                className={`flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-bold border transition-all shadow-subtle ${
+                  barterOnly
+                    ? "bg-violet-600 text-white border-violet-500 shadow-subtle"
+                    : "bg-surface border-border text-foreground hover:bg-surface-secondary"
+                }`}
+                title="Saring proposal yang direkomendasikan barter voucher"
+              >
+                <Tag className="w-3.5 h-3.5" />
+                <span>Khusus Barter Voucher</span>
+                <span
+                  className={`text-[10px] px-1.5 py-0.5 rounded-full font-extrabold ${
+                    barterOnly ? "bg-white/20 text-white" : "bg-violet-500/10 text-violet-700 dark:text-violet-300"
+                  }`}
+                >
+                  {stats.barterViable}
+                </span>
+              </button>
             </div>
 
             <div className="text-xs text-foreground-secondary font-medium px-1">
@@ -1138,6 +1282,7 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
                 setSelectedBranch("all");
                 setSelectedStatus("all");
                 setTimeFilter("upcoming");
+                setBarterOnly(false);
               }}
               className="mt-4 px-4 py-2 rounded-full bg-surface-secondary hover:bg-surface-secondary/80 text-xs font-bold text-foreground border border-border transition-all shadow-subtle"
             >
@@ -1155,6 +1300,7 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
               const days = getDaysUntilEvent(item.eventDate);
               const urgency = getUrgencyBadge(days);
               const category = extractEventCategory(item.eventName, item.description);
+              const barter = evaluateBarterVoucher(item);
               const isExpanded = expandedId === item.id;
               const isEditingNote = noteEditing === item.id;
               const waUrl = formatWhatsAppUrl(
@@ -1194,6 +1340,9 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
                             {urgency.label}
                           </span>
                         )}
+                        <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full border ${barter.badgeClass}`}>
+                          {barter.tierLabel}
+                        </span>
                       </div>
 
                       <div className="flex items-center gap-1 shrink-0">
@@ -1227,8 +1376,17 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
                       </div>
                     </div>
 
+                    {/* Barter Analysis Chip */}
+                    <div className="mt-2.5 flex items-start gap-2 p-2.5 rounded-xl bg-surface-secondary/50 border border-border/60 text-xs">
+                      <Tag className="w-3.5 h-3.5 text-violet-500 shrink-0 mt-0.5" />
+                      <div className="space-y-0.5">
+                        <span className="font-bold text-foreground block">Analisis Barter Voucher:</span>
+                        <span className="text-foreground-secondary leading-relaxed block">{barter.reason}</span>
+                      </div>
+                    </div>
+
                     {item.sheetNote && (
-                      <div className="mt-3 flex items-center gap-2 px-3 py-1.5 rounded-xl bg-amber-500/10 border border-amber-500/25 text-amber-800 dark:text-amber-300 text-xs font-semibold">
+                      <div className="mt-2.5 flex items-center gap-2 px-3 py-1.5 rounded-xl bg-amber-500/10 border border-amber-500/25 text-amber-800 dark:text-amber-300 text-xs font-semibold">
                         <Tag className="w-3.5 h-3.5 text-amber-600 shrink-0" />
                         <span>
                           <strong>Catatan Tim di Sheet:</strong> {item.sheetNote}
@@ -1430,6 +1588,7 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
                     const statusCfg = STATUS_CONFIG[currentStatus];
                     const days = getDaysUntilEvent(item.eventDate);
                     const urgency = getUrgencyBadge(days);
+                    const barter = evaluateBarterVoucher(item);
                     const waUrl = formatWhatsAppUrl(
                       item.applicantPhone,
                       item.eventName,
@@ -1458,8 +1617,13 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
                         </td>
                         <td className="py-3.5 px-4">
                           <div className="font-bold text-foreground">{item.eventName}</div>
-                          <div className="text-[10px] text-foreground-muted mt-0.5">
-                            {extractEventCategory(item.eventName, item.description)}
+                          <div className="flex items-center gap-1.5 mt-1 flex-wrap">
+                            <span className="text-[10px] text-foreground-muted">
+                              {extractEventCategory(item.eventName, item.description)}
+                            </span>
+                            <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${barter.badgeClass}`}>
+                              {barter.tierLabel}
+                            </span>
                           </div>
                         </td>
                         <td className="py-3.5 px-4 text-foreground-secondary font-medium">{item.institution}</td>
@@ -1558,53 +1722,115 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
             </p>
           </div>
 
-          <button
-            onClick={() => {
-              const activeProposals = validItems.filter((i) => {
-                const d = getDaysUntilEvent(i.eventDate);
-                return d === null || d >= 0;
-              });
-              const todayStr = new Date().toLocaleDateString("id-ID", {
-                day: "numeric",
-                month: "long",
-                year: "numeric",
-              });
+          <div className="flex items-center gap-2 flex-wrap w-full sm:w-auto">
+            <button
+              onClick={() => {
+                const barterProposals = validItems.filter((i) => {
+                  const d = getDaysUntilEvent(i.eventDate);
+                  const isUpcoming = d === null || d >= 0;
+                  return isUpcoming && evaluateBarterVoucher(i).isViable;
+                });
 
-              const summaryLines = [
-                `LAPORAN PENGAJUAN SPONSORSHIP - OPTIK I SEE YOU`,
-                `Tanggal Laporan: ${todayStr}`,
-                `========================================`,
-                ``,
-                `STATUS PROPOSAL:`,
-                `- Kegiatan Aktif / Mendatang : ${stats.upcoming}`,
-                `- Prioritas (<= 14 Hari)     : ${stats.urgent}`,
-                `- Disetujui                  : ${stats.approved}`,
-                `- Negosiasi Paket Voucher    : ${stats.negotiate}`,
-                `- Menunggu Keputusan         : ${stats.pending}`,
-                `- Perlu Dihubungi            : ${stats.contact}`,
-                ``,
-                `SEBARAN CABANG:`,
-                ...branches.map((b) => `- Cabang ${b}: ${validItems.filter((i) => i.targetBranch === b).length} proposal`),
-                ``,
-                `DAFTAR KEGIATAN PRIORITAS MENDATANG:`,
-                ...activeProposals.slice(0, 8).map((i, idx) => {
-                  const d = formatDate(i.eventDate);
-                  const note = i.sheetNote ? ` [Catatan: ${i.sheetNote}]` : "";
-                  return `${idx + 1}. ${i.eventName}\n   Penyelenggara: ${i.institution}\n   Tanggal: ${d} | Cabang: ${i.targetBranch}${note}\n   Kontak: ${i.applicantName} (${i.applicantPhone})`;
-                }),
-                ``,
-                `----------------------------------------`,
-                `Disusun oleh Tim Partnership Optik I See You`,
-              ];
+                const tierOrder: Record<string, number> = { priority: 1, approved: 2, negotiable: 3, unlikely: 4 };
+                barterProposals.sort((a, b) => {
+                  const tA = tierOrder[evaluateBarterVoucher(a).tier] || 99;
+                  const tB = tierOrder[evaluateBarterVoucher(b).tier] || 99;
+                  if (tA !== tB) return tA - tB;
+                  return (a.eventDate || "").localeCompare(b.eventDate || "");
+                });
 
-              navigator.clipboard.writeText(summaryLines.join("\n"));
-              alert("Ringkasan laporan telah disalin ke clipboard.");
-            }}
-            className="w-full sm:w-auto min-h-[44px] flex items-center justify-center gap-2 px-4 py-2.5 rounded-full bg-foreground text-surface text-xs font-bold hover:bg-foreground/90 transition-all shadow-subtle active:scale-95"
-          >
-            <Copy className="w-3.5 h-3.5" />
-            <span>Salin Ringkasan Laporan</span>
-          </button>
+                const todayStr = new Date().toLocaleDateString("id-ID", {
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric",
+                });
+
+                const lines = [
+                  `REKAP SELEKSI PROPOSAL BARTER VOUCHER - OPTIK I SEE YOU`,
+                  `Tanggal Laporan : ${todayStr}`,
+                  `Total Rekomendasi: ${barterProposals.length} Proposal Mendatang`,
+                  `Prinsip Kerja Sama: Barter Voucher Diskon Belanja (Bukan Support Dana Tunai)`,
+                  `========================================`,
+                  ``,
+                  ...barterProposals.map((item, idx) => {
+                    const barter = evaluateBarterVoucher(item);
+                    const urgency = getUrgencyBadge(getDaysUntilEvent(item.eventDate));
+                    const d = formatDate(item.eventDate);
+                    return [
+                      `${idx + 1}. [${barter.tierLabel.toUpperCase()}] ${item.eventName}`,
+                      `   Penyelenggara : ${item.institution}`,
+                      `   Jadwal Acara  : ${d} (${urgency?.label || "-"}) | Cabang: ${item.targetBranch}`,
+                      `   Kontak Panitia: ${item.applicantName} (${item.applicantPhone})`,
+                      `   Alasan Masuk  : ${barter.reason}`,
+                      item.sheetNote ? `   Catatan Sheet : ${item.sheetNote}` : null,
+                      ``,
+                    ].filter(Boolean).join("\n");
+                  }),
+                  `----------------------------------------`,
+                  `STRATEGI NEGOSIASI BARTER:`,
+                  `1. Tawarkan paket 5-10 lembar voucher belanja (misal voucher potongan Rp50.000 atau Rp100.000).`,
+                  `2. Target imbal balik: Logo backdrop, adlibs MC, ulasan Google Maps, dan publikasi story/konten media sosial.`,
+                  `3. Voucher menjadi alat penarik pengunjung (customer acquisition) agar datang langsung ke cabang Optik I See You.`,
+                ];
+
+                navigator.clipboard.writeText(lines.join("\n"));
+                alert("Rekapan proposal barter voucher untuk atasan telah disalin ke clipboard.");
+              }}
+              className="flex-1 sm:flex-initial min-h-[44px] flex items-center justify-center gap-2 px-4 py-2.5 rounded-full bg-violet-600 text-white text-xs font-bold hover:bg-violet-700 transition-all shadow-subtle active:scale-95"
+            >
+              <Tag className="w-3.5 h-3.5" />
+              <span>Salin Rekap Barter Voucher</span>
+            </button>
+
+            <button
+              onClick={() => {
+                const activeProposals = validItems.filter((i) => {
+                  const d = getDaysUntilEvent(i.eventDate);
+                  return d === null || d >= 0;
+                });
+                const todayStr = new Date().toLocaleDateString("id-ID", {
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric",
+                });
+
+                const summaryLines = [
+                  `LAPORAN PENGAJUAN SPONSORSHIP - OPTIK I SEE YOU`,
+                  `Tanggal Laporan: ${todayStr}`,
+                  `========================================`,
+                  ``,
+                  `STATUS PROPOSAL:`,
+                  `- Kegiatan Aktif / Mendatang : ${stats.upcoming}`,
+                  `- Rekomendasi Barter Voucher : ${stats.barterViable}`,
+                  `- Prioritas (<= 14 Hari)     : ${stats.urgent}`,
+                  `- Disetujui                  : ${stats.approved}`,
+                  `- Negosiasi Paket Voucher    : ${stats.negotiate}`,
+                  `- Menunggu Keputusan         : ${stats.pending}`,
+                  `- Perlu Dihubungi            : ${stats.contact}`,
+                  ``,
+                  `SEBARAN CABANG:`,
+                  ...branches.map((b) => `- Cabang ${b}: ${validItems.filter((i) => i.targetBranch === b).length} proposal`),
+                  ``,
+                  `DAFTAR KEGIATAN PRIORITAS MENDATANG:`,
+                  ...activeProposals.slice(0, 8).map((i, idx) => {
+                    const d = formatDate(i.eventDate);
+                    const note = i.sheetNote ? ` [Catatan: ${i.sheetNote}]` : "";
+                    return `${idx + 1}. ${i.eventName}\n   Penyelenggara: ${i.institution}\n   Tanggal: ${d} | Cabang: ${i.targetBranch}${note}\n   Kontak: ${i.applicantName} (${i.applicantPhone})`;
+                  }),
+                  ``,
+                  `----------------------------------------`,
+                  `Disusun oleh Tim Partnership Optik I See You`,
+                ];
+
+                navigator.clipboard.writeText(summaryLines.join("\n"));
+                alert("Ringkasan laporan telah disalin ke clipboard.");
+              }}
+              className="flex-1 sm:flex-initial min-h-[44px] flex items-center justify-center gap-2 px-4 py-2.5 rounded-full bg-foreground text-surface text-xs font-bold hover:bg-foreground/90 transition-all shadow-subtle active:scale-95"
+            >
+              <Copy className="w-3.5 h-3.5" />
+              <span>Salin Ringkasan Laporan</span>
+            </button>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
