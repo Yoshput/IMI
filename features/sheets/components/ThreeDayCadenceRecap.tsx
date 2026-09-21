@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import {
   Calendar,
-  Sparkles,
+  Monitor,
   Copy,
   Check,
   ExternalLink,
@@ -238,7 +238,7 @@ Akses Dashboard Lengkap: https://iseeyou-intelligence.vercel.app/spreadsheet`;
                 : "bg-surface border-border text-foreground hover:bg-surface-secondary shadow-subtle"
             }`}
           >
-            <Sparkles className="w-3.5 h-3.5" />
+            <Monitor className="w-3.5 h-3.5" />
             <span>{isPresentationMode ? "Keluar Mode Layar" : "Mode Presentasi Rapat"}</span>
           </button>
 

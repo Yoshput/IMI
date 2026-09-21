@@ -7,7 +7,6 @@ import {
   DollarSign,
   Crown,
   Printer,
-  Sparkles,
   AlertCircle,
   CheckCircle2,
   HelpCircle,
@@ -67,7 +66,9 @@ export const ExecutiveMeetingRecap: React.FC<ExecutiveMeetingRecapProps> = ({
   executiveRecap,
   picTracker,
 }) => {
-  const [selectedPeriodKey, setSelectedPeriodKey] = useState<"lastTuesday" | "nextTuesday">("lastTuesday");
+  const [selectedPeriodKey, setSelectedPeriodKey] = useState<"lastTuesday" | "nextTuesday">(
+    (executiveRecap.activePeriodKey as "lastTuesday" | "nextTuesday") || "nextTuesday"
+  );
   const [activeAudienceTab, setActiveAudienceTab] = useState<"all" | "hrd" | "head" | "finance" | "owner">("all");
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [quickCopied, setQuickCopied] = useState(false);
@@ -177,7 +178,7 @@ Link Akses Web: https://imi-puce.vercel.app/spreadsheet`;
             onClick={() => setIsReportModalOpen(true)}
             className="flex items-center gap-1.5 px-3.5 py-2 rounded-control bg-foreground text-surface text-xs font-semibold hover:bg-foreground/90 transition-all shadow-subtle"
           >
-            <Sparkles className="w-3.5 h-3.5 text-brand-accent" />
+            <FileText className="w-3.5 h-3.5" />
             <span>Buat Laporan Rapat (1-Klik)</span>
           </button>
 

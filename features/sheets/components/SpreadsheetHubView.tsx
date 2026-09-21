@@ -10,7 +10,7 @@ import {
   ExternalLink,
   TableProperties,
   ArrowUpRight,
-  Sparkles,
+  Zap,
   CheckCircle2,
   Calendar,
   PackageCheck,
@@ -197,7 +197,7 @@ export const SpreadsheetHubView: React.FC<SpreadsheetHubViewProps> = ({
             className="flex items-center gap-1.5 px-3 py-2 rounded-control border border-border bg-surface hover:bg-surface-secondary text-xs font-semibold text-foreground transition-all shadow-subtle"
             title="Cara membuat Google Sheets push data otomatis seketika saat ada ketikan baru"
           >
-            <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+            <Zap className="w-3.5 h-3.5 text-amber-500" />
             <span>Setup Push Webhook</span>
           </button>
 
@@ -229,7 +229,7 @@ export const SpreadsheetHubView: React.FC<SpreadsheetHubViewProps> = ({
           <div className="bg-surface border border-border rounded-container max-w-2xl w-full p-6 shadow-2xl max-h-[90vh] overflow-y-auto space-y-4">
             <div className="flex items-center justify-between pb-3 border-b border-border">
               <div className="flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-amber-500" />
+                <Zap className="w-5 h-5 text-amber-500" />
                 <h3 className="text-base font-bold text-foreground">
                   Cara Kerja Pembaruan Otomatis & Trigger Google Sheets
                 </h3>
@@ -244,7 +244,7 @@ export const SpreadsheetHubView: React.FC<SpreadsheetHubViewProps> = ({
 
             <div className="space-y-3 text-xs text-foreground-secondary leading-relaxed">
               <div className="p-3.5 rounded-control bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-800 text-emerald-900 dark:text-emerald-200">
-                <p className="font-bold text-sm mb-1">🟢 Otomatisasi Bawaan Aplikasi Sudah Aktif!</p>
+                <p className="font-bold text-sm mb-1">Otomatisasi Bawaan Aplikasi Sudah Aktif</p>
                 <p>
                   Setiap kali Anda atau direksi membuka aplikasi dashboard ini, sistem <strong>otomatis mengecek dan mendownload perubahan terbaru dari Google Sheets</strong> di latar belakang (background sync). Data di aplikasi juga di-refresh otomatis setiap 5 menit tanpa perlu menekan tombol apapun.
                 </p>

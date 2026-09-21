@@ -9,7 +9,6 @@ import {
   Calendar,
   Building2,
   Film,
-  Sparkles,
   ArrowUpRight,
   ArrowDownRight,
   Minus,

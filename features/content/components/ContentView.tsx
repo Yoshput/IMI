@@ -6,7 +6,7 @@ import { DominantPerformer } from "./DominantPerformer";
 import { ContentFilterToolbar } from "./ContentFilterToolbar";
 import { RankedContentTable } from "./RankedContentTable";
 import { StateRenderer } from "@/components/shared/StateRenderer";
-import { Film, Plus, RefreshCw, Sparkles, ExternalLink } from "lucide-react";
+import { Film, Plus, RefreshCw, ExternalLink } from "lucide-react";
 import { DevStateSwitcher } from "@/components/shared/DevStateSwitcher";
 
 export const ContentView: React.FC = () => {

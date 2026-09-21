@@ -747,14 +747,16 @@ async function main() {
       igLiveCache: igLiveCache || null,
       bonusSummary: bonusSummary,
       latestTotalNetworkFollowers: {
-        instagram: 226581 + 6195 + 3946 + 7361 + 1248,
+        instagram: igLiveCache?.accounts
+          ? Object.values(igLiveCache.accounts).reduce((sum, acc) => sum + (acc.followers || 0), 0)
+          : (226000 + 6196 + 7395 + 1255 + 3986),
         tiktok: 87200 + 979 + 3031 + 42 + 541,
       },
       periods: {
         lastTuesday: periodLastTuesday,
         nextTuesday: periodNextTuesday,
       },
-      activePeriodKey: 'lastTuesday',
+      activePeriodKey: 'nextTuesday',
     },
   };
 

@@ -255,20 +255,24 @@ _Laporan otomatis digenerate via I See You Marketing Intelligence._`;
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 text-xs">
               {OFFICIAL_BRANCH_ACCOUNTS.map((acc) => {
                 const liveStats: Record<string, { followers: string; posts: number }> = {
-                  "pwt-pusat": { followers: "226K", posts: 2940 },
-                  "clp": { followers: "7,387", posts: 1403 },
-                  "pbg": { followers: "6,194", posts: 567 },
-                  "tgl": { followers: "3,943", posts: 357 },
-                  "wns": { followers: "1,248", posts: 339 },
+                  "pwt": { followers: "226K", posts: 2946 },
+                  "pwt-pusat": { followers: "226K", posts: 2946 },
+                  "clp": { followers: "7,395", posts: 1412 },
+                  "pbg": { followers: "6,196", posts: 572 },
+                  "tgl": { followers: "3,986", posts: 359 },
+                  "lunar": { followers: "3,986", posts: 359 },
+                  "wns": { followers: "1,255", posts: 343 },
                 };
                 const stat = liveStats[acc.id] || { followers: "-", posts: 0 };
                 
                 // Map to spreadsheet key
                 const sheetKeyMap: Record<string, string> = {
+                  "pwt": "PWT",
                   "pwt-pusat": "PWT",
                   "clp": "CLP",
                   "pbg": "PBG",
                   "tgl": "TGL",
+                  "lunar": "TGL",
                   "wns": "WNS",
                 };
                 const sheetData = spreadsheetFollowersByBranch ? spreadsheetFollowersByBranch[sheetKeyMap[acc.id]] : null;

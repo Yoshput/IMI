@@ -10,7 +10,6 @@ import {
   Heart,
   Users,
   MessageSquare,
-  Sparkles,
   Link2,
 } from "lucide-react";
 

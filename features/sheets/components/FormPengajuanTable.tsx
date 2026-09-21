@@ -9,7 +9,6 @@ import {
   Search,
   RefreshCw,
   ExternalLink,
-  Sparkles,
   CheckCircle2,
   Clock,
   Filter,

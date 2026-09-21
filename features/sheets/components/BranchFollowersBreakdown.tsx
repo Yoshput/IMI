@@ -9,9 +9,11 @@ import {
   Image as ImageIcon,
   Clock,
   CheckCircle2,
-  Sparkles,
+  Info,
 } from "lucide-react";
 import { IgAccountLive, IgLiveCache } from "@/lib/instagram-realtime";
+
+import { OFFICIAL_BRANCH_ACCOUNTS } from "@/lib/branch-accounts";
 
 interface BranchFollowersBreakdownProps {
   initialCache?: IgLiveCache;
@@ -35,75 +37,98 @@ export const BranchFollowersBreakdown: React.FC<BranchFollowersBreakdownProps> =
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
 
-  const accounts: IgAccountLive[] = cache?.accounts
-    ? Object.values(cache.accounts)
-    : [
-        {
-          id: "pwt-pusat",
-          name: "Optik I See You Purwokerto (Pusat)",
-          handle: "@iseeyou.glasses",
-          url: "https://www.instagram.com/iseeyou.glasses/",
-          city: "Purwokerto",
-          picName: "Ilya & Nuha",
-          followers: 226000,
-          followersFormatted: "226K",
-          following: 112,
-          posts: 2940,
-          lastUpdated: new Date().toISOString(),
-        },
-        {
-          id: "pbg",
-          name: "Optik I See You Purbalingga",
-          handle: "@iseeyou.purbalingga",
-          url: "https://www.instagram.com/iseeyou.purbalingga/",
-          city: "Purbalingga",
-          picName: "Ajun",
-          followers: 6194,
-          followersFormatted: "6,194",
-          following: 6,
-          posts: 567,
-          lastUpdated: new Date().toISOString(),
-        },
-        {
-          id: "clp",
-          name: "Optik I See You Cilacap",
-          handle: "@iseeyou.cilacap",
-          url: "https://www.instagram.com/iseeyou.cilacap/",
-          city: "Cilacap",
-          picName: "Arum",
-          followers: 7387,
-          followersFormatted: "7,387",
-          following: 6,
-          posts: 1403,
-          lastUpdated: new Date().toISOString(),
-        },
-        {
-          id: "wns",
-          name: "Optik I See You Wonosobo",
-          handle: "@iseeyou.wonosobo",
-          url: "https://www.instagram.com/iseeyou.wonosobo/",
-          city: "Wonosobo",
-          picName: "Febi",
-          followers: 1248,
-          followersFormatted: "1,248",
-          following: 6,
-          posts: 339,
-          lastUpdated: new Date().toISOString(),
-        },
-        {
-          id: "tgl",
-          name: "Lunar Eyewear Tegal (Second Brand)",
-          handle: "@lunareyewear.co",
-          url: "https://www.instagram.com/lunareyewear.co",
-          city: "Tegal",
-          picName: "Amanda",
-          followers: 3943,
-          followersFormatted: "3,943",
-          following: 5,
-          posts: 357,
-          lastUpdated: new Date().toISOString(),
-        },
-      ];
+  const accounts: IgAccountLive[] = OFFICIAL_BRANCH_ACCOUNTS.map((official) => {
+    const match =
+      cache?.accounts?.[official.id] ||
+      (official.id === "pwt" ? cache?.accounts?.["pwt-pusat"] : null) ||
+      (official.id === "lunar" ? cache?.accounts?.["tgl"] : null);
+
+    if (match) return match;
+
+    const fallbackDefaults: Record<string, IgAccountLive> = {
+      pwt: {
+        id: "pwt",
+        name: official.name,
+        handle: official.handle,
+        url: official.url,
+        city: official.city,
+        picName: official.picName,
+        followers: 226000,
+        followersFormatted: "226K",
+        following: 112,
+        posts: 2946,
+        lastUpdated: new Date().toISOString(),
+      },
+      pbg: {
+        id: "pbg",
+        name: official.name,
+        handle: official.handle,
+        url: official.url,
+        city: official.city,
+        picName: official.picName,
+        followers: 6196,
+        followersFormatted: "6,196",
+        following: 6,
+        posts: 572,
+        lastUpdated: new Date().toISOString(),
+      },
+      clp: {
+        id: "clp",
+        name: official.name,
+        handle: official.handle,
+        url: official.url,
+        city: official.city,
+        picName: official.picName,
+        followers: 7395,
+        followersFormatted: "7,395",
+        following: 6,
+        posts: 1412,
+        lastUpdated: new Date().toISOString(),
+      },
+      wns: {
+        id: "wns",
+        name: official.name,
+        handle: official.handle,
+        url: official.url,
+        city: official.city,
+        picName: official.picName,
+        followers: 1255,
+        followersFormatted: "1,255",
+        following: 6,
+        posts: 343,
+        lastUpdated: new Date().toISOString(),
+      },
+      lunar: {
+        id: "lunar",
+        name: official.name,
+        handle: official.handle,
+        url: official.url,
+        city: official.city,
+        picName: official.picName,
+        followers: 3986,
+        followersFormatted: "3,986",
+        following: 5,
+        posts: 359,
+        lastUpdated: new Date().toISOString(),
+      },
+    };
+
+    return (
+      fallbackDefaults[official.id] || {
+        id: official.id,
+        name: official.name,
+        handle: official.handle,
+        url: official.url,
+        city: official.city,
+        picName: official.picName,
+        followers: 0,
+        followersFormatted: "0",
+        following: 0,
+        posts: 0,
+        lastUpdated: new Date().toISOString(),
+      }
+    );
+  });
 
   const handleManualSync = async () => {
     setIsRefreshing(true);
@@ -224,10 +249,12 @@ export const BranchFollowersBreakdown: React.FC<BranchFollowersBreakdownProps> =
               {/* Dual Followers Comparison: Realtime IG vs Spreadsheet H+3 */}
               {(() => {
                 const sheetKeyMap: Record<string, string> = {
+                  "pwt": "PWT",
                   "pwt-pusat": "PWT",
                   "clp": "CLP",
                   "pbg": "PBG",
                   "tgl": "TGL",
+                  "lunar": "TGL",
                   "wns": "WNS",
                 };
                 const sheetData = spreadsheetFollowers ? spreadsheetFollowers[sheetKeyMap[acc.id]] : null;
@@ -300,9 +327,9 @@ export const BranchFollowersBreakdown: React.FC<BranchFollowersBreakdownProps> =
       {/* Footer Info Notice */}
       <div className="bg-surface-secondary/50 border border-border/70 rounded-control px-4 py-2.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-foreground-muted">
         <div className="flex items-center gap-2">
-          <Sparkles className="w-3.5 h-3.5 text-amber-700 shrink-0" />
+          <Info className="w-3.5 h-3.5 text-foreground-secondary shrink-0" />
           <span>
-            <strong>Jadwal Otomatis:</strong> Cron job Vercel & background worker menarik metrik langsung dari Instagram setiap 1 jam sekali tanpa jeda.
+            <strong>Jadwal Otomatis:</strong> Background worker menarik metrik langsung dari Instagram setiap 1 jam sekali. Klik "Sync Realtime" untuk update manual.
           </span>
         </div>
         <span className="text-[11px] text-foreground-secondary shrink-0">

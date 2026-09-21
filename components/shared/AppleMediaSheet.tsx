@@ -15,7 +15,6 @@ import {
   MessageCircle,
   Share2,
   Award,
-  Sparkles,
   Info,
 } from "lucide-react";
 import { formatNumber } from "@/lib/utils";
@@ -410,7 +409,7 @@ export const AppleMediaSheet: React.FC<AppleMediaSheetProps> = ({
 
             {item.keyObservation && (
               <div className="p-3.5 rounded-[20px] bg-brand-light/30 border border-brand/20 text-xs flex items-start gap-2.5">
-                <Sparkles className="w-4 h-4 text-brand shrink-0 mt-0.5" />
+                <Info className="w-4 h-4 text-brand shrink-0 mt-0.5" />
                 <p className="text-foreground text-[11px] leading-relaxed">
                   <strong className="text-brand font-semibold">Observasi Analis:</strong>{" "}
                   {item.keyObservation}

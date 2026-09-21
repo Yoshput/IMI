@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { MapPin, Building2, Eye, Sparkles, X, ChevronRight } from "lucide-react";
+import { MapPin, Building2, Eye, X, ChevronRight } from "lucide-react";
 
 interface BranchData {
   id: string;

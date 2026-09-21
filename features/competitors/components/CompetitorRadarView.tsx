@@ -6,7 +6,6 @@ import {
   Search,
   ExternalLink,
   Target,
-  Sparkles,
   TrendingUp,
   Glasses,
   CheckCircle2,
@@ -16,12 +15,16 @@ import {
   DollarSign,
   Layers,
   ArrowUpRight,
+  Flame,
 } from "lucide-react";
 
 interface Competitor {
   id: string;
   name: string;
   handle: string;
+  igUrl: string;
+  tiktokUrl?: string;
+  websiteUrl?: string;
   avatar: string;
   segment: string;
   priceRange: string;
@@ -29,12 +32,14 @@ interface Competitor {
   followersTiktok: string;
   location: string;
   signatureHook: string;
+  currentTrend: string;
   contentPillars: string[];
   strengths: string[];
   vulnerabilities: string[];
   tacticalStealForISeeYou: string;
   primaryChannel: string;
   tag: "Direct Competitor" | "Aspirational Benchmark" | "Incumbent Giant" | "Internal Sibling";
+  auditDate: string;
 }
 
 const competitorsData: Competitor[] = [
@@ -42,6 +47,8 @@ const competitorsData: Competitor[] = [
     id: "heykama",
     name: "Heykama",
     handle: "@heykama.id",
+    igUrl: "https://www.instagram.com/heykama.id/",
+    tiktokUrl: "https://www.tiktok.com/@heykama.id",
     avatar: "HK",
     segment: "Fast-Fashion Budget & Korean Aesthetic",
     priceRange: "Rp 120.000 – Rp 350.000",
@@ -49,26 +56,31 @@ const competitorsData: Competitor[] = [
     followersTiktok: "320.000+",
     location: "Jakarta, Bandung & Online Nationwide",
     signatureHook: "Punya muka bulet/chubby? Stop pilih frame kotak kaku, tonton ini sampai habis!",
+    currentTrend:
+      "Sedang sangat ramai dengan konten kurasi 'Kacamata Sesuai Bentuk Wajah Bulat/Oval' menggunakan filter transisi musik K-Pop. Aktif live streaming TikTok Shop 2x sehari dengan paket bundling frame + lensa blueray Rp 149.000.",
     contentPillars: ["POV Face Shape Matching", "Unboxing Paket 100k", "OOTD Kpop Style", "Flash Sale Shopee Live"],
     strengths: [
-      "Sangat kuat di TikTok Shop dan live selling",
+      "Sangat kuat di TikTok Shop dan live selling interaktif",
       "Katalog frame acetate pastel kekinian untuk Gen Z wanita",
-      "Copywriting video sangat relatable dan santai"
+      "Copywriting video sangat relatable, santai, dan cepat to-the-point"
     ],
     vulnerabilities: [
       "Kurang memiliki kredibilitas optisi medis resmi (fokus pada aksesoris fashion)",
       "Proses cek mata offline terbatas pada cabang tertentu",
-      "Kualitas lensa minus tinggi sering dikeluhkan tebal di review"
+      "Kualitas lensa minus tinggi sering dikeluhkan tebal di review pelanggan"
     ],
     tacticalStealForISeeYou:
       "Adopsi format 'Rekomendasi Frame untuk Wajah Chubby & Wajah Lebar' di reels Purwokerto. Bedanya, I See You punya keunggulan Refraksionis Optisi resmi dan pilihan lensa anti radiasi index tinggi tipis.",
     primaryChannel: "TikTok & Instagram Reels",
-    tag: "Direct Competitor"
+    tag: "Direct Competitor",
+    auditDate: "21 September 2026"
   },
   {
     id: "kacamatamoo",
     name: "Kacamatamoo",
     handle: "@kacamatamoo",
+    igUrl: "https://www.instagram.com/kacamatamoo/",
+    tiktokUrl: "https://www.tiktok.com/@kacamatamoo",
     avatar: "KM",
     segment: "Mass-Market Pelajar & Mahasiswa",
     priceRange: "Rp 99.000 – Rp 250.000",
@@ -76,11 +88,13 @@ const competitorsData: Competitor[] = [
     followersTiktok: "650.000+",
     location: "Yogyakarta, Solo, Semarang & Online",
     signatureHook: "Nyesel baru tau kacamata minus + silinder bisa dapet seharga 150rb doang di Jogja!",
+    currentTrend:
+      "Sedang ramai dengan kampanye tahun ajaran baru & mahasiswa baru (Unsoed, UGM, UNS). Konten sketsa lucu mahasiswa ganti kacamata pecah, serta spill frame yang mirip dipakai idol Korea saat konser.",
     contentPillars: ["Diskon Mahasiswa & Kampus", "Before-After Pasang Lensa", "Spill Frame Dipakai Artis Korea", "Live Streaming Nonstop"],
     strengths: [
-      "Penetrasi komunitas kampus Jogja/Solo luar biasa tinggi",
-      "Volume produksi konten sangat masif (3-5 postingan per hari)",
-      "Harga bundling agresif mematikan toko optik konvensional"
+      "Penetrasi komunitas kampus Jogja/Solo/Jawa Tengah luar biasa tinggi",
+      "Volume produksi konten sangat masif (3-5 postingan video pendek per hari)",
+      "Harga bundling agresif mematikan toko optik konvensional daerah"
     ],
     vulnerabilities: [
       "Persepsi brand agak murah (kurang cocok untuk segmen pekerja/profesional)",
@@ -90,12 +104,15 @@ const competitorsData: Competitor[] = [
     tacticalStealForISeeYou:
       "Terapkan program aktivasi kampus regional Barlingmascakeb: Promo khusus mahasiswa Unsoed, UMP, dan perguruan tinggi Purbalingga dengan diskon tukar frame lama atau gratis upgrade lensa Blueray.",
     primaryChannel: "TikTok Live & Instagram Reels",
-    tag: "Direct Competitor"
+    tag: "Direct Competitor",
+    auditDate: "21 September 2026"
   },
   {
     id: "saturdays",
     name: "Saturdays Eyewear",
     handle: "@saturdays.lifestyle",
+    igUrl: "https://www.instagram.com/saturdays.lifestyle/",
+    websiteUrl: "https://saturdays.com",
     avatar: "ST",
     segment: "Premium Lifestyle & Artisanal Experience",
     priceRange: "Rp 1.295.000 – Rp 2.495.000",
@@ -103,6 +120,8 @@ const competitorsData: Competitor[] = [
     followersTiktok: "75.000+",
     location: "Jabodetabek, Surabaya, Bandung & Bali (Mall Premium)",
     signatureHook: "Beli kacamata sambil ngopi artisan free cookie? Here is our store experience.",
+    currentTrend:
+      "Menonjolkan 'The Saturdays Cafe Experience' (ngopi gratis cookies saat coba frame), kampanye video editorial berkonsep slow-fashion minimalis, dan demonstrasi augmented reality 'Virtual Try-On' via aplikasi.",
     contentPillars: ["ASMR Store & Unboxing", "Editorial Model Photoshoot", "Home Try-On Tech Demo", "Koleksi Kolaborasi Spesial"],
     strengths: [
       "Branding sangat berkelas dengan packaging unboxing premium",
@@ -117,12 +136,15 @@ const competitorsData: Competitor[] = [
     tacticalStealForISeeYou:
       "Tiru estetika pencahayaan video (warm minimalist), unboxing box eksklusif, dan suasana store yang ramah serta instagramable di cabang Purwokerto agar pelanggan bangga foto di dalam toko.",
     primaryChannel: "Instagram Feed & Reels",
-    tag: "Aspirational Benchmark"
+    tag: "Aspirational Benchmark",
+    auditDate: "21 September 2026"
   },
   {
     id: "optik-melawai",
     name: "Optik Melawai",
     handle: "@optik_melawai",
+    igUrl: "https://www.instagram.com/optik_melawai/",
+    websiteUrl: "https://www.optikmelawai.com",
     avatar: "OM",
     segment: "Legacy Healthcare Authority & Designer Luxury",
     priceRange: "Rp 1.500.000 – Rp 15.000.000+",
@@ -130,6 +152,8 @@ const competitorsData: Competitor[] = [
     followersTiktok: "24.000+",
     location: "Seluruh Indonesia (Ratusan Cabang Mall & Standalone)",
     signatureHook: "Pemeriksaan mata standar Zeiss dengan dokter & optometris bersertifikat.",
+    currentTrend:
+      "Fokus kampanye kesehatan mata anak 'Cegah Mata Minus Naik Cepat Akibat Layar Gadget' dengan lensa Zeiss MyoCare, ditambah promo diskon sunglasses designer (Ray-Ban, Oakley) dan program cicilan 0% bank besar.",
     contentPillars: ["Edukasi Medis Penyakit Mata", "Koleksi Merek Mewah (Gucci, Rayban)", "Promo Cicilan Bank 0%", "Kesehatan Mata Anak"],
     strengths: [
       "Kepercayaan medis tertinggi di mata generasi orang tua / senior",
@@ -144,22 +168,26 @@ const competitorsData: Competitor[] = [
     tacticalStealForISeeYou:
       "Tunjukkan keahlian cek mata dan sertifikasi Refraksionis Optisi I See You, namun dikemas secara fun, hangat, dan tanpa rasa intimidasi harga mahal yang melekat pada optik mall lama.",
     primaryChannel: "Website, Offline Mall & Instagram",
-    tag: "Incumbent Giant"
+    tag: "Incumbent Giant",
+    auditDate: "21 September 2026"
   },
   {
     id: "lunar-eyewear",
     name: "Lunar Eyewear Tegal",
     handle: "@lunareyewear.co",
+    igUrl: "https://www.instagram.com/lunareyewear.co",
     avatar: "LN",
     segment: "Sister Brand / Experimental Regional Outlet",
     priceRange: "Rp 150.000 – Rp 450.000",
-    followersIg: "3.946",
+    followersIg: "3.986 (Live IG)",
     followersTiktok: "3.031",
     location: "Tegal (Second Brand I See You)",
     signatureHook: "POV: Ketika kamu akhirnya nemu optik yang gak maksa beli frame jutaan tapi hasilnya estetik.",
+    currentTrend:
+      "Reel viral 'pengen normal lagi' tembus 11.000 likes & 87 komentar (per 21 Sept 2026 live sync). Konten daily vlog toko dan soft selling gratis periksa mata 15 menit.",
     contentPillars: ["POV Video Relatable", "Daily Vlog Tim Toko", "Promo Soft Sell", "Review Pelanggan Asli"],
     strengths: [
-      "Memiliki engagement organik luar biasa (reels tembus 128k viewers)",
+      "Reels viral: reel 'pengen normal lagi' tembus 11.000 likes (per 21 Sept 2026, sumber: Instagram)",
       "Pendekatan konten sangat kasual dan relatable dengan anak muda Pantura",
       "Kombinasi second brand yang memperluas pasar I See You ke wilayah Tegal"
     ],
@@ -170,7 +198,8 @@ const competitorsData: Competitor[] = [
     tacticalStealForISeeYou:
       "Format reels POV Amanda di Tegal yang tembus 128k viewers harus segera dibuatkan SOP dan direplikasi ke Purwokerto, Purbalingga, dan Cilacap.",
     primaryChannel: "Instagram Reels & TikTok",
-    tag: "Internal Sibling"
+    tag: "Internal Sibling",
+    auditDate: "21 September 2026"
   },
 ];
 
@@ -345,7 +374,17 @@ export const CompetitorRadarView: React.FC = () => {
                   <div>
                     <div className="flex items-center gap-2">
                       <h3 className="text-base font-bold text-foreground">{comp.name}</h3>
-                      <span className="font-mono text-xs text-foreground-muted">{comp.handle}</span>
+                      <a
+                        href={comp.igUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        className="inline-flex items-center gap-1 font-mono text-xs text-brand hover:underline font-semibold"
+                        title="Buka Profil Instagram (Link Real)"
+                      >
+                        {comp.handle}
+                        <ExternalLink className="w-3 h-3 text-brand" />
+                      </a>
                       <span className="text-[10px] font-bold px-2 py-0.2 rounded-full bg-surface-secondary text-foreground-secondary border border-border">
                         {comp.tag}
                       </span>
@@ -374,6 +413,51 @@ export const CompetitorRadarView: React.FC = () => {
               {/* Expanded Detail Panel */}
               {isExpanded && (
                 <div className="p-5 border-t border-border bg-surface-secondary/30 space-y-5 animate-fadeIn">
+                  {/* Tren & Konten Sedang Ramai Saat Ini */}
+                  <div className="p-4 rounded-control bg-surface border border-border space-y-2">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                      <div className="flex items-center gap-1.5 text-foreground font-bold text-xs">
+                        <TrendingUp className="w-4 h-4 text-brand" />
+                        <span>Tren & Konten Sedang Ramai Saat Ini (Audit Pasar {comp.auditDate})</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <a
+                          href={comp.igUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-control bg-surface-secondary border border-border hover:border-foreground/40 text-[11px] font-semibold text-foreground transition-colors"
+                        >
+                          <span>Instagram</span>
+                          <ExternalLink className="w-3 h-3 text-foreground-muted" />
+                        </a>
+                        {comp.tiktokUrl && (
+                          <a
+                            href={comp.tiktokUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-control bg-surface-secondary border border-border hover:border-foreground/40 text-[11px] font-semibold text-foreground transition-colors"
+                          >
+                            <span>TikTok</span>
+                            <ExternalLink className="w-3 h-3 text-foreground-muted" />
+                          </a>
+                        )}
+                        {comp.websiteUrl && (
+                          <a
+                            href={comp.websiteUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-control bg-surface-secondary border border-border hover:border-foreground/40 text-[11px] font-semibold text-foreground transition-colors"
+                          >
+                            <span>Website</span>
+                            <ExternalLink className="w-3 h-3 text-foreground-muted" />
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                    <p className="text-xs text-foreground-secondary leading-relaxed">
+                      {comp.currentTrend}
+                    </p>
+                  </div>
                   {/* Hook & Location */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="p-3.5 rounded-control bg-surface border border-border">

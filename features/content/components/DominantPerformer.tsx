@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ContentItem } from "@/types";
 import { formatNumber } from "@/lib/utils";
-import { Trophy, Bookmark, MessageCircle, Eye, Share2, Sparkles, Heart, ZoomIn } from "lucide-react";
+import { Trophy, Bookmark, MessageCircle, Eye, Share2, TrendingUp, Heart, ZoomIn } from "lucide-react";
 import { ProvenanceBadge } from "@/components/shared/ProvenanceBadge";
 import { AppleMediaSheet } from "@/components/shared/AppleMediaSheet";
 
@@ -146,7 +146,7 @@ export const DominantPerformer: React.FC<DominantPerformerProps> = ({ item }) =>
           {/* Editorial Observation / Why it won */}
           <div className="p-4 rounded-control bg-surface-secondary border border-border flex items-start gap-3">
             <div className="w-7 h-7 rounded bg-brand-light flex items-center justify-center text-brand shrink-0 mt-0.5">
-              <Sparkles className="w-4 h-4" />
+              <TrendingUp className="w-4 h-4" />
             </div>
             <div>
               <span className="text-xs font-bold text-foreground uppercase tracking-wider block">
