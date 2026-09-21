@@ -62,13 +62,24 @@ interface FormProposalTableProps {
 }
 
 type DecisionStatus = "pending" | "approved" | "rejected" | "negotiate" | "contact";
+type OutreachResponse = "none" | "interested" | "declined" | "followup" | "confirmed";
 
 interface ProposalDecision {
   [id: string]: {
     status: DecisionStatus;
     note: string;
+    contactedAt?: string | null;   // ISO date string when WA was sent
+    response?: OutreachResponse;   // what they replied
   };
 }
+
+const RESPONSE_CONFIG: Record<OutreachResponse, { label: string; short: string; color: string; bg: string }> = {
+  none:       { label: "Belum Balas",    short: "Belum Balas",  color: "text-neutral-500 dark:text-neutral-400",    bg: "bg-neutral-500/10 border-neutral-400/20" },
+  interested: { label: "Tertarik",       short: "Tertarik",     color: "text-emerald-600 dark:text-emerald-400",    bg: "bg-emerald-500/10 border-emerald-500/25" },
+  followup:   { label: "Perlu Follow-up",short: "Follow-up",    color: "text-amber-600 dark:text-amber-400",        bg: "bg-amber-500/10 border-amber-500/25" },
+  declined:   { label: "Tidak Bersedia", short: "Tidak",        color: "text-red-600 dark:text-red-400",            bg: "bg-red-500/10 border-red-500/25" },
+  confirmed:  { label: "Deal Confirmed", short: "Deal",          color: "text-violet-600 dark:text-violet-400",      bg: "bg-violet-500/10 border-violet-500/25" },
+};
 
 const STATUS_CONFIG: Record<
   DecisionStatus,
@@ -208,9 +219,43 @@ const formatPersonName = (rawName: string): string => {
 };
 
 /**
- * Professional, human business communication via WhatsApp
- * Strictly no broken emojis, no AI buzzwords, 100% clean formatting
+ * Official, professional, human business communication via WhatsApp.
+ * Strictly offers the management-approved package:
+ * Rp 1.000.000 in 20 shopping vouchers @ Rp 50.000 for eyeglass frames/lenses.
+ * No emojis, no AI buzzwords, completely clean formatting.
  */
+export const getWhatsAppVoucherOfferText = (
+  eventName: string,
+  applicantName: string,
+  targetBranch: string
+): string => {
+  const cleanBranch = targetBranch?.trim() || "Purwokerto";
+  const name = formatPersonName(applicantName);
+
+  const lines = [
+    `Selamat siang Kak ${name}, salam kenal dari tim Partnership Optik I See You Cabang ${cleanBranch}.`,
+    ``,
+    `Menindaklanjuti proposal sponsorship yang telah diajukan untuk kegiatan "${eventName.trim()}", pihak manajemen Optik I See You tertarik untuk memberikan dukungan kerja sama.`,
+    ``,
+    `Kami dapat berpartisipasi dengan dukungan senilai total Rp1.000.000 (satu juta rupiah) dalam bentuk 20 lembar Voucher Belanja Kacamata masing-masing senilai Rp50.000. Voucher ini dapat dialokasikan oleh panitia sebagai hadiah pemenang lomba, doorprize peserta, maupun apresiasi narasumber.`,
+    ``,
+    `Sebagai timbal balik kerja sama, kami berharap dapat memperoleh fasilitas promosi sponsorship seperti:`,
+    `1. Pencantuman logo Optik I See You pada media publikasi utama (backdrop / banner / pamflet)`,
+    `2. Penyebutan nama brand (adlibs) oleh MC selama kegiatan berlangsung`,
+    `3. Ulasan rating bintang 5 pada Google Maps resmi Optik I See You Cabang ${cleanBranch}`,
+    ``,
+    `Apakah penawaran paket sponsorship barter voucher ini dapat diterima oleh panitia? Jika berkenan, kami siap berkoordinasi lebih lanjut terkait teknis penyerahan fisik voucher serta pengiriman materi logo resmi.`,
+    ``,
+    `Terima kasih atas perhatian dan kerja samanya.`,
+    ``,
+    `Salam hormat,`,
+    `Tim Marketing & Partnership`,
+    `Optik I See You Cabang ${cleanBranch}`,
+  ];
+
+  return lines.join("\n");
+};
+
 const formatWhatsAppUrl = (
   rawPhone: string,
   eventName: string,
@@ -223,26 +268,8 @@ const formatWhatsAppUrl = (
   } else if (clean.startsWith("8")) {
     clean = "628" + clean.slice(1);
   }
-  const cleanBranch = targetBranch.trim() || "Purwokerto";
-  const name = formatPersonName(applicantName);
-
-  const lines = [
-    `Selamat siang Kak ${name}, salam kenal dari tim Partnership Optik I See You Cabang ${cleanBranch}.`,
-    ``,
-    `Kami telah menerima dan meninjau pengajuan proposal sponsorship untuk kegiatan "${eventName.trim()}".`,
-    ``,
-    `Terkait penawaran kerja sama tersebut, pihak manajemen kami tertarik untuk mendiskusikan kemungkinan dukungan sponsorship dari Optik I See You.`,
-    ``,
-    `Apakah ada kontak koordinator sponsorship atau panitia terkait yang dapat kami hubungi untuk membahas teknis kesepakatan lebih lanjut?`,
-    ``,
-    `Terima kasih atas perhatian dan kerja samanya.`,
-    ``,
-    `Salam hormat,`,
-    `Tim Marketing & Partnership`,
-    `Optik I See You Cabang ${cleanBranch}`,
-  ];
-
-  return `https://wa.me/${clean}?text=${encodeURIComponent(lines.join("\n"))}`;
+  const message = getWhatsAppVoucherOfferText(eventName, applicantName, targetBranch);
+  return `https://wa.me/${clean}?text=${encodeURIComponent(message)}`;
 };
 
 export interface BarterEvaluation {
@@ -315,7 +342,7 @@ export const evaluateBarterVoucher = (item: FormProposalItem): BarterEvaluation 
   };
 };
 
-const STORAGE_KEY = "proposal-decisions-v1";
+const STORAGE_KEY = "proposal-decisions-v2";
 
 const loadDecisions = (): ProposalDecision => {
   try {
@@ -363,9 +390,11 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
   const [selectedStatus, setSelectedStatus] = useState<"all" | DecisionStatus>("all");
   const [timeFilter, setTimeFilter] = useState<"upcoming" | "all" | "past">("upcoming");
   const [barterOnly, setBarterOnly] = useState(false);
+  const [selectedBatch, setSelectedBatch] = useState<"all" | 1 | 2 | 3 | 4>("all");
   const [viewMode, setViewMode] = useState<"cards" | "table">("cards");
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [copiedChatId, setCopiedChatId] = useState<string | null>(null);
   const [decisions, setDecisions] = useState<ProposalDecision>(loadDecisions);
   const [noteEditing, setNoteEditing] = useState<string | null>(null);
   const [noteText, setNoteText] = useState("");
@@ -386,7 +415,7 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
   const updateDecision = (id: string, status: DecisionStatus) => {
     const updated = {
       ...decisions,
-      [id]: { status, note: decisions[id]?.note || "" },
+      [id]: { ...decisions[id], status, note: decisions[id]?.note || "" },
     };
     setDecisions(updated);
     saveDecisions(updated);
@@ -395,7 +424,38 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
   const updateNote = (id: string, note: string) => {
     const updated = {
       ...decisions,
-      [id]: { status: decisions[id]?.status || "pending", note },
+      [id]: { ...decisions[id], status: decisions[id]?.status || "pending", note },
+    };
+    setDecisions(updated);
+    saveDecisions(updated);
+  };
+
+  /** Mark as contacted now (called when WA link is opened) */
+  const markContacted = (id: string) => {
+    if (decisions[id]?.contactedAt) return; // don't overwrite if already set
+    const updated = {
+      ...decisions,
+      [id]: {
+        ...decisions[id],
+        status: decisions[id]?.status || "contact",
+        note: decisions[id]?.note || "",
+        contactedAt: new Date().toISOString(),
+        response: decisions[id]?.response ?? "none",
+      },
+    };
+    setDecisions(updated);
+    saveDecisions(updated);
+  };
+
+  const updateResponse = (id: string, response: OutreachResponse) => {
+    const updated = {
+      ...decisions,
+      [id]: {
+        ...decisions[id],
+        status: decisions[id]?.status || "contact",
+        note: decisions[id]?.note || "",
+        response,
+      },
     };
     setDecisions(updated);
     saveDecisions(updated);
@@ -434,13 +494,45 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
     setTimeout(() => setCopiedId(null), 2500);
   };
 
+  const handleCopyChat = (item: FormProposalItem) => {
+    const text = getWhatsAppVoucherOfferText(item.eventName, item.applicantName, item.targetBranch);
+    navigator.clipboard.writeText(text);
+    setCopiedChatId(item.id);
+    setTimeout(() => setCopiedChatId(null), 2500);
+  };
+
   const branches = useMemo(
     () => Array.from(new Set(validItems.map((i) => i.targetBranch).filter(Boolean))),
     [validItems]
   );
 
+  // Strictly chronological upcoming list for 5-by-5 batching
+  const sortedUpcomingList = useMemo(() => {
+    return [...validItems]
+      .filter((i) => {
+        const d = getDaysUntilEvent(i.eventDate);
+        return d === null || d >= 0;
+      })
+      .sort((a, b) => {
+        if (!a.eventDate) return 1;
+        if (!b.eventDate) return -1;
+        return a.eventDate.localeCompare(b.eventDate);
+      });
+  }, [validItems]);
+
+  // Map each upcoming item to its Batch 1..4 (5 proposals per batch)
+  const proposalBatchMap = useMemo(() => {
+    const map = new Map<string, { batch: number; orderInBatch: number; overallIndex: number }>();
+    sortedUpcomingList.forEach((item, idx) => {
+      const batch = Math.floor(idx / 5) + 1;
+      const orderInBatch = (idx % 5) + 1;
+      map.set(item.id, { batch, orderInBatch, overallIndex: idx + 1 });
+    });
+    return map;
+  }, [sortedUpcomingList]);
+
   const filteredItems = useMemo(() => {
-    return validItems.filter((item) => {
+    const list = validItems.filter((item) => {
       const q = searchQuery.toLowerCase();
       const matchSearch =
         !q ||
@@ -472,9 +564,21 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
         if (!barter.isViable) return false;
       }
 
+      if (selectedBatch !== "all") {
+        const batchInfo = proposalBatchMap.get(item.id);
+        if (!batchInfo || batchInfo.batch !== selectedBatch) return false;
+      }
+
       return matchSearch && matchBranch && matchStatus && matchTime;
     });
-  }, [validItems, searchQuery, selectedBranch, selectedStatus, timeFilter, barterOnly, decisions]);
+
+    // Chronologically ordered by eventDate ascending
+    return list.sort((a, b) => {
+      if (!a.eventDate) return 1;
+      if (!b.eventDate) return -1;
+      return a.eventDate.localeCompare(b.eventDate);
+    });
+  }, [validItems, searchQuery, selectedBranch, selectedStatus, timeFilter, barterOnly, selectedBatch, decisions, proposalBatchMap]);
 
   const stats = useMemo(() => {
     const all = validItems.length;
@@ -502,8 +606,13 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
       const isUpcoming = d === null || d >= 0;
       return isUpcoming && evaluateBarterVoucher(i).isViable;
     }).length;
+    const contacted = validItems.filter((i) => decisions[i.id]?.contactedAt).length;
+    const respondedPositive = validItems.filter((i) => {
+      const r = decisions[i.id]?.response;
+      return r === "interested" || r === "confirmed";
+    }).length;
 
-    return { all, upcoming, past, urgent, approved, pending, rejected, negotiate, contact, barterViable };
+    return { all, upcoming, past, urgent, approved, pending, rejected, negotiate, contact, barterViable, contacted, respondedPositive };
   }, [validItems, decisions]);
 
   const openPreview = (fileUrl: string, title: string) => {
@@ -616,13 +725,13 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
               <span className="text-[10px] font-bold text-foreground-muted uppercase tracking-wider block">Aktif</span>
               <span className="text-xl font-extrabold text-violet-600 dark:text-violet-400 block mt-0.5">{stats.upcoming}</span>
             </div>
-            <div className="p-2.5 rounded-2xl bg-surface-secondary border border-border text-center">
-              <span className="text-[10px] font-bold text-foreground-muted uppercase tracking-wider block">Pending</span>
-              <span className="text-xl font-extrabold text-amber-600 dark:text-amber-400 block mt-0.5">{stats.pending}</span>
+            <div className="p-2.5 rounded-2xl bg-emerald-500/5 border border-emerald-500/20 text-center">
+              <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-400 uppercase tracking-wider block">Dihubungi</span>
+              <span className="text-xl font-extrabold text-emerald-600 dark:text-emerald-400 block mt-0.5">{stats.contacted}</span>
             </div>
-            <div className="p-2.5 rounded-2xl bg-surface-secondary border border-border text-center">
-              <span className="text-[10px] font-bold text-foreground-muted uppercase tracking-wider block">Disetujui</span>
-              <span className="text-xl font-extrabold text-emerald-600 dark:text-emerald-400 block mt-0.5">{stats.approved}</span>
+            <div className="p-2.5 rounded-2xl bg-violet-500/5 border border-violet-500/20 text-center">
+              <span className="text-[10px] font-bold text-violet-700 dark:text-violet-300 uppercase tracking-wider block">Tertarik</span>
+              <span className="text-xl font-extrabold text-violet-600 dark:text-violet-400 block mt-0.5">{stats.respondedPositive}</span>
             </div>
           </div>
         </div>
@@ -689,6 +798,59 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
           </span>
         </button>
 
+        {/* Mobile Batch 5-5 Strategy Card */}
+        <div className="rounded-2xl bg-surface border border-border p-3.5 space-y-2.5 shadow-subtle">
+          <div className="flex items-center justify-between gap-2">
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-violet-600 text-white text-[11px] font-bold">
+              Arahan Hubungi 5 Dulu
+            </span>
+            <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+              20 Voucher @ 50rb (1 Juta)
+            </span>
+          </div>
+          <p className="text-[11px] text-foreground-secondary leading-relaxed">
+            Proposal diurutkan tanggal terdekat dan dipisahkan bertahap per 5 kegiatan.
+          </p>
+          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar -mx-1 px-1">
+            <button
+              onClick={() => setSelectedBatch("all")}
+              className={`min-h-[34px] px-3 py-1 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
+                selectedBatch === "all"
+                  ? "bg-foreground text-surface shadow-subtle"
+                  : "bg-surface-secondary text-foreground-secondary"
+              }`}
+            >
+              Semua ({sortedUpcomingList.length})
+            </button>
+            {[1, 2, 3, 4].map((b) => {
+              const count = sortedUpcomingList.filter((_, idx) => Math.floor(idx / 5) + 1 === b).length;
+              const isSel = selectedBatch === b;
+              const labels: Record<number, string> = {
+                1: "Batch 1: 5 Terdekat (26-30 Sep)",
+                2: "Batch 2: 5 Kedua (01-03 Okt)",
+                3: "Batch 3: 5 Ketiga (06-24 Okt)",
+                4: "Batch 4: 4 Terakhir (Nov-Des)",
+              };
+              return (
+                <button
+                  key={b}
+                  onClick={() => {
+                    setSelectedBatch(b as any);
+                    setTimeFilter("upcoming");
+                  }}
+                  className={`min-h-[34px] px-3 py-1 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
+                    isSel
+                      ? "bg-violet-600 text-white font-bold shadow-subtle"
+                      : "bg-surface-secondary text-foreground-secondary"
+                  }`}
+                >
+                  {labels[b]} ({count})
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
         {/* Mobile Search & Branch Filter */}
         <div className="space-y-2">
           <div className="relative">
@@ -753,6 +915,7 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
               const urgency = getUrgencyBadge(days);
               const category = extractEventCategory(item.eventName, item.description);
               const barter = evaluateBarterVoucher(item);
+              const batchInfo = proposalBatchMap.get(item.id);
               const isExpanded = expandedId === item.id;
               const isEditingNote = noteEditing === item.id;
               const waUrl = formatWhatsAppUrl(
@@ -778,6 +941,11 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
                   {/* Card Top Badges */}
                   <div className="flex items-center justify-between gap-2">
                     <div className="flex flex-wrap items-center gap-1.5 flex-1">
+                      {batchInfo && (
+                        <span className="text-[11px] font-extrabold px-2.5 py-0.5 rounded-full bg-violet-600 text-white shadow-subtle">
+                          Batch {batchInfo.batch} · #{batchInfo.orderInBatch}
+                        </span>
+                      )}
                       <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold border ${badge.bg}`}>
                         <span className={`w-1.5 h-1.5 rounded-full ${badge.dot}`} />
                         {item.targetBranch}
@@ -790,6 +958,18 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
                       <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full border ${barter.badgeClass}`}>
                         {barter.tierLabel}
                       </span>
+                      {/* Contacted badge */}
+                      {decision?.contactedAt && (
+                        <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full border ${
+                          decision.response && decision.response !== "none"
+                            ? RESPONSE_CONFIG[decision.response].bg + " " + RESPONSE_CONFIG[decision.response].color
+                            : "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/25"
+                        }`}>
+                          {decision.response && decision.response !== "none"
+                            ? RESPONSE_CONFIG[decision.response].short
+                            : "Sudah Dihubungi"}
+                        </span>
+                      )}
                     </div>
 
                     <button
@@ -886,33 +1066,104 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
                     <span className="text-[11px] font-mono text-foreground-muted">{item.applicantPhone}</span>
                   </div>
 
-                  {/* Direct WhatsApp Action Button */}
+                  {/* Direct WhatsApp Action Button & Copy Chat WA */}
                   <div className="space-y-2 pt-1">
+                    {/* Main WA Send — marks contacted on click */}
                     <a
                       href={waUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-full min-h-[48px] py-3 px-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 active:scale-[0.98] text-white text-xs font-bold flex items-center justify-center gap-2 shadow-sm transition-all"
+                      onClick={() => markContacted(item.id)}
+                      className={`w-full min-h-[48px] py-3 px-4 rounded-2xl active:scale-[0.98] text-white text-xs font-bold flex items-center justify-center gap-2 shadow-sm transition-all ${
+                        decision?.contactedAt
+                          ? "bg-emerald-700 hover:bg-emerald-800"
+                          : "bg-emerald-600 hover:bg-emerald-700"
+                      }`}
                     >
                       <Phone className="w-4 h-4" />
-                      <span>Hubungi Panitia via WhatsApp</span>
+                      <span>
+                        {decision?.contactedAt
+                          ? `Hubungi Lagi — Sudah Dikirim ${new Date(decision.contactedAt).toLocaleDateString("id-ID", { day: "numeric", month: "short" })}`
+                          : "Kirim Penawaran 20 Voucher via WhatsApp"}
+                      </span>
                     </a>
+
+                    {/* Outreach tracking row: appears after WA is sent */}
+                    {decision?.contactedAt && (
+                      <div className="rounded-2xl border border-border bg-surface-secondary/50 p-3 space-y-2">
+                        <div className="flex items-center justify-between">
+                          <span className="text-[10px] font-bold text-foreground-muted uppercase tracking-wider">
+                            Respons Panitia:
+                          </span>
+                          <span className="text-[11px] font-semibold text-foreground-secondary">
+                            Dihubungi {new Date(decision.contactedAt).toLocaleDateString("id-ID", { day: "numeric", month: "long" })}
+                          </span>
+                        </div>
+                        <div className="flex flex-wrap gap-1.5">
+                          {(Object.entries(RESPONSE_CONFIG) as [OutreachResponse, typeof RESPONSE_CONFIG[OutreachResponse]][]).map(([key, cfg]) => {
+                            const isSel = (decision?.response ?? "none") === key;
+                            return (
+                              <button
+                                key={key}
+                                onClick={() => updateResponse(item.id, key)}
+                                className={`px-3 py-1 rounded-full text-[11px] font-bold border transition-all ${
+                                  isSel
+                                    ? `${cfg.bg} ${cfg.color} shadow-subtle`
+                                    : "bg-surface border-border text-foreground-muted"
+                                }`}
+                              >
+                                {cfg.short}
+                              </button>
+                            );
+                          })}
+                        </div>
+                        {/* Reset contacted */}
+                        <button
+                          onClick={() => {
+                            const updated = { ...decisions, [item.id]: { ...decisions[item.id], contactedAt: null, response: "none" as OutreachResponse } };
+                            setDecisions(updated);
+                            saveDecisions(updated);
+                          }}
+                          className="text-[10px] text-foreground-muted underline underline-offset-2 mt-0.5 block"
+                        >
+                          Reset status dihubungi
+                        </button>
+                      </div>
+                    )}
+
+                    <button
+                      onClick={() => handleCopyChat(item)}
+                      className="w-full min-h-[42px] py-2 px-3 rounded-xl border border-violet-500/30 bg-violet-500/10 hover:bg-violet-500/15 text-xs font-bold text-violet-700 dark:text-violet-300 flex items-center justify-center gap-1.5 active:scale-95 transition-all"
+                      title="Salin Pesan WA Tawaran 20 Voucher senilai 50rb"
+                    >
+                      {copiedChatId === item.id ? (
+                        <>
+                          <Check className="w-3.5 h-3.5 text-emerald-600" />
+                          <span className="text-emerald-600">Draft Chat 20 Voucher Disalin!</span>
+                        </>
+                      ) : (
+                        <>
+                          <MessageSquare className="w-3.5 h-3.5 text-violet-600 dark:text-violet-400" />
+                          <span>Salin Draft Chat WA (20 Voucher @ 50rb)</span>
+                        </>
+                      )}
+                    </button>
 
                     <div className="flex items-center gap-2">
                       {item.fileUrl && (
                         <button
                           onClick={() => openPreview(item.fileUrl, item.eventName)}
-                          className="flex-1 min-h-[42px] py-2 px-3 rounded-xl border border-violet-500/30 bg-violet-500/5 text-xs font-semibold text-violet-700 dark:text-violet-300 flex items-center justify-center gap-1.5 active:scale-95"
+                          className="flex-1 min-h-[40px] py-2 px-3 rounded-xl border border-border bg-surface-secondary text-xs font-semibold text-foreground flex items-center justify-center gap-1.5 active:scale-95"
                         >
-                          <FileText className="w-3.5 h-3.5" />
+                          <FileText className="w-3.5 h-3.5 text-violet-500" />
                           <span>Preview Proposal</span>
                         </button>
                       )}
                       <button
                         onClick={() => handleCopy(item)}
-                        className="flex-1 min-h-[42px] py-2 px-3 rounded-xl border border-border bg-surface-secondary text-xs font-semibold text-foreground flex items-center justify-center gap-1.5 active:scale-95"
+                        className="flex-1 min-h-[40px] py-2 px-3 rounded-xl border border-border bg-surface-secondary text-xs font-semibold text-foreground flex items-center justify-center gap-1.5 active:scale-95"
                       >
-                        <Copy className="w-3.5 h-3.5" />
+                        <Copy className="w-3.5 h-3.5 text-foreground-muted" />
                         <span>Salin Memo</span>
                       </button>
                     </div>
@@ -1268,6 +1519,62 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
           </div>
         </div>
 
+        {/* Desktop Batch 5-5 Strategy Banner */}
+        <div className="rounded-2xl bg-surface border border-border p-4 flex flex-col lg:flex-row lg:items-center justify-between gap-3 shadow-subtle">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <span className="px-2.5 py-0.5 rounded-full bg-violet-600 text-white text-xs font-bold shadow-subtle">
+                Arahan Manajemen: Hubungi 5 Dulu
+              </span>
+              <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20">
+                20 Voucher @ Rp50.000 (Total Rp1.000.000)
+              </span>
+            </div>
+            <p className="text-xs text-foreground-secondary">
+              Proposal diurutkan tanggal pelaksanaan terdekat dan dipisahkan bertahap per 5 kegiatan agar tim fokus menindaklanjuti.
+            </p>
+          </div>
+
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <button
+              onClick={() => setSelectedBatch("all")}
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                selectedBatch === "all"
+                  ? "bg-foreground text-surface shadow-subtle"
+                  : "bg-surface-secondary text-foreground-secondary hover:text-foreground"
+              }`}
+            >
+              Semua Jadwal ({sortedUpcomingList.length})
+            </button>
+            {[1, 2, 3, 4].map((b) => {
+              const count = sortedUpcomingList.filter((_, idx) => Math.floor(idx / 5) + 1 === b).length;
+              const isSel = selectedBatch === b;
+              const labels: Record<number, string> = {
+                1: "Batch 1: 5 Terdekat (26-30 Sep)",
+                2: "Batch 2: 5 Kedua (01-03 Okt)",
+                3: "Batch 3: 5 Ketiga (06-24 Okt)",
+                4: "Batch 4: 4 Terakhir (Nov-Des)",
+              };
+              return (
+                <button
+                  key={b}
+                  onClick={() => {
+                    setSelectedBatch(b as any);
+                    setTimeFilter("upcoming");
+                  }}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+                    isSel
+                      ? "bg-violet-600 text-white font-bold shadow-subtle"
+                      : "bg-surface-secondary text-foreground-secondary hover:text-foreground"
+                  }`}
+                >
+                  {labels[b]} ({count})
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
         {/* Desktop Cards / Table Content */}
         {filteredItems.length === 0 ? (
           <div className="text-center py-16 rounded-3xl bg-surface border border-dashed border-border p-8 shadow-subtle">
@@ -1282,6 +1589,7 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
                 setSelectedBranch("all");
                 setSelectedStatus("all");
                 setTimeFilter("upcoming");
+                setSelectedBatch("all");
                 setBarterOnly(false);
               }}
               className="mt-4 px-4 py-2 rounded-full bg-surface-secondary hover:bg-surface-secondary/80 text-xs font-bold text-foreground border border-border transition-all shadow-subtle"
@@ -1301,6 +1609,7 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
               const urgency = getUrgencyBadge(days);
               const category = extractEventCategory(item.eventName, item.description);
               const barter = evaluateBarterVoucher(item);
+              const batchInfo = proposalBatchMap.get(item.id);
               const isExpanded = expandedId === item.id;
               const isEditingNote = noteEditing === item.id;
               const waUrl = formatWhatsAppUrl(
@@ -1328,6 +1637,11 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
                   <div className="p-5 pb-4 border-b border-border/50">
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex flex-wrap items-center gap-1.5 flex-1">
+                        {batchInfo && (
+                          <span className="text-[11px] font-extrabold px-2.5 py-0.5 rounded-full bg-violet-600 text-white shadow-subtle">
+                            Batch {batchInfo.batch} · #{batchInfo.orderInBatch}
+                          </span>
+                        )}
                         <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold border ${badge.bg}`}>
                           <span className={`w-1.5 h-1.5 rounded-full ${badge.dot}`} />
                           {item.targetBranch}
@@ -1343,6 +1657,18 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
                         <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full border ${barter.badgeClass}`}>
                           {barter.tierLabel}
                         </span>
+                        {/* Contacted badge desktop */}
+                        {decision?.contactedAt && (
+                          <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full border ${
+                            decision.response && decision.response !== "none"
+                              ? RESPONSE_CONFIG[decision.response].bg + " " + RESPONSE_CONFIG[decision.response].color
+                              : "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/25"
+                          }`}>
+                            {decision.response && decision.response !== "none"
+                              ? RESPONSE_CONFIG[decision.response].short
+                              : "Sudah Dihubungi"}
+                          </span>
+                        )}
                       </div>
 
                       <div className="flex items-center gap-1 shrink-0">
@@ -1452,7 +1778,7 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 flex-wrap">
                         {item.fileUrl && (
                           <button
                             onClick={() => openPreview(item.fileUrl, item.eventName)}
@@ -1460,22 +1786,85 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
                             title="Preview Dokumen Proposal"
                           >
                             <FileText className="w-3.5 h-3.5" />
-                            <span>Preview Proposal</span>
+                            <span>Preview</span>
                           </button>
                         )}
+
+                        <button
+                          onClick={() => handleCopyChat(item)}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-violet-500/30 bg-violet-500/10 hover:bg-violet-500/15 text-xs font-bold text-violet-700 dark:text-violet-300 transition-all shadow-subtle active:scale-95"
+                          title="Salin Draft Pesan WhatsApp 20 Voucher senilai 50rb"
+                        >
+                          {copiedChatId === item.id ? (
+                            <>
+                              <Check className="w-3.5 h-3.5 text-emerald-600" />
+                              <span className="text-emerald-600">Draft Disalin!</span>
+                            </>
+                          ) : (
+                            <>
+                              <MessageSquare className="w-3.5 h-3.5 text-violet-600 dark:text-violet-400" />
+                              <span>Salin Chat WA</span>
+                            </>
+                          )}
+                        </button>
 
                         <a
                           href={waUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-all shadow-subtle hover:scale-[1.02] active:scale-95"
-                          title="Hubungi panitia via WhatsApp"
+                          onClick={() => markContacted(item.id)}
+                          className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-white text-xs font-bold transition-all shadow-subtle hover:scale-[1.02] active:scale-95 ${
+                            decision?.contactedAt
+                              ? "bg-emerald-700 hover:bg-emerald-800"
+                              : "bg-emerald-600 hover:bg-emerald-700"
+                          }`}
+                          title="Kirim penawaran 20 voucher via WhatsApp"
                         >
                           <Phone className="w-3 h-3" />
-                          <span>Hubungi via WA</span>
+                          <span>{decision?.contactedAt ? "Hubungi Lagi" : "Kirim Penawaran WA"}</span>
                         </a>
                       </div>
                     </div>
+
+                    {/* Desktop Outreach Tracking — appears after WA sent */}
+                    {decision?.contactedAt && (
+                      <div className="mt-2 rounded-xl border border-border bg-surface-secondary/40 px-3 py-2 space-y-1.5">
+                        <div className="flex items-center justify-between">
+                          <span className="text-[10px] font-bold text-foreground-muted uppercase tracking-wider">Respons Panitia:</span>
+                          <span className="text-[10px] text-foreground-secondary">
+                            Dihubungi {new Date(decision.contactedAt).toLocaleDateString("id-ID", { day: "numeric", month: "long" })}
+                          </span>
+                        </div>
+                        <div className="flex flex-wrap gap-1">
+                          {(Object.entries(RESPONSE_CONFIG) as [OutreachResponse, typeof RESPONSE_CONFIG[OutreachResponse]][]).map(([key, cfg]) => {
+                            const isSel = (decision?.response ?? "none") === key;
+                            return (
+                              <button
+                                key={key}
+                                onClick={() => updateResponse(item.id, key)}
+                                className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold border transition-all ${
+                                  isSel
+                                    ? `${cfg.bg} ${cfg.color} shadow-subtle`
+                                    : "bg-surface border-border text-foreground-muted hover:text-foreground"
+                                }`}
+                              >
+                                {cfg.short}
+                              </button>
+                            );
+                          })}
+                          <button
+                            onClick={() => {
+                              const updated = { ...decisions, [item.id]: { ...decisions[item.id], contactedAt: null, response: "none" as OutreachResponse } };
+                              setDecisions(updated);
+                              saveDecisions(updated);
+                            }}
+                            className="text-[10px] text-foreground-muted underline underline-offset-2 px-1"
+                          >
+                            Reset
+                          </button>
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   {/* Decision Control */}
