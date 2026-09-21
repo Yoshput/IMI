@@ -10,7 +10,6 @@ import {
   Search,
   RefreshCw,
   ExternalLink,
-  Sparkles,
   CheckCircle2,
   XCircle,
   Clock,
@@ -20,14 +19,9 @@ import {
   Check,
   LayoutGrid,
   Table as TableIcon,
-  TrendingUp,
-  Star,
   Building2,
-  BadgeCheck,
   MessageSquare,
   AlertTriangle,
-  Filter,
-  Award,
   Handshake,
   PhoneCall,
   ThumbsUp,
@@ -37,14 +31,11 @@ import {
   Info,
   Tag,
   Gift,
-  Target,
   Send,
   CalendarCheck,
   CalendarX,
   Layers,
   CheckCircle,
-  Smartphone,
-  SlidersHorizontal,
 } from "lucide-react";
 
 export interface FormProposalItem {
@@ -87,39 +78,39 @@ const STATUS_CONFIG: Record<
     color: "text-amber-600 dark:text-amber-400",
     bg: "bg-amber-500/10 border-amber-500/20",
     icon: Hourglass,
-    desc: "Proposal belum diputuskan oleh pimpinan / tim marketing",
+    desc: "Proposal belum diputuskan oleh manajemen",
   },
   approved: {
     label: "Disetujui",
-    short: "Setujui",
+    short: "Disetujui",
     color: "text-emerald-600 dark:text-emerald-400",
     bg: "bg-emerald-500/10 border-emerald-500/20",
     icon: ThumbsUp,
-    desc: "Disetujui untuk kerja sama sponsorship (voucher / dana)",
+    desc: "Disetujui untuk kerja sama sponsorship",
   },
   rejected: {
     label: "Ditolak",
-    short: "Tolak",
+    short: "Ditolak",
     color: "text-red-600 dark:text-red-400",
     bg: "bg-red-500/10 border-red-500/20",
     icon: ThumbsDown,
-    desc: "Tidak sesuai kriteria, jadwal mepet, atau budget penuh",
+    desc: "Tidak memenuhi kriteria atau jadwal terlalu mepet",
   },
   negotiate: {
-    label: "Negosiasi (Barter Voucher)",
+    label: "Negosiasi Voucher",
     short: "Nego Voucher",
     color: "text-purple-600 dark:text-purple-400",
     bg: "bg-purple-500/10 border-purple-500/20",
     icon: Handshake,
-    desc: "Ajukan barter paket voucher belanja (contoh: 5-10 vou @50K) tanpa tunai",
+    desc: "Tawarkan kerja sama barter paket voucher diskon",
   },
   contact: {
-    label: "Hubungi Pengaju",
+    label: "Perlu Dihubungi",
     short: "Hubungi",
     color: "text-blue-600 dark:text-blue-400",
     bg: "bg-blue-500/10 border-blue-500/20",
     icon: PhoneCall,
-    desc: "Perlu konfirmasi tanggal, rincian benefit, atau proposal fisik",
+    desc: "Perlu konfirmasi tanggal pelaksanaan atau teknis kerja sama",
   },
 };
 
@@ -137,7 +128,7 @@ const getBranchBadge = (branch: string) => {
 };
 
 const formatDate = (dateStr: string | null): string => {
-  if (!dateStr) return "Tanggal Belum Ditentukan";
+  if (!dateStr) return "Tanggal belum ditentukan";
   try {
     const d = new Date(dateStr);
     if (isNaN(d.getTime())) return dateStr;
@@ -163,38 +154,61 @@ const getDaysUntilEvent = (dateStr: string | null): number | null => {
 
 const getUrgencyBadge = (days: number | null) => {
   if (days === null) return { label: "Jadwal Belum Pasti", color: "text-foreground-muted", bg: "bg-surface-secondary border-border" };
-  if (days < 0) return { label: `Sudah Lewat (${Math.abs(days)} hari lalu)`, color: "text-neutral-500 dark:text-neutral-400", bg: "bg-neutral-500/10 border-neutral-500/20", isPast: true };
-  if (days === 0) return { label: "HARI INI!", color: "text-red-600 dark:text-red-400 font-extrabold animate-pulse", bg: "bg-red-500/20 border-red-500/40", isPast: false };
-  if (days === 1) return { label: "Besok (H-1)!", color: "text-red-600 dark:text-red-400 font-bold", bg: "bg-red-500/15 border-red-500/30", isPast: false };
-  if (days <= 7) return { label: `H-${days} Hari (Mendesak)`, color: "text-red-600 dark:text-red-400 font-bold", bg: "bg-red-500/10 border-red-500/20", isPast: false };
-  if (days <= 14) return { label: `H-${days} Hari (Segera)`, color: "text-amber-600 dark:text-amber-400 font-semibold", bg: "bg-amber-500/10 border-amber-500/20", isPast: false };
+  if (days < 0) return { label: `Selesai (${Math.abs(days)} hari lalu)`, color: "text-neutral-500 dark:text-neutral-400", bg: "bg-neutral-500/10 border-neutral-500/20", isPast: true };
+  if (days === 0) return { label: "Hari Ini", color: "text-red-600 dark:text-red-400 font-bold", bg: "bg-red-500/20 border-red-500/40", isPast: false };
+  if (days === 1) return { label: "Besok (H-1)", color: "text-red-600 dark:text-red-400 font-bold", bg: "bg-red-500/15 border-red-500/30", isPast: false };
+  if (days <= 7) return { label: `H-${days} Hari (Prioritas)`, color: "text-red-600 dark:text-red-400 font-bold", bg: "bg-red-500/10 border-red-500/20", isPast: false };
+  if (days <= 14) return { label: `H-${days} Hari`, color: "text-amber-600 dark:text-amber-400 font-semibold", bg: "bg-amber-500/10 border-amber-500/20", isPast: false };
   if (days <= 30) return { label: `H-${days} Hari`, color: "text-blue-600 dark:text-blue-400 font-medium", bg: "bg-blue-500/10 border-blue-500/20", isPast: false };
-  return { label: `H-${days} Hari (Mendatang)`, color: "text-emerald-600 dark:text-emerald-400 font-medium", bg: "bg-emerald-500/10 border-emerald-500/20", isPast: false };
+  return { label: `H-${days} Hari`, color: "text-emerald-600 dark:text-emerald-400 font-medium", bg: "bg-emerald-500/10 border-emerald-500/20", isPast: false };
 };
 
 const extractEventCategory = (name: string, desc: string): string => {
   const combined = `${name} ${desc}`.toLowerCase();
   if (combined.includes("konser") || combined.includes("music") || combined.includes("band") || combined.includes("festival"))
-    return "🎵 Konser / Festival";
+    return "Konser & Festival Musik";
   if (combined.includes("ospek") || combined.includes("orma") || combined.includes("pbak") || combined.includes("pkkmb") || combined.includes("orientasi") || combined.includes("ortepa"))
-    return "🎓 Orientasi Mahasiswa";
+    return "Orientasi Mahasiswa";
   if (combined.includes("seminar") || combined.includes("workshop") || combined.includes("pelatihan") || combined.includes("webinar") || combined.includes("diklat"))
-    return "📚 Seminar & Edukasi";
+    return "Seminar & Workshop Edukasi";
   if (combined.includes("olahraga") || combined.includes("sport") || combined.includes("porsema") || combined.includes("porsoed"))
-    return "🏅 Olahraga Mahasiswa";
+    return "Pekan Olahraga Mahasiswa";
   if (combined.includes("seni") || combined.includes("pameran") || combined.includes("kreasi") || combined.includes("choral"))
-    return "🎨 Seni & Budaya";
+    return "Pentas Seni & Budaya";
   if (combined.includes("lomba") || combined.includes("kompetisi") || combined.includes("competition") || combined.includes("bmcc"))
-    return "🏆 Kompetisi Bisnis";
+    return "Kompetisi Bisnis & Lomba";
   if (combined.includes("sosial") || combined.includes("bakti") || combined.includes("masyarakat") || combined.includes("kbi"))
-    return "🤝 Sosial & Bakti";
+    return "Bakti Sosial & Pengabdian";
   if (combined.includes("investasi") || combined.includes("ekonomi") || combined.includes("bisnis") || combined.includes("entrepreneur"))
-    return "💼 Bisnis & Karir";
+    return "Bisnis, Finansial & Karir";
   if (combined.includes("agama") || combined.includes("islam") || combined.includes("maulid") || combined.includes("ta'aruf"))
-    return "🕌 Kegiatan Religi";
-  return "📌 Event Umum";
+    return "Kegiatan Keagamaan";
+  return "Kegiatan Mahasiswa & Umum";
 };
 
+/**
+ * Format proper Indonesian title case for applicant names
+ * Example: "WITDYA ROSYANNA INDAH PRATIWI" -> "Witdya Rosyanna"
+ */
+const formatPersonName = (rawName: string): string => {
+  if (!rawName || rawName.trim() === "-" || rawName.trim() === "") return "Panitia";
+  let clean = rawName.replace(/^(Kak|Mas|Mba|Mbak|Pak|Bu)\s+/i, "").trim();
+  clean = clean
+    .toLowerCase()
+    .split(/\s+/)
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
+  const words = clean.split(" ");
+  if (words.length > 2) {
+    return `${words[0]} ${words[1]}`;
+  }
+  return clean;
+};
+
+/**
+ * Professional, human business communication via WhatsApp
+ * Strictly no broken emojis, no AI buzzwords, 100% clean formatting
+ */
 const formatWhatsAppUrl = (
   rawPhone: string,
   eventName: string,
@@ -208,15 +222,25 @@ const formatWhatsAppUrl = (
     clean = "628" + clean.slice(1);
   }
   const cleanBranch = targetBranch.trim() || "Purwokerto";
-  const name = applicantName && applicantName !== "-" ? applicantName : "Panitia";
-  const msg =
-    `Halo Kak ${name},\n\n` +
-    `Salam hangat dari Manajemen Optik I See You Cabang ${cleanBranch}.\n\n` +
-    `Menindaklanjuti pengajuan proposal kerja sama sponsorship untuk event:\n` +
-    `📌 *${eventName}*\n\n` +
-    `Kami tertarik untuk mendiskusikan opsi kolaborasi & paket sponsorship (voucher belanja kacamata / materi promosi brand). Apakah bisa kami minta kontak penanggung jawab sponsorship untuk pembahasan kesepakatan lebih lanjut?\n\n` +
-    `Terima kasih! 🙏\n_Optik I See You Marketing Intelligence_`;
-  return `https://wa.me/${clean}?text=${encodeURIComponent(msg)}`;
+  const name = formatPersonName(applicantName);
+
+  const lines = [
+    `Selamat siang Kak ${name}, salam kenal dari tim Partnership Optik I See You Cabang ${cleanBranch}.`,
+    ``,
+    `Kami telah menerima dan meninjau pengajuan proposal sponsorship untuk kegiatan "${eventName.trim()}".`,
+    ``,
+    `Terkait penawaran kerja sama tersebut, pihak manajemen kami tertarik untuk mendiskusikan kemungkinan dukungan sponsorship dari Optik I See You.`,
+    ``,
+    `Apakah ada kontak koordinator sponsorship atau panitia terkait yang dapat kami hubungi untuk membahas teknis kesepakatan lebih lanjut?`,
+    ``,
+    `Terima kasih atas perhatian dan kerja samanya.`,
+    ``,
+    `Salam hormat,`,
+    `Tim Marketing & Partnership`,
+    `Optik I See You Cabang ${cleanBranch}`,
+  ];
+
+  return `https://wa.me/${clean}?text=${encodeURIComponent(lines.join("\n"))}`;
 };
 
 const STORAGE_KEY = "proposal-decisions-v1";
@@ -255,7 +279,6 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
   const sheetUrl =
     "https://docs.google.com/spreadsheets/d/1BU0fIDP656Y-eue55bWVSxeaixSeFJwR3GP1n8kwBYc/edit?gid=1296355126#gid=1296355126";
 
-  // Filter out corrupted/empty rows
   const validItems = useMemo(() => {
     return items.filter(
       (i) =>
@@ -286,25 +309,31 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
     const decision = decisions[item.id];
     const days = getDaysUntilEvent(item.eventDate);
     const urgency = getUrgencyBadge(days);
-    const text = `[REKAP PROPOSAL SPONSORSHIP - OPTIK I SEE YOU ${item.targetBranch.toUpperCase()}]
-📌 Event: ${item.eventName}
-🏫 Penyelenggara: ${item.institution}
-📅 Pelaksanaan Acara: ${formatDate(item.eventDate)} (${urgency?.label || "Jadwal Belum Pasti"})
-👤 Kontak Pengaju: ${item.applicantName} (${item.applicantPhone})
-📍 Cabang Target: ${item.targetBranch}
-${item.sheetNote ? `🏷️ Catatan Negosiasi Tim: ${item.sheetNote}` : ""}
+    const statusLabel = STATUS_CONFIG[decision?.status || "pending"].label;
 
-📝 Deskripsi Acara:
-${item.description}
+    const lines = [
+      `REKAP PENGAJUAN SPONSORSHIP - OPTIK I SEE YOU`,
+      `Cabang Target   : ${item.targetBranch}`,
+      `----------------------------------------`,
+      `Nama Kegiatan   : ${item.eventName}`,
+      `Penyelenggara   : ${item.institution}`,
+      `Jadwal Acara    : ${formatDate(item.eventDate)} (${urgency?.label || "Jadwal Belum Pasti"})`,
+      `Kontak Pengaju  : ${item.applicantName} (${item.applicantPhone})`,
+      item.sheetNote ? `Catatan Sheet   : ${item.sheetNote}` : null,
+      `----------------------------------------`,
+      `Deskripsi Kegiatan:`,
+      item.description,
+      ``,
+      `Benefit yang Ditawarkan:`,
+      item.benefit,
+      ``,
+      item.fileUrl ? `Tautan Dokumen Proposal: ${item.fileUrl}` : null,
+      `----------------------------------------`,
+      `Status Arahan   : ${statusLabel}`,
+      decision?.note ? `Catatan Tindak Lanjut: ${decision.note}` : null,
+    ].filter(Boolean);
 
-🎁 Benefit Yang Ditawarkan:
-${item.benefit}
-
-📄 Link File Proposal: ${item.fileUrl || "Tidak ada file lampiran"}
-
-⚡ Status Rekomendasi: ${STATUS_CONFIG[decision?.status || "pending"].label}
-${decision?.note ? `📝 Catatan Tambahan: ${decision.note}` : ""}`;
-    navigator.clipboard.writeText(text);
+    navigator.clipboard.writeText(lines.join("\n"));
     setCopiedId(item.id);
     setTimeout(() => setCopiedId(null), 2500);
   };
@@ -314,7 +343,6 @@ ${decision?.note ? `📝 Catatan Tambahan: ${decision.note}` : ""}`;
     [validItems]
   );
 
-  // Filtered proposals
   const filteredItems = useMemo(() => {
     return validItems.filter((item) => {
       const q = searchQuery.toLowerCase();
@@ -335,7 +363,6 @@ ${decision?.note ? `📝 Catatan Tambahan: ${decision.note}` : ""}`;
       const currentStatus = decision?.status || "pending";
       const matchStatus = selectedStatus === "all" || currentStatus === selectedStatus;
 
-      // Time filter logic
       const days = getDaysUntilEvent(item.eventDate);
       let matchTime = true;
       if (timeFilter === "upcoming") {
@@ -348,7 +375,6 @@ ${decision?.note ? `📝 Catatan Tambahan: ${decision.note}` : ""}`;
     });
   }, [validItems, searchQuery, selectedBranch, selectedStatus, timeFilter, decisions]);
 
-  // KPI Statistics
   const stats = useMemo(() => {
     const all = validItems.length;
     let upcoming = 0;
@@ -377,31 +403,31 @@ ${decision?.note ? `📝 Catatan Tambahan: ${decision.note}` : ""}`;
   return (
     <div className="space-y-6">
       {/* ========================================================================= */}
-      {/* 📱 KHUSUS MOBILE LAYOUT (iOS Safari, iPhone, Android Phone, iPad Portrait) */}
+      {/* KHUSUS MOBILE LAYOUT (iOS Safari, iPhone, Android Phone, iPad Portrait) */}
       {/* ========================================================================= */}
       <div className="block md:hidden space-y-4">
         {/* Mobile Header Card */}
-        <div className="rounded-3xl bg-gradient-to-br from-violet-600/15 via-surface to-blue-600/10 border border-violet-500/20 p-5 shadow-sm space-y-3.5">
+        <div className="rounded-3xl bg-surface border border-border p-5 shadow-subtle space-y-3.5">
           <div className="flex items-center justify-between">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-violet-500/15 text-violet-700 dark:text-violet-300 text-xs font-bold border border-violet-500/20">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-violet-500/10 text-violet-700 dark:text-violet-300 text-xs font-bold border border-violet-500/20">
               <FileText className="w-3.5 h-3.5" />
               Proposal Sponsorship
             </span>
-            <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20">
-              ● Live Sync
+            <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+              Sinkronisasi Aktif
             </span>
           </div>
 
           <div>
-            <h2 className="text-lg font-extrabold text-foreground tracking-tight">
+            <h2 className="text-lg font-bold text-foreground tracking-tight">
               Proposal Masuk & Negosiasi
             </h2>
             <p className="text-xs text-foreground-secondary mt-1 leading-relaxed">
-              Disaring otomatis <strong>khusus event mendatang</strong> untuk keputusan cepat via WhatsApp.
+              Disaring otomatis khusus kegiatan mendatang untuk ditindaklanjuti secara cepat.
             </p>
           </div>
 
-          {/* Mobile Fast Action Buttons */}
           <div className="flex items-center gap-2 pt-1">
             {onSync && (
               <button
@@ -410,39 +436,38 @@ ${decision?.note ? `📝 Catatan Tambahan: ${decision.note}` : ""}`;
                 className="flex-1 min-h-[44px] flex items-center justify-center gap-2 px-3 py-2.5 rounded-2xl bg-foreground text-surface text-xs font-bold active:scale-95 transition-all shadow-subtle disabled:opacity-50"
               >
                 <RefreshCw className={`w-3.5 h-3.5 ${isSyncing ? "animate-spin" : ""}`} />
-                <span>{isSyncing ? "Menyinkron..." : "Cek Data Baru"}</span>
+                <span>{isSyncing ? "Menyinkronkan..." : "Perbarui Data"}</span>
               </button>
             )}
             <a
               href={sheetUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="min-h-[44px] flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-2xl border border-border bg-surface text-xs font-semibold text-foreground active:scale-95 transition-all"
+              className="min-h-[44px] flex items-center justify-center gap-1.5 px-3.5 py-2.5 rounded-2xl border border-border bg-surface-secondary text-xs font-semibold text-foreground active:scale-95 transition-all"
             >
               <ExternalLink className="w-3.5 h-3.5 text-violet-500" />
-              <span>Sheet</span>
+              <span>Buka Sheet</span>
             </a>
           </div>
 
-          {/* Mobile KPI Grid (Big Bold Touch Friendly) */}
           <div className="grid grid-cols-3 gap-2 pt-2 border-t border-border/60">
-            <div className="p-2.5 rounded-2xl bg-violet-500/10 border border-violet-500/20 text-center">
-              <span className="text-[10px] font-bold text-violet-700 dark:text-violet-300 uppercase block">Aktif</span>
-              <span className="text-xl font-black text-violet-600 dark:text-violet-400 block mt-0.5">{stats.upcoming}</span>
+            <div className="p-2.5 rounded-2xl bg-surface-secondary border border-border text-center">
+              <span className="text-[10px] font-bold text-foreground-muted uppercase tracking-wider block">Aktif</span>
+              <span className="text-xl font-extrabold text-violet-600 dark:text-violet-400 block mt-0.5">{stats.upcoming}</span>
             </div>
-            <div className="p-2.5 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-center">
-              <span className="text-[10px] font-bold text-amber-700 dark:text-amber-300 uppercase block">Pending</span>
-              <span className="text-xl font-black text-amber-600 dark:text-amber-400 block mt-0.5">{stats.pending}</span>
+            <div className="p-2.5 rounded-2xl bg-surface-secondary border border-border text-center">
+              <span className="text-[10px] font-bold text-foreground-muted uppercase tracking-wider block">Pending</span>
+              <span className="text-xl font-extrabold text-amber-600 dark:text-amber-400 block mt-0.5">{stats.pending}</span>
             </div>
-            <div className="p-2.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-center">
-              <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-300 uppercase block">Deal</span>
-              <span className="text-xl font-black text-emerald-600 dark:text-emerald-400 block mt-0.5">{stats.approved}</span>
+            <div className="p-2.5 rounded-2xl bg-surface-secondary border border-border text-center">
+              <span className="text-[10px] font-bold text-foreground-muted uppercase tracking-wider block">Disetujui</span>
+              <span className="text-xl font-extrabold text-emerald-600 dark:text-emerald-400 block mt-0.5">{stats.approved}</span>
             </div>
           </div>
         </div>
 
-        {/* Mobile Time Filter: Big iOS Segments */}
-        <div className="bg-surface border border-border p-1.5 rounded-2xl flex items-center gap-1 shadow-xs">
+        {/* Mobile Time Filter: iOS Segmented Control */}
+        <div className="bg-surface border border-border p-1.5 rounded-2xl flex items-center gap-1 shadow-subtle">
           <button
             onClick={() => setTimeFilter("upcoming")}
             className={`flex-1 min-h-[42px] flex items-center justify-center gap-1.5 px-2 py-2 rounded-xl text-xs font-bold transition-all ${
@@ -451,7 +476,7 @@ ${decision?.note ? `📝 Catatan Tambahan: ${decision.note}` : ""}`;
                 : "text-foreground-secondary hover:text-foreground"
             }`}
           >
-            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+            <CalendarCheck className="w-3.5 h-3.5" />
             <span>Aktif ({stats.upcoming})</span>
           </button>
           <button
@@ -472,7 +497,7 @@ ${decision?.note ? `📝 Catatan Tambahan: ${decision.note}` : ""}`;
                 : "text-foreground-secondary hover:text-foreground"
             }`}
           >
-            <span>Lewat ({stats.past})</span>
+            <span>Selesai ({stats.past})</span>
           </button>
         </div>
 
@@ -482,20 +507,19 @@ ${decision?.note ? `📝 Catatan Tambahan: ${decision.note}` : ""}`;
             <Search className="w-4 h-4 text-foreground-muted absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
-              placeholder="Cari nama event, kampus, atau kontak..."
+              placeholder="Cari kegiatan, kampus, atau nama pengaju..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full min-h-[44px] pl-10 pr-4 py-2.5 rounded-2xl bg-surface border border-border text-sm text-foreground placeholder:text-foreground-muted focus:outline-none focus:ring-2 focus:ring-violet-400/40 shadow-xs"
+              className="w-full min-h-[44px] pl-10 pr-4 py-2.5 rounded-2xl bg-surface border border-border text-xs text-foreground placeholder:text-foreground-muted focus:outline-none focus:ring-2 focus:ring-violet-400/40 shadow-subtle"
             />
           </div>
 
-          {/* Horizontal Branch Pills for Mobile */}
           <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar -mx-1 px-1">
             <button
               onClick={() => setSelectedBranch("all")}
               className={`min-h-[36px] px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all ${
                 selectedBranch === "all"
-                  ? "bg-foreground text-surface shadow-xs"
+                  ? "bg-foreground text-surface shadow-subtle"
                   : "bg-surface border border-border text-foreground-secondary"
               }`}
             >
@@ -510,7 +534,7 @@ ${decision?.note ? `📝 Catatan Tambahan: ${decision.note}` : ""}`;
                   onClick={() => setSelectedBranch(b)}
                   className={`min-h-[36px] px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
                     isSel
-                      ? "bg-violet-600 text-white shadow-xs font-bold"
+                      ? "bg-violet-600 text-white shadow-subtle font-bold"
                       : "bg-surface border border-border text-foreground-secondary"
                   }`}
                 >
@@ -521,13 +545,13 @@ ${decision?.note ? `📝 Catatan Tambahan: ${decision.note}` : ""}`;
           </div>
         </div>
 
-        {/* Mobile Item List */}
+        {/* Mobile Proposal Card List */}
         {filteredItems.length === 0 ? (
-          <div className="text-center py-14 rounded-3xl bg-surface border border-dashed border-border p-6 shadow-xs">
+          <div className="text-center py-14 rounded-3xl bg-surface border border-dashed border-border p-6 shadow-subtle">
             <FileText className="w-10 h-10 text-foreground-muted mx-auto mb-2 opacity-40" />
-            <h3 className="text-sm font-bold text-foreground">Tidak Ada Proposal yang Cocok</h3>
+            <h3 className="text-sm font-bold text-foreground">Tidak Ada Proposal yang Sesuai</h3>
             <p className="text-xs text-foreground-secondary mt-1 max-w-xs mx-auto">
-              Coba reset pencarian atau pilih tab "Semua Proposal".
+              Silakan reset pencarian atau pilih tab "Semua Proposal".
             </p>
           </div>
         ) : (
@@ -552,17 +576,17 @@ ${decision?.note ? `📝 Catatan Tambahan: ${decision.note}` : ""}`;
               return (
                 <div
                   key={item.id}
-                  className={`rounded-3xl bg-surface border p-4 shadow-sm transition-all space-y-3.5 ${
+                  className={`rounded-3xl bg-surface border p-4 shadow-subtle transition-all space-y-3.5 ${
                     urgency?.isPast
                       ? "opacity-75 border-border/70"
                       : currentStatus === "approved"
-                      ? "border-emerald-500/40 shadow-emerald-500/5"
+                      ? "border-emerald-500/40"
                       : currentStatus === "negotiate"
-                      ? "border-purple-500/40 shadow-purple-500/5"
+                      ? "border-purple-500/40"
                       : "border-border/80"
                   }`}
                 >
-                  {/* Top Badges */}
+                  {/* Card Top Badges */}
                   <div className="flex items-center justify-between gap-2">
                     <div className="flex flex-wrap items-center gap-1.5 flex-1">
                       <span className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-bold border ${badge.bg}`}>
@@ -579,7 +603,7 @@ ${decision?.note ? `📝 Catatan Tambahan: ${decision.note}` : ""}`;
                     <button
                       onClick={() => handleCopy(item)}
                       className="p-2 rounded-xl bg-surface-secondary active:scale-95 text-foreground-muted"
-                      title="Salin Rincian"
+                      title="Salin Rincian Acara"
                     >
                       {copiedId === item.id ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
                     </button>
@@ -602,7 +626,7 @@ ${decision?.note ? `📝 Catatan Tambahan: ${decision.note}` : ""}`;
                     <span>Jadwal: {formatDate(item.eventDate)}</span>
                   </div>
 
-                  {/* Sheet Note if available */}
+                  {/* Note from Sheet if exists */}
                   {item.sheetNote && (
                     <div className="flex items-center gap-2 p-2.5 rounded-2xl bg-amber-500/10 border border-amber-500/25 text-amber-800 dark:text-amber-300 text-xs font-semibold">
                       <Tag className="w-4 h-4 text-amber-600 shrink-0" />
@@ -612,11 +636,11 @@ ${decision?.note ? `📝 Catatan Tambahan: ${decision.note}` : ""}`;
                     </div>
                   )}
 
-                  {/* Description & Benefits */}
+                  {/* Benefits & Description */}
                   <div className="space-y-2 text-xs">
-                    <div className="p-3 rounded-2xl bg-surface-secondary/40 border border-border/40 space-y-1">
+                    <div className="p-3 rounded-2xl bg-surface-secondary/50 border border-border/50 space-y-1">
                       <span className="text-[10px] font-bold text-foreground-muted uppercase tracking-wider block">
-                        Benefit ke Optik:
+                        Benefit Sponsorship yang Ditawarkan:
                       </span>
                       <p className={`text-foreground-secondary leading-relaxed ${isExpanded ? "" : "line-clamp-2"}`}>
                         {item.benefit}
@@ -624,9 +648,9 @@ ${decision?.note ? `📝 Catatan Tambahan: ${decision.note}` : ""}`;
                     </div>
 
                     {isExpanded && (
-                      <div className="p-3 rounded-2xl bg-surface-secondary/30 border border-border/40 space-y-1 animate-fadeIn">
+                      <div className="p-3 rounded-2xl bg-surface-secondary/30 border border-border/50 space-y-1">
                         <span className="text-[10px] font-bold text-foreground-muted uppercase tracking-wider block">
-                          Deskripsi Lengkap Acara:
+                          Deskripsi Lengkap Kegiatan:
                         </span>
                         <p className="text-foreground-secondary leading-relaxed whitespace-pre-line">
                           {item.description}
@@ -652,25 +676,25 @@ ${decision?.note ? `📝 Catatan Tambahan: ${decision.note}` : ""}`;
                     </button>
                   </div>
 
-                  {/* Contact Info */}
+                  {/* Applicant Info */}
                   <div className="flex items-center justify-between text-xs pt-1 border-t border-border/40">
                     <div className="text-foreground-secondary">
-                      <span className="text-[10px] text-foreground-muted block">Pengaju:</span>
+                      <span className="text-[10px] text-foreground-muted block">Pengaju Proposal:</span>
                       <span className="font-bold text-foreground">{item.applicantName}</span>
                     </div>
                     <span className="text-[11px] font-mono text-foreground-muted">{item.applicantPhone}</span>
                   </div>
 
-                  {/* 🚀 PRIMARY MOBILE ACTION BUTTON: WHATSAPP DIRECT */}
+                  {/* Direct WhatsApp Action Button */}
                   <div className="space-y-2 pt-1">
                     <a
                       href={waUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-full min-h-[48px] py-3 px-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 active:scale-[0.98] text-white text-sm font-bold flex items-center justify-center gap-2.5 shadow-md shadow-emerald-600/20 transition-all"
+                      className="w-full min-h-[48px] py-3 px-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 active:scale-[0.98] text-white text-xs font-bold flex items-center justify-center gap-2 shadow-sm transition-all"
                     >
                       <Phone className="w-4 h-4" />
-                      <span>Chat WhatsApp Panitia Langsung</span>
+                      <span>Hubungi Panitia via WhatsApp</span>
                     </a>
 
                     <div className="flex items-center gap-2">
@@ -679,26 +703,26 @@ ${decision?.note ? `📝 Catatan Tambahan: ${decision.note}` : ""}`;
                           href={item.fileUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex-1 min-h-[42px] py-2 px-3 rounded-xl border border-border bg-surface-secondary text-xs font-bold text-foreground flex items-center justify-center gap-1.5 active:scale-95"
+                          className="flex-1 min-h-[42px] py-2 px-3 rounded-xl border border-border bg-surface-secondary text-xs font-semibold text-foreground flex items-center justify-center gap-1.5 active:scale-95"
                         >
                           <FileText className="w-3.5 h-3.5 text-violet-500" />
-                          <span>File PDF Proposal</span>
+                          <span>Dokumen PDF</span>
                         </a>
                       )}
                       <button
                         onClick={() => handleCopy(item)}
-                        className="flex-1 min-h-[42px] py-2 px-3 rounded-xl border border-border bg-surface-secondary text-xs font-bold text-foreground flex items-center justify-center gap-1.5 active:scale-95"
+                        className="flex-1 min-h-[42px] py-2 px-3 rounded-xl border border-border bg-surface-secondary text-xs font-semibold text-foreground flex items-center justify-center gap-1.5 active:scale-95"
                       >
                         <Copy className="w-3.5 h-3.5" />
-                        <span>Salin Rekap WA</span>
+                        <span>Salin Memo</span>
                       </button>
                     </div>
                   </div>
 
-                  {/* Mobile Decision Selector for Owner */}
+                  {/* Decision Selector for Owner */}
                   <div className="pt-2 border-t border-border/50 space-y-2">
                     <span className="text-[10px] font-bold text-foreground-muted uppercase tracking-wider block">
-                      Status Keputusan Owner:
+                      Status Keputusan Manajemen:
                     </span>
                     <div className="grid grid-cols-3 gap-1.5">
                       {(
@@ -713,9 +737,9 @@ ${decision?.note ? `📝 Catatan Tambahan: ${decision.note}` : ""}`;
                           <button
                             key={key}
                             onClick={() => updateDecision(item.id, key)}
-                            className={`min-h-[38px] px-2 py-1.5 rounded-xl text-[11px] font-bold flex items-center justify-center gap-1 transition-all ${
+                            className={`min-h-[38px] px-2 py-1.5 rounded-xl text-[11px] font-semibold flex items-center justify-center gap-1 transition-all ${
                               isSel
-                                ? `${cfg.bg} ${cfg.color} border-2 shadow-xs scale-102`
+                                ? `${cfg.bg} ${cfg.color} border font-bold shadow-subtle`
                                 : "bg-surface-secondary/70 text-foreground-muted border border-border/50"
                             }`}
                           >
@@ -726,13 +750,12 @@ ${decision?.note ? `📝 Catatan Tambahan: ${decision.note}` : ""}`;
                       })}
                     </div>
 
-                    {/* Mobile Note Input */}
                     {isEditingNote ? (
                       <div className="space-y-2 pt-1">
                         <textarea
                           value={noteText}
                           onChange={(e) => setNoteText(e.target.value)}
-                          placeholder="Catatan pimpinan..."
+                          placeholder="Tuliskan catatan tindak lanjut atau arahan pimpinan..."
                           className="w-full p-2.5 rounded-xl bg-surface border border-violet-400 text-xs text-foreground focus:outline-none"
                           rows={2}
                           autoFocus
@@ -751,7 +774,7 @@ ${decision?.note ? `📝 Catatan Tambahan: ${decision.note}` : ""}`;
                             }}
                             className="px-3 py-1 rounded-full bg-violet-600 text-white text-xs font-bold"
                           >
-                            Simpan
+                            Simpan Catatan
                           </button>
                         </div>
                       </div>
@@ -765,7 +788,7 @@ ${decision?.note ? `📝 Catatan Tambahan: ${decision.note}` : ""}`;
                       >
                         <MessageSquare className="w-3.5 h-3.5 shrink-0 text-violet-500" />
                         <span className="truncate">
-                          {decision?.note || "Tambah catatan arahan owner..."}
+                          {decision?.note || "Tambah catatan kesepakatan manajemen..."}
                         </span>
                       </button>
                     )}
@@ -778,14 +801,11 @@ ${decision?.note ? `📝 Catatan Tambahan: ${decision.note}` : ""}`;
       </div>
 
       {/* ========================================================================= */}
-      {/* 💻 KHUSUS DESKTOP / WEB LAYOUT (Chrome Windows, MacBook Safari, PC Browser) */}
+      {/* KHUSUS DESKTOP / WEB LAYOUT (Windows Chrome, MacBook Safari, PC Browser) */}
       {/* ========================================================================= */}
       <div className="hidden md:block space-y-6">
-        {/* ─── Header Banner ─── */}
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-violet-600/10 via-surface to-blue-600/5 border border-border/80 p-6 md:p-8 shadow-subtle">
-          <div className="absolute -top-8 -right-8 w-44 h-44 rounded-full bg-violet-500/10 blur-2xl pointer-events-none" />
-          <div className="absolute -bottom-6 -left-6 w-36 h-36 rounded-full bg-blue-500/10 blur-2xl pointer-events-none" />
-
+        {/* Header Banner */}
+        <div className="relative overflow-hidden rounded-3xl bg-surface border border-border p-6 md:p-8 shadow-subtle">
           <div className="relative flex flex-col lg:flex-row lg:items-start justify-between gap-6">
             <div className="space-y-3">
               <div className="flex flex-wrap items-center gap-2">
@@ -794,26 +814,23 @@ ${decision?.note ? `📝 Catatan Tambahan: ${decision.note}` : ""}`;
                   Form Proposal Sponsorship
                 </span>
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20 text-xs font-semibold">
-                  <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
-                  </span>
-                  Tersinkron Otomatis dari Sheet
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                  Sinkronisasi Otomatis Aktif
                 </span>
                 {stats.urgent > 0 && (
-                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20 text-xs font-bold animate-pulse">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20 text-xs font-bold">
                     <AlertTriangle className="w-3.5 h-3.5" />
-                    {stats.urgent} Event Mendesak (≤14 hari)
+                    {stats.urgent} Kegiatan Prioritas (&le;14 hari)
                   </span>
                 )}
               </div>
 
               <div>
                 <h2 className="text-xl sm:text-2xl font-bold text-foreground tracking-tight">
-                  Daftar Proposal Kerja Sama & Sponsorship Masuk
+                  Daftar Pengajuan Kerja Sama Sponsorship Masuk
                 </h2>
                 <p className="text-xs sm:text-sm text-foreground-secondary mt-1.5 max-w-2xl leading-relaxed">
-                  Filter cerdas menampilkan <strong>khusus event aktif yang berlangsung hari ini ke depan</strong> agar relevan untuk diputuskan kerja sama dan negosiasi paket voucher oleh pimpinan / atasan.
+                  Penyaringan otomatis difokuskan pada kegiatan aktif yang berlangsung saat ini dan di masa mendatang untuk evaluasi kelayakan kerja sama cabang.
                 </p>
               </div>
             </div>
@@ -826,26 +843,26 @@ ${decision?.note ? `📝 Catatan Tambahan: ${decision.note}` : ""}`;
                   className="flex items-center gap-2 px-4 py-2.5 rounded-full bg-foreground text-surface text-xs font-bold hover:bg-foreground/90 transition-all shadow-subtle disabled:opacity-50 active:scale-95"
                 >
                   <RefreshCw className={`w-3.5 h-3.5 ${isSyncing ? "animate-spin" : ""}`} />
-                  <span>{isSyncing ? "Menyinkronkan..." : "Cek Proposal Terbaru"}</span>
+                  <span>{isSyncing ? "Menyinkronkan..." : "Sinkronisasi Data"}</span>
                 </button>
               )}
               <a
                 href={sheetUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-border/80 bg-surface-secondary/70 hover:bg-surface-secondary text-xs font-semibold text-foreground transition-all shadow-subtle hover:border-violet-400/40 active:scale-95"
+                className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-border bg-surface-secondary/70 hover:bg-surface-secondary text-xs font-semibold text-foreground transition-all shadow-subtle hover:border-violet-400/40 active:scale-95"
               >
                 <ExternalLink className="w-3.5 h-3.5 text-violet-600" />
-                <span>Buka Google Sheets</span>
+                <span>Buka Google Sheets Asli</span>
               </a>
             </div>
           </div>
 
-          {/* ─── KPI Stats Strip ─── */}
+          {/* KPI Stats Strip */}
           <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3 mt-6 pt-5 border-t border-border/60">
-            <div className="p-3 rounded-2xl bg-violet-500/5 border border-violet-500/20">
-              <span className="text-[10px] font-bold text-violet-700 dark:text-violet-300 block uppercase tracking-wider">
-                Aktif / Mendatang
+            <div className="p-3 rounded-2xl bg-surface-secondary border border-border">
+              <span className="text-[10px] font-bold text-foreground-muted block uppercase tracking-wider">
+                Aktif & Mendatang
               </span>
               <div className="flex items-baseline gap-1.5 mt-1">
                 <span className="text-2xl font-black text-violet-600 dark:text-violet-400">{stats.upcoming}</span>
@@ -853,9 +870,9 @@ ${decision?.note ? `📝 Catatan Tambahan: ${decision.note}` : ""}`;
               </div>
             </div>
 
-            <div className="p-3 rounded-2xl bg-amber-500/5 border border-amber-500/20">
-              <span className="text-[10px] font-bold text-amber-700 dark:text-amber-300 block uppercase tracking-wider">
-                Menunggu Respon
+            <div className="p-3 rounded-2xl bg-surface-secondary border border-border">
+              <span className="text-[10px] font-bold text-foreground-muted block uppercase tracking-wider">
+                Menunggu Arahan
               </span>
               <div className="flex items-baseline gap-1.5 mt-1">
                 <span className="text-2xl font-black text-amber-600 dark:text-amber-400">{stats.pending}</span>
@@ -863,8 +880,8 @@ ${decision?.note ? `📝 Catatan Tambahan: ${decision.note}` : ""}`;
               </div>
             </div>
 
-            <div className="p-3 rounded-2xl bg-purple-500/5 border border-purple-500/20">
-              <span className="text-[10px] font-bold text-purple-700 dark:text-purple-300 block uppercase tracking-wider">
+            <div className="p-3 rounded-2xl bg-surface-secondary border border-border">
+              <span className="text-[10px] font-bold text-foreground-muted block uppercase tracking-wider">
                 Negosiasi Voucher
               </span>
               <div className="flex items-baseline gap-1.5 mt-1">
@@ -873,18 +890,18 @@ ${decision?.note ? `📝 Catatan Tambahan: ${decision.note}` : ""}`;
               </div>
             </div>
 
-            <div className="p-3 rounded-2xl bg-emerald-500/5 border border-emerald-500/20">
-              <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-300 block uppercase tracking-wider">
+            <div className="p-3 rounded-2xl bg-surface-secondary border border-border">
+              <span className="text-[10px] font-bold text-foreground-muted block uppercase tracking-wider">
                 Disetujui
               </span>
               <div className="flex items-baseline gap-1.5 mt-1">
                 <span className="text-2xl font-black text-emerald-600 dark:text-emerald-400">{stats.approved}</span>
-                <span className="text-[10px] text-foreground-secondary">Deal</span>
+                <span className="text-[10px] text-foreground-secondary">Disetujui</span>
               </div>
             </div>
 
-            <div className="p-3 rounded-2xl bg-blue-500/5 border border-blue-500/20">
-              <span className="text-[10px] font-bold text-blue-700 dark:text-blue-300 block uppercase tracking-wider">
+            <div className="p-3 rounded-2xl bg-surface-secondary border border-border">
+              <span className="text-[10px] font-bold text-foreground-muted block uppercase tracking-wider">
                 Perlu Dihubungi
               </span>
               <div className="flex items-baseline gap-1.5 mt-1">
@@ -893,23 +910,22 @@ ${decision?.note ? `📝 Catatan Tambahan: ${decision.note}` : ""}`;
               </div>
             </div>
 
-            <div className="p-3 rounded-2xl bg-surface-secondary/60 border border-border/50">
-              <span className="text-[10px] font-medium text-foreground-muted block uppercase tracking-wider">
-                Total Seluruh Data
+            <div className="p-3 rounded-2xl bg-surface-secondary border border-border">
+              <span className="text-[10px] font-bold text-foreground-muted block uppercase tracking-wider">
+                Total Arsip
               </span>
               <div className="flex items-baseline gap-1.5 mt-1">
-                <span className="text-2xl font-extrabold text-foreground">{stats.all}</span>
-                <span className="text-[10px] text-foreground-muted">({stats.past} lewat)</span>
+                <span className="text-2xl font-bold text-foreground">{stats.all}</span>
+                <span className="text-[10px] text-foreground-muted">({stats.past} selesai)</span>
               </div>
             </div>
           </div>
         </div>
 
-        {/* ─── Control Bar: Time Segment Switch + Search & Filters ─── */}
+        {/* Desktop Filter Controls */}
         <div className="space-y-3">
-          {/* Time Segment Tab Selector (iOS Style) */}
           <div className="flex flex-wrap items-center justify-between gap-3 bg-surface border border-border p-2 rounded-2xl shadow-subtle">
-            <div className="flex items-center gap-1.5 bg-surface-secondary/70 p-1 rounded-xl">
+            <div className="flex items-center gap-1.5 bg-surface-secondary p-1 rounded-xl">
               <button
                 onClick={() => setTimeFilter("upcoming")}
                 className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
@@ -918,10 +934,10 @@ ${decision?.note ? `📝 Catatan Tambahan: ${decision.note}` : ""}`;
                     : "text-foreground-secondary hover:text-foreground"
                 }`}
               >
-                <CalendarCheck className="w-3.5 h-3.5 text-emerald-400" />
-                <span>Event Aktif & Mendatang</span>
+                <CalendarCheck className="w-3.5 h-3.5" />
+                <span>Kegiatan Aktif & Mendatang</span>
                 <span
-                  className={`ml-1 px-1.5 py-0.5 rounded-full text-[10px] font-extrabold ${
+                  className={`ml-1 px-1.5 py-0.5 rounded-full text-[10px] font-bold ${
                     timeFilter === "upcoming"
                       ? "bg-surface/20 text-surface"
                       : "bg-surface border border-border text-foreground"
@@ -952,8 +968,8 @@ ${decision?.note ? `📝 Catatan Tambahan: ${decision.note}` : ""}`;
                     : "text-foreground-secondary hover:text-foreground"
                 }`}
               >
-                <CalendarX className="w-3.5 h-3.5 text-neutral-400" />
-                <span>Sudah Lewat (Expired)</span>
+                <CalendarX className="w-3.5 h-3.5" />
+                <span>Kegiatan Selesai (Arsip)</span>
                 <span className="text-[10px] text-foreground-muted">({stats.past})</span>
               </button>
             </div>
@@ -968,7 +984,7 @@ ${decision?.note ? `📝 Catatan Tambahan: ${decision.note}` : ""}`;
                 }`}
               >
                 <LayoutGrid className="w-3.5 h-3.5" />
-                <span>Kartu</span>
+                <span>Tampilan Kartu</span>
               </button>
               <button
                 onClick={() => setViewMode("table")}
@@ -979,19 +995,18 @@ ${decision?.note ? `📝 Catatan Tambahan: ${decision.note}` : ""}`;
                 }`}
               >
                 <TableIcon className="w-3.5 h-3.5" />
-                <span>Tabel</span>
+                <span>Tampilan Tabel</span>
               </button>
             </div>
           </div>
 
-          {/* Search, Branch, Status Filters */}
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
             <div className="flex flex-1 flex-wrap items-center gap-2">
               <div className="relative flex-1 max-w-sm">
                 <Search className="w-4 h-4 text-foreground-muted absolute left-3.5 top-1/2 -translate-y-1/2" />
                 <input
                   type="text"
-                  placeholder="Cari event, institusi, pengaju, atau catatan..."
+                  placeholder="Cari nama kegiatan, penyelenggara, kontak..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="w-full pl-10 pr-4 py-2 rounded-full bg-surface border border-border text-xs text-foreground placeholder:text-foreground-muted focus:outline-none focus:ring-2 focus:ring-violet-400/40 transition-all shadow-subtle"
@@ -1026,21 +1041,18 @@ ${decision?.note ? `📝 Catatan Tambahan: ${decision.note}` : ""}`;
             </div>
 
             <div className="text-xs text-foreground-secondary font-medium px-1">
-              Menampilkan <strong>{filteredItems.length}</strong> proposal{" "}
-              {timeFilter === "upcoming" ? "(Event Mendatang)" : timeFilter === "past" ? "(Sudah Lewat)" : "(Semua)"}
+              Menampilkan <strong>{filteredItems.length}</strong> proposal
             </div>
           </div>
         </div>
 
-        {/* ─── Desktop Cards / Table View ─── */}
+        {/* Desktop Cards / Table Content */}
         {filteredItems.length === 0 ? (
           <div className="text-center py-16 rounded-3xl bg-surface border border-dashed border-border p-8 shadow-subtle">
             <FileText className="w-12 h-12 text-foreground-muted mx-auto mb-3 opacity-40" />
-            <h3 className="text-sm font-bold text-foreground">Tidak Ada Proposal yang Sesuai Filter</h3>
+            <h3 className="text-sm font-bold text-foreground">Tidak Ada Proposal yang Sesuai</h3>
             <p className="text-xs text-foreground-secondary mt-1.5 max-w-md mx-auto leading-relaxed">
-              {timeFilter === "upcoming"
-                ? "Tidak ada event mendatang dengan kriteria pencarian ini. Anda bisa mengubah kata kunci atau memilih tab 'Semua Proposal' untuk melihat riwayat data."
-                : "Coba ubah kata kunci pencarian atau reset filter cabang/status."}
+              Silakan sesuaikan kriteria pencarian atau pilih tab "Semua Proposal".
             </p>
             <button
               onClick={() => {
@@ -1051,7 +1063,7 @@ ${decision?.note ? `📝 Catatan Tambahan: ${decision.note}` : ""}`;
               }}
               className="mt-4 px-4 py-2 rounded-full bg-surface-secondary hover:bg-surface-secondary/80 text-xs font-bold text-foreground border border-border transition-all shadow-subtle"
             >
-              Reset Semua Filter
+              Reset Filter
             </button>
           </div>
         ) : viewMode === "cards" ? (
@@ -1089,7 +1101,6 @@ ${decision?.note ? `📝 Catatan Tambahan: ${decision.note}` : ""}`;
                       : "border-border/80 hover:border-violet-500/40"
                   } hover:shadow-elevated`}
                 >
-                  {/* Card Header */}
                   <div className="p-5 pb-4 border-b border-border/50">
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex flex-wrap items-center gap-1.5 flex-1">
@@ -1111,7 +1122,7 @@ ${decision?.note ? `📝 Catatan Tambahan: ${decision.note}` : ""}`;
                         <button
                           onClick={() => handleCopy(item)}
                           className="p-1.5 rounded-full hover:bg-surface-secondary text-foreground-muted hover:text-foreground transition-colors"
-                          title="Salin rincian format rekap"
+                          title="Salin rincian memo"
                         >
                           {copiedId === item.id ? (
                             <Check className="w-3.5 h-3.5 text-emerald-600" />
@@ -1148,13 +1159,12 @@ ${decision?.note ? `📝 Catatan Tambahan: ${decision.note}` : ""}`;
                     )}
                   </div>
 
-                  {/* Card Body */}
                   <div className="p-5 space-y-4 flex-1">
                     <div className="space-y-1">
                       <div className="flex items-center justify-between text-[11px] font-bold text-foreground-muted uppercase tracking-wider">
                         <span className="flex items-center gap-1">
                           <Info className="w-3 h-3 text-violet-500" />
-                          Penjelasan Singkat Acara
+                          Ringkasan Acara
                         </span>
                       </div>
                       <p
@@ -1169,7 +1179,7 @@ ${decision?.note ? `📝 Catatan Tambahan: ${decision.note}` : ""}`;
                     <div className="space-y-1.5 p-3.5 rounded-2xl bg-surface-secondary/50 border border-border/60">
                       <div className="flex items-center gap-1.5 text-[11px] font-bold text-foreground uppercase tracking-wider">
                         <Gift className="w-3.5 h-3.5 text-emerald-500" />
-                        <span>Benefit yang Ditawarkan ke Optik:</span>
+                        <span>Benefit yang Ditawarkan:</span>
                       </div>
                       <p
                         className={`text-xs text-foreground-secondary leading-relaxed ${
@@ -1213,7 +1223,7 @@ ${decision?.note ? `📝 Catatan Tambahan: ${decision.note}` : ""}`;
                             target="_blank"
                             rel="noopener noreferrer"
                             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border bg-surface hover:bg-surface-secondary text-xs font-semibold text-foreground transition-all shadow-subtle"
-                            title="Buka File Proposal di Google Drive"
+                            title="Buka File Dokumen Proposal"
                           >
                             <FileText className="w-3.5 h-3.5 text-violet-500" />
                             <span>File PDF</span>
@@ -1226,20 +1236,20 @@ ${decision?.note ? `📝 Catatan Tambahan: ${decision.note}` : ""}`;
                           target="_blank"
                           rel="noopener noreferrer"
                           className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-all shadow-subtle hover:scale-[1.02] active:scale-95"
-                          title="Langsung chat panitia via WhatsApp"
+                          title="Hubungi panitia via WhatsApp"
                         >
                           <Phone className="w-3 h-3" />
-                          <span>Hubungi WA</span>
+                          <span>Hubungi via WA</span>
                         </a>
                       </div>
                     </div>
                   </div>
 
-                  {/* Card Footer: Decision Control */}
+                  {/* Decision Control */}
                   <div className="p-4 bg-surface-secondary/40 border-t border-border/60 rounded-b-3xl space-y-3">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                       <span className="text-[11px] font-bold text-foreground-muted uppercase tracking-wider">
-                        Keputusan / Arahan Owner:
+                        Keputusan Manajemen:
                       </span>
 
                       <div className="flex flex-wrap items-center gap-1">
@@ -1255,9 +1265,9 @@ ${decision?.note ? `📝 Catatan Tambahan: ${decision.note}` : ""}`;
                             <button
                               key={key}
                               onClick={() => updateDecision(item.id, key)}
-                              className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold transition-all ${
+                              className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-semibold transition-all ${
                                 isSelected
-                                  ? `${cfg.bg} ${cfg.color} border shadow-subtle scale-105`
+                                  ? `${cfg.bg} ${cfg.color} border shadow-subtle font-bold scale-105`
                                   : "text-foreground-muted hover:text-foreground hover:bg-surface-secondary"
                               }`}
                               title={cfg.desc}
@@ -1276,7 +1286,7 @@ ${decision?.note ? `📝 Catatan Tambahan: ${decision.note}` : ""}`;
                           <textarea
                             value={noteText}
                             onChange={(e) => setNoteText(e.target.value)}
-                            placeholder="Tulis instruksi kesepakatan (misal: Berikan 10 voucher potongan 50rb)..."
+                            placeholder="Tuliskan arahan kesepakatan (contoh: Tawarkan barter 10 voucher belanja 50rb)..."
                             className="w-full p-2.5 rounded-2xl bg-surface border border-violet-400 text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-violet-400/40 resize-none"
                             rows={2}
                             autoFocus
@@ -1309,7 +1319,7 @@ ${decision?.note ? `📝 Catatan Tambahan: ${decision.note}` : ""}`;
                         >
                           <MessageSquare className="w-3.5 h-3.5 shrink-0 text-violet-500" />
                           <span className={`flex-1 text-left truncate ${decision?.note ? "text-foreground font-semibold" : ""}`}>
-                            {decision?.note || "Tambah catatan kesepakatan pimpinan / instruksi tim..."}
+                            {decision?.note || "Tambah catatan kesepakatan manajemen..."}
                           </span>
                         </button>
                       )}
@@ -1326,11 +1336,11 @@ ${decision?.note ? `📝 Catatan Tambahan: ${decision.note}` : ""}`;
               <table className="w-full text-left text-xs border-collapse">
                 <thead>
                   <tr className="bg-surface-secondary/60 border-b border-border text-foreground-muted font-bold text-[11px] uppercase tracking-wider">
-                    <th className="py-3 px-4 min-w-[140px]">Jadwal Event</th>
+                    <th className="py-3 px-4 min-w-[140px]">Jadwal Acara</th>
                     <th className="py-3 px-4">Cabang</th>
-                    <th className="py-3 px-4 min-w-[200px]">Event & Kategori</th>
+                    <th className="py-3 px-4 min-w-[200px]">Kegiatan & Kategori</th>
                     <th className="py-3 px-4 min-w-[180px]">Penyelenggara</th>
-                    <th className="py-3 px-4">Pengaju & WhatsApp</th>
+                    <th className="py-3 px-4">Kontak Pengaju</th>
                     <th className="py-3 px-4 min-w-[280px]">Benefit Sponsorship</th>
                     <th className="py-3 px-4">Catatan Sheet</th>
                     <th className="py-3 px-4 min-w-[150px]">Keputusan</th>
@@ -1362,7 +1372,7 @@ ${decision?.note ? `📝 Catatan Tambahan: ${decision.note}` : ""}`;
                         <td className="py-3.5 px-4 whitespace-nowrap">
                           <div className="font-bold text-foreground">{formatDate(item.eventDate)}</div>
                           {urgency && (
-                            <span className={`text-[10px] font-bold ${urgency.color}`}>{urgency.label}</span>
+                            <span className={`text-[10px] font-semibold ${urgency.color}`}>{urgency.label}</span>
                           )}
                         </td>
                         <td className="py-3.5 px-4 whitespace-nowrap">
@@ -1399,7 +1409,7 @@ ${decision?.note ? `📝 Catatan Tambahan: ${decision.note}` : ""}`;
                               {item.sheetNote}
                             </span>
                           ) : (
-                            <span className="text-[11px] text-foreground-muted">—</span>
+                            <span className="text-[11px] text-foreground-muted">-</span>
                           )}
                         </td>
                         <td className="py-3.5 px-4 whitespace-nowrap">
@@ -1424,7 +1434,7 @@ ${decision?.note ? `📝 Catatan Tambahan: ${decision.note}` : ""}`;
                           <button
                             onClick={() => handleCopy(item)}
                             className="p-1.5 rounded-full hover:bg-surface-secondary text-foreground-muted hover:text-foreground transition-colors mr-1"
-                            title="Salin Rincian"
+                            title="Salin Memo"
                           >
                             {copiedId === item.id ? (
                               <Check className="w-3.5 h-3.5 text-emerald-600" />
@@ -1438,7 +1448,7 @@ ${decision?.note ? `📝 Catatan Tambahan: ${decision.note}` : ""}`;
                               target="_blank"
                               rel="noopener noreferrer"
                               className="p-1.5 rounded-full hover:bg-surface-secondary text-foreground-muted hover:text-foreground inline-flex items-center transition-colors mr-1"
-                              title="Buka File Proposal"
+                              title="Buka Dokumen Proposal"
                             >
                               <FileText className="w-3.5 h-3.5 text-violet-500" />
                             </a>
@@ -1448,7 +1458,7 @@ ${decision?.note ? `📝 Catatan Tambahan: ${decision.note}` : ""}`;
                             target="_blank"
                             rel="noopener noreferrer"
                             className="p-1.5 rounded-full hover:bg-surface-secondary text-emerald-600 inline-flex items-center transition-colors"
-                            title="Chat WhatsApp Panitia"
+                            title="Hubungi Panitia via WhatsApp"
                           >
                             <Send className="w-3.5 h-3.5" />
                           </a>
@@ -1463,21 +1473,16 @@ ${decision?.note ? `📝 Catatan Tambahan: ${decision.note}` : ""}`;
         )}
       </div>
 
-      {/* ─── Executive Summary Card for Owner / Board Presentation (Shared) ─── */}
-      <div className="rounded-3xl bg-gradient-to-br from-surface to-violet-500/5 border border-violet-500/15 p-5 md:p-6 space-y-4 shadow-subtle">
+      {/* Shared Executive Memo Summary */}
+      <div className="rounded-3xl bg-surface border border-border p-5 md:p-6 space-y-4 shadow-subtle">
         <div className="flex items-center justify-between flex-wrap gap-3">
-          <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-2xl bg-violet-500/10 text-violet-600">
-              <Award className="w-5 h-5" />
-            </div>
-            <div>
-              <h3 className="text-sm font-bold text-foreground">
-                Ringkasan Eksekutif untuk Presentasi Owner / Rapat Direksi
-              </h3>
-              <p className="text-xs text-foreground-secondary">
-                Format siap pakai untuk evaluasi kelayakan kerja sama dan kesepakatan harga sponsorship cabang.
-              </p>
-            </div>
+          <div className="space-y-1">
+            <h3 className="text-sm font-bold text-foreground">
+              Ringkasan Laporan Pengajuan Sponsorship
+            </h3>
+            <p className="text-xs text-foreground-secondary">
+              Format memo resmi untuk evaluasi kelayakan kerja sama dan kesepakatan sponsorship cabang.
+            </p>
           </div>
 
           <button
@@ -1486,66 +1491,69 @@ ${decision?.note ? `📝 Catatan Tambahan: ${decision.note}` : ""}`;
                 const d = getDaysUntilEvent(i.eventDate);
                 return d === null || d >= 0;
               });
-              const summary = `📊 *RINGKASAN PROPOSAL SPONSORSHIP - OPTIK I SEE YOU*
-Tanggal Laporan: ${new Date().toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" })}
+              const todayStr = new Date().toLocaleDateString("id-ID", {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+              });
 
-🎯 *Status Proposal:*
-• Total Event Aktif / Mendatang: ${stats.upcoming} kegiatan
-• Mendesak (≤14 Hari): ${stats.urgent} kegiatan
-• Disetujui: ${stats.approved}
-• Negosiasi Voucher: ${stats.negotiate}
-• Menunggu Keputusan: ${stats.pending}
-• Perlu Dihubungi: ${stats.contact}
+              const summaryLines = [
+                `LAPORAN PENGAJUAN SPONSORSHIP - OPTIK I SEE YOU`,
+                `Tanggal Laporan: ${todayStr}`,
+                `========================================`,
+                ``,
+                `STATUS PROPOSAL:`,
+                `- Kegiatan Aktif / Mendatang : ${stats.upcoming}`,
+                `- Prioritas (<= 14 Hari)     : ${stats.urgent}`,
+                `- Disetujui                  : ${stats.approved}`,
+                `- Negosiasi Paket Voucher    : ${stats.negotiate}`,
+                `- Menunggu Keputusan         : ${stats.pending}`,
+                `- Perlu Dihubungi            : ${stats.contact}`,
+                ``,
+                `SEBARAN CABANG:`,
+                ...branches.map((b) => `- Cabang ${b}: ${validItems.filter((i) => i.targetBranch === b).length} proposal`),
+                ``,
+                `DAFTAR KEGIATAN PRIORITAS MENDATANG:`,
+                ...activeProposals.slice(0, 8).map((i, idx) => {
+                  const d = formatDate(i.eventDate);
+                  const note = i.sheetNote ? ` [Catatan: ${i.sheetNote}]` : "";
+                  return `${idx + 1}. ${i.eventName}\n   Penyelenggara: ${i.institution}\n   Tanggal: ${d} | Cabang: ${i.targetBranch}${note}\n   Kontak: ${i.applicantName} (${i.applicantPhone})`;
+                }),
+                ``,
+                `----------------------------------------`,
+                `Disusun oleh Tim Partnership Optik I See You`,
+              ];
 
-🏢 *Distribusi Cabang Target:*
-${branches.map((b) => `• ${b}: ${validItems.filter((i) => i.targetBranch === b).length} proposal`).join("\n")}
-
-🔥 *Event Mendatang yang Perlu Segera Diputuskan:*
-${
-  activeProposals
-    .slice(0, 8)
-    .map(
-      (i, idx) =>
-        `${idx + 1}. *${i.eventName}* (${i.institution})\n   📅 ${formatDate(i.eventDate)} | Cabang: ${i.targetBranch}${
-          i.sheetNote ? ` | Catatan: ${i.sheetNote}` : ""
-        }\n   👤 PIC Panitia: ${i.applicantName} (${i.applicantPhone})`
-    )
-    .join("\n\n") || "Tidak ada"
-}
-
-_Disusun otomatis oleh I See You Marketing Intelligence Hub_`;
-              navigator.clipboard.writeText(summary);
-              alert("Ringkasan eksekutif telah disalin ke clipboard! Siap dikirim ke WhatsApp Owner/Atasan.");
+              navigator.clipboard.writeText(summaryLines.join("\n"));
+              alert("Ringkasan laporan telah disalin ke clipboard.");
             }}
             className="w-full sm:w-auto min-h-[44px] flex items-center justify-center gap-2 px-4 py-2.5 rounded-full bg-foreground text-surface text-xs font-bold hover:bg-foreground/90 transition-all shadow-subtle active:scale-95"
           >
             <Copy className="w-3.5 h-3.5" />
-            <span>Salin Ringkasan untuk WhatsApp Owner</span>
+            <span>Salin Ringkasan Laporan</span>
           </button>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-          <div className="p-4 rounded-2xl bg-surface-secondary/40 border border-border/60 space-y-2">
-            <h4 className="text-xs font-bold text-foreground uppercase tracking-wider flex items-center gap-1.5">
-              <CheckCircle className="w-3.5 h-3.5 text-emerald-500" />
+          <div className="p-4 rounded-2xl bg-surface-secondary/50 border border-border space-y-2">
+            <h4 className="text-xs font-bold text-foreground uppercase tracking-wider">
               Pedoman Rekomendasi Kerja Sama
             </h4>
             <ul className="text-xs text-foreground-secondary space-y-1.5 leading-relaxed">
               <li>
-                • <strong>Prioritas Utama:</strong> Acara orientasi kampus & festival musik karena massa mahasiswa 500–2.000 orang sangat cocok untuk produk kacamata antiradiasi & frame fashion.
+                &bull; <strong>Prioritas Utama:</strong> Kegiatan orientasi kampus dan festival mahasiswa dengan perkiraan peserta 500-2.000 orang.
               </li>
               <li>
-                • <strong>Strategi Anggaran:</strong> Utamakan penawaran <em>Barter Voucher Belanja Potongan Rp50.000 / Rp100.000</em> (5–10 lembar) tanpa dana tunai, dengan imbalan adlibs MC, logo backdrop, dan ulasan Google Maps.
+                &bull; <strong>Strategi Anggaran:</strong> Utamakan penawaran barter voucher belanja diskon kacamata (5-10 lembar) tanpa dana tunai, dengan imbalan pencantuman logo backdrop, adlibs MC, dan ulasan Google Maps.
               </li>
               <li>
-                • <strong>Batas Waktu:</strong> Proposal dengan waktu kurang dari 7 hari sebaiknya segera diputuskan via WhatsApp agar materi promosi tidak terlambat dicetak oleh panitia.
+                &bull; <strong>Batas Waktu:</strong> Proposal dengan jadwal kurang dari 7 hari agar segera dihubungi agar materi promosi panitia belum ditutup.
               </li>
             </ul>
           </div>
 
-          <div className="p-4 rounded-2xl bg-surface-secondary/40 border border-border/60 space-y-2">
-            <h4 className="text-xs font-bold text-foreground uppercase tracking-wider flex items-center gap-1.5">
-              <MapPin className="w-3.5 h-3.5 text-violet-500" />
+          <div className="p-4 rounded-2xl bg-surface-secondary/50 border border-border space-y-2">
+            <h4 className="text-xs font-bold text-foreground uppercase tracking-wider">
               Sebaran Proposal per Cabang
             </h4>
             <div className="grid grid-cols-2 gap-2 text-xs">
@@ -1556,9 +1564,9 @@ _Disusun otomatis oleh I See You Marketing Intelligence Hub_`;
                 ).length;
                 const badge = getBranchBadge(b);
                 return (
-                  <div key={b} className="p-2.5 rounded-xl bg-surface border border-border/50 flex items-center justify-between">
+                  <div key={b} className="p-2.5 rounded-xl bg-surface border border-border flex items-center justify-between">
                     <span className="font-bold text-foreground">{b}</span>
-                    <span className="text-[11px] font-extrabold text-violet-600 dark:text-violet-400">
+                    <span className="text-[11px] font-bold text-violet-600 dark:text-violet-400">
                       {upcomingBranchCount} aktif <span className="text-foreground-muted font-normal">/ {count}</span>
                     </span>
                   </div>
