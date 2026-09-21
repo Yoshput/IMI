@@ -14,6 +14,7 @@ import {
   CheckCircle2,
   Calendar,
   PackageCheck,
+  FileText,
 } from "lucide-react";
 import { PicComplianceTracker, PicStatus } from "./PicComplianceTracker";
 import { RawSheetsTable } from "./RawSheetsTable";
@@ -21,6 +22,7 @@ import { ExecutiveMeetingRecap } from "./ExecutiveMeetingRecap";
 import { SocialBladeTracker } from "./SocialBladeTracker";
 import { ThreeDayCadenceRecap } from "./ThreeDayCadenceRecap";
 import { FormPengajuanTable } from "./FormPengajuanTable";
+import { FormProposalTable } from "./FormProposalTable";
 
 interface SpreadsheetHubViewProps {
   initialData: {
@@ -41,7 +43,7 @@ interface SpreadsheetHubViewProps {
 export const SpreadsheetHubView: React.FC<SpreadsheetHubViewProps> = ({
   initialData,
 }) => {
-  const [activeTab, setActiveTab] = useState<"cadence" | "pengajuan" | "compliance" | "raw" | "executive" | "socialblade">("cadence");
+  const [activeTab, setActiveTab] = useState<"cadence" | "pengajuan" | "proposal" | "compliance" | "raw" | "executive" | "socialblade">("cadence");
   const [data, setData] = useState(initialData);
   const [isSyncing, setIsSyncing] = useState(false);
   const [syncStatus, setSyncStatus] = useState<string | null>(null);
@@ -119,6 +121,12 @@ export const SpreadsheetHubView: React.FC<SpreadsheetHubViewProps> = ({
       label: "List Pengajuan Alat",
       icon: PackageCheck,
       badge: `${(data.formPengajuan || []).length} Alat`,
+    },
+    {
+      key: "proposal",
+      label: "Proposal Sponsorship",
+      icon: FileText,
+      badge: `${(data.formProposal || []).length} Proposal`,
     },
     {
       key: "executive",
@@ -337,6 +345,14 @@ export const SpreadsheetHubView: React.FC<SpreadsheetHubViewProps> = ({
       {activeTab === "pengajuan" && (
         <FormPengajuanTable
           items={data.formPengajuan || []}
+          onSync={handleLiveSync}
+          isSyncing={isSyncing}
+        />
+      )}
+
+      {activeTab === "proposal" && (
+        <FormProposalTable
+          items={data.formProposal || []}
           onSync={handleLiveSync}
           isSyncing={isSyncing}
         />
