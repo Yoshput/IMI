@@ -36,6 +36,8 @@ import {
   CalendarX,
   Layers,
   CheckCircle,
+  X,
+  Maximize2,
 } from "lucide-react";
 
 export interface FormProposalItem {
@@ -260,6 +262,27 @@ const saveDecisions = (decisions: ProposalDecision) => {
   } catch {}
 };
 
+/**
+ * Convert a Google Drive share URL to an embeddable preview URL.
+ * Handles formats:
+ *   https://drive.google.com/file/d/FILE_ID/view?...
+ *   https://drive.google.com/open?id=FILE_ID
+ *   https://docs.google.com/...
+ */
+const getGoogleDrivePreviewUrl = (url: string): string | null => {
+  if (!url) return null;
+  // Already a preview URL
+  if (url.includes("/preview")) return url;
+  // Format: /file/d/FILE_ID/view or /file/d/FILE_ID/...
+  const fileMatch = url.match(/\/file\/d\/([^/?]+)/);
+  if (fileMatch) return `https://drive.google.com/file/d/${fileMatch[1]}/preview`;
+  // Format: ?id=FILE_ID or &id=FILE_ID
+  const idMatch = url.match(/[?&]id=([^&]+)/);
+  if (idMatch) return `https://drive.google.com/file/d/${idMatch[1]}/preview`;
+  // Fallback: cannot convert
+  return null;
+};
+
 export const FormProposalTable: React.FC<FormProposalTableProps> = ({
   items = [],
   onSync,
@@ -275,6 +298,8 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
   const [decisions, setDecisions] = useState<ProposalDecision>(loadDecisions);
   const [noteEditing, setNoteEditing] = useState<string | null>(null);
   const [noteText, setNoteText] = useState("");
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [previewTitle, setPreviewTitle] = useState<string>("");
 
   const sheetUrl =
     "https://docs.google.com/spreadsheets/d/1BU0fIDP656Y-eue55bWVSxeaixSeFJwR3GP1n8kwBYc/edit?gid=1296355126#gid=1296355126";
@@ -400,8 +425,63 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
     return { all, upcoming, past, urgent, approved, pending, rejected, negotiate, contact };
   }, [validItems, decisions]);
 
+  const openPreview = (fileUrl: string, title: string) => {
+    const embedUrl = getGoogleDrivePreviewUrl(fileUrl);
+    if (embedUrl) {
+      setPreviewUrl(embedUrl);
+      setPreviewTitle(title);
+    } else {
+      window.open(fileUrl, "_blank", "noopener,noreferrer");
+    }
+  };
+
   return (
     <div className="space-y-6">
+      {/* PDF Preview Modal */}
+      {previewUrl && (
+        <div
+          className="fixed inset-0 z-[999] flex items-center justify-center p-3 sm:p-6 bg-black/70"
+          onClick={(e) => { if (e.target === e.currentTarget) { setPreviewUrl(null); setPreviewTitle(""); } }}
+        >
+          <div className="relative w-full max-w-4xl h-[88vh] bg-surface rounded-2xl border border-border flex flex-col overflow-hidden shadow-2xl">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-surface-secondary/70 shrink-0">
+              <div className="flex items-center gap-2 min-w-0">
+                <FileText className="w-4 h-4 text-violet-500 shrink-0" />
+                <span className="text-sm font-bold text-foreground truncate">{previewTitle || "Dokumen Proposal"}</span>
+              </div>
+              <div className="flex items-center gap-2 shrink-0">
+                <a
+                  href={previewUrl.replace("/preview", "/view")}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border bg-surface hover:bg-surface-secondary text-xs font-semibold text-foreground transition-all"
+                >
+                  <ExternalLink className="w-3.5 h-3.5" />
+                  <span>Buka di Drive</span>
+                </a>
+                <button
+                  onClick={() => { setPreviewUrl(null); setPreviewTitle(""); }}
+                  className="p-1.5 rounded-full hover:bg-surface-secondary text-foreground-muted hover:text-foreground transition-colors"
+                  title="Tutup Preview"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+            {/* Iframe */}
+            <div className="flex-1 bg-neutral-100 dark:bg-neutral-900">
+              <iframe
+                src={previewUrl}
+                className="w-full h-full border-0"
+                title="Dokumen Proposal"
+                allow="fullscreen"
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* ========================================================================= */}
       {/* KHUSUS MOBILE LAYOUT (iOS Safari, iPhone, Android Phone, iPad Portrait) */}
       {/* ========================================================================= */}
@@ -699,15 +779,13 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
 
                     <div className="flex items-center gap-2">
                       {item.fileUrl && (
-                        <a
-                          href={item.fileUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex-1 min-h-[42px] py-2 px-3 rounded-xl border border-border bg-surface-secondary text-xs font-semibold text-foreground flex items-center justify-center gap-1.5 active:scale-95"
+                        <button
+                          onClick={() => openPreview(item.fileUrl, item.eventName)}
+                          className="flex-1 min-h-[42px] py-2 px-3 rounded-xl border border-violet-500/30 bg-violet-500/5 text-xs font-semibold text-violet-700 dark:text-violet-300 flex items-center justify-center gap-1.5 active:scale-95"
                         >
-                          <FileText className="w-3.5 h-3.5 text-violet-500" />
-                          <span>Dokumen PDF</span>
-                        </a>
+                          <FileText className="w-3.5 h-3.5" />
+                          <span>Preview Proposal</span>
+                        </button>
                       )}
                       <button
                         onClick={() => handleCopy(item)}
@@ -1218,17 +1296,14 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
 
                       <div className="flex items-center gap-2">
                         {item.fileUrl && (
-                          <a
-                            href={item.fileUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border bg-surface hover:bg-surface-secondary text-xs font-semibold text-foreground transition-all shadow-subtle"
-                            title="Buka File Dokumen Proposal"
+                          <button
+                            onClick={() => openPreview(item.fileUrl, item.eventName)}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-violet-500/30 bg-violet-500/5 hover:bg-violet-500/10 text-xs font-semibold text-violet-700 dark:text-violet-300 transition-all shadow-subtle"
+                            title="Preview Dokumen Proposal"
                           >
-                            <FileText className="w-3.5 h-3.5 text-violet-500" />
-                            <span>File PDF</span>
-                            <ArrowUpRight className="w-3 h-3 text-foreground-muted" />
-                          </a>
+                            <FileText className="w-3.5 h-3.5" />
+                            <span>Preview Proposal</span>
+                          </button>
                         )}
 
                         <a
@@ -1443,15 +1518,13 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
                             )}
                           </button>
                           {item.fileUrl && (
-                            <a
-                              href={item.fileUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="p-1.5 rounded-full hover:bg-surface-secondary text-foreground-muted hover:text-foreground inline-flex items-center transition-colors mr-1"
-                              title="Buka Dokumen Proposal"
+                            <button
+                              onClick={() => openPreview(item.fileUrl, item.eventName)}
+                              className="p-1.5 rounded-full hover:bg-violet-500/10 text-violet-500 hover:text-violet-600 inline-flex items-center transition-colors mr-1"
+                              title="Preview Dokumen Proposal"
                             >
-                              <FileText className="w-3.5 h-3.5 text-violet-500" />
-                            </a>
+                              <FileText className="w-3.5 h-3.5" />
+                            </button>
                           )}
                           <a
                             href={waUrl}
