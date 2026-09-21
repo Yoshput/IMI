@@ -9,16 +9,6 @@ export const revalidate = 0;
 
 function parseExcelDate(serial: any): string | null {
   if (!serial) return null;
-  if (typeof serial === "string") {
-    const parts = serial.trim().split(/[/\-\s]/);
-    if (parts.length >= 3) {
-      const d = parts[0].padStart(2, "0");
-      const m = parts[1].padStart(2, "0");
-      const y = parts[2].length === 2 ? "20" + parts[2] : parts[2];
-      return `${y}-${m}-${d}`;
-    }
-    return serial;
-  }
   if (typeof serial === "number") {
     const utc_days = Math.floor(serial - 25569);
     const utc_value = utc_days * 86400;
@@ -27,6 +17,28 @@ function parseExcelDate(serial: any): string | null {
     const m = String(date_info.getMonth() + 1).padStart(2, "0");
     const d = String(date_info.getDate()).padStart(2, "0");
     return `${y}-${m}-${d}`;
+  }
+  if (typeof serial === "string") {
+    const s = serial.trim();
+    if (!s || s === "-" || s.toLowerCase() === "belum ada" || s.toLowerCase() === "libur") return null;
+    if (/^\d{4}-\d{2}-\d{2}/.test(s)) {
+      return s.slice(0, 10);
+    }
+    const parts = s.split(/[/\-\s]/);
+    if (parts.length >= 3) {
+      if (parts[0].length === 4) {
+        const y = parts[0];
+        const m = parts[1].padStart(2, "0");
+        const d = parts[2].padStart(2, "0");
+        return `${y}-${m}-${d}`;
+      } else {
+        const d = parts[0].padStart(2, "0");
+        const m = parts[1].padStart(2, "0");
+        const y = parts[2].length === 2 ? "20" + parts[2] : parts[2];
+        return `${y}-${m}-${d}`;
+      }
+    }
+    return s;
   }
   return String(serial);
 }
@@ -650,19 +662,26 @@ async function syncSpreadsheetData() {
 
   const proposalSheet = workbook.Sheets["Form Proposal"];
   const rawProposal: any[] = proposalSheet ? XLSX.utils.sheet_to_json(proposalSheet) : [];
-  const formProposal = rawProposal.map((r, i) => ({
-    id: `proposal-${i}`,
-    timestamp: parseExcelDate(r["Cap waktu"]),
-    institution: r["Nama Perusahaan/Sekolah/Event"] || "-",
-    targetBranch: r["Pengajuan Untuk Cabang"] || "Purwokerto",
-    eventName: r["Nama Event/Kegiatan"] || "-",
-    eventDate: parseExcelDate(r["Tanggal Pelaksanaan Event/Kegiatan"]),
-    description: r["Deskripsi Singkat Event/Kegiatan"] || "-",
-    benefit: r["Banefit Yang Ditawarkan"] || "-",
-    applicantName: r["Nama Pengaju"] || "-",
-    applicantPhone: r["Nomor Hp Pengaju"] || "-",
-    fileUrl: r["File Proposal Event/Kegiatan"] || "",
-  }));
+  const formProposal = rawProposal
+    .filter(
+      (r) =>
+        (r["Nama Event/Kegiatan"] || r["Nama Perusahaan/Sekolah/Event"]) &&
+        String(r["Nama Event/Kegiatan"] || "").trim() !== "-"
+    )
+    .map((r, i) => ({
+      id: `proposal-${i}`,
+      timestamp: parseExcelDate(r["Cap waktu"]),
+      institution: String(r["Nama Perusahaan/Sekolah/Event"] || "-").trim(),
+      targetBranch: String(r["Pengajuan Untuk Cabang"] || "Purwokerto").trim(),
+      eventName: String(r["Nama Event/Kegiatan"] || "-").trim(),
+      eventDate: parseExcelDate(r["Tanggal Pelaksanaan Event/Kegiatan"]),
+      description: String(r["Deskripsi Singkat Event/Kegiatan"] || "-").trim(),
+      benefit: String(r["Banefit Yang Ditawarkan"] || "-").trim(),
+      applicantName: String(r["Nama Pengaju"] || "-").trim(),
+      applicantPhone: String(r["Nomor Hp Pengaju"] || "-").trim(),
+      fileUrl: String(r["File Proposal Event/Kegiatan"] || "").trim(),
+      sheetNote: r["Kolom 1"] && String(r["Kolom 1"]).trim() !== "-" ? String(r["Kolom 1"]).trim() : "",
+    }));
 
   const pengajuanSheet = workbook.Sheets["Form Pengajuan"];
   const rawPengajuan: any[] = pengajuanSheet ? XLSX.utils.sheet_to_json(pengajuanSheet) : [];

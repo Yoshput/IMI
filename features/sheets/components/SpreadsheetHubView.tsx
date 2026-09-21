@@ -126,7 +126,12 @@ export const SpreadsheetHubView: React.FC<SpreadsheetHubViewProps> = ({
       key: "proposal",
       label: "Proposal Sponsorship",
       icon: FileText,
-      badge: `${(data.formProposal || []).length} Proposal`,
+      badge: `${
+        (data.formProposal || []).filter((p: any) => {
+          if (!p.eventDate) return true;
+          return p.eventDate >= new Date().toISOString().slice(0, 10);
+        }).length
+      } Aktif`,
     },
     {
       key: "executive",
