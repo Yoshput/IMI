@@ -3,21 +3,35 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, Film, BarChart3, FileText, Glasses, FileSpreadsheet, Compass } from "lucide-react";
+import {
+  LayoutDashboard,
+  Film,
+  BarChart3,
+  FileText,
+  Glasses,
+  FileSpreadsheet,
+  Compass,
+  HeartHandshake,
+  Coins,
+  Lock,
+} from "lucide-react";
 
 interface NavItem {
   name: string;
   href: string;
   icon: React.ElementType;
+  isLocked?: boolean;
 }
 
 const navItems: NavItem[] = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+  { name: "Aftersales CRM", href: "/aftersales", icon: HeartHandshake },
   { name: "Spreadsheet Rekap", href: "/spreadsheet", icon: FileSpreadsheet },
   { name: "Competitor Radar", href: "/competitors", icon: Compass },
   { name: "Content", href: "/content", icon: Film },
   { name: "Analytics", href: "/analytics", icon: BarChart3 },
-  { name: "Reports", href: "/reports", icon: FileText },
+  { name: "Reports", href: "/reports", icon: FileText, isLocked: true },
+  { name: "Finance", href: "/finance", icon: Coins, isLocked: true },
 ];
 
 export const AppNav: React.FC = () => {
@@ -40,18 +54,18 @@ export const AppNav: React.FC = () => {
                 <span className="text-[11px] font-bold tracking-tight text-foreground">
                   Marketing Intelligence
                 </span>
-                <span className="text-[9px] uppercase font-semibold px-1 py-0.2 rounded bg-brand-light text-brand">
-                  4 Cabang
+                <span className="text-[9px] uppercase font-semibold px-1.5 py-0.2 rounded bg-brand-light text-brand">
+                  5 Cabang
                 </span>
               </div>
               <span className="text-[10px] text-foreground-muted block">
-                Purwokerto · Purbalingga · Cilacap · Wonosobo
+                Purwokerto · Purbalingga · Cilacap · Wonosobo · Tegal
               </span>
             </div>
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-1">
+          <nav className="hidden xl:flex items-center gap-1">
             {navItems.map((item) => {
               const isActive = pathname.startsWith(item.href);
               const Icon = item.icon;
@@ -59,7 +73,7 @@ export const AppNav: React.FC = () => {
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`flex items-center gap-2 px-3 py-1.5 rounded-control text-xs font-medium transition-all ${
+                  className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-control text-xs font-medium transition-all ${
                     isActive
                       ? "bg-foreground text-surface font-semibold shadow-subtle"
                       : "text-foreground-secondary hover:text-foreground hover:bg-surface-secondary"
@@ -67,12 +81,49 @@ export const AppNav: React.FC = () => {
                 >
                   <Icon className="w-3.5 h-3.5" />
                   <span>{item.name}</span>
+                  {item.isLocked && (
+                    <Lock className="w-2.5 h-2.5 opacity-60 text-amber-500 ml-0.5" />
+                  )}
                 </Link>
               );
             })}
           </nav>
 
-          {/* Right Header Area: Logo 'For Every You' di Kanan Atas */}
+          {/* Semi-compact Navigation for medium screens */}
+          <nav className="hidden md:flex xl:hidden items-center gap-1">
+            {navItems.slice(0, 6).map((item) => {
+              const isActive = pathname.startsWith(item.href);
+              const Icon = item.icon;
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`flex items-center gap-1 px-2 py-1.5 rounded-control text-xs font-medium transition-all ${
+                    isActive
+                      ? "bg-foreground text-surface font-semibold shadow-subtle"
+                      : "text-foreground-secondary hover:text-foreground hover:bg-surface-secondary"
+                  }`}
+                  title={item.name}
+                >
+                  <Icon className="w-3.5 h-3.5" />
+                  <span className="text-[11px]">{item.name.split(" ")[0]}</span>
+                </Link>
+              );
+            })}
+            <Link
+              href="/finance"
+              className={`flex items-center gap-1 px-2 py-1.5 rounded-control text-xs font-medium ${
+                pathname.startsWith("/finance")
+                  ? "bg-foreground text-surface font-semibold"
+                  : "text-foreground-secondary hover:bg-surface-secondary"
+              }`}
+            >
+              <Coins className="w-3.5 h-3.5" />
+              <Lock className="w-2.5 h-2.5 text-amber-500" />
+            </Link>
+          </nav>
+
+          {/* Right Header Area: Brand Tagline Mark */}
           <div className="flex items-center gap-3 sm:gap-4">
             <div className="hidden lg:block text-right">
               <span className="text-xs font-semibold text-foreground block">
@@ -85,7 +136,6 @@ export const AppNav: React.FC = () => {
 
             <div className="h-5 w-px bg-border hidden lg:block" />
 
-            {/* Logo 'For Every You' di Kanan Atas (Brand Tagline Mark) */}
             <div className="flex items-center">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
@@ -97,8 +147,8 @@ export const AppNav: React.FC = () => {
           </div>
         </div>
 
-        {/* Mobile Navigation Bar (DESIGN.md §28: Recompose for Mobile) */}
-        <div className="flex md:hidden border-t border-border/60 py-2 items-center justify-around gap-1">
+        {/* Mobile Navigation Bar */}
+        <div className="flex md:hidden border-t border-border/60 py-2 items-center justify-around gap-1 overflow-x-auto">
           {navItems.map((item) => {
             const isActive = pathname.startsWith(item.href);
             const Icon = item.icon;
@@ -106,14 +156,19 @@ export const AppNav: React.FC = () => {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex flex-col items-center justify-center flex-1 py-1 rounded-control text-[11px] font-medium transition-colors ${
+                className={`flex flex-col items-center justify-center flex-1 py-1 rounded-control text-[10px] font-medium transition-colors shrink-0 px-1 ${
                   isActive
                     ? "text-brand font-bold bg-brand-light"
                     : "text-foreground-secondary hover:text-foreground"
                 }`}
               >
-                <Icon className="w-4 h-4 mb-0.5" />
-                <span>{item.name === "Dashboard" ? "Overview" : item.name}</span>
+                <div className="relative">
+                  <Icon className="w-4 h-4 mb-0.5" />
+                  {item.isLocked && (
+                    <span className="absolute -top-1 -right-1.5 w-1.5 h-1.5 rounded-full bg-amber-500" />
+                  )}
+                </div>
+                <span>{item.name.split(" ")[0]}</span>
               </Link>
             );
           })}

@@ -7,9 +7,10 @@ import { SingleQuestionChart } from "./SingleQuestionChart";
 import { FormatEfficiencyChart } from "./FormatEfficiencyChart";
 import { MetricHistoryTable } from "./MetricHistoryTable";
 import { ManualEntryModal } from "./ManualEntryModal";
+import { GscClickReport } from "./GscClickReport";
+import { TikTokBranchAnalytics } from "./TikTokBranchAnalytics";
 import { StateRenderer } from "@/components/shared/StateRenderer";
 import { PlusCircle, FileSpreadsheet } from "lucide-react";
-
 import { DevStateSwitcher } from "@/components/shared/DevStateSwitcher";
 
 export const AnalyticsView: React.FC = () => {
@@ -36,11 +37,11 @@ export const AnalyticsView: React.FC = () => {
           <div className="flex items-center gap-2 text-caption font-medium uppercase tracking-wider text-foreground-secondary mb-1">
             <span>Modul Analisis & Audit Data</span>
             <span>·</span>
-            <span>Single Question Charts</span>
+            <span>Multichannel Intelligence</span>
           </div>
-          <h1 className="heading-page text-foreground">Analytics & Manual Input</h1>
+          <h1 className="heading-page text-foreground">Analytics & Content Diagnostic</h1>
           <p className="text-sm text-foreground-secondary mt-1">
-            Visualisasi terfokus untuk menjawab pertanyaan spesifik dan formulir input data manual tanpa overwrite histori.
+            Visualisasi terfokus untuk Google Search Console optikiseeyou.com, performa video TikTok 5 cabang, dan efisiensi format Instagram.
           </p>
         </div>
 
@@ -63,6 +64,12 @@ export const AnalyticsView: React.FC = () => {
         emptyActionLabel="Input Metrik Sekarang"
         onEmptyAction={() => setIsModalOpen(true)}
       >
+        {/* Fitur 3: TikTok Branch Analytics (Trending vs Underperforming) */}
+        <TikTokBranchAnalytics />
+
+        {/* Fitur 1: Google Search Console — Click Report optikiseeyou.com */}
+        <GscClickReport />
+
         {/* Two Single-Question Charts (DESIGN.md §17) */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <SingleQuestionChart />

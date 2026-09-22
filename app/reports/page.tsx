@@ -1,4 +1,5 @@
 import { ReportBuilderView } from "@/features/reports/components/ReportBuilderView";
+import { SensitiveGate } from "@/components/shared/SensitiveGate";
 
 export const metadata = {
   title: "Report Builder — I See You Marketing Intelligence",
@@ -6,5 +7,13 @@ export const metadata = {
 };
 
 export default function ReportsPage() {
-  return <ReportBuilderView />;
+  return (
+    <SensitiveGate
+      section="reports"
+      title="Akses Laporan Manajemen & Evaluasi"
+      subtitle="Halaman ini memuat laporan strategis mingguan, evaluasi performa PIC per cabang, dan analisis bisnis internal Optik I See You."
+    >
+      <ReportBuilderView />
+    </SensitiveGate>
+  );
 }
