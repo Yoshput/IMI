@@ -36,11 +36,11 @@ export const BranchResumeCard: React.FC<BranchResumeCardProps> = ({
       { gscClicks: number; gscImpressions: number; antrianClicks: number; igFollowers: number }
     >
   >({
-    pwt: { gscClicks: 680, gscImpressions: 12500, antrianClicks: 142, igFollowers: 226581 },
-    clp: { gscClicks: 270, gscImpressions: 5800, antrianClicks: 68, igFollowers: 3946 },
-    pbg: { gscClicks: 210, gscImpressions: 4600, antrianClicks: 54, igFollowers: 6195 },
-    wns: { gscClicks: 145, gscImpressions: 3100, antrianClicks: 41, igFollowers: 7361 },
-    tgl: { gscClicks: 85, gscImpressions: 1800, antrianClicks: 29, igFollowers: 1248 },
+    pwt: { gscClicks: 710, gscImpressions: 13200, antrianClicks: 142, igFollowers: 226581 },
+    clp: { gscClicks: 290, gscImpressions: 6100, antrianClicks: 68, igFollowers: 3946 },
+    pbg: { gscClicks: 220, gscImpressions: 4800, antrianClicks: 54, igFollowers: 6195 },
+    wns: { gscClicks: 160, gscImpressions: 3400, antrianClicks: 41, igFollowers: 7361 },
+    tgl: { gscClicks: 0, gscImpressions: 0, antrianClicks: 0, igFollowers: 1248 },
   });
 
   // Dynamic live fetch from Google Sheets sync & live Antrian Tracker
@@ -124,7 +124,7 @@ export const BranchResumeCard: React.FC<BranchResumeCardProps> = ({
             Ringkasan Performa Multichannel per Cabang
           </h2>
           <p className="text-xs text-foreground-secondary">
-            Evaluasi terpadu performa marketing digital 5 cabang: Purwokerto, Cilacap, Purbalingga, Wonosobo, dan Tegal.
+            Evaluasi terpadu performa marketing digital 4 cabang Optik I See You (Purwokerto, Cilacap, Purbalingga, Wonosobo) &amp; Lunar Eyewear Tegal.
           </p>
         </div>
 
@@ -218,12 +218,25 @@ export const BranchResumeCard: React.FC<BranchResumeCardProps> = ({
                       <Globe className="w-3 h-3 text-blue-500" />
                       <span>Web Google Clicks</span>
                     </div>
-                    <div className="text-base font-bold text-foreground tabular-nums">
-                      {web.gscClicks}
-                    </div>
-                    <span className="text-[9px] text-foreground-muted">
-                      {web.gscImpressions.toLocaleString("id-ID")} impresi
-                    </span>
+                    {b.branchId === "tgl" ? (
+                      <>
+                        <div className="text-xs font-bold text-foreground-muted tabular-nums py-0.5">
+                          Khusus Lunar
+                        </div>
+                        <span className="text-[9px] text-foreground-muted">
+                          Non-optikiseeyou
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        <div className="text-base font-bold text-foreground tabular-nums">
+                          {web.gscClicks}
+                        </div>
+                        <span className="text-[9px] text-foreground-muted">
+                          {web.gscImpressions.toLocaleString("id-ID")} impresi
+                        </span>
+                      </>
+                    )}
                   </div>
 
                   {/* Antrian Cek Mata */}
@@ -232,12 +245,25 @@ export const BranchResumeCard: React.FC<BranchResumeCardProps> = ({
                       <Stethoscope className="w-3 h-3 text-teal-500" />
                       <span>Antrian Cek Mata</span>
                     </div>
-                    <div className="text-base font-bold text-foreground tabular-nums">
-                      {web.antrianClicks} <span className="text-[10px] font-normal">klik</span>
-                    </div>
-                    <span className="text-[9px] text-emerald-600 font-semibold">
-                      Konversi tinggi
-                    </span>
+                    {b.branchId === "tgl" ? (
+                      <>
+                        <div className="text-xs font-bold text-foreground-muted tabular-nums py-0.5">
+                          Direct Store/WA
+                        </div>
+                        <span className="text-[9px] text-foreground-muted">
+                          Brand mandiri
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        <div className="text-base font-bold text-foreground tabular-nums">
+                          {web.antrianClicks} <span className="text-[10px] font-normal">klik</span>
+                        </div>
+                        <span className="text-[9px] text-emerald-600 font-semibold">
+                          Konversi tinggi
+                        </span>
+                      </>
+                    )}
                   </div>
 
                   {/* TikTok Views */}

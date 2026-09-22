@@ -65,10 +65,6 @@ export const MeetingReportModal: React.FC<MeetingReportModalProps> = ({
   const currentObstacles = periodData?.obstacleLogs || [];
 
   const handleCopyWhatsApp = () => {
-    const bonusText = bonusSummary
-      ? `\n=============================\n*REKAP BONUS GAJI TIM KONTEN (DATA SPREADSHEET H+3)*\n• Total Bonus Dibayar: ${bonusSummary.totalBonusPaidFormatted || "Rp 1.335.000"}\n• Total Video Lolos Bonus: ${bonusSummary.totalEligibleVideos || 32} video\n• Rincian Per Creator:\n${(bonusSummary.byPic || []).map((p) => `  - ${p.pic} (${p.branch}): ${p.totalAmountFormatted} (${p.count} video)`).join("\n")}`
-      : "";
-
     const text = `*LAPORAN EVALUASI MINGGUAN MARKETING INTELLIGENCE*
 *Optik I See You & Lunar Eyewear*
 Agenda Rapat: ${periodData?.meetingDateTitle || "Meeting Direksi"}
@@ -92,7 +88,6 @@ Target Audiens: HRD, Head of Marketing, Finance, Owner
   - Live IG: 1.248 followers (339 posts)
   - Spreadsheet H+3: ${spreadsheetFollowersByBranch?.WNS?.followersFormatted || "1.248"} (PIC: Febi)
 Total Jaringan: ${networkFollowers.instagram.toLocaleString("id-ID")} IG · ${networkFollowers.tiktok.toLocaleString("id-ID")} TikTok
-${bonusText}
 
 =============================
 *2. STATUS KEPATUHAN 6 PIC CABANG*
@@ -104,7 +99,6 @@ ${currentReels.slice(0, 5).map((r: any, idx: number) => `${idx + 1}. [${r.branch
    - Viewers H+3: ${r.viewers.toLocaleString("id-ID")} viewers
    - Likes Realtime IG: ${r.igLikesFormatted || r.likes.toLocaleString("id-ID")} likes ${r.igComments !== undefined ? `| Komentar: ${r.igComments}` : ""}
    - Likes Sheet H+3: ${r.sheetLikes ? r.sheetLikes.toLocaleString("id-ID") : r.likes.toLocaleString("id-ID")} likes
-   ${r.bonus && r.bonus !== '-' ? `- Bonus Sheet: ${r.bonus}` : ''}
    - Caption Asli IG: "${r.igCaption ? r.igCaption.replace(/\n+/g, " ").slice(0, 110) + "..." : "-"}"
    - Link: ${r.reelsLink || "-"}`).join("\n\n")}
 
@@ -117,7 +111,7 @@ ${currentStories.slice(0, 4).map((q: any) => `• ${q.topic} (${q.count} hari di
 *5. KEPUTUSAN & ARAHAN RAPAT*
 • HRD: Pengingat PIC tertunda & mini-clinic editing CapCut untuk creator cabang.
 • Head: Gandakan format POV try-on & review wawancara customer ke Purwokerto & Cilacap.
-• Finance: Efisiensi jangkauan organik setara Rp 8,4jt belanja iklan; pencairan bonus tim konten per data H+3 spreadsheet.
+• Finance: Efisiensi jangkauan organik setara Rp 8,4jt belanja iklan (detail finansial di modul Finance).
 • Owner: Pantauan live harian menuju evaluasi berikutnya.
 
 _Laporan otomatis digenerate via I See You Marketing Intelligence._`;
@@ -369,7 +363,6 @@ _Laporan otomatis digenerate via I See You Marketing Intelligence._`;
                     <th className="py-2 px-2 text-right">Viewers H+3</th>
                     <th className="py-2 px-2 text-right">Likes IG Live</th>
                     <th className="py-2 px-2 text-right">Likes Sheet</th>
-                    <th className="py-2 px-2 text-center">Bonus Sheet</th>
                     <th className="py-2 px-2 text-center">Tautan</th>
                   </tr>
                 </thead>
@@ -404,15 +397,6 @@ _Laporan otomatis digenerate via I See You Marketing Intelligence._`;
                         {r.sheetLikes ? r.sheetLikes.toLocaleString("id-ID") : r.likes.toLocaleString("id-ID")}
                       </td>
                       <td className="py-2 px-2 text-center whitespace-nowrap">
-                        {r.bonus && r.bonus !== '-' ? (
-                          <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-900 border border-emerald-300">
-                            {r.bonus}
-                          </span>
-                        ) : (
-                          <span className="text-[10px] text-foreground-muted">-</span>
-                        )}
-                      </td>
-                      <td className="py-2 px-2 text-center whitespace-nowrap">
                         {r.reelsLink && r.reelsLink.startsWith("http") ? (
                           <a
                             href={r.reelsLink}
@@ -434,65 +418,12 @@ _Laporan otomatis digenerate via I See You Marketing Intelligence._`;
             </div>
           </div>
 
-          {/* 3. Rekap Bonus Gaji Tim Konten (Spreadsheet H+3) */}
-          {bonusSummary && (
-            <div className="space-y-3 bg-surface-secondary border border-border rounded-control p-4">
-              <div className="flex items-center justify-between border-b border-border pb-2">
-                <div>
-                  <h3 className="text-xs font-bold uppercase tracking-wider text-foreground flex items-center gap-1.5">
-                    <FileSpreadsheet className="w-3.5 h-3.5 text-brand" />
-                    3. Rekapitulasi Bonus Gaji Tim Konten (Data Spreadsheet H+3)
-                  </h3>
-                  <p className="text-[11px] text-foreground-secondary mt-0.5">
-                    Data riil kualifikasi bonus tim creator berdasarkan view & likes H+3 di Google Sheets.
-                  </p>
-                </div>
-                <div className="text-right">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-foreground-muted block">
-                    Total Bonus Terakumulasi
-                  </span>
-                  <span className="text-sm font-bold text-emerald-800 tabular-nums">
-                    {bonusSummary.totalBonusPaidFormatted || "Rp 1.335.000"}
-                  </span>
-                </div>
-              </div>
-
-              {/* Creator Cards */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2.5">
-                {(bonusSummary.byPic || []).map((p, idx) => (
-                  <div
-                    key={idx}
-                    className="p-2.5 rounded-control bg-surface border border-border text-xs flex flex-col justify-between space-y-1.5"
-                  >
-                    <div>
-                      <div className="flex items-center justify-between">
-                        <span className="font-bold text-foreground">{p.pic}</span>
-                        <span className="text-[9px] font-semibold px-1.5 py-0.2 rounded bg-surface-secondary border border-border">
-                          {p.count} video
-                        </span>
-                      </div>
-                      <span className="text-[10px] text-foreground-muted block truncate mt-0.5">
-                        {p.branch}
-                      </span>
-                    </div>
-                    <div className="pt-1.5 border-t border-border/60 flex items-baseline justify-between">
-                      <span className="text-[9px] text-foreground-muted">Total Bonus:</span>
-                      <span className="text-xs font-bold text-emerald-800 tabular-nums">
-                        {p.totalAmountFormatted}
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* 4. Story Inquiries & Obstacles */}
+          {/* 3. Story Inquiries & Obstacles */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="p-3.5 rounded-control border border-border bg-surface space-y-2">
               <span className="text-xs font-bold text-foreground block flex items-center gap-1.5">
                 <MessageCircle className="w-3.5 h-3.5 text-foreground" />
-                4. Topik DM Story Terbanyak (Nuha):
+                3. Topik DM Story Terbanyak (Nuha):
               </span>
               <span className="text-[11px] text-foreground-muted block">
                 Total {periodData?.totalDmInquiries || 0} DM masuk selama 7 hari periode ini.
@@ -523,11 +454,11 @@ _Laporan otomatis digenerate via I See You Marketing Intelligence._`;
             </div>
           </div>
 
-          {/* 5. Strategic Actions for 4 Divisions */}
+          {/* 4. Strategic Actions for Divisions */}
           <div className="border-t border-border pt-4 space-y-2.5">
             <h3 className="text-xs font-bold uppercase tracking-wider text-foreground flex items-center gap-1.5">
               <Crown className="w-3.5 h-3.5 text-brand" />
-              5. Ringkasan Arahan Kerja Rapat 4 Divisi:
+              4. Ringkasan Arahan Kerja Rapat Divisi:
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">

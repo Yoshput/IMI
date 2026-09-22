@@ -167,11 +167,11 @@ export const AntrianTrackingCard: React.FC = () => {
       {/* Breakdown per Cabang */}
       <div className="space-y-2 pt-1">
         <div className="flex items-center justify-between text-xs font-bold text-foreground">
-          <span>Breakdown Klik Antrian Per Cabang (Mingguan):</span>
+          <span>Breakdown Klik Antrian Per Cabang (Mingguan) - 4 Cabang Optik I See You:</span>
           <span className="text-[10px] font-normal text-foreground-muted">Total: {stats.weeklyTotal} klik</span>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-2.5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
           {stats.branchStats.map((b) => (
             <div
               key={b.branchId}
@@ -199,6 +199,10 @@ export const AntrianTrackingCard: React.FC = () => {
             </div>
           ))}
         </div>
+
+        <p className="text-[10px] text-foreground-muted italic pt-1">
+          * Catatan: Cabang Tegal beroperasi mandiri di bawah brand <strong>Lunar Eyewear</strong>, sehingga data web &amp; booking <code>optikiseeyou.com</code> hanya mencakup 4 cabang utama Optik I See You (Purwokerto, Cilacap, Purbalingga, Wonosobo).
+        </p>
       </div>
     </div>
   );

@@ -192,6 +192,9 @@ export const GscClickReport: React.FC = () => {
                   </div>
                 ))}
               </div>
+              <p className="text-[10px] text-foreground-muted italic pt-1">
+                * Wilayah pencarian mencakup 4 cabang utama Optik I See You (Purwokerto, Cilacap, Purbalingga, Wonosobo) &amp; daerah penyangga sekitar. Cabang Tegal beroperasi di bawah brand <strong>Lunar Eyewear</strong> dan tidak diarahkan ke domain <code>optikiseeyou.com</code>.
+              </p>
             </div>
 
             {/* Device Breakdown & Top Keyword Highlights (5 cols) */}

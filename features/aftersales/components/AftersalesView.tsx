@@ -16,6 +16,8 @@ import {
   ExternalLink,
   ChevronRight,
   Plus,
+  Info,
+  Sparkles,
 } from "lucide-react";
 import {
   CustomerAftersalesRecord,
@@ -37,6 +39,18 @@ export const AftersalesView: React.FC = () => {
   const [selectedBranch, setSelectedBranch] = useState("all");
   const [selectedStatus, setSelectedStatus] = useState("all");
   const [selectedCustomer, setSelectedCustomer] = useState<CustomerAftersalesRecord | null>(null);
+  const [showAddModal, setShowAddModal] = useState(false);
+
+  // New customer form state
+  const [newName, setNewName] = useState("");
+  const [newPhone, setNewPhone] = useState("");
+  const [newBranch, setNewBranch] = useState<"PWT" | "CLP" | "PBG" | "WNS" | "TGL">("PWT");
+  const [newFrame, setNewFrame] = useState("");
+  const [newLens, setNewLens] = useState("");
+  const [newPrice, setNewPrice] = useState("");
+  const [newOdSph, setNewOdSph] = useState("");
+  const [newOsSph, setNewOsSph] = useState("");
+  const [newNotes, setNewNotes] = useState("");
 
   const fetchCustomers = async () => {
     try {
@@ -68,6 +82,71 @@ export const AftersalesView: React.FC = () => {
     setCustomers((prev) => prev.map((c) => (c.id === updated.id ? updated : c)));
     setSelectedCustomer(updated);
     fetchCustomers();
+  };
+
+  const handleCreateCustomer = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newName.trim() || !newPhone.trim()) return;
+
+    try {
+      const res = await fetch("/api/aftersales", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: newName.trim(),
+          phone: newPhone.trim(),
+          branchKey: newBranch,
+          frameModel: newFrame.trim() || "Frame Optik I See You",
+          lensType: newLens.trim() || "Bluechromic Anti Radiasi",
+          totalTransaction: parseInt(newPrice) || 650000,
+          prescription: {
+            odSph: newOdSph || "-1.50",
+            odCyl: "0.00",
+            osSph: newOsSph || "-1.50",
+            osCyl: "0.00",
+            pd: "62",
+          },
+          notes: newNotes.trim() || "Input kasir / RO cabang",
+          status: "belum_dihubungi",
+        }),
+      });
+      const result = await res.json();
+      if (result.success) {
+        setShowAddModal(false);
+        // reset form
+        setNewName("");
+        setNewPhone("");
+        setNewFrame("");
+        setNewLens("");
+        setNewPrice("");
+        setNewOdSph("");
+        setNewOsSph("");
+        setNewNotes("");
+        fetchCustomers();
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const [isSyncing, setIsSyncing] = useState(false);
+
+  const handleLiveSync = async () => {
+    setIsSyncing(true);
+    try {
+      const res = await fetch("/api/aftersales?fresh=true");
+      const json = await res.json();
+      if (json.success) {
+        setCustomers(json.data);
+        if (json.counts) {
+          setCounts(json.counts);
+        }
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setIsSyncing(false);
+    }
   };
 
   const getStatusBadge = (status: FollowUpStatus) => {
@@ -114,7 +193,52 @@ export const AftersalesView: React.FC = () => {
             Layanan Aftersales & Kepuasan Pelanggan
           </h1>
           <p className="text-xs text-foreground-secondary mt-1">
-            Sistem rekam medis kacamata, status follow-up kenyamanan lensa, garansi, dan retensi customer. Klik baris customer untuk melihat detail lengkap.
+            Sistem rekam medis kacamata, status follow-up kenyamanan frame/lensa, review Google Maps, dan retensi customer. Klik baris customer untuk membuka detail lengkap & kirim WA.
+          </p>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2 self-start sm:self-auto">
+          <button
+            onClick={handleLiveSync}
+            disabled={isSyncing}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-border bg-surface hover:bg-surface-secondary text-xs font-semibold text-foreground transition-all shadow-subtle disabled:opacity-50"
+          >
+            <span className={`w-2 h-2 rounded-full bg-emerald-500 ${isSyncing ? "animate-ping" : ""}`} />
+            <span>{isSyncing ? "Menyinkronkan..." : "Sinkronkan Google Sheets"}</span>
+          </button>
+
+          <a
+            href="https://docs.google.com/spreadsheets/d/10lKjuzUvWhnUKbKNEo4opo4MiQoesZKW4NhY9sQ4T8w/edit?usp=sharing"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-border bg-surface hover:bg-surface-secondary text-xs font-semibold text-foreground-secondary hover:text-foreground transition-all shadow-subtle"
+          >
+            <ExternalLink className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Spreadsheet Asli</span>
+          </a>
+
+          <button
+            onClick={() => setShowAddModal(true)}
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-foreground text-surface text-xs font-semibold hover:opacity-90 transition-all shadow-subtle"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Tambah Customer</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Origin of Data Informative Banner */}
+      <div className="p-3.5 rounded-xl bg-surface-secondary/40 border border-border flex items-start gap-3 text-xs">
+        <Info className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+        <div className="space-y-0.5">
+          <span className="font-bold text-foreground flex items-center gap-1.5">
+            <span>Terhubung Langsung ke Google Sheets Database Aftersales</span>
+            <span className="text-[10px] px-1.5 py-0.2 rounded bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 font-normal">
+              5.775+ Data Customer & 187 Log Feedback
+            </span>
+          </span>
+          <p className="text-foreground-secondary text-[11px] leading-relaxed">
+            Data customer di halaman ini ditarik langsung dari sheet <strong>DATA CUSTOMER</strong> (resep refraksi, ukuran lensa, model frame) dan sheet <strong>REKAP DATA</strong> (review & komplain 5 cabang) di spreadsheet Google Sheets Optik I See You.
           </p>
         </div>
       </div>
@@ -122,7 +246,7 @@ export const AftersalesView: React.FC = () => {
       {/* KPI Status Counts */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
         <button
-          onClick={() => setSelectedStatus("belum_dihubungi")}
+          onClick={() => setSelectedStatus(selectedStatus === "belum_dihubungi" ? "all" : "belum_dihubungi")}
           className={`p-3.5 rounded-xl border text-left transition-all ${
             selectedStatus === "belum_dihubungi"
               ? "border-amber-500 bg-amber-500/10 shadow-subtle"
@@ -144,7 +268,7 @@ export const AftersalesView: React.FC = () => {
         </button>
 
         <button
-          onClick={() => setSelectedStatus("sudah_dihubungi")}
+          onClick={() => setSelectedStatus(selectedStatus === "sudah_dihubungi" ? "all" : "sudah_dihubungi")}
           className={`p-3.5 rounded-xl border text-left transition-all ${
             selectedStatus === "sudah_dihubungi"
               ? "border-blue-500 bg-blue-500/10 shadow-subtle"
@@ -166,7 +290,7 @@ export const AftersalesView: React.FC = () => {
         </button>
 
         <button
-          onClick={() => setSelectedStatus("butuh_garansi")}
+          onClick={() => setSelectedStatus(selectedStatus === "butuh_garansi" ? "all" : "butuh_garansi")}
           className={`p-3.5 rounded-xl border text-left transition-all ${
             selectedStatus === "butuh_garansi"
               ? "border-red-500 bg-red-500/10 shadow-subtle"
@@ -188,7 +312,7 @@ export const AftersalesView: React.FC = () => {
         </button>
 
         <button
-          onClick={() => setSelectedStatus("selesai_puas")}
+          onClick={() => setSelectedStatus(selectedStatus === "selesai_puas" ? "all" : "selesai_puas")}
           className={`p-3.5 rounded-xl border text-left transition-all ${
             selectedStatus === "selesai_puas"
               ? "border-emerald-500 bg-emerald-500/10 shadow-subtle"
@@ -221,7 +345,7 @@ export const AftersalesView: React.FC = () => {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Cari nama, no WA, lensa..."
+                placeholder="Cari nama, no WA, frame, lensa..."
                 className="w-full pl-9 pr-3 py-1.5 bg-surface-secondary border border-border rounded-lg text-xs text-foreground placeholder:text-foreground-muted focus:outline-none focus:ring-1 focus:ring-brand"
               />
             </div>
@@ -332,7 +456,7 @@ export const AftersalesView: React.FC = () => {
                         onClick={() => setSelectedCustomer(cust)}
                         className="px-2.5 py-1 rounded bg-surface border border-border text-[11px] font-semibold text-foreground-secondary hover:text-foreground hover:bg-surface-secondary transition-all"
                       >
-                        Detail Lengkap
+                        Detail & WA
                       </button>
                     </td>
                   </tr>
@@ -350,6 +474,159 @@ export const AftersalesView: React.FC = () => {
           onClose={() => setSelectedCustomer(null)}
           onUpdateCustomer={handleUpdateCustomer}
         />
+      )}
+
+      {/* Add New Customer Modal */}
+      {showAddModal && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 animate-in fade-in duration-200">
+          <div className="bg-surface border border-border rounded-2xl max-w-lg w-full p-5 shadow-elevated space-y-4 max-h-[92vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-border pb-3">
+              <div>
+                <h3 className="text-sm font-bold text-foreground">
+                  Tambah Data Pelanggan Baru (Aftersales)
+                </h3>
+                <p className="text-xs text-foreground-muted">
+                  Catat riwayat pembelian kacamata untuk monitoring berkala.
+                </p>
+              </div>
+              <button
+                onClick={() => setShowAddModal(false)}
+                className="text-foreground-muted hover:text-foreground text-sm font-bold"
+              >
+                ✕
+              </button>
+            </div>
+
+            <form onSubmit={handleCreateCustomer} className="space-y-3 text-xs">
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block font-semibold text-foreground mb-1">Nama Lengkap</label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="Contoh: Dimas Arya"
+                    value={newName}
+                    onChange={(e) => setNewName(e.target.value)}
+                    className="w-full px-3 py-2 bg-surface-secondary border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-brand"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-semibold text-foreground mb-1">Nomor WhatsApp</label>
+                  <input
+                    type="tel"
+                    required
+                    placeholder="Contoh: 6281229837411"
+                    value={newPhone}
+                    onChange={(e) => setNewPhone(e.target.value)}
+                    className="w-full px-3 py-2 bg-surface-secondary border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-brand"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block font-semibold text-foreground mb-1">Cabang Pembelian</label>
+                  <select
+                    value={newBranch}
+                    onChange={(e: any) => setNewBranch(e.target.value)}
+                    className="w-full px-3 py-2 bg-surface-secondary border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-brand"
+                  >
+                    <option value="PWT">Purwokerto (Pusat)</option>
+                    <option value="CLP">Cilacap</option>
+                    <option value="PBG">Purbalingga</option>
+                    <option value="WNS">Wonosobo</option>
+                    <option value="TGL">Lunar Eyewear Tegal</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block font-semibold text-foreground mb-1">Total Transaksi (Rp)</label>
+                  <input
+                    type="number"
+                    placeholder="650000"
+                    value={newPrice}
+                    onChange={(e) => setNewPrice(e.target.value)}
+                    className="w-full px-3 py-2 bg-surface-secondary border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-brand"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block font-semibold text-foreground mb-1">Model Frame Kacamata</label>
+                <input
+                  type="text"
+                  placeholder="Contoh: Vintage Titanium Round Black Gold"
+                  value={newFrame}
+                  onChange={(e) => setNewFrame(e.target.value)}
+                  className="w-full px-3 py-2 bg-surface-secondary border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-brand"
+                />
+              </div>
+
+              <div>
+                <label className="block font-semibold text-foreground mb-1">Jenis Lensa</label>
+                <input
+                  type="text"
+                  placeholder="Contoh: Bluechromic Night Drive (Anti Silau)"
+                  value={newLens}
+                  onChange={(e) => setNewLens(e.target.value)}
+                  className="w-full px-3 py-2 bg-surface-secondary border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-brand"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block font-semibold text-foreground mb-1">Ukuran Kanan (OD SPH)</label>
+                  <input
+                    type="text"
+                    placeholder="-1.50"
+                    value={newOdSph}
+                    onChange={(e) => setNewOdSph(e.target.value)}
+                    className="w-full px-3 py-2 bg-surface-secondary border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-brand font-mono"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-semibold text-foreground mb-1">Ukuran Kiri (OS SPH)</label>
+                  <input
+                    type="text"
+                    placeholder="-1.75"
+                    value={newOsSph}
+                    onChange={(e) => setNewOsSph(e.target.value)}
+                    className="w-full px-3 py-2 bg-surface-secondary border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-brand font-mono"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block font-semibold text-foreground mb-1">Catatan Staf / Keluhan Awal</label>
+                <textarea
+                  rows={2}
+                  placeholder="Contoh: Customer kerja depan monitor 8 jam sehari..."
+                  value={newNotes}
+                  onChange={(e) => setNewNotes(e.target.value)}
+                  className="w-full px-3 py-2 bg-surface-secondary border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-brand"
+                />
+              </div>
+
+              <div className="flex items-center justify-end gap-2 pt-2 border-t border-border">
+                <button
+                  type="button"
+                  onClick={() => setShowAddModal(false)}
+                  className="px-3 py-1.5 rounded-lg border border-border text-foreground-secondary hover:text-foreground"
+                >
+                  Batal
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-1.5 rounded-lg bg-foreground text-surface font-semibold hover:opacity-90"
+                >
+                  Simpan Pelanggan
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
       )}
     </div>
   );

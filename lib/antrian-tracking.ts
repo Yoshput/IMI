@@ -3,7 +3,7 @@
 export interface AntrianEvent {
   id: string;
   timestamp: string;
-  branch: "pwt" | "clp" | "pbg" | "wns" | "tgl" | "unknown";
+  branch: "pwt" | "clp" | "pbg" | "wns" | "unknown";
   branchName: string;
   sourceUrl: string;
   device: "mobile" | "desktop" | "tablet";
@@ -66,18 +66,9 @@ let inMemoryEvents: AntrianEvent[] = [
     timestamp: "2026-09-22T08:50:00Z",
     branch: "wns",
     branchName: "Wonosobo",
-    sourceUrl: "https://optikiseeyou.com/",
+    sourceUrl: "https://optikiseeyou.com/cabang/wonosobo",
     device: "mobile",
     referrer: "https://www.google.com/",
-  },
-  {
-    id: "evt-05",
-    timestamp: "2026-09-22T08:12:45Z",
-    branch: "tgl",
-    branchName: "Lunar Eyewear Tegal",
-    sourceUrl: "https://optikiseeyou.com/cabang/tegal",
-    device: "mobile",
-    referrer: "https://www.instagram.com/",
   },
 ];
 
@@ -97,8 +88,6 @@ export function recordAntrianClick(params: {
     purbalingga: { id: "pbg", name: "Purbalingga" },
     wns: { id: "wns", name: "Wonosobo" },
     wonosobo: { id: "wns", name: "Wonosobo" },
-    tgl: { id: "tgl", name: "Lunar Eyewear Tegal" },
-    tegal: { id: "tgl", name: "Lunar Eyewear Tegal" },
   };
 
   const cleanKey = (params.branch || "pwt").toLowerCase().trim();
@@ -160,15 +149,6 @@ export function getAntrianStats(): AntrianSummary {
       weeklyClicks: 41,
       monthlyClicks: 168,
       conversionRate: 51.2,
-    },
-    {
-      branchId: "tgl",
-      branchName: "Lunar Eyewear Tegal",
-      city: "Tegal",
-      todayClicks: 4,
-      weeklyClicks: 29,
-      monthlyClicks: 118,
-      conversionRate: 48.3,
     },
   ];
 

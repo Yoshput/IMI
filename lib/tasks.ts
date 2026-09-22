@@ -26,7 +26,7 @@ export interface MarketingTaskItem {
 export const INITIAL_MARKETING_TASKS: MarketingTaskItem[] = [
   {
     id: "task-01",
-    title: "Design Grafis Feed — Carousel Edukasi Lensa & Promo 5 Cabang",
+    title: "Design Grafis Feed — Carousel Edukasi Lensa & Promo Jaringan Cabang",
     assignee: "Yanuar",
     role: "Graphic Designer & Visual Creative",
     avatarInitials: "YN",

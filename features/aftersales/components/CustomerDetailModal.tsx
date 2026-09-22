@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   X,
   User,
@@ -17,6 +17,10 @@ import {
   FileText,
   Eye,
   ExternalLink,
+  Copy,
+  Star,
+  Globe,
+  MessageSquare,
 } from "lucide-react";
 import { CustomerAftersalesRecord, FollowUpStatus } from "@/lib/aftersales";
 
@@ -35,13 +39,133 @@ export const CustomerDetailModal: React.FC<CustomerDetailModalProps> = ({
   const [notes, setNotes] = useState(customer.notes);
   const [newNoteInput, setNewNoteInput] = useState("");
   const [saving, setSaving] = useState(false);
+  const [selectedTemplate, setSelectedTemplate] = useState<"kenyamanan" | "google_maps" | "garansi">("kenyamanan");
+  const [customMessage, setCustomMessage] = useState("");
+  const [copied, setCopied] = useState(false);
 
-  const getWaMessage = () => {
-    return encodeURIComponent(
-      `Halo Kak ${customer.name}, perkenalkan kami dari Tim Layanan Pelanggan Optik I See You Cabang ${customer.city}.\n\n` +
-      `Bagaimana kenyamanan kacamata ${customer.frameModel} dengan lensa ${customer.lensType} yang diambil tanggal ${customer.pickupDate} kemarin? Apakah pandangan sudah nyaman dan pas digunakan? 😊\n\n` +
-      `Jika butuh penyetelan kacamata (re-fitting frame) atau ada kendala, silakan mampir langsung ke store kami ya Kak. Layanan gratis selamanya! ✨`
-    );
+  // Link Google Maps per branch
+  const branchMapsLinks: Record<string, string> = {
+    PWT: "https://maps.app.goo.gl/OptikISeeYouPurwokerto",
+    CLP: "https://maps.app.goo.gl/OptikISeeYouCilacap",
+    PBG: "https://maps.app.goo.gl/OptikISeeYouPurbalingga",
+    WNS: "https://maps.app.goo.gl/OptikISeeYouWonosobo",
+    TGL: "https://maps.app.goo.gl/LunarEyewearTegal",
+  };
+
+  const currentMapLink = branchMapsLinks[customer.branchKey] || "https://maps.google.com/?q=Optik+I+See+You";
+
+  // Template generation
+  useEffect(() => {
+    const isLunarTegal =
+      customer.branchKey === "TGL" ||
+      customer.city.toLowerCase().includes("tegal") ||
+      customer.branch.toLowerCase().includes("lunar");
+
+    const brandName = isLunarTegal ? "Lunar Eyewear Tegal" : `Optik I See You Cabang ${customer.city}`;
+    const brandShort = isLunarTegal ? "Lunar Eyewear" : "Optik I See You";
+
+    let msg = "";
+    if (selectedTemplate === "kenyamanan") {
+      msg = isLunarTegal
+        ? `Selamat siang Kak ${customer.name}, salam hangat dari Tim Layanan Pelanggan Lunar Eyewear Tegal. 🙏✨
+
+Semoga Kak ${customer.name} senantiasa dalam keadaan sehat dan lancar aktivitasnya.
+
+Menindaklanjuti pengambilan kacamata pada tanggal ${customer.pickupDate} kemarin:
+• Model Frame: ${customer.frameModel}
+• Jenis Lensa: ${customer.lensType}
+
+Kami ingin menanyakan pengalaman dan kenyamanan Kakak selama menggunakan kacamata tersebut:
+1. Apakah posisi frame terasa pas di wajah, hidung, dan telinga (tidak terasa menekan atau melorot)?
+2. Apakah adaptasi lensa sudah jernih dan nyaman untuk penglihatan harian?
+
+Apabila dirasa kurang pas atau membutuhkan penyetelan ulang (re-fitting frame), silakan mampir langsung ke store Lunar Eyewear Tegal (Jl. Werkudoro, Ruko Langon Square No. 2, Tegal Timur). Layanan stel kacamata dan pembersihan lensa tersedia GRATIS untuk Kakak.
+
+Boleh luangkan waktu 1 menit untuk membalas pesan ini ya Kak? Masukan dari Kakak sangat berharga untuk peningkatan pelayanan kami.
+
+Terima kasih banyak atas kepercayaan Kak ${customer.name} kepada Lunar Eyewear Tegal. 🙏`
+        : `Selamat siang Kak ${customer.name}, salam hangat dari Tim Layanan Pelanggan Optik I See You Cabang ${customer.city}. 🙏✨
+
+Semoga Kak ${customer.name} senantiasa dalam keadaan sehat dan lancar aktivitasnya.
+
+Menindaklanjuti pengambilan kacamata pada tanggal ${customer.pickupDate} kemarin:
+• Model Frame: ${customer.frameModel}
+• Jenis Lensa: ${customer.lensType}
+
+Kami ingin menanyakan pengalaman dan kenyamanan Kakak selama menggunakan kacamata tersebut:
+1. Apakah posisi frame terasa pas di wajah, hidung, dan telinga (tidak terasa menekan atau melorot)?
+2. Apakah adaptasi lensa sudah jernih dan nyaman untuk melihat jarak jauh maupun membaca?
+
+Apabila dirasa kurang pas atau membutuhkan penyetelan ulang (re-fitting frame), silakan mampir langsung ke store Optik I See You ${customer.city}. Layanan stel kacamata dan pembersihan lensa tersedia GRATIS selamanya untuk Kakak.
+
+Boleh luangkan waktu 1 menit untuk membalas pesan ini ya Kak? Masukan dari Kakak sangat berharga agar kami dapat terus memberikan pelayanan terbaik.
+
+Informasi pemeriksaan mata berkala 4 cabang resmi dapat dicek melalui website:
+🌐 https://optikiseeyou.com
+
+Terima kasih banyak atas kepercayaan Kak ${customer.name} kepada Optik I See You. 🙏`;
+    } else if (selectedTemplate === "google_maps") {
+      msg = isLunarTegal
+        ? `Halo Kak ${customer.name}, terima kasih banyak telah mempercayakan pembuatan kacamata ${customer.frameModel} di Lunar Eyewear Tegal. 🙏✨
+
+Bagaimana kacamata dan lensa ${customer.lensType}-nya sejauh ini Kak? Semoga selalu nyaman menemani aktivitas harian.
+
+Jika Kakak merasa puas dengan hasil kacamata dan keramahan staf kami, kami akan sangat berterima kasih apabila Kakak berkenan meluangkan 1 menit untuk memberikan ulasan bintang 5 ⭐⭐⭐⭐⭐ di Google Maps resmi Lunar Eyewear Tegal:
+📍 ${currentMapLink}
+
+Setiap ulasan dari Kak ${customer.name} sangat berarti bagi tim kami untuk terus bersemangat menghadirkan eyewear terbaik di Kota Tegal.
+
+Terima kasih banyak atas dukungan dan kepercayaannya ya Kak! Sehat selalu. ✨`
+        : `Halo Kak ${customer.name}, terima kasih banyak telah mempercayakan pembuatan kacamata ${customer.frameModel} di Optik I See You Cabang ${customer.city}. 🙏✨
+
+Bagaimana kacamata dan lensa ${customer.lensType}-nya sejauh ini Kak? Semoga selalu nyaman menemani aktivitas harian.
+
+Jika Kakak merasa puas dengan hasil kacamata dan keramahan staf kami, kami akan sangat berterima kasih apabila Kakak berkenan meluangkan 1 menit untuk memberikan ulasan bintang 5 ⭐⭐⭐⭐⭐ serta sedikit kesan di Google Maps resmi kami:
+📍 ${currentMapLink}
+
+Setiap ulasan dari Kak ${customer.name} sangat berarti bagi tim kami untuk terus bersemangat memberikan pelayanan prima bagi masyarakat ${customer.city}.
+
+Kakak juga dapat mendaftarkan rekan atau keluarga untuk booking antrian cek mata gratis tanpa antri di:
+🌐 https://optikiseeyou.com/booking-antrian
+
+Terima kasih banyak atas dukungan dan kepercayaannya ya Kak! Sehat selalu. ✨`;
+    } else {
+      msg = isLunarTegal
+        ? `Selamat siang Kak ${customer.name}, kami dari Tim Aftersales & Jaminan Mutu Lunar Eyewear Tegal. 🙏
+
+Mengingatkan kembali bahwa kacamata ${customer.frameModel} dengan lensa ${customer.lensType} yang Kakak ambil pada ${customer.pickupDate} dilindungi oleh fasilitas Garansi Lunar Eyewear:
+✅ Garansi penyetelan frame & nosepad gratis
+✅ Garansi pembersihan berkala di store
+✅ Konsultasi kenyamanan penglihatan
+
+Apakah saat ini ada kendala pada dudukan frame atau kenyamanan pandangan mata Kakak?
+
+Store Lunar Eyewear Tegal:
+📍 Jl. Werkudoro, Ruko Langon Square No. 2, Tegal Timur
+
+Silakan balas pesan ini apabila ada yang bisa kami bantu ya Kak. Terima kasih banyak. 🙏`
+        : `Selamat siang Kak ${customer.name}, kami dari Tim Aftersales & Jaminan Mutu Optik I See You Cabang ${customer.city}. 🙏
+
+Mengingatkan kembali bahwa kacamata ${customer.frameModel} dengan lensa ${customer.lensType} yang Kakak ambil pada ${customer.pickupDate} dilindungi oleh fasilitas Garansi Resmi Optik I See You:
+✅ Garansi penyetelan frame & nosepad gratis selamanya
+✅ Garansi pembersihan ultrasonik berkala di seluruh cabang
+✅ Konsultasi perkembangan refraksi penglihatan
+
+Apakah saat ini ada kendala pada dudukan frame atau kenyamanan pandangan mata Kakak?
+
+Jika memerlukan pengecekan ulang atau servis kacamata, silakan hubungi kami atau cek cabang terdekat di:
+🌐 https://optikiseeyou.com
+
+Silakan balas pesan ini apabila ada yang bisa kami bantu ya Kak. Terima kasih banyak. 🙏`;
+    }
+
+    setCustomMessage(msg);
+  }, [selectedTemplate, customer]);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(customMessage);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   const handleSave = async () => {
@@ -109,22 +233,99 @@ export const CustomerDetailModal: React.FC<CustomerDetailModalProps> = ({
 
         {/* Modal Body */}
         <div className="p-4 sm:p-6 space-y-5 flex-1">
-          {/* Action Quick Bar: WhatsApp Direct Link */}
-          <div className="flex flex-wrap items-center justify-between gap-3 p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-xs">
-            <div className="flex items-center gap-2 text-emerald-800 dark:text-emerald-300">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-              <span>Follow-up kacamata & kepuasan customer langsung via WhatsApp resmi</span>
+          {/* WhatsApp Professional Composer Section */}
+          <div className="p-4 rounded-xl bg-surface-secondary/40 border border-border space-y-3">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-border/70 pb-3">
+              <div className="flex items-center gap-2">
+                <MessageSquare className="w-4 h-4 text-emerald-600" />
+                <span className="text-xs font-bold text-foreground">
+                  Draft Pesan WhatsApp Follow-up & Review
+                </span>
+              </div>
+
+              {/* Template Selector Pills */}
+              <div className="flex items-center gap-1 overflow-x-auto text-[11px]">
+                <button
+                  onClick={() => setSelectedTemplate("kenyamanan")}
+                  className={`px-2.5 py-1 rounded-lg font-semibold transition-all ${
+                    selectedTemplate === "kenyamanan"
+                      ? "bg-emerald-600 text-white shadow-subtle"
+                      : "bg-surface border border-border text-foreground-secondary hover:text-foreground"
+                  }`}
+                >
+                  1. Cek Frame & Lensa
+                </button>
+                <button
+                  onClick={() => setSelectedTemplate("google_maps")}
+                  className={`px-2.5 py-1 rounded-lg font-semibold transition-all ${
+                    selectedTemplate === "google_maps"
+                      ? "bg-emerald-600 text-white shadow-subtle"
+                      : "bg-surface border border-border text-foreground-secondary hover:text-foreground"
+                  }`}
+                >
+                  2. Review Google Maps
+                </button>
+                <button
+                  onClick={() => setSelectedTemplate("garansi")}
+                  className={`px-2.5 py-1 rounded-lg font-semibold transition-all ${
+                    selectedTemplate === "garansi"
+                      ? "bg-emerald-600 text-white shadow-subtle"
+                      : "bg-surface border border-border text-foreground-secondary hover:text-foreground"
+                  }`}
+                >
+                  3. Garansi & Web
+                </button>
+              </div>
             </div>
-            <a
-              href={`https://wa.me/${customer.phone}?text=${getWaMessage()}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-semibold transition-all shadow-subtle text-xs"
-            >
-              <Send className="w-3.5 h-3.5" />
-              <span>Kirim Chat WhatsApp</span>
-              <ExternalLink className="w-3 h-3 ml-0.5" />
-            </a>
+
+            {/* Editable Message Preview */}
+            <div>
+              <textarea
+                rows={7}
+                value={customMessage}
+                onChange={(e) => setCustomMessage(e.target.value)}
+                className="w-full p-3 rounded-lg bg-surface border border-border text-xs text-foreground font-sans leading-relaxed focus:outline-none focus:ring-1 focus:ring-emerald-500"
+              />
+            </div>
+
+            {/* Action buttons */}
+            <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
+              <div className="flex items-center gap-1.5 text-[10px] text-foreground-muted">
+                <Globe className="w-3 h-3 text-brand" />
+                <span>Termasuk link web optikiseeyou.com & link review Google Maps cabang</span>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={handleCopy}
+                  className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-surface border border-border text-xs font-semibold text-foreground-secondary hover:text-foreground hover:bg-surface-secondary transition-all"
+                >
+                  {copied ? (
+                    <>
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                      <span className="text-emerald-600">Tersalin!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-3.5 h-3.5 text-foreground-muted" />
+                      <span>Salin Pesan</span>
+                    </>
+                  )}
+                </button>
+
+                <a
+                  href={`https://wa.me/${customer.phone}?text=${encodeURIComponent(customMessage)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1.5 px-4 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-semibold transition-all shadow-subtle text-xs"
+                >
+                  <Send className="w-3.5 h-3.5" />
+                  <span>Buka Chat WhatsApp</span>
+                  <ExternalLink className="w-3 h-3 ml-0.5" />
+                </a>
+              </div>
+            </div>
           </div>
 
           {/* Resep Kacamata (Optical Prescription Details) */}
@@ -233,7 +434,7 @@ export const CustomerDetailModal: React.FC<CustomerDetailModalProps> = ({
 
             <div>
               <label className="block text-xs font-semibold text-foreground mb-1">
-                Tambah Log Interaksi Baru (misal hasil telepon/chat hari ini):
+                Tambah Log Interaksi Baru:
               </label>
               <input
                 type="text"

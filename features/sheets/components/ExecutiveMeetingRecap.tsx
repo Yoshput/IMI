@@ -69,7 +69,7 @@ export const ExecutiveMeetingRecap: React.FC<ExecutiveMeetingRecapProps> = ({
   const [selectedPeriodKey, setSelectedPeriodKey] = useState<"lastTuesday" | "nextTuesday">(
     (executiveRecap.activePeriodKey as "lastTuesday" | "nextTuesday") || "nextTuesday"
   );
-  const [activeAudienceTab, setActiveAudienceTab] = useState<"all" | "hrd" | "head" | "finance" | "owner">("all");
+  const [activeAudienceTab, setActiveAudienceTab] = useState<"all" | "hrd" | "head" | "owner">("all");
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [quickCopied, setQuickCopied] = useState(false);
 
@@ -306,7 +306,6 @@ Link Akses Web: https://imi-puce.vercel.app/spreadsheet`;
           { key: "all", label: "Semua Agenda Rapat", icon: Briefcase },
           { key: "hrd", label: "Fokus HRD (Disiplin & Tim)", icon: Briefcase },
           { key: "head", label: "Fokus Head (Tren & Yang Rame)", icon: TrendingUp },
-          { key: "finance", label: "Fokus Finance (Biaya & Bonus)", icon: DollarSign },
           { key: "owner", label: "Fokus Owner (Strategis)", icon: Crown },
         ].map((tab) => {
           const Icon = tab.icon;
@@ -511,13 +510,6 @@ Link Akses Web: https://imi-puce.vercel.app/spreadsheet`;
                             <span>{r.sheetLikes ? `${r.sheetLikes.toLocaleString("id-ID")} likes (Sheet H+3)` : `${r.likes.toLocaleString("id-ID")} likes (Sheet)`}</span>
                           </div>
                         </div>
-                        {r.bonus && r.bonus !== '-' && (
-                          <div className="mt-1">
-                            <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-900 border border-emerald-300">
-                              Bonus: {r.bonus}
-                            </span>
-                          </div>
-                        )}
                         {r.igComments !== undefined && (
                           <span className="text-[9px] text-foreground-muted block">
                             {r.igComments} komentar
@@ -579,123 +571,33 @@ Link Akses Web: https://imi-puce.vercel.app/spreadsheet`;
         </div>
       )}
 
-      {/* SECTION 3: FINANCE */}
-      {(activeAudienceTab === "all" || activeAudienceTab === "finance") && (
-        <div className="bg-surface border border-border rounded-container p-5 shadow-subtle space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-border">
-            <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-control bg-surface-secondary flex items-center justify-center font-bold text-foreground">
-                3
+      {/* Followers per branch from spreadsheet */}
+      {executiveRecap.spreadsheetFollowersByBranch && (
+        <div className="bg-surface border border-border rounded-container p-4 shadow-subtle space-y-2">
+          <span className="text-xs font-bold text-foreground block">
+            Followers Instagram Per Cabang (Data Riil Spreadsheet):
+          </span>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
+            {Object.values(executiveRecap.spreadsheetFollowersByBranch).map((b, i) => (
+              <div key={i} className="p-2.5 rounded-control border border-border bg-surface-secondary text-center">
+                <div className="text-xs font-bold text-foreground tabular-nums">{b.followersFormatted}</div>
+                <div className="text-[10px] text-foreground-muted truncate mt-0.5">{b.city}</div>
+                {b.lastRecordedDate && (
+                  <div className="text-[9px] text-foreground-muted/70 mt-0.5">{b.lastRecordedDate}</div>
+                )}
               </div>
-              <div>
-                <h3 className="text-sm font-bold text-foreground">
-                  Fokus Finance: Rekapitulasi Bonus Gaji Tim Konten (Spreadsheet Per 3 Hari)
-                </h3>
-                <p className="text-xs text-foreground-secondary">
-                  Data riil dari spreadsheet Google Sheets. Bonus dihitung per video yang memenuhi threshold viewer.
-                </p>
-              </div>
-            </div>
-            <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-surface-secondary text-foreground-secondary">
-              Bonus Gaji Konten
-            </span>
+            ))}
           </div>
-
-          {/* Summary KPIs */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <div className="p-3.5 rounded-control border border-border bg-surface-secondary">
-              <span className="text-[10px] uppercase font-bold text-foreground-muted block">
-                Total Bonus Dibayarkan (Semua Periode)
-              </span>
-              <div className="text-base font-bold text-foreground mt-1 tabular-nums">
-                {executiveRecap.bonusSummary?.totalBonusPaidFormatted || "–"}
-              </div>
-              <p className="text-[11px] text-foreground-secondary mt-1">
-                Untuk {executiveRecap.bonusSummary?.totalEligibleVideos || 0} video yang lolos threshold dari semua cabang.
-              </p>
-            </div>
-
-            <div className="p-3.5 rounded-control border border-border bg-surface-secondary">
-              <span className="text-[10px] uppercase font-bold text-foreground-muted block">
-                Jumlah Creator Berkualifikasi
-              </span>
-              <div className="text-base font-bold text-foreground mt-1">
-                {executiveRecap.bonusSummary?.byPic?.length || 0} Creator
-              </div>
-              <p className="text-[11px] text-foreground-secondary mt-1">
-                {executiveRecap.bonusSummary?.byPic?.map(p => `${p.pic}`).join(", ") || "–"}
-              </p>
-            </div>
-
-            <div className="p-3.5 rounded-control border border-border bg-surface-secondary">
-              <span className="text-[10px] uppercase font-bold text-foreground-muted block">
-                Total Video Lolos Bonus
-              </span>
-              <div className="text-base font-bold text-foreground mt-1">
-                {executiveRecap.bonusSummary?.totalEligibleVideos || 0} Video
-              </div>
-              <p className="text-[11px] text-foreground-secondary mt-1">
-                Dihitung dari data spreadsheet aktual per 3 hari.
-              </p>
-            </div>
-          </div>
-
-          {/* Per-PIC Breakdown */}
-          {(executiveRecap.bonusSummary?.byPic || []).length > 0 && (
-            <div className="space-y-2">
-              <span className="text-xs font-bold text-foreground block">Rincian Bonus Per Creator (Total Kumulatif):</span>
-              <div className="space-y-1.5">
-                {(executiveRecap.bonusSummary?.byPic || []).map((p, i) => (
-                  <div
-                    key={i}
-                    className="flex items-center justify-between p-2.5 rounded-control border border-border bg-surface-secondary text-xs"
-                  >
-                    <div className="flex items-center gap-2">
-                      <span className="w-5 h-5 rounded-full bg-surface border border-border flex items-center justify-center text-[10px] font-bold shrink-0">
-                        {i + 1}
-                      </span>
-                      <div>
-                        <span className="font-semibold text-foreground">{p.pic}</span>
-                        <span className="text-foreground-muted ml-1.5 text-[11px]">({p.branch})</span>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <div className="font-bold text-foreground tabular-nums">{p.totalAmountFormatted}</div>
-                      <div className="text-[10px] text-foreground-muted">{p.count} video lolos</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Followers per branch from spreadsheet */}
-          {executiveRecap.spreadsheetFollowersByBranch && (
-            <div className="space-y-2">
-              <span className="text-xs font-bold text-foreground block">Followers Instagram Per Cabang (Data Spreadsheet):</span>
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
-                {Object.values(executiveRecap.spreadsheetFollowersByBranch).map((b, i) => (
-                  <div key={i} className="p-2.5 rounded-control border border-border bg-surface-secondary text-center">
-                    <div className="text-xs font-bold text-foreground tabular-nums">{b.followersFormatted}</div>
-                    <div className="text-[10px] text-foreground-muted truncate mt-0.5">{b.city}</div>
-                    {b.lastRecordedDate && (
-                      <div className="text-[9px] text-foreground-muted/70 mt-0.5">{b.lastRecordedDate}</div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
       )}
 
-      {/* SECTION 4: OWNER & BOARD ACTION PLAN */}
+      {/* SECTION 3: OWNER & BOARD ACTION PLAN */}
       {(activeAudienceTab === "all" || activeAudienceTab === "owner") && (
         <div className="bg-surface border border-border rounded-container p-5 shadow-subtle space-y-4">
           <div className="flex items-center justify-between pb-3 border-b border-border">
             <div className="flex items-center gap-2">
               <div className="w-7 h-7 rounded-control bg-surface-secondary flex items-center justify-center font-bold text-foreground">
-                4
+                3
               </div>
               <div>
                 <h3 className="text-sm font-bold text-foreground">

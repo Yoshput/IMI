@@ -55,11 +55,11 @@ export const AppNav: React.FC = () => {
                   Marketing Intelligence
                 </span>
                 <span className="text-[9px] uppercase font-semibold px-1.5 py-0.2 rounded bg-brand-light text-brand">
-                  5 Cabang
+                  4+1 Cabang
                 </span>
               </div>
               <span className="text-[10px] text-foreground-muted block">
-                Purwokerto · Purbalingga · Cilacap · Wonosobo · Tegal
+                Optik I See You (PWT · PBG · CLP · WNS) + Lunar Tegal
               </span>
             </div>
           </Link>

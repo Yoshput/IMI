@@ -189,7 +189,7 @@ ${Object.entries(reelsByBranch).map(([key, list]) => {
     return `• ${b.name} (PIC: ${b.pic}): Belum ada video baru tercatat`;
   }
   return `• ${b.name} (PIC: ${b.pic}) [${list.length} video]:\n` +
-    list.map((r, i) => `  ${i + 1}. "${r.reelsTitle}" — ${Number(r.viewers || 0).toLocaleString("id-ID")} viewers | ${Number(r.likes || 0).toLocaleString("id-ID")} likes ${r.bonus && r.bonus !== '-' ? `(Bonus: ${r.bonus})` : ''}`).join("\n");
+    list.map((r, i) => `  ${i + 1}. "${r.reelsTitle}" — ${Number(r.viewers || 0).toLocaleString("id-ID")} viewers | ${Number(r.likes || 0).toLocaleString("id-ID")} likes`).join("\n");
 }).join("\n\n")}
 
 =============================
@@ -584,11 +584,6 @@ Akses Dashboard Lengkap: https://iseeyou-intelligence.vercel.app/spreadsheet`;
                                         {r.contentPillar}
                                       </span>
                                     </>
-                                  )}
-                                  {r.bonus && r.bonus !== "-" && (
-                                    <span className="px-1.5 py-0.2 rounded bg-emerald-100 text-emerald-900 border border-emerald-300 font-bold text-[10px]">
-                                      Bonus: {r.bonus}
-                                    </span>
                                   )}
                                 </div>
 

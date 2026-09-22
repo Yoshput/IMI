@@ -41,7 +41,7 @@ export const AnalyticsView: React.FC = () => {
           </div>
           <h1 className="heading-page text-foreground">Analytics & Content Diagnostic</h1>
           <p className="text-sm text-foreground-secondary mt-1">
-            Visualisasi terfokus untuk Google Search Console optikiseeyou.com, performa video TikTok 5 cabang, dan efisiensi format Instagram.
+            Visualisasi terfokus untuk Google Search Console optikiseeyou.com (4 cabang utama), performa TikTok jaringan cabang &amp; Lunar Eyewear Tegal, serta efisiensi format Instagram.
           </p>
         </div>
 
