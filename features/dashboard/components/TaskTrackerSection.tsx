@@ -6,7 +6,6 @@ import {
   Clock,
   User,
   Calendar,
-  Sparkles,
   AlertCircle,
   CheckCircle2,
   ListTodo,
@@ -213,7 +212,7 @@ export const TaskTrackerSection: React.FC = () => {
                 {/* Notes */}
                 {task.notes && (
                   <p className="text-[10px] text-foreground-muted leading-relaxed bg-surface p-2 rounded-lg border border-border/60">
-                    💡 <strong>Brief:</strong> {task.notes}
+                    <strong className="text-foreground">Brief:</strong> {task.notes}
                   </p>
                 )}
               </div>

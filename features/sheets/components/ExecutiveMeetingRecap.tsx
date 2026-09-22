@@ -10,7 +10,6 @@ import {
   AlertCircle,
   CheckCircle2,
   HelpCircle,
-  Flame,
   MessageCircle,
   ExternalLink,
   ChevronRight,
@@ -451,7 +450,7 @@ Link Akses Web: https://imi-puce.vercel.app/spreadsheet`;
             {/* Top Viral Reels strictly in this 7-day period */}
             <div className="space-y-2">
               <span className="text-xs font-bold text-foreground flex items-center gap-1.5">
-                <Flame className="w-3.5 h-3.5 text-amber-800" />
+                <TrendingUp className="w-3.5 h-3.5 text-brand" />
                 Reels dengan Viewers Tertinggi di Periode Ini (Tautan Aktif):
               </span>
               <div className="space-y-2">

@@ -9,7 +9,7 @@ import {
   Calendar,
   Building2,
   Users,
-  Flame,
+  TrendingUp,
   MessageCircle,
   AlertTriangle,
   ExternalLink,
@@ -91,7 +91,7 @@ Total Jaringan: ${networkFollowers.instagram.toLocaleString("id-ID")} IG · ${ne
 
 =============================
 *2. STATUS KEPATUHAN 6 PIC CABANG*
-${picTracker.map((p) => `• ${p.pic} (${p.role}): ${p.isUpToDate ? "✅ Lengkap" : `⚠️ Tertunda (Tgl: ${p.latestDate})`}`).join("\n")}
+${picTracker.map((p) => `• ${p.pic} (${p.role}): ${p.isUpToDate ? "[Lengkap]" : `[Tertunda - Tgl: ${p.latestDate}]`}`).join("\n")}
 
 =============================
 *3. KONTEN TERAMAI PEKAN INI (2 PEMBANDING: VIEWERS & LIKES SPREADSHEET H+3 VS REALTIME IG)*
@@ -345,7 +345,7 @@ _Laporan otomatis digenerate via I See You Marketing Intelligence._`;
           <div className="space-y-2">
             <div className="flex items-center justify-between border-b border-border pb-1">
               <h3 className="text-xs font-bold uppercase tracking-wider text-foreground flex items-center gap-1.5">
-                <Flame className="w-3.5 h-3.5 text-amber-800" />
+                <TrendingUp className="w-3.5 h-3.5 text-brand" />
                 2. Konten Teramai Pekan Ini (2 Pembanding: Realtime IG vs Spreadsheet H+3)
               </h3>
               <span className="text-[11px] text-foreground-muted">

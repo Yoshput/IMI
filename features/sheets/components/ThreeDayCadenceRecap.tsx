@@ -198,7 +198,7 @@ ${allReelsInCycle.slice(0, 3).map((r, i) => `${i + 1}. [${r.branch || r.branchKe
 
 =============================
 *4. STATUS KEPATUHAN PIC SPREADSHEET*
-${picTracker.map((p) => `• ${p.pic} (${p.role}): ${p.isUpToDate ? "✅ Up-to-date" : `⚠️ Tertunda (${p.latestDate})`}`).join("\n")}
+${picTracker.map((p) => `• ${p.pic} (${p.role}): ${p.isUpToDate ? "[Lengkap]" : `[Tertunda - ${p.latestDate}]`}`).join("\n")}
 
 Akses Dashboard Lengkap: https://iseeyou-intelligence.vercel.app/spreadsheet`;
 

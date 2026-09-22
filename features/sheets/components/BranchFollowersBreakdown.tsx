@@ -139,7 +139,7 @@ export const BranchFollowersBreakdown: React.FC<BranchFollowersBreakdownProps> =
       if (json.success && json.data) {
         setCache(json.data);
         if (onRefreshSuccess) onRefreshSuccess(json.data);
-        setStatusMessage("✅ Data Instagram 5 cabang berhasil diperbarui secara realtime!");
+        setStatusMessage("Data Instagram cabang berhasil diperbarui secara realtime.");
         setTimeout(() => setStatusMessage(null), 4000);
       } else {
         setStatusMessage("Gagal memperbarui: " + (json.error || "Coba lagi nanti"));

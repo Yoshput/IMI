@@ -1,19 +1,12 @@
 "use client";
 
 import React, { useState } from "react";
-import { AlertTriangle, CheckCircle2, RefreshCw, Clock, Users, ArrowRight } from "lucide-react";
+import { AlertTriangle, CheckCircle2, RefreshCw, Clock, Users, ArrowRight, ExternalLink } from "lucide-react";
 import Link from "next/link";
 import realSheetsData from "@/lib/real-sheets-data.json";
+import { PicDetailModal, PicTrackerItem } from "./PicDetailModal";
 
-interface PicStatus {
-  pic: string;
-  branch: string;
-  sheetKey: string;
-  latestDate: string;
-  totalEntries: number;
-  isUpToDate: boolean;
-  statusText: string;
-}
+interface PicStatus extends PicTrackerItem {}
 
 interface PicSubmissionBannerProps {
   picTracker?: PicStatus[];
@@ -28,6 +21,8 @@ export const PicSubmissionBanner: React.FC<PicSubmissionBannerProps> = ({
 }) => {
   const [currentTracker, setCurrentTracker] = useState<PicStatus[]>(picTracker);
   const [currentSyncTime, setCurrentSyncTime] = useState<string>(lastSync);
+  const [sheetsData, setSheetsData] = useState<any>(realSheetsData);
+  const [selectedPic, setSelectedPic] = useState<PicStatus | null>(null);
   const [isSyncing, setIsSyncing] = useState(false);
   const [syncMessage, setSyncMessage] = useState<string | null>(null);
 
@@ -37,6 +32,7 @@ export const PicSubmissionBanner: React.FC<PicSubmissionBannerProps> = ({
       .then((res) => res.json())
       .then((res) => {
         if (isMounted && res.success && res.data) {
+          setSheetsData(res.data);
           if (res.data.picTracker) setCurrentTracker(res.data.picTracker);
           if (res.data.syncTimestamp) setCurrentSyncTime(res.data.syncTimestamp);
         }
@@ -147,37 +143,62 @@ export const PicSubmissionBanner: React.FC<PicSubmissionBannerProps> = ({
         </div>
       )}
 
+      {/* PIC Status Pills Bar Header info */}
+      <div className="flex items-center justify-between pt-1">
+        <span className="text-[11px] font-semibold text-foreground-secondary flex items-center gap-1.5">
+          <span className="w-1.5 h-1.5 rounded-full bg-brand" />
+          <span>Klik kartu PIC untuk audit data lengkap, riwayat konten, keluhan, dan chat WhatsApp:</span>
+        </span>
+        <span className="text-[10px] text-foreground-muted hidden sm:inline">
+          Live Drill-down
+        </span>
+      </div>
+
       {/* PIC Status Pills Bar */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 pt-1">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
         {currentTracker.map((p) => (
-          <div
+          <button
             key={p.sheetKey}
-            className={`p-2.5 rounded-control border text-xs flex flex-col justify-between transition-all ${
+            type="button"
+            onClick={() => setSelectedPic(p)}
+            className={`group p-2.5 rounded-control border text-xs flex flex-col justify-between text-left transition-all cursor-pointer hover:shadow-subtle hover:-translate-y-0.5 active:translate-y-0 ${
               p.isUpToDate
-                ? "bg-surface-secondary border-border/80 text-foreground"
-                : "bg-amber-50/70 border-amber-300 text-amber-950"
+                ? "bg-surface-secondary border-border/80 hover:border-foreground/40 text-foreground"
+                : "bg-amber-50/70 border-amber-300 hover:border-amber-500 text-amber-950"
             }`}
           >
-            <div className="flex items-start justify-between gap-1">
-              <span className="font-bold text-[11px] truncate">{p.pic}</span>
+            <div className="flex items-start justify-between gap-1 w-full">
+              <span className="font-bold text-[11px] truncate group-hover:text-brand transition-colors">
+                {p.pic}
+              </span>
               <span
                 className={`w-2 h-2 rounded-full mt-1 shrink-0 ${
                   p.isUpToDate ? "bg-emerald-500" : "bg-amber-500 animate-ping"
                 }`}
               />
             </div>
-            <span className="text-[10px] text-foreground-muted block mt-0.5 truncate">
+            <span className="text-[10px] text-foreground-muted block mt-0.5 truncate w-full">
               {p.branch.replace(" (Second Brand)", "")}
             </span>
-            <div className="pt-2 mt-1 border-t border-border/50 flex items-center justify-between text-[10px]">
+            <div className="pt-2 mt-1 border-t border-border/50 flex items-center justify-between text-[10px] w-full">
               <span className="opacity-70 font-medium">Tgl: {p.latestDate.slice(5)}</span>
               <span className={`font-bold ${p.isUpToDate ? "text-emerald-700" : "text-amber-800"}`}>
                 {p.isUpToDate ? "Lengkap" : "Pending"}
               </span>
             </div>
-          </div>
+          </button>
         ))}
       </div>
+
+      {/* Drill-down Modal for Selected PIC */}
+      {selectedPic && (
+        <PicDetailModal
+          pic={selectedPic}
+          nuhaStory={sheetsData?.nuhaStory || []}
+          branchReels={sheetsData?.branchReels?.[selectedPic.sheetKey] || []}
+          onClose={() => setSelectedPic(null)}
+        />
+      )}
     </div>
   );
 };

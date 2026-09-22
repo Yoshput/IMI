@@ -10,9 +10,7 @@ import {
   Video,
   ArrowUpRight,
   ExternalLink,
-  Flame,
   AlertCircle,
-  Sparkles,
   MapPin,
   CheckCircle2,
   RefreshCw,
@@ -283,13 +281,13 @@ export const BranchResumeCard: React.FC<BranchResumeCardProps> = ({
 
                 {/* Trending Content Highlight */}
                 {topTrending && (
-                  <div className="p-3 rounded-lg bg-emerald-500/5 border border-emerald-500/20 text-xs space-y-1">
-                    <div className="flex items-center justify-between text-emerald-700 dark:text-emerald-400 font-bold text-[11px]">
-                      <span className="flex items-center gap-1">
-                        <Flame className="w-3.5 h-3.5 text-orange-500" />
-                        Konten TikTok Paling Rame (Trending)
+                  <div className="p-3 rounded-lg bg-surface border border-border text-xs space-y-1">
+                    <div className="flex items-center justify-between text-foreground font-bold text-[11px]">
+                      <span className="flex items-center gap-1.5 text-emerald-700 dark:text-emerald-400">
+                        <TrendingUp className="w-3.5 h-3.5 text-emerald-600" />
+                        Konten TikTok Terpopuler
                       </span>
-                      <span className="tabular-nums font-mono">
+                      <span className="tabular-nums font-mono text-foreground-muted">
                         {topTrending.views.toLocaleString("id-ID")} Views · {topTrending.engagementRate}% ER
                       </span>
                     </div>
@@ -297,18 +295,18 @@ export const BranchResumeCard: React.FC<BranchResumeCardProps> = ({
                       &quot;{topTrending.title}&quot;
                     </p>
                     <p className="text-[10px] text-foreground-muted leading-relaxed">
-                      💡 {topTrending.keyTakeaway}
+                      <strong className="text-foreground">Analisis:</strong> {topTrending.keyTakeaway}
                     </p>
                   </div>
                 )}
 
                 {/* Underperforming Content Highlight */}
                 {underperforming && (
-                  <div className="p-3 rounded-lg bg-amber-500/5 border border-amber-500/20 text-xs space-y-1">
-                    <div className="flex items-center justify-between text-amber-700 dark:text-amber-400 font-bold text-[11px]">
-                      <span className="flex items-center gap-1">
-                        <AlertCircle className="w-3.5 h-3.5 text-amber-500" />
-                        Konten Kurang Performa (Perlu Evaluasi)
+                  <div className="p-3 rounded-lg bg-surface border border-border text-xs space-y-1">
+                    <div className="flex items-center justify-between text-foreground font-bold text-[11px]">
+                      <span className="flex items-center gap-1.5 text-amber-700 dark:text-amber-400">
+                        <AlertCircle className="w-3.5 h-3.5 text-amber-600" />
+                        Perlu Evaluasi Format
                       </span>
                       <span className="tabular-nums font-mono text-foreground-muted">
                         {underperforming.views.toLocaleString("id-ID")} Views · {underperforming.engagementRate}% ER
@@ -318,7 +316,7 @@ export const BranchResumeCard: React.FC<BranchResumeCardProps> = ({
                       &quot;{underperforming.title}&quot;
                     </p>
                     <p className="text-[10px] text-foreground-muted leading-relaxed">
-                      ⚠️ {underperforming.keyTakeaway}
+                      <strong className="text-foreground">Evaluasi:</strong> {underperforming.keyTakeaway}
                     </p>
                   </div>
                 )}

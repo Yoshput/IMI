@@ -3,7 +3,6 @@
 import React, { useState } from "react";
 import {
   Video,
-  Flame,
   AlertCircle,
   Plus,
   ArrowUpRight,
@@ -12,7 +11,6 @@ import {
   MessageCircle,
   Share2,
   Bookmark,
-  Sparkles,
   CheckCircle2,
   ExternalLink,
 } from "lucide-react";
@@ -228,11 +226,11 @@ export const TikTokBranchAnalytics: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
         {/* Kolom 1: Konten Lagi Rame (Trending) */}
         <div className="space-y-3">
-          <div className="flex items-center gap-2 text-xs font-bold text-emerald-700 dark:text-emerald-400">
+          <div className="flex items-center gap-2 text-xs font-bold text-foreground">
             <div className="p-1 rounded-md bg-emerald-500/10 text-emerald-600">
-              <Flame className="w-4 h-4 text-orange-500" />
+              <TrendingUp className="w-4 h-4" />
             </div>
-            <span>Konten yang Lagi Rame (Trending / High Performer)</span>
+            <span>Konten Performa Tinggi (High Performer)</span>
           </div>
 
           <div className="space-y-2.5">
@@ -434,8 +432,8 @@ export const TikTokBranchAnalytics: React.FC = () => {
                     onChange={(e: any) => setNewStatus(e.target.value)}
                     className="w-full px-3 py-2 bg-surface-secondary border border-border rounded-lg text-foreground focus:outline-none focus:ring-1 focus:ring-brand"
                   >
-                    <option value="trending">🔥 Lagi Rame (Trending)</option>
-                    <option value="underperforming">⚠️ Kurang Performa</option>
+                    <option value="trending">Performa Tinggi (High Performer)</option>
+                    <option value="underperforming">Perlu Evaluasi Format</option>
                   </select>
                 </div>
               </div>

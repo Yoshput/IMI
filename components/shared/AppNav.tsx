@@ -147,8 +147,8 @@ export const AppNav: React.FC = () => {
           </div>
         </div>
 
-        {/* Mobile Navigation Bar */}
-        <div className="flex md:hidden border-t border-border/60 py-2 items-center justify-around gap-1 overflow-x-auto">
+        {/* Mobile Navigation Bar (iOS Tab Bar Style) */}
+        <div className="flex md:hidden border-t border-border/60 py-2 items-center gap-1 overflow-x-auto px-2 scroll-smooth">
           {navItems.map((item) => {
             const isActive = pathname.startsWith(item.href);
             const Icon = item.icon;
@@ -156,10 +156,10 @@ export const AppNav: React.FC = () => {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex flex-col items-center justify-center flex-1 py-1 rounded-control text-[10px] font-medium transition-colors shrink-0 px-1 ${
+                className={`flex flex-col items-center justify-center min-w-[58px] min-h-[44px] py-1 px-2 rounded-control text-[10px] font-medium transition-all shrink-0 active:scale-95 ${
                   isActive
                     ? "text-brand font-bold bg-brand-light"
-                    : "text-foreground-secondary hover:text-foreground"
+                    : "text-foreground-secondary hover:text-foreground hover:bg-surface-secondary"
                 }`}
               >
                 <div className="relative">
@@ -168,7 +168,7 @@ export const AppNav: React.FC = () => {
                     <span className="absolute -top-1 -right-1.5 w-1.5 h-1.5 rounded-full bg-amber-500" />
                   )}
                 </div>
-                <span>{item.name.split(" ")[0]}</span>
+                <span className="truncate">{item.name.split(" ")[0]}</span>
               </Link>
             );
           })}

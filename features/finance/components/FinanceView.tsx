@@ -7,7 +7,6 @@ import {
   Award,
   Users,
   Calendar,
-  Sparkles,
   Download,
   Filter,
   Search,
@@ -195,7 +194,7 @@ export const FinanceView: React.FC = () => {
       {/* PIC Summary Grid */}
       <div className="space-y-3">
         <h2 className="text-sm font-bold text-foreground flex items-center gap-2">
-          <Sparkles className="w-4 h-4 text-brand" />
+          <Users className="w-4 h-4 text-brand" />
           Rincian Bonus Akumulatif Per PIC / Creator
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">

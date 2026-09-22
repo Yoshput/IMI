@@ -252,7 +252,7 @@ export const SpreadsheetHubView: React.FC<SpreadsheetHubViewProps> = ({
 
               <div className="p-3.5 rounded-control bg-surface-secondary border border-border space-y-2">
                 <p className="font-bold text-foreground">
-                  ⚡ Opsi Lanjutan: Push Instan dari Google Sheets (Opsional)
+                  Opsi Lanjutan: Push Instan dari Google Sheets (Opsional)
                 </p>
                 <p>
                   Jika Anda ingin setiap kali PIC (Ilya, Ajun, dsb) mengisi baris baru di spreadsheet langsung detik itu juga terkirim ke dashboard, Anda cukup menambahkan skrip berikut ke Google Spreadsheet:

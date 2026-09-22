@@ -12,7 +12,6 @@ import {
   Clock,
   Send,
   ShieldAlert,
-  Sparkles,
   History,
   FileText,
   Eye,
@@ -67,7 +66,7 @@ export const CustomerDetailModal: React.FC<CustomerDetailModalProps> = ({
     let msg = "";
     if (selectedTemplate === "kenyamanan") {
       msg = isLunarTegal
-        ? `Selamat siang Kak ${customer.name}, salam hangat dari Tim Layanan Pelanggan Lunar Eyewear Tegal. 🙏✨
+        ? `Selamat siang Kak ${customer.name}, salam hangat dari Tim Layanan Pelanggan Lunar Eyewear Tegal.
 
 Semoga Kak ${customer.name} senantiasa dalam keadaan sehat dan lancar aktivitasnya.
 
@@ -79,12 +78,12 @@ Kami ingin menanyakan pengalaman dan kenyamanan Kakak selama menggunakan kacamat
 1. Apakah posisi frame terasa pas di wajah, hidung, dan telinga (tidak terasa menekan atau melorot)?
 2. Apakah adaptasi lensa sudah jernih dan nyaman untuk penglihatan harian?
 
-Apabila dirasa kurang pas atau membutuhkan penyetelan ulang (re-fitting frame), silakan mampir langsung ke store Lunar Eyewear Tegal (Jl. Werkudoro, Ruko Langon Square No. 2, Tegal Timur). Layanan stel kacamata dan pembersihan lensa tersedia GRATIS untuk Kakak.
+Apabila dirasa kurang pas atau membutuhkan penyetelan ulang (re-fitting frame), silakan mampir langsung ke store Lunar Eyewear Tegal (Jl. Werkudoro, Ruko Langon Square No. 2, Tegal Timur). Layanan stel kacamata dan pembersihan lensa tersedia gratis untuk Kakak.
 
 Boleh luangkan waktu 1 menit untuk membalas pesan ini ya Kak? Masukan dari Kakak sangat berharga untuk peningkatan pelayanan kami.
 
-Terima kasih banyak atas kepercayaan Kak ${customer.name} kepada Lunar Eyewear Tegal. 🙏`
-        : `Selamat siang Kak ${customer.name}, salam hangat dari Tim Layanan Pelanggan Optik I See You Cabang ${customer.city}. 🙏✨
+Terima kasih banyak atas kepercayaan Kak ${customer.name} kepada Lunar Eyewear Tegal.`
+        : `Selamat siang Kak ${customer.name}, salam hangat dari Tim Layanan Pelanggan Optik I See You Cabang ${customer.city}.
 
 Semoga Kak ${customer.name} senantiasa dalam keadaan sehat dan lancar aktivitasnya.
 
@@ -96,67 +95,67 @@ Kami ingin menanyakan pengalaman dan kenyamanan Kakak selama menggunakan kacamat
 1. Apakah posisi frame terasa pas di wajah, hidung, dan telinga (tidak terasa menekan atau melorot)?
 2. Apakah adaptasi lensa sudah jernih dan nyaman untuk melihat jarak jauh maupun membaca?
 
-Apabila dirasa kurang pas atau membutuhkan penyetelan ulang (re-fitting frame), silakan mampir langsung ke store Optik I See You ${customer.city}. Layanan stel kacamata dan pembersihan lensa tersedia GRATIS selamanya untuk Kakak.
+Apabila dirasa kurang pas atau membutuhkan penyetelan ulang (re-fitting frame), silakan mampir langsung ke store Optik I See You ${customer.city}. Layanan stel kacamata dan pembersihan lensa tersedia gratis selamanya untuk Kakak.
 
 Boleh luangkan waktu 1 menit untuk membalas pesan ini ya Kak? Masukan dari Kakak sangat berharga agar kami dapat terus memberikan pelayanan terbaik.
 
 Informasi pemeriksaan mata berkala 4 cabang resmi dapat dicek melalui website:
-🌐 https://optikiseeyou.com
+https://optikiseeyou.com
 
-Terima kasih banyak atas kepercayaan Kak ${customer.name} kepada Optik I See You. 🙏`;
+Terima kasih banyak atas kepercayaan Kak ${customer.name} kepada Optik I See You.`;
     } else if (selectedTemplate === "google_maps") {
       msg = isLunarTegal
-        ? `Halo Kak ${customer.name}, terima kasih banyak telah mempercayakan pembuatan kacamata ${customer.frameModel} di Lunar Eyewear Tegal. 🙏✨
+        ? `Halo Kak ${customer.name}, terima kasih banyak telah mempercayakan pembuatan kacamata ${customer.frameModel} di Lunar Eyewear Tegal.
 
 Bagaimana kacamata dan lensa ${customer.lensType}-nya sejauh ini Kak? Semoga selalu nyaman menemani aktivitas harian.
 
-Jika Kakak merasa puas dengan hasil kacamata dan keramahan staf kami, kami akan sangat berterima kasih apabila Kakak berkenan meluangkan 1 menit untuk memberikan ulasan bintang 5 ⭐⭐⭐⭐⭐ di Google Maps resmi Lunar Eyewear Tegal:
-📍 ${currentMapLink}
+Jika Kakak merasa puas dengan hasil kacamata dan keramahan staf kami, kami akan sangat berterima kasih apabila Kakak berkenan meluangkan 1 menit untuk memberikan ulasan bintang 5 di Google Maps resmi Lunar Eyewear Tegal:
+${currentMapLink}
 
 Setiap ulasan dari Kak ${customer.name} sangat berarti bagi tim kami untuk terus bersemangat menghadirkan eyewear terbaik di Kota Tegal.
 
-Terima kasih banyak atas dukungan dan kepercayaannya ya Kak! Sehat selalu. ✨`
-        : `Halo Kak ${customer.name}, terima kasih banyak telah mempercayakan pembuatan kacamata ${customer.frameModel} di Optik I See You Cabang ${customer.city}. 🙏✨
+Terima kasih banyak atas dukungan dan kepercayaannya ya Kak. Sehat selalu.`
+        : `Halo Kak ${customer.name}, terima kasih banyak telah mempercayakan pembuatan kacamata ${customer.frameModel} di Optik I See You Cabang ${customer.city}.
 
 Bagaimana kacamata dan lensa ${customer.lensType}-nya sejauh ini Kak? Semoga selalu nyaman menemani aktivitas harian.
 
-Jika Kakak merasa puas dengan hasil kacamata dan keramahan staf kami, kami akan sangat berterima kasih apabila Kakak berkenan meluangkan 1 menit untuk memberikan ulasan bintang 5 ⭐⭐⭐⭐⭐ serta sedikit kesan di Google Maps resmi kami:
-📍 ${currentMapLink}
+Jika Kakak merasa puas dengan hasil kacamata dan keramahan staf kami, kami akan sangat berterima kasih apabila Kakak berkenan meluangkan 1 menit untuk memberikan ulasan bintang 5 serta sedikit kesan di Google Maps resmi kami:
+${currentMapLink}
 
 Setiap ulasan dari Kak ${customer.name} sangat berarti bagi tim kami untuk terus bersemangat memberikan pelayanan prima bagi masyarakat ${customer.city}.
 
 Kakak juga dapat mendaftarkan rekan atau keluarga untuk booking antrian cek mata gratis tanpa antri di:
-🌐 https://optikiseeyou.com/booking-antrian
+https://optikiseeyou.com/booking-antrian
 
-Terima kasih banyak atas dukungan dan kepercayaannya ya Kak! Sehat selalu. ✨`;
+Terima kasih banyak atas dukungan dan kepercayaannya ya Kak. Sehat selalu.`;
     } else {
       msg = isLunarTegal
-        ? `Selamat siang Kak ${customer.name}, kami dari Tim Aftersales & Jaminan Mutu Lunar Eyewear Tegal. 🙏
+        ? `Selamat siang Kak ${customer.name}, kami dari Tim Aftersales dan Jaminan Mutu Lunar Eyewear Tegal.
 
 Mengingatkan kembali bahwa kacamata ${customer.frameModel} dengan lensa ${customer.lensType} yang Kakak ambil pada ${customer.pickupDate} dilindungi oleh fasilitas Garansi Lunar Eyewear:
-✅ Garansi penyetelan frame & nosepad gratis
-✅ Garansi pembersihan berkala di store
-✅ Konsultasi kenyamanan penglihatan
+- Garansi penyetelan frame & nosepad gratis
+- Garansi pembersihan berkala di store
+- Konsultasi kenyamanan penglihatan
 
 Apakah saat ini ada kendala pada dudukan frame atau kenyamanan pandangan mata Kakak?
 
 Store Lunar Eyewear Tegal:
-📍 Jl. Werkudoro, Ruko Langon Square No. 2, Tegal Timur
+Jl. Werkudoro, Ruko Langon Square No. 2, Tegal Timur
 
-Silakan balas pesan ini apabila ada yang bisa kami bantu ya Kak. Terima kasih banyak. 🙏`
-        : `Selamat siang Kak ${customer.name}, kami dari Tim Aftersales & Jaminan Mutu Optik I See You Cabang ${customer.city}. 🙏
+Silakan balas pesan ini apabila ada yang bisa kami bantu ya Kak. Terima kasih banyak.`
+        : `Selamat siang Kak ${customer.name}, kami dari Tim Aftersales dan Jaminan Mutu Optik I See You Cabang ${customer.city}.
 
 Mengingatkan kembali bahwa kacamata ${customer.frameModel} dengan lensa ${customer.lensType} yang Kakak ambil pada ${customer.pickupDate} dilindungi oleh fasilitas Garansi Resmi Optik I See You:
-✅ Garansi penyetelan frame & nosepad gratis selamanya
-✅ Garansi pembersihan ultrasonik berkala di seluruh cabang
-✅ Konsultasi perkembangan refraksi penglihatan
+- Garansi penyetelan frame & nosepad gratis selamanya
+- Garansi pembersihan ultrasonik berkala di seluruh cabang
+- Konsultasi perkembangan refraksi penglihatan
 
 Apakah saat ini ada kendala pada dudukan frame atau kenyamanan pandangan mata Kakak?
 
 Jika memerlukan pengecekan ulang atau servis kacamata, silakan hubungi kami atau cek cabang terdekat di:
-🌐 https://optikiseeyou.com
+https://optikiseeyou.com
 
-Silakan balas pesan ini apabila ada yang bisa kami bantu ya Kak. Terima kasih banyak. 🙏`;
+Silakan balas pesan ini apabila ada yang bisa kami bantu ya Kak. Terima kasih banyak.`;
     }
 
     setCustomMessage(msg);
@@ -393,7 +392,7 @@ Silakan balas pesan ini apabila ada yang bisa kami bantu ya Kak. Terima kasih ba
                 Spesifikasi Lensa
               </span>
               <p className="font-bold text-foreground text-sm flex items-center gap-1.5">
-                <Sparkles className="w-4 h-4 text-purple-500 shrink-0" />
+                <Eye className="w-4 h-4 text-brand shrink-0" />
                 {customer.lensType}
               </p>
               <span className="text-[11px] text-foreground-muted block">
@@ -413,10 +412,10 @@ Silakan balas pesan ini apabila ada yang bisa kami bantu ya Kak. Terima kasih ba
                 onChange={(e: any) => setStatus(e.target.value)}
                 className="px-3 py-1.5 rounded-lg bg-surface-secondary border border-border text-xs font-semibold text-foreground focus:outline-none focus:ring-1 focus:ring-brand"
               >
-                <option value="belum_dihubungi">⏳ Belum Dihubungi</option>
-                <option value="sudah_dihubungi">💬 Sudah Dihubungi (Respon)</option>
-                <option value="selesai_puas">✅ Selesai (Puas / Bintang 5)</option>
-                <option value="butuh_garansi">⚠️ Perlu Garansi / Re-fitting</option>
+                <option value="belum_dihubungi">Belum Dihubungi</option>
+                <option value="sudah_dihubungi">Sudah Dihubungi (Merespon)</option>
+                <option value="selesai_puas">Selesai (Puas / Bintang 5)</option>
+                <option value="butuh_garansi">Perlu Garansi / Re-fitting</option>
               </select>
             </div>
 
