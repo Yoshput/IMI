@@ -49,6 +49,7 @@ export interface ContentItem {
   isDemo: boolean;
   thumbnail?: string;
   branchName?: string;
+  branchKey?: string;
   postUrl?: string;
   pic?: string;
 }

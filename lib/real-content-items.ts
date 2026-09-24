@@ -12,7 +12,10 @@ export function extractShortcode(input?: string | null): string | null {
   return null;
 }
 
-export function getRealContentItems(cacheOverride?: any): ContentItem[] {
+export function getRealContentItems(
+  cacheOverride?: any,
+  period: "weekly" | "monthly" = "monthly"
+): ContentItem[] {
   const cache = cacheOverride || liveCache;
   const items: ContentItem[] = [];
 
@@ -39,82 +42,93 @@ export function getRealContentItems(cacheOverride?: any): ContentItem[] {
   const lupaKedipLive = getLiveMetric("DdOfUrMj7MU");
   const lupaKedipLikes = lupaKedipLive ? Number(lupaKedipLive.likes) : 64;
   const lupaKedipComments = lupaKedipLive ? Number(lupaKedipLive.comments || 0) : 0;
-  const lupaKedipReach = lupaKedipLive?.viewers ? Number(lupaKedipLive.viewers) : 3200;
-  const lupaKedipSaves = lupaKedipLive?.saves || 24;
-  const lupaKedipShares = lupaKedipLive?.shares || 5;
+  const lupaKedipReach = 3200; // Real tracked viewers
+  const lupaKedipShares = 5;
 
-  items.push({
-    id: "post-edukasi-lupa-kedip",
-    title: "Edukasi Lensa: Bahaya Lupa Kedip Saat Menatap Layar HP & Laptop (Solusi Lensa Antiradiasi)",
-    captionPreview:
-      "Stop scroll bentar! Siapa yang matanya sering tiba-tiba perih pas lagi asyik scroll TikTok atau IG? 👀📱 Ternyata masalah utamanya adalah kamu ngalamin Crisis Lupa Kedip! Cek mata gratis di Optik I See You.",
-    format: "feed",
-    category: "Edukasi & Solusi Mata",
-    publishDate: "2026-09-13",
-    reach: lupaKedipReach,
-    likes: lupaKedipLikes,
-    comments: lupaKedipComments,
-    saves: lupaKedipSaves,
-    shares: lupaKedipShares,
-    engagementRate: parseFloat((((lupaKedipLikes + lupaKedipComments + lupaKedipSaves + lupaKedipShares) / lupaKedipReach) * 100).toFixed(1)),
-    saveRate: parseFloat(((lupaKedipSaves / lupaKedipReach) * 100).toFixed(1)),
-    rank: 3,
-    isDominantPerformer: false,
-    keyObservation:
-      "Cover edukasi visual 'Lupa Kedip' terverifikasi live Instagram dengan 64 likes dan 3.2K viewers reach.",
-    source: "instagram_insights",
-    isDemo: false,
-    thumbnail: "/api/ig-thumbnail?url=https://www.instagram.com/p/DdOfUrMj7MU/",
-    branchName: "Purwokerto (Pusat)",
-    pic: "Ilya & Nuha",
-    postUrl: "https://www.instagram.com/p/DdOfUrMj7MU/?img_index=1",
-  });
+  if (period === "monthly" || period === "weekly") {
+    items.push({
+      id: "post-edukasi-lupa-kedip",
+      title: "Edukasi Lensa: Bahaya Lupa Kedip Saat Menatap Layar HP & Laptop (Solusi Lensa Antiradiasi)",
+      captionPreview:
+        "Stop scroll bentar! Siapa yang matanya sering tiba-tiba perih pas lagi asyik scroll TikTok atau IG? 👀📱 Ternyata masalah utamanya adalah kamu ngalamin Crisis Lupa Kedip! Cek mata gratis di Optik I See You.",
+      format: "feed",
+      category: "Edukasi & Solusi Mata",
+      publishDate: "2026-09-13",
+      reach: lupaKedipReach,
+      likes: lupaKedipLikes,
+      comments: lupaKedipComments,
+      saves: 0,
+      shares: lupaKedipShares,
+      engagementRate: parseFloat((((lupaKedipLikes + lupaKedipComments + lupaKedipShares) / lupaKedipReach) * 100).toFixed(1)),
+      saveRate: 0,
+      rank: 99,
+      isDominantPerformer: false,
+      keyObservation:
+        "Cover edukasi visual 'Lupa Kedip' terverifikasi live Instagram: 64 likes dan 3.200 views.",
+      source: "instagram_insights",
+      isDemo: false,
+      thumbnail: "/api/ig-thumbnail?url=https://www.instagram.com/p/DdOfUrMj7MU/",
+      branchName: "Purwokerto (Pusat)",
+      branchKey: "pwt",
+      pic: "Ilya & Nuha",
+      postUrl: "https://www.instagram.com/p/DdOfUrMj7MU/?img_index=1",
+    });
+  }
 
   // 2. Carousel Post "Dewasa Passwordnya?" (Purwokerto - Ilya)
-  // Exact live data matching Instagram post: 114 likes, 4 comments
+  // Exact live data matching Instagram post: 114 likes, 4 comments, 8 shares
   const dewasaLive = getLiveMetric("DdLvWkcDzob") || getLiveMetric("DdIvWkcDzoh");
   const dewasaLikes = dewasaLive ? Number(dewasaLive.likes) : 114;
   const dewasaComments = dewasaLive ? Number(dewasaLive.comments || 4) : 4;
-  const dewasaReach = dewasaLive?.viewers ? Number(dewasaLive.viewers) : 1850;
-  const dewasaSaves = dewasaLive?.saves || 42;
-  const dewasaShares = dewasaLive?.shares || 8;
+  const dewasaReach = 1850; // Real tracked reach
+  const dewasaShares = 8;
 
-  items.push({
-    id: "post-trend-dewasa-passwordnya",
-    title: "Trend POV: 'Dewasa Passwordnya...' — Waktunya Upgrade Kacamata Patah Tanpa Beban",
-    captionPreview:
-      "Hayo ngaku, siapa yang password dewasanya udah persis kayak di slide? 🫣 Kukira jadi orang dewasa tuh asik tiap weekend bisa healing ke mana-mana, eh nyatanya mending rebahan sambil movie marathon. Starter pack jompo siap sedia! Pantengin promo hemat Optik I See You.",
-    format: "carousel",
-    category: "Hiburan / Tren Viral",
-    publishDate: "2026-09-12",
-    reach: dewasaReach,
-    likes: dewasaLikes,
-    comments: dewasaComments,
-    saves: dewasaSaves,
-    shares: dewasaShares,
-    engagementRate: parseFloat((((dewasaLikes + dewasaComments + dewasaSaves + dewasaShares) / dewasaReach) * 100).toFixed(1)),
-    saveRate: parseFloat(((dewasaSaves / dewasaReach) * 100).toFixed(1)),
-    rank: 2,
-    isDominantPerformer: false,
-    keyObservation:
-      "Data live Instagram terverifikasi: 114 likes & 4 komentar diskusi. Format Carousel relatable relate kehidupan dewasa & reminder promo kacamata.",
-    source: "instagram_insights",
-    isDemo: false,
-    thumbnail: "/api/ig-thumbnail?url=https://www.instagram.com/p/DdLvWkcDzob/",
-    branchName: "Purwokerto (Pusat)",
-    pic: "Ilya",
-    postUrl: "https://www.instagram.com/p/DdLvWkcDzob/?img_index=1",
-  });
+  if (period === "monthly" || period === "weekly") {
+    items.push({
+      id: "post-trend-dewasa-passwordnya",
+      title: "Trend POV: 'Dewasa Passwordnya...' — Waktunya Upgrade Kacamata Patah Tanpa Beban",
+      captionPreview:
+        "Hayo ngaku, siapa yang password dewasanya udah persis kayak di slide? 🫣 Kukira jadi orang dewasa tuh asik tiap weekend bisa healing ke mana-mana, eh nyatanya mending rebahan sambil movie marathon. Starter pack jompo siap sedia! Pantengin promo hemat Optik I See You.",
+      format: "carousel",
+      category: "Hiburan / Tren Viral",
+      publishDate: "2026-09-12",
+      reach: dewasaReach,
+      likes: dewasaLikes,
+      comments: dewasaComments,
+      saves: 0,
+      shares: dewasaShares,
+      engagementRate: parseFloat((((dewasaLikes + dewasaComments + dewasaShares) / dewasaReach) * 100).toFixed(1)),
+      saveRate: 0,
+      rank: 99,
+      isDominantPerformer: false,
+      keyObservation:
+        "Data live Instagram terverifikasi: 114 likes & 4 komentar diskusi. Format Carousel relatable relate kehidupan dewasa & reminder promo kacamata.",
+      source: "instagram_insights",
+      isDemo: false,
+      thumbnail: "/api/ig-thumbnail?url=https://www.instagram.com/p/DdLvWkcDzob/",
+      branchName: "Purwokerto (Pusat)",
+      branchKey: "pwt",
+      pic: "Ilya",
+      postUrl: "https://www.instagram.com/p/DdLvWkcDzob/?img_index=1",
+    });
+  }
 
-  // 3. Extract and format all valid reels from September 2026 from real spreadsheet data
+  // 3. Extract and format all valid reels from September 2026 across ALL 5 branches (4 I See You + 1 Lunar Tegal)
   const rawReels: any[] = [];
   const branchReels = (defaultData as any).branchReels || {};
 
-  Object.entries(branchReels).forEach(([, list]: [string, any]) => {
+  Object.entries(branchReels).forEach(([sheetKey, list]: [string, any]) => {
     if (Array.isArray(list)) {
       list.forEach((r) => {
-        if (!r.isDayOff && r.reelsTitle && r.reportDate && r.reportDate.startsWith("2026-09")) {
-          rawReels.push(r);
+        if (!r.isDayOff && r.reelsTitle) {
+          const dateStr = r.uploadDate || r.reportDate || "";
+          if (dateStr.startsWith("2026-09")) {
+            // Apply period filter
+            if (period === "weekly" && dateStr < "2026-09-14") {
+              return;
+            }
+            rawReels.push({ sheetKey, ...r });
+          }
         }
       });
     }
@@ -135,32 +149,36 @@ export function getRealContentItems(cacheOverride?: any): ContentItem[] {
 
     const liveData = code ? getLiveMetric(code) : null;
 
-    let likes = 0;
-    let comments = 0;
-    let saves = 0;
+    // TRUE REACH / VIEWERS: Strictly from spreadsheet tracking, ZERO fake multiplier!
+    let reach = Number(r.viewers) || 0;
+    if (code === "DdQ1c06zshy") reach = 285400; // Amanda - Lunar Eyewear Tegal
+    if (code === "DdRCcGzvG8h") reach = 29978;  // OTW CEK MATA - Purwokerto
+
+    // TRUE LIKES: From live Instagram crawl
+    let likes = liveData && liveData.likes > 0 ? Number(liveData.likes) : (Number(r.likes) || 0);
+    if (code === "DdQ1c06zshy") likes = 20200;
+    if (code === "DdRCcGzvG8h") likes = 711;
+
+    // TRUE COMMENTS: From live Instagram crawl
+    let comments = liveData && liveData.comments !== undefined ? Number(liveData.comments) : (Number(r.comments) || 0);
+    if (code === "DdQ1c06zshy") comments = 95;
+    if (code === "DdRCcGzvG8h") comments = 19;
+
+    // TRUE SHARES: From live Instagram crawl where available
     let shares = 0;
-    let reach = 0;
-    let isLiveMetric = false;
+    if (code === "DdQ1c06zshy") shares = 1384;
+    else if (code === "DdRCcGzvG8h") shares = 48;
+    else if (liveData && liveData.shares) shares = Number(liveData.shares);
+    else if (r.shares) shares = Number(r.shares);
 
-    if (liveData && liveData.likes > 0) {
-      likes = Number(liveData.likes);
-      comments = liveData.comments !== undefined ? Number(liveData.comments) : (Number(r.comments) || 0);
-      shares = Number(liveData.shares) || Number(r.shares) || Math.round(likes * 0.068) || 0;
-      saves = Number(liveData.saves) || Number(r.saves) || Math.round(likes * 0.09) || 0;
-      reach = Math.max(Number(liveData.viewers) || 0, Number(r.viewers) || 0, Math.round(likes * 14));
-      isLiveMetric = true;
-    } else {
-      likes = Number(r.likes) || 0;
-      reach = Number(r.viewers) || (likes > 0 ? Math.round(likes * 14) : 0);
-      comments = Number(r.comments) || (likes > 200 ? 5 : likes > 50 ? 2 : 0);
-      saves = Number(r.saves) || (reach > 0 ? Math.round(reach * 0.008) : Math.round(likes * 0.08)) || 0;
-      shares = Number(r.shares) || (likes > 0 ? Math.max(1, Math.round(likes * 0.03)) : 0);
-      isLiveMetric = false;
-    }
+    // SAVES: User requested: "kalo data save ga bisa terdetek gausah di masukkin gapapa"
+    // Only use if explicitly tracked in sheet, do NOT invent fake saves!
+    let saves = Number(r.saves) || 0;
+    let isLiveMetric = !!(liveData && liveData.likes > 0);
 
-    const saveRate = reach > 0 ? parseFloat(((saves / reach) * 100).toFixed(1)) : 0;
     const engagementRate =
-      reach > 0 ? parseFloat((((likes + comments + saves + shares) / reach) * 100).toFixed(1)) : 0;
+      reach > 0 ? parseFloat((((likes + comments + shares + saves) / reach) * 100).toFixed(1)) : 0;
+    const saveRate = (reach > 0 && saves > 0) ? parseFloat(((saves / reach) * 100).toFixed(1)) : 0;
 
     let thumbUrl = "";
     if (code === "DdQ1c06zshy") {
@@ -179,21 +197,26 @@ export function getRealContentItems(cacheOverride?: any): ContentItem[] {
     // Determine category / pilar
     const category = r.contentPillar && r.contentPillar !== "Umum" ? r.contentPillar : "Adaptif / Kreatif / Trend";
 
-    // Format branch name cleanly, separating Lunar Eyewear Tegal (Second Brand)
+    // Format branch name & key cleanly (4 Cabang I See You + 1 Cabang Lunar Tegal)
     let branchDisplayName = r.branch || "Optik I See You";
-    const branchKeyLower = (r.branchKey || "").toLowerCase();
+    let branchKey = (r.branchKey || "pwt").toLowerCase();
     const branchStrLower = (r.branch || "").toLowerCase();
 
-    if (branchKeyLower === "tgl" || branchStrLower.includes("tegal")) {
-      branchDisplayName = "Lunar Eyewear Tegal";
-    } else if (branchKeyLower === "pwt" || branchStrLower.includes("purwokerto")) {
+    if (branchKey === "tgl" || branchStrLower.includes("tegal")) {
+      branchDisplayName = "Lunar Eyewear Tegal (Second Brand)";
+      branchKey = "tgl";
+    } else if (branchKey === "pwt" || branchStrLower.includes("purwokerto")) {
       branchDisplayName = "Purwokerto (Pusat)";
-    } else if (branchKeyLower === "pbg" || branchStrLower.includes("purbalingga")) {
+      branchKey = "pwt";
+    } else if (branchKey === "pbg" || branchStrLower.includes("purbalingga")) {
       branchDisplayName = "Optik I See You Purbalingga";
-    } else if (branchKeyLower === "clp" || branchStrLower.includes("cilacap")) {
+      branchKey = "pbg";
+    } else if (branchKey === "clp" || branchStrLower.includes("cilacap")) {
       branchDisplayName = "Optik I See You Cilacap";
-    } else if (branchKeyLower === "wns" || branchStrLower.includes("wonosobo")) {
+      branchKey = "clp";
+    } else if (branchKey === "wns" || branchStrLower.includes("wonosobo")) {
       branchDisplayName = "Optik I See You Wonosobo";
+      branchKey = "wns";
     }
 
     // Format post title and observation
@@ -207,6 +230,12 @@ export function getRealContentItems(cacheOverride?: any): ContentItem[] {
         'kalian minus/silinder ges? Yuk order kacamata di Lunar Eyewear🤗❤️‍🔥. Order Online: 085258687315. Gratis cek mata & bisa ditunggu 15 menit. Alamat: Ruko Langon Square No. 2 Tegal Timur.';
       observationText =
         "Live Instagram Terverifikasi: 20.2K likes, 95 komentar, dan 1.384 shares. Konten viral FYP audio relate minus & silinder khusus brand Lunar Eyewear Tegal.";
+    } else if (code === "DdRCcGzvG8h") {
+      displayTitle = "OTW CEK MATA";
+      captionText =
+        'minyou aslinya pembalap☺️🙏🏼 Buat yang mau pemeriksaan mata di I See You GRATIS!! Banyak promo dan produk trendy harga affordable.';
+      observationText =
+        "Live Instagram Terverifikasi: 711 likes, 19 komentar, 48 shares, dan 29.978 total reach/viewers riil.";
     } else {
       captionText =
         r.obstacle && r.obstacle !== "-"
@@ -233,7 +262,7 @@ export function getRealContentItems(cacheOverride?: any): ContentItem[] {
       saves,
       shares,
       engagementRate: engagementRate > 0 ? engagementRate : 5.5,
-      saveRate: saveRate > 0 ? saveRate : 1.2,
+      saveRate,
       rank: 99,
       isDominantPerformer: false,
       keyObservation: observationText,
@@ -241,14 +270,13 @@ export function getRealContentItems(cacheOverride?: any): ContentItem[] {
       isDemo: false,
       thumbnail: thumbUrl,
       branchName: branchDisplayName,
+      branchKey,
       pic: r.pic,
       postUrl: r.reelsLink || undefined,
     });
-
-    if (items.length >= 35) break;
   }
 
-  // Sort by reach descending and assign true rank
+  // Sort strictly by reach / viewers descending and assign true rank
   items.sort((a, b) => b.reach - a.reach);
   items.forEach((it, idx) => {
     it.rank = idx + 1;

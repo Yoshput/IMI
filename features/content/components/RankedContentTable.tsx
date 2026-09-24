@@ -132,24 +132,28 @@ export const RankedContentTable: React.FC<RankedContentTableProps> = ({ items })
                 </td>
 
                 {/* Saves */}
-                <td className="py-4 px-3 text-right font-bold text-brand whitespace-nowrap">
+                <td className="py-4 px-3 text-right font-medium text-foreground whitespace-nowrap">
                   <div className="flex items-center justify-end gap-1">
-                    <Bookmark className="w-3 h-3" />
-                    <span>{formatNumber(item.saves)}</span>
+                    <Bookmark className="w-3 h-3 text-foreground-muted" />
+                    <span>{item.saves > 0 ? formatNumber(item.saves) : "—"}</span>
                   </div>
                 </td>
 
                 {/* Save Rate */}
                 <td className="py-4 px-3 text-right whitespace-nowrap">
-                  <span
-                    className={`font-semibold px-1.5 py-0.5 rounded text-[11px] ${
-                      item.saveRate >= 4.0
-                        ? "bg-status-successBg text-status-success"
-                        : "bg-surface-secondary text-foreground-muted"
-                    }`}
-                  >
-                    {item.saveRate}%
-                  </span>
+                  {item.saves > 0 ? (
+                    <span
+                      className={`font-semibold px-1.5 py-0.5 rounded text-[11px] ${
+                        item.saveRate >= 4.0
+                          ? "bg-status-successBg text-status-success"
+                          : "bg-surface-secondary text-foreground-muted"
+                      }`}
+                    >
+                      {item.saveRate}%
+                    </span>
+                  ) : (
+                    <span className="text-foreground-muted text-[11px]">—</span>
+                  )}
                 </td>
 
                 {/* Interactions breakdown */}

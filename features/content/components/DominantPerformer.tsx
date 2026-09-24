@@ -142,16 +142,16 @@ export const DominantPerformer: React.FC<DominantPerformerProps> = ({ item }) =>
               </span>
             </div>
 
-            <div className="p-3 rounded-control bg-brand-accentLight border border-amber-200">
-              <div className="flex items-center gap-1.5 text-xs text-amber-900 font-medium mb-1">
-                <Bookmark className="w-3.5 h-3.5 text-amber-800" />
+            <div className="p-3 rounded-control bg-surface-secondary border border-border">
+              <div className="flex items-center gap-1.5 text-xs text-foreground-secondary mb-1">
+                <Bookmark className="w-3.5 h-3.5 text-amber-700" />
                 <span>Saves</span>
               </div>
-              <span className="text-xl font-bold text-amber-950 block">
-                {formatNumber(item.saves)}
+              <span className="text-xl font-bold text-foreground block">
+                {item.saves > 0 ? formatNumber(item.saves) : "—"}
               </span>
-              <span className="text-[10px] text-amber-800 font-semibold">
-                Save Rate {item.saveRate}%
+              <span className="text-[10px] text-foreground-muted font-medium">
+                {item.saves > 0 ? `Save Rate ${item.saveRate}%` : "Data Privat IG"}
               </span>
             </div>
           </div>
