@@ -88,8 +88,8 @@ export const DominantPerformer: React.FC<DominantPerformerProps> = ({ item }) =>
             </p>
           </div>
 
-          {/* Metric Breakdown Grid (Dominant Performer has 4 Key Stats) */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 py-4 border-y border-border">
+          {/* Metric Breakdown Grid (Dominant Performer has 5 Key Live Stats) */}
+          <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 py-4 border-y border-border">
             <div className="p-3 rounded-control bg-surface-secondary">
               <div className="flex items-center gap-1.5 text-xs text-foreground-secondary mb-1">
                 <Eye className="w-3.5 h-3.5" />
@@ -103,42 +103,55 @@ export const DominantPerformer: React.FC<DominantPerformerProps> = ({ item }) =>
               </span>
             </div>
 
-            <div className="p-3 rounded-control bg-brand-accentLight border border-amber-200">
-              <div className="flex items-center gap-1.5 text-xs text-amber-900 font-medium mb-1">
-                <Bookmark className="w-3.5 h-3.5 text-amber-800" />
-                <span>Saves (Disimpan)</span>
-              </div>
-              <span className="text-xl font-bold text-amber-950 block">
-                {formatNumber(item.saves)}
-              </span>
-              <span className="text-[10px] text-amber-800 font-semibold">
-                2.4× di atas rata-rata
-              </span>
-            </div>
-
             <div className="p-3 rounded-control bg-surface-secondary">
               <div className="flex items-center gap-1.5 text-xs text-foreground-secondary mb-1">
-                <Heart className="w-3.5 h-3.5" />
+                <Heart className="w-3.5 h-3.5 text-rose-500" />
                 <span>Likes</span>
               </div>
               <span className="text-xl font-bold text-foreground block">
                 {formatNumber(item.likes)}
               </span>
               <span className="text-[10px] text-foreground-muted">
-                Interaksi organik
+                Live Instagram
               </span>
             </div>
 
             <div className="p-3 rounded-control bg-surface-secondary">
               <div className="flex items-center gap-1.5 text-xs text-foreground-secondary mb-1">
-                <MessageCircle className="w-3.5 h-3.5" />
-                <span>Komentar & DM</span>
+                <MessageCircle className="w-3.5 h-3.5 text-blue-500" />
+                <span>Komentar</span>
               </div>
               <span className="text-xl font-bold text-foreground block">
                 {item.comments}
               </span>
               <span className="text-[10px] text-brand font-semibold">
-                Tanya harga & lokasi
+                Diskusi audiens
+              </span>
+            </div>
+
+            <div className="p-3 rounded-control bg-surface-secondary">
+              <div className="flex items-center gap-1.5 text-xs text-foreground-secondary mb-1">
+                <Share2 className="w-3.5 h-3.5 text-emerald-600" />
+                <span>Shares</span>
+              </div>
+              <span className="text-xl font-bold text-foreground block">
+                {formatNumber(item.shares)}
+              </span>
+              <span className="text-[10px] text-status-success font-semibold">
+                Dibagikan audiens
+              </span>
+            </div>
+
+            <div className="p-3 rounded-control bg-brand-accentLight border border-amber-200">
+              <div className="flex items-center gap-1.5 text-xs text-amber-900 font-medium mb-1">
+                <Bookmark className="w-3.5 h-3.5 text-amber-800" />
+                <span>Saves</span>
+              </div>
+              <span className="text-xl font-bold text-amber-950 block">
+                {formatNumber(item.saves)}
+              </span>
+              <span className="text-[10px] text-amber-800 font-semibold">
+                Save Rate {item.saveRate}%
               </span>
             </div>
           </div>

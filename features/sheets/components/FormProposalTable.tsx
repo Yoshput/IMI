@@ -1067,7 +1067,7 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
             <FileText className="w-10 h-10 text-foreground-muted mx-auto mb-2 opacity-40" />
             <h3 className="text-sm font-bold text-foreground">Tidak Ada Proposal yang Sesuai</h3>
             <p className="text-xs text-foreground-secondary mt-1 max-w-xs mx-auto">
-              Silakan reset pencarian atau pilih tab "Semua Proposal".
+              Silakan reset pencarian atau pilih tab &quot;Semua Proposal&quot;.
             </p>
           </div>
         ) : (
@@ -1748,7 +1748,7 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
             <FileText className="w-12 h-12 text-foreground-muted mx-auto mb-3 opacity-40" />
             <h3 className="text-sm font-bold text-foreground">Tidak Ada Proposal yang Sesuai</h3>
             <p className="text-xs text-foreground-secondary mt-1.5 max-w-md mx-auto leading-relaxed">
-              Silakan sesuaikan kriteria pencarian atau pilih tab "Semua Proposal".
+              Silakan sesuaikan kriteria pencarian atau pilih tab &quot;Semua Proposal&quot;.
             </p>
             <button
               onClick={() => {

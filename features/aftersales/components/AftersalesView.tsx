@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   HeartHandshake,
   Users,
@@ -54,7 +54,7 @@ export const AftersalesView: React.FC = () => {
   const [newOsSph, setNewOsSph] = useState("");
   const [newNotes, setNewNotes] = useState("");
 
-  const fetchCustomers = async () => {
+  const fetchCustomers = useCallback(async () => {
     try {
       const params = new URLSearchParams();
       if (selectedBranch !== "all") params.set("branch", selectedBranch);
@@ -74,11 +74,11 @@ export const AftersalesView: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedBranch, selectedStatus, searchQuery]);
 
   useEffect(() => {
     fetchCustomers();
-  }, [selectedBranch, selectedStatus, searchQuery]);
+  }, [fetchCustomers]);
 
   const handleUpdateCustomer = (updated: CustomerAftersalesRecord) => {
     setCustomers((prev) => prev.map((c) => (c.id === updated.id ? updated : c)));

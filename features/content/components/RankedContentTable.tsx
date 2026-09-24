@@ -154,9 +154,14 @@ export const RankedContentTable: React.FC<RankedContentTableProps> = ({ items })
 
                 {/* Interactions breakdown */}
                 <td className="py-4 px-3 text-right text-foreground-secondary whitespace-nowrap">
-                  <span title={`Likes: ${item.likes}, Comments: ${item.comments}, Shares: ${item.shares}`}>
-                    {formatNumber(item.likes + item.comments + item.shares)}
-                  </span>
+                  <div className="flex flex-col items-end justify-center" title={`Likes: ${formatNumber(item.likes)}, Komentar: ${item.comments}, Shares: ${formatNumber(item.shares)}`}>
+                    <span className="font-semibold text-foreground">
+                      {formatNumber(item.likes + item.comments + item.shares)}
+                    </span>
+                    <span className="text-[10px] text-foreground-muted font-mono">
+                      {formatNumber(item.likes)}L · {item.comments}K · {formatNumber(item.shares)}S
+                    </span>
+                  </div>
                 </td>
 
                 {/* Key observation / notes */}

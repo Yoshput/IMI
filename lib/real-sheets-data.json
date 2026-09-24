@@ -9180,14 +9180,16 @@
         "tiktokLink": "https://vt.tiktok.com/ZSqQR3moo/",
         "igFollowers": 3946,
         "tiktokFollowers": 3027,
-        "viewers": 281340,
-        "likes": 13400,
+        "viewers": 285400,
+        "likes": 20200,
         "bonus": "-",
         "obstacle": "-",
         "isDayOff": false,
         "isEvaluated": true,
-        "isLiveMetric": false,
-        "evaluationCadence": "H+3 Selesai"
+        "isLiveMetric": true,
+        "evaluationCadence": "H+3 Selesai",
+        "comments": 95,
+        "shares": 1384
       },
       {
         "id": "rekap tgl-109",
@@ -21528,8 +21530,8 @@
         "tiktokFollowers": 3027,
         "ttDelta": -4,
         "reelsTitle": "mata minus",
-        "viewers": 281340,
-        "likes": 13400
+        "viewers": 285400,
+        "likes": 20200
       },
       {
         "date": "2026-09-15",
@@ -31406,10 +31408,10 @@
             "title": "mata minus",
             "secondTitle": "mata minus",
             "pillar": "Hiburan / Tren Viral",
-            "viewers": 281340,
-            "sheetViewers": 281340,
-            "likes": 13400,
-            "sheetLikes": 13400,
+            "viewers": 285400,
+            "sheetViewers": 285400,
+            "likes": 20200,
+            "sheetLikes": 20200,
             "liveIgLikes": null,
             "igComments": 0,
             "igCaption": "",
@@ -31418,7 +31420,9 @@
             "tiktokLink": "https://vt.tiktok.com/ZSqQR3moo/",
             "isEvaluated": true,
             "isLiveMetric": false,
-            "evaluationStatus": "Evaluasi H+3 Selesai"
+            "evaluationStatus": "Evaluasi H+3 Selesai",
+            "comments": 95,
+            "shares": 1384
           },
           {
             "branch": "Lunar Eyewear Tegal (Second Brand)",
@@ -31599,10 +31603,10 @@
             "title": "mata minus",
             "secondTitle": "mata minus",
             "pillar": "Hiburan / Tren Viral",
-            "viewers": 281340,
-            "sheetViewers": 281340,
-            "likes": 13400,
-            "sheetLikes": 13400,
+            "viewers": 285400,
+            "sheetViewers": 285400,
+            "likes": 20200,
+            "sheetLikes": 20200,
             "liveIgLikes": null,
             "igComments": 0,
             "igCaption": "",
@@ -31611,7 +31615,9 @@
             "tiktokLink": "https://vt.tiktok.com/ZSqQR3moo/",
             "isEvaluated": true,
             "isLiveMetric": false,
-            "evaluationStatus": "Evaluasi H+3 Selesai"
+            "evaluationStatus": "Evaluasi H+3 Selesai",
+            "comments": 95,
+            "shares": 1384
           },
           {
             "branch": "Lunar Eyewear Tegal (Second Brand)",
@@ -32653,10 +32659,10 @@
             "title": "mata minus",
             "secondTitle": "mata minus",
             "pillar": "Hiburan / Tren Viral",
-            "viewers": 281340,
-            "sheetViewers": 281340,
-            "likes": 13400,
-            "sheetLikes": 13400,
+            "viewers": 285400,
+            "sheetViewers": 285400,
+            "likes": 20200,
+            "sheetLikes": 20200,
             "liveIgLikes": null,
             "igComments": 0,
             "igCaption": "",
@@ -32665,7 +32671,9 @@
             "tiktokLink": "https://vt.tiktok.com/ZSqQR3moo/",
             "isEvaluated": true,
             "isLiveMetric": false,
-            "evaluationStatus": "Evaluasi H+3 Selesai"
+            "evaluationStatus": "Evaluasi H+3 Selesai",
+            "comments": 95,
+            "shares": 1384
           },
           {
             "branch": "Purwokerto (Pusat)",
@@ -32844,10 +32852,10 @@
             "title": "mata minus",
             "secondTitle": "mata minus",
             "pillar": "Hiburan / Tren Viral",
-            "viewers": 281340,
-            "sheetViewers": 281340,
-            "likes": 13400,
-            "sheetLikes": 13400,
+            "viewers": 285400,
+            "sheetViewers": 285400,
+            "likes": 20200,
+            "sheetLikes": 20200,
             "liveIgLikes": null,
             "igComments": 0,
             "igCaption": "",
@@ -32856,7 +32864,9 @@
             "tiktokLink": "https://vt.tiktok.com/ZSqQR3moo/",
             "isEvaluated": true,
             "isLiveMetric": false,
-            "evaluationStatus": "Evaluasi H+3 Selesai"
+            "evaluationStatus": "Evaluasi H+3 Selesai",
+            "comments": 95,
+            "shares": 1384
           },
           {
             "branch": "Purwokerto (Pusat)",

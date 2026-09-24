@@ -28,6 +28,12 @@ async function run() {
 
   const r2 = await check('https://www.instagram.com/reel/DdQ1c06zshy/');
   console.log('DdQ1c06zshy:', r2);
+
+  const r3 = await check('https://www.instagram.com/p/DdIvWkcDzoh/');
+  console.log('DdIvWkcDzoh:', r3);
+
+  const r4 = await check('https://www.instagram.com/p/DdLvWkcDzob/');
+  console.log('DdLvWkcDzob:', r4);
 }
 
 run();

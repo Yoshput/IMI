@@ -329,7 +329,7 @@ export const BranchFollowersBreakdown: React.FC<BranchFollowersBreakdownProps> =
         <div className="flex items-center gap-2">
           <Info className="w-3.5 h-3.5 text-foreground-secondary shrink-0" />
           <span>
-            <strong>Jadwal Otomatis:</strong> Background worker menarik metrik langsung dari Instagram setiap 1 jam sekali. Klik "Sync Realtime" untuk update manual.
+            <strong>Jadwal Otomatis:</strong> Background worker menarik metrik langsung dari Instagram setiap 1 jam sekali. Klik &quot;Sync Realtime&quot; untuk update manual.
           </span>
         </div>
         <span className="text-[11px] text-foreground-secondary shrink-0">

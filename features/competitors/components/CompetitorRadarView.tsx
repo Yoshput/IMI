@@ -465,7 +465,7 @@ export const CompetitorRadarView: React.FC = () => {
                         Signature Hook Konten Paling Sering Dipakai:
                       </span>
                       <p className="text-xs font-semibold text-foreground mt-1.5 italic">
-                        "{comp.signatureHook}"
+                        &quot;{comp.signatureHook}&quot;
                       </p>
                     </div>
 

@@ -31,6 +31,7 @@ export interface AppleMediaItem {
   likes?: number;
   comments?: number;
   saves?: number;
+  shares?: number;
   saveRate?: number;
   engagementRate?: number;
   postUrl?: string;
@@ -357,10 +358,10 @@ export const AppleMediaSheet: React.FC<AppleMediaSheetProps> = ({
             </div>
 
             {/* Metrics Breakdown Apple Style Chips */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 pt-1">
               <div className="p-3 rounded-[20px] bg-surface-secondary border border-border/80 text-center">
                 <span className="text-[10px] uppercase font-bold text-foreground-muted block">
-                  Reach / Viewers
+                  Reach / Views
                 </span>
                 <span className="text-base font-bold text-foreground mt-0.5 block tabular-nums">
                   {formatNumber(item.reach || 0)}
@@ -369,10 +370,28 @@ export const AppleMediaSheet: React.FC<AppleMediaSheetProps> = ({
 
               <div className="p-3 rounded-[20px] bg-surface-secondary border border-border/80 text-center">
                 <span className="text-[10px] uppercase font-bold text-foreground-muted block">
-                  Likes Instagram
+                  Likes IG
                 </span>
                 <span className="text-base font-bold text-foreground mt-0.5 block tabular-nums">
                   {formatNumber(item.likes || 0)}
+                </span>
+              </div>
+
+              <div className="p-3 rounded-[20px] bg-surface-secondary border border-border/80 text-center">
+                <span className="text-[10px] uppercase font-bold text-foreground-muted block">
+                  Komentar
+                </span>
+                <span className="text-base font-bold text-foreground mt-0.5 block tabular-nums">
+                  {item.comments !== undefined ? item.comments : 0}
+                </span>
+              </div>
+
+              <div className="p-3 rounded-[20px] bg-surface-secondary border border-border/80 text-center">
+                <span className="text-[10px] uppercase font-bold text-foreground-muted block">
+                  Shares
+                </span>
+                <span className="text-base font-bold text-foreground mt-0.5 block tabular-nums">
+                  {formatNumber(item.shares || 0)}
                 </span>
               </div>
 
@@ -382,15 +401,6 @@ export const AppleMediaSheet: React.FC<AppleMediaSheetProps> = ({
                 </span>
                 <span className="text-base font-bold text-brand mt-0.5 block tabular-nums">
                   {formatNumber(item.saves || 0)}
-                </span>
-              </div>
-
-              <div className="p-3 rounded-[20px] bg-surface-secondary border border-border/80 text-center">
-                <span className="text-[10px] uppercase font-bold text-foreground-muted block">
-                  Save Rate
-                </span>
-                <span className="text-base font-bold text-emerald-700 dark:text-emerald-400 mt-0.5 block tabular-nums">
-                  {item.saveRate || 3.2}%
                 </span>
               </div>
             </div>

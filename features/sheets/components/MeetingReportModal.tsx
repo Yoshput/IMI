@@ -447,7 +447,7 @@ _Laporan otomatis digenerate via I See You Marketing Intelligence._`;
                 {currentObstacles.slice(0, 3).map((obs: any, i: number) => (
                   <div key={i} className="p-2 rounded bg-surface-secondary border border-border">
                     <span className="font-bold text-foreground">{obs.pic} ({obs.role}) · {obs.date}:</span>
-                    <p className="text-foreground-secondary italic mt-0.5">"{obs.obstacle}"</p>
+                    <p className="text-foreground-secondary italic mt-0.5">&quot;{obs.obstacle}&quot;</p>
                   </div>
                 ))}
               </div>

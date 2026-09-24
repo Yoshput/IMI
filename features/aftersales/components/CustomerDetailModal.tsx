@@ -169,7 +169,7 @@ Silakan balas pesan ini apabila ada yang bisa kami bantu ya Kak. Terima kasih ba
     }
 
     setCustomMessage(msg);
-  }, [selectedTemplate, customer]);
+  }, [selectedTemplate, customer, currentMapLink]);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(customMessage);

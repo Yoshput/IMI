@@ -397,7 +397,7 @@ Link Akses Web: https://imi-puce.vercel.app/spreadsheet`;
                         <span>{obs.date}</span>
                       </div>
                       <p className="text-foreground-secondary text-[11px] italic">
-                        "{obs.obstacle}"
+                        &quot;{obs.obstacle}&quot;
                       </p>
                     </div>
                   ))
@@ -562,7 +562,7 @@ Link Akses Web: https://imi-puce.vercel.app/spreadsheet`;
                   1. Format <strong>POV & Try-on Frame</strong> wajib diduplikasi ke Purwokerto dan Cilacap karena terbukti melesat di Tegal (128k & 62k viewers).
                 </p>
                 <p className="text-foreground-secondary text-[11px]">
-                  2. Buat Sorotan profil khusus "Price List Lensa & Rekomendasi Wajah Lebar" untuk mempermudah konversi DM ke store visit.
+                  2. Buat Sorotan profil khusus &quot;Price List Lensa & Rekomendasi Wajah Lebar&quot; untuk mempermudah konversi DM ke store visit.
                 </p>
               </div>
             </div>

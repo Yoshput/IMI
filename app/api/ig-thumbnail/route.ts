@@ -49,8 +49,13 @@ export async function GET(request: NextRequest) {
     if (fs.existsSync(filePath)) {
       sourceBuffer = fs.readFileSync(filePath);
     }
-  } else if (shortcode === "DdLvWkcDzob") {
+  } else if (shortcode === "DdLvWkcDzob" || shortcode === "DdIvWkcDzoh") {
     const filePath = path.join(process.cwd(), "public", "covers", "trend-dewasa-passwordnya.png");
+    if (fs.existsSync(filePath)) {
+      sourceBuffer = fs.readFileSync(filePath);
+    }
+  } else if (shortcode === "DdQ1c06zshy") {
+    const filePath = path.join(process.cwd(), "public", "covers", "lunar-mata-minus.png");
     if (fs.existsSync(filePath)) {
       sourceBuffer = fs.readFileSync(filePath);
     }
