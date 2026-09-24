@@ -1,0 +1,41 @@
+{
+  "prop_workshopaffiliate2026_20260928_9105": {
+    "status": "approved",
+    "note": "",
+    "contactedAt": "2026-09-24T00:00:00.000Z",
+    "response": "confirmed",
+    "updatedAt": "2026-09-24T00:00:00.000Z"
+  },
+  "proposal-41": {
+    "status": "approved",
+    "note": "",
+    "contactedAt": "2026-09-24T00:00:00.000Z",
+    "response": "confirmed",
+    "updatedAt": "2026-09-24T00:00:00.000Z"
+  },
+  "proposal-4": {
+    "status": "approved",
+    "note": "",
+    "contactedAt": "2026-09-24T00:00:00.000Z",
+    "response": "confirmed",
+    "updatedAt": "2026-09-24T00:00:00.000Z"
+  },
+  "prop_pekanolahragasoedirman20_20260930_8382": {
+    "status": "pending",
+    "note": "",
+    "response": "none",
+    "updatedAt": "2026-09-24T00:00:00.000Z"
+  },
+  "proposal-36": {
+    "status": "pending",
+    "note": "",
+    "response": "none",
+    "updatedAt": "2026-09-24T00:00:00.000Z"
+  },
+  "proposal-5": {
+    "status": "pending",
+    "note": "",
+    "response": "none",
+    "updatedAt": "2026-09-24T00:00:00.000Z"
+  }
+}

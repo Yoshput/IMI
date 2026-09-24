@@ -21,7 +21,12 @@ import {
   Globe,
   MessageSquare,
 } from "lucide-react";
-import { CustomerAftersalesRecord, FollowUpStatus } from "@/lib/aftersales";
+import {
+  CustomerAftersalesRecord,
+  FollowUpStatus,
+  AFTERSALES_CS_PHONE,
+  AFTERSALES_CS_WA_URL,
+} from "@/lib/aftersales";
 
 interface CustomerDetailModalProps {
   customer: CustomerAftersalesRecord;
@@ -114,6 +119,8 @@ ${currentMapLink}
 
 Setiap ulasan dari Kak ${customer.name} sangat berarti bagi tim kami untuk terus bersemangat menghadirkan eyewear terbaik di Kota Tegal.
 
+Apabila ada kendala dudukan frame atau ingin konsultasi, silakan hubungi WhatsApp CS Layanan Pelanggan kami di ${AFTERSALES_CS_PHONE}.
+
 Terima kasih banyak atas dukungan dan kepercayaannya ya Kak. Sehat selalu.`
         : `Halo Kak ${customer.name}, terima kasih banyak telah mempercayakan pembuatan kacamata ${customer.frameModel} di Optik I See You Cabang ${customer.city}.
 
@@ -126,6 +133,8 @@ Setiap ulasan dari Kak ${customer.name} sangat berarti bagi tim kami untuk terus
 
 Kakak juga dapat mendaftarkan rekan atau keluarga untuk booking antrian cek mata gratis tanpa antri di:
 https://optikiseeyou.com/booking-antrian
+
+Untuk bantuan atau layanan garansi, WhatsApp CS Aftersales kami selalu aktif di ${AFTERSALES_CS_PHONE}.
 
 Terima kasih banyak atas dukungan dan kepercayaannya ya Kak. Sehat selalu.`;
     } else {
@@ -141,6 +150,7 @@ Apakah saat ini ada kendala pada dudukan frame atau kenyamanan pandangan mata Ka
 
 Store Lunar Eyewear Tegal:
 Jl. Werkudoro, Ruko Langon Square No. 2, Tegal Timur
+Kontak WhatsApp CS: ${AFTERSALES_CS_PHONE}
 
 Silakan balas pesan ini apabila ada yang bisa kami bantu ya Kak. Terima kasih banyak.`
         : `Selamat siang Kak ${customer.name}, kami dari Tim Aftersales dan Jaminan Mutu Optik I See You Cabang ${customer.city}.
@@ -152,8 +162,8 @@ Mengingatkan kembali bahwa kacamata ${customer.frameModel} dengan lensa ${custom
 
 Apakah saat ini ada kendala pada dudukan frame atau kenyamanan pandangan mata Kakak?
 
-Jika memerlukan pengecekan ulang atau servis kacamata, silakan hubungi kami atau cek cabang terdekat di:
-https://optikiseeyou.com
+Layanan CS & Garansi Aftersales: ${AFTERSALES_CS_PHONE}
+Cek info cabang resmi: https://optikiseeyou.com
 
 Silakan balas pesan ini apabila ada yang bisa kami bantu ya Kak. Terima kasih banyak.`;
     }

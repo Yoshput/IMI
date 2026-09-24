@@ -695,20 +695,30 @@ async function main() {
         (r['Nama Event/Kegiatan'] || r['Nama Perusahaan/Sekolah/Event']) &&
         String(r['Nama Event/Kegiatan'] || '').trim() !== '-'
     )
-    .map((r, i) => ({
-      id: `proposal-${i}`,
-      timestamp: parseExcelDate(r['Cap waktu']),
-      institution: String(r['Nama Perusahaan/Sekolah/Event'] || '-').trim(),
-      targetBranch: String(r['Pengajuan Untuk Cabang'] || 'Purwokerto').trim(),
-      eventName: String(r['Nama Event/Kegiatan'] || '-').trim(),
-      eventDate: parseExcelDate(r['Tanggal Pelaksanaan Event/Kegiatan']),
-      description: String(r['Deskripsi Singkat Event/Kegiatan'] || '-').trim(),
-      benefit: String(r['Banefit Yang Ditawarkan'] || '-').trim(),
-      applicantName: String(r['Nama Pengaju'] || '-').trim(),
-      applicantPhone: String(r['Nomor Hp Pengaju'] || '-').trim(),
-      fileUrl: String(r['File Proposal Event/Kegiatan'] || '').trim(),
-      sheetNote: r['Kolom 1'] && String(r['Kolom 1']).trim() !== '-' ? String(r['Kolom 1']).trim() : '',
-    }));
+    .map((r, i) => {
+      const eventClean = String(r['Nama Event/Kegiatan'] || r['Nama Perusahaan/Sekolah/Event'] || 'event')
+        .toLowerCase()
+        .replace(/[^a-z0-9]/g, '')
+        .slice(0, 24);
+      const dateClean = (parseExcelDate(r['Tanggal Pelaksanaan Event/Kegiatan']) || 'nodate').replace(/[^a-z0-9]/g, '');
+      const phoneClean = String(r['Nomor Hp Pengaju'] || '').replace(/[^0-9]/g, '').slice(-4);
+      const stableId = `prop_${eventClean}_${dateClean}_${phoneClean || i}`;
+      return {
+        id: `proposal-${i}`,
+        stableId,
+        timestamp: parseExcelDate(r['Cap waktu']),
+        institution: String(r['Nama Perusahaan/Sekolah/Event'] || '-').trim(),
+        targetBranch: String(r['Pengajuan Untuk Cabang'] || 'Purwokerto').trim(),
+        eventName: String(r['Nama Event/Kegiatan'] || '-').trim(),
+        eventDate: parseExcelDate(r['Tanggal Pelaksanaan Event/Kegiatan']),
+        description: String(r['Deskripsi Singkat Event/Kegiatan'] || '-').trim(),
+        benefit: String(r['Banefit Yang Ditawarkan'] || '-').trim(),
+        applicantName: String(r['Nama Pengaju'] || '-').trim(),
+        applicantPhone: String(r['Nomor Hp Pengaju'] || '-').trim(),
+        fileUrl: String(r['File Proposal Event/Kegiatan'] || '').trim(),
+        sheetNote: r['Kolom 1'] && String(r['Kolom 1']).trim() !== '-' ? String(r['Kolom 1']).trim() : '',
+      };
+    });
 
   const pengajuanSheet = workbook.Sheets['Form Pengajuan'];
   const rawPengajuan = pengajuanSheet ? XLSX.utils.sheet_to_json(pengajuanSheet) : [];

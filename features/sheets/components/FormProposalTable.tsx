@@ -42,6 +42,7 @@ import {
 
 export interface FormProposalItem {
   id: string;
+  stableId?: string;
   timestamp: string | null;
   institution: string;
   targetBranch: string;
@@ -344,6 +345,35 @@ export const evaluateBarterVoucher = (item: FormProposalItem): BarterEvaluation 
 
 const STORAGE_KEY = "proposal-decisions-v2";
 
+export const getProposalKey = (item: FormProposalItem): string => {
+  if (item.stableId) return item.stableId;
+  const eventClean = String(item.eventName || item.institution || "event")
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, "")
+    .slice(0, 24);
+  const dateClean = (item.eventDate || "nodate").replace(/[^a-z0-9]/g, "");
+  const phoneClean = String(item.applicantPhone || "").replace(/[^0-9]/g, "").slice(-4);
+  return `prop_${eventClean}_${dateClean}_${phoneClean}`;
+};
+
+export const getDecisionForItem = (
+  item: FormProposalItem,
+  decisionsMap: ProposalDecision
+): ProposalDecision[string] | undefined => {
+  if (!item || !decisionsMap) return undefined;
+  const stableKey = item.stableId || getProposalKey(item);
+  if (decisionsMap[stableKey]) return decisionsMap[stableKey];
+  if (item.stableId && decisionsMap[item.stableId]) return decisionsMap[item.stableId];
+  if (item.id && decisionsMap[item.id]) return decisionsMap[item.id];
+  // Fuzzy match on event name substring
+  const eventClean = (item.eventName || "").toLowerCase().replace(/[^a-z0-9]/g, "").slice(0, 16);
+  if (eventClean.length >= 6) {
+    const matchedKey = Object.keys(decisionsMap).find((k) => k.includes(eventClean));
+    if (matchedKey) return decisionsMap[matchedKey];
+  }
+  return undefined;
+};
+
 const loadDecisions = (): ProposalDecision => {
   try {
     const raw = typeof window !== "undefined" ? localStorage.getItem(STORAGE_KEY) : null;
@@ -396,6 +426,7 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [copiedChatId, setCopiedChatId] = useState<string | null>(null);
   const [decisions, setDecisions] = useState<ProposalDecision>(loadDecisions);
+  const [saveIndicator, setSaveIndicator] = useState<"saving" | "saved">("saved");
   const [noteEditing, setNoteEditing] = useState<string | null>(null);
   const [noteText, setNoteText] = useState("");
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -412,57 +443,191 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
     );
   }, [items]);
 
-  const updateDecision = (id: string, status: DecisionStatus) => {
+  // Load from server and merge with localStorage on mount
+  React.useEffect(() => {
+    const local = loadDecisions();
+    if (local && Object.keys(local).length > 0) {
+      setDecisions((prev) => ({ ...local, ...prev }));
+    }
+
+    fetch("/api/proposal-decisions")
+      .then((res) => res.json())
+      .then((resJson) => {
+        if (resJson.success && resJson.data) {
+          setDecisions((prev) => {
+            const merged = { ...resJson.data, ...prev };
+            saveDecisions(merged);
+            return merged;
+          });
+        }
+      })
+      .catch((err) => console.warn("Proposal decision fetch error:", err));
+  }, []);
+
+  const persistDecision = (item: FormProposalItem, newEntry: any) => {
+    const key = getProposalKey(item);
     const updated = {
       ...decisions,
-      [id]: { ...decisions[id], status, note: decisions[id]?.note || "" },
+      [key]: newEntry,
+      [item.id]: newEntry,
     };
+    if (item.stableId) {
+      updated[item.stableId] = newEntry;
+    }
     setDecisions(updated);
     saveDecisions(updated);
+    setSaveIndicator("saving");
+
+    fetch("/api/proposal-decisions", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: key, decision: newEntry, mirrorId: item.id }),
+    })
+      .then(() => {
+        setSaveIndicator("saved");
+      })
+      .catch((err) => {
+        console.warn("Server save error:", err);
+        setSaveIndicator("saved");
+      });
   };
 
-  const updateNote = (id: string, note: string) => {
-    const updated = {
-      ...decisions,
-      [id]: { ...decisions[id], status: decisions[id]?.status || "pending", note },
+  const updateDecision = (target: FormProposalItem | string, status: DecisionStatus) => {
+    const item = typeof target === "string" ? validItems.find((i) => i.id === target) : target;
+    if (!item) {
+      const id = typeof target === "string" ? target : "";
+      const updated = {
+        ...decisions,
+        [id]: { ...decisions[id], status, note: decisions[id]?.note || "" },
+      };
+      setDecisions(updated);
+      saveDecisions(updated);
+      return;
+    }
+
+    const existing = getDecisionForItem(item, decisions);
+    const newEntry = {
+      status,
+      note: existing?.note || "",
+      contactedAt: existing?.contactedAt || null,
+      response: existing?.response || ("none" as OutreachResponse),
+      updatedAt: new Date().toISOString(),
     };
-    setDecisions(updated);
-    saveDecisions(updated);
+    persistDecision(item, newEntry);
+  };
+
+  const updateNote = (target: FormProposalItem | string, note: string) => {
+    const item = typeof target === "string" ? validItems.find((i) => i.id === target) : target;
+    if (!item) {
+      const id = typeof target === "string" ? target : "";
+      const updated = {
+        ...decisions,
+        [id]: { ...decisions[id], status: decisions[id]?.status || "pending", note },
+      };
+      setDecisions(updated);
+      saveDecisions(updated);
+      return;
+    }
+
+    const existing = getDecisionForItem(item, decisions);
+    const newEntry = {
+      status: existing?.status || ("pending" as DecisionStatus),
+      note,
+      contactedAt: existing?.contactedAt || null,
+      response: existing?.response || ("none" as OutreachResponse),
+      updatedAt: new Date().toISOString(),
+    };
+    persistDecision(item, newEntry);
   };
 
   /** Mark as contacted now (called when WA link is opened) */
-  const markContacted = (id: string) => {
-    if (decisions[id]?.contactedAt) return; // don't overwrite if already set
-    const updated = {
-      ...decisions,
-      [id]: {
-        ...decisions[id],
-        status: decisions[id]?.status || "contact",
-        note: decisions[id]?.note || "",
-        contactedAt: new Date().toISOString(),
-        response: decisions[id]?.response ?? "none",
-      },
+  const markContacted = (target: FormProposalItem | string) => {
+    const item = typeof target === "string" ? validItems.find((i) => i.id === target) : target;
+    if (!item) {
+      const id = typeof target === "string" ? target : "";
+      if (decisions[id]?.contactedAt) return;
+      const updated = {
+        ...decisions,
+        [id]: {
+          ...decisions[id],
+          status: decisions[id]?.status || "contact",
+          note: decisions[id]?.note || "",
+          contactedAt: new Date().toISOString(),
+          response: decisions[id]?.response ?? "none",
+        },
+      };
+      setDecisions(updated);
+      saveDecisions(updated);
+      return;
+    }
+
+    const existing = getDecisionForItem(item, decisions);
+    if (existing?.contactedAt) return;
+    const newEntry = {
+      status: existing?.status || ("contact" as DecisionStatus),
+      note: existing?.note || "",
+      contactedAt: new Date().toISOString(),
+      response: existing?.response ?? ("none" as OutreachResponse),
+      updatedAt: new Date().toISOString(),
     };
-    setDecisions(updated);
-    saveDecisions(updated);
+    persistDecision(item, newEntry);
   };
 
-  const updateResponse = (id: string, response: OutreachResponse) => {
-    const updated = {
-      ...decisions,
-      [id]: {
-        ...decisions[id],
-        status: decisions[id]?.status || "contact",
-        note: decisions[id]?.note || "",
-        response,
-      },
+  const updateResponse = (target: FormProposalItem | string, response: OutreachResponse) => {
+    const item = typeof target === "string" ? validItems.find((i) => i.id === target) : target;
+    if (!item) {
+      const id = typeof target === "string" ? target : "";
+      const updated = {
+        ...decisions,
+        [id]: {
+          ...decisions[id],
+          status: decisions[id]?.status || "contact",
+          note: decisions[id]?.note || "",
+          response,
+        },
+      };
+      setDecisions(updated);
+      saveDecisions(updated);
+      return;
+    }
+
+    const existing = getDecisionForItem(item, decisions);
+    const newEntry = {
+      status: existing?.status || ("contact" as DecisionStatus),
+      note: existing?.note || "",
+      contactedAt: existing?.contactedAt || new Date().toISOString(),
+      response,
+      updatedAt: new Date().toISOString(),
     };
-    setDecisions(updated);
-    saveDecisions(updated);
+    persistDecision(item, newEntry);
+  };
+
+  const resetContact = (target: FormProposalItem | string) => {
+    const item = typeof target === "string" ? validItems.find((i) => i.id === target) : target;
+    if (!item) {
+      const id = typeof target === "string" ? target : "";
+      const updated = {
+        ...decisions,
+        [id]: { ...decisions[id], contactedAt: null, response: "none" as OutreachResponse },
+      };
+      setDecisions(updated);
+      saveDecisions(updated);
+      return;
+    }
+
+    const existing = getDecisionForItem(item, decisions);
+    const newEntry = {
+      status: existing?.status || ("pending" as DecisionStatus),
+      note: existing?.note || "",
+      contactedAt: null,
+      response: "none" as OutreachResponse,
+      updatedAt: new Date().toISOString(),
+    };
+    persistDecision(item, newEntry);
   };
 
   const handleCopy = (item: FormProposalItem) => {
-    const decision = decisions[item.id];
+    const decision = getDecisionForItem(item, decisions);
     const days = getDaysUntilEvent(item.eventDate);
     const urgency = getUrgencyBadge(days);
     const statusLabel = STATUS_CONFIG[decision?.status || "pending"].label;
@@ -547,7 +712,7 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
         selectedBranch === "all" ||
         item.targetBranch.toLowerCase().includes(selectedBranch.toLowerCase());
 
-      const decision = decisions[item.id];
+      const decision = getDecisionForItem(item, decisions);
       const currentStatus = decision?.status || "pending";
       const matchStatus = selectedStatus === "all" || currentStatus === selectedStatus;
 
@@ -596,19 +761,19 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
       }
     });
 
-    const approved = validItems.filter((i) => decisions[i.id]?.status === "approved").length;
-    const pending = validItems.filter((i) => !decisions[i.id] || decisions[i.id]?.status === "pending").length;
-    const rejected = validItems.filter((i) => decisions[i.id]?.status === "rejected").length;
-    const negotiate = validItems.filter((i) => decisions[i.id]?.status === "negotiate").length;
-    const contact = validItems.filter((i) => decisions[i.id]?.status === "contact").length;
+    const approved = validItems.filter((i) => getDecisionForItem(i, decisions)?.status === "approved").length;
+    const pending = validItems.filter((i) => !getDecisionForItem(i, decisions) || getDecisionForItem(i, decisions)?.status === "pending").length;
+    const rejected = validItems.filter((i) => getDecisionForItem(i, decisions)?.status === "rejected").length;
+    const negotiate = validItems.filter((i) => getDecisionForItem(i, decisions)?.status === "negotiate").length;
+    const contact = validItems.filter((i) => getDecisionForItem(i, decisions)?.status === "contact").length;
     const barterViable = validItems.filter((i) => {
       const d = getDaysUntilEvent(i.eventDate);
       const isUpcoming = d === null || d >= 0;
       return isUpcoming && evaluateBarterVoucher(i).isViable;
     }).length;
-    const contacted = validItems.filter((i) => decisions[i.id]?.contactedAt).length;
+    const contacted = validItems.filter((i) => getDecisionForItem(i, decisions)?.contactedAt).length;
     const respondedPositive = validItems.filter((i) => {
-      const r = decisions[i.id]?.response;
+      const r = getDecisionForItem(i, decisions)?.response;
       return r === "interested" || r === "confirmed";
     }).length;
 
@@ -684,8 +849,9 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
               Proposal Sponsorship
             </span>
             <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-              Sinkronisasi Aktif
+              <span className={`w-1.5 h-1.5 rounded-full bg-emerald-500 ${saveIndicator === "saving" ? "animate-ping" : "animate-pulse"}`} />
+              <CheckCircle2 className="w-3 h-3" />
+              <span>{saveIndicator === "saving" ? "Menyimpan..." : "Tersimpan Permanen"}</span>
             </span>
           </div>
 
@@ -908,7 +1074,7 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
           <div className="space-y-4">
             {filteredItems.map((item) => {
               const badge = getBranchBadge(item.targetBranch);
-              const decision = decisions[item.id];
+              const decision = getDecisionForItem(item, decisions);
               const currentStatus: DecisionStatus = decision?.status || "pending";
               const statusCfg = STATUS_CONFIG[currentStatus];
               const days = getDaysUntilEvent(item.eventDate);
@@ -1119,11 +1285,7 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
                         </div>
                         {/* Reset contacted */}
                         <button
-                          onClick={() => {
-                            const updated = { ...decisions, [item.id]: { ...decisions[item.id], contactedAt: null, response: "none" as OutreachResponse } };
-                            setDecisions(updated);
-                            saveDecisions(updated);
-                          }}
+                          onClick={() => resetContact(item)}
                           className="text-[10px] text-foreground-muted underline underline-offset-2 mt-0.5 block"
                         >
                           Reset status dihubungi
@@ -1286,6 +1448,11 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
             </div>
 
             <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+              <div className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20 text-xs font-semibold shadow-2xs">
+                <span className={`w-2 h-2 rounded-full bg-emerald-500 ${saveIndicator === "saving" ? "animate-ping" : "animate-pulse"}`} />
+                <CheckCircle2 className="w-3.5 h-3.5" />
+                <span>{saveIndicator === "saving" ? "Menyimpan ke Cloud..." : "Tersimpan di Cloud & Perangkat"}</span>
+              </div>
               {onSync && (
                 <button
                   onClick={onSync}
@@ -1601,7 +1768,7 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
             {filteredItems.map((item) => {
               const badge = getBranchBadge(item.targetBranch);
-              const decision = decisions[item.id];
+              const decision = getDecisionForItem(item, decisions);
               const currentStatus: DecisionStatus = decision?.status || "pending";
               const statusCfg = STATUS_CONFIG[currentStatus];
               const StatusIcon = statusCfg.icon;
@@ -1812,7 +1979,7 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
                           href={waUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          onClick={() => markContacted(item.id)}
+                          onClick={() => markContacted(item)}
                           className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-white text-xs font-bold transition-all shadow-subtle hover:scale-[1.02] active:scale-95 ${
                             decision?.contactedAt
                               ? "bg-emerald-700 hover:bg-emerald-800"
@@ -1841,7 +2008,7 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
                             return (
                               <button
                                 key={key}
-                                onClick={() => updateResponse(item.id, key)}
+                                onClick={() => updateResponse(item, key)}
                                 className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold border transition-all ${
                                   isSel
                                     ? `${cfg.bg} ${cfg.color} shadow-subtle`
@@ -1853,11 +2020,7 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
                             );
                           })}
                           <button
-                            onClick={() => {
-                              const updated = { ...decisions, [item.id]: { ...decisions[item.id], contactedAt: null, response: "none" as OutreachResponse } };
-                              setDecisions(updated);
-                              saveDecisions(updated);
-                            }}
+                            onClick={() => resetContact(item)}
                             className="text-[10px] text-foreground-muted underline underline-offset-2 px-1"
                           >
                             Reset
@@ -1886,7 +2049,7 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
                           return (
                             <button
                               key={key}
-                              onClick={() => updateDecision(item.id, key)}
+                              onClick={() => updateDecision(item, key)}
                               className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-semibold transition-all ${
                                 isSelected
                                   ? `${cfg.bg} ${cfg.color} border shadow-subtle font-bold scale-105`
@@ -1922,7 +2085,7 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
                             </button>
                             <button
                               onClick={() => {
-                                updateNote(item.id, noteText);
+                                updateNote(item, noteText);
                                 setNoteEditing(null);
                               }}
                               className="px-3.5 py-1 rounded-full bg-violet-600 text-white text-xs font-bold hover:bg-violet-700 shadow-subtle"
@@ -1972,7 +2135,7 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
                 <tbody className="divide-y divide-border/60">
                   {filteredItems.map((item) => {
                     const badge = getBranchBadge(item.targetBranch);
-                    const decision = decisions[item.id];
+                    const decision = getDecisionForItem(item, decisions);
                     const currentStatus: DecisionStatus = decision?.status || "pending";
                     const statusCfg = STATUS_CONFIG[currentStatus];
                     const days = getDaysUntilEvent(item.eventDate);
@@ -2043,7 +2206,7 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
                         <td className="py-3.5 px-4 whitespace-nowrap">
                           <select
                             value={currentStatus}
-                            onChange={(e) => updateDecision(item.id, e.target.value as DecisionStatus)}
+                            onChange={(e) => updateDecision(item, e.target.value as DecisionStatus)}
                             className={`px-2.5 py-1 rounded-full text-[11px] font-bold border focus:outline-none cursor-pointer ${statusCfg.bg} ${statusCfg.color}`}
                           >
                             {(

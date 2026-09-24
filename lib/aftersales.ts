@@ -1,5 +1,9 @@
 // Aftersales CRM Model, Database & Helpers for Optik I See You
 
+export const AFTERSALES_CS_PHONE = "+62 821-4601-328";
+export const AFTERSALES_CS_PHONE_RAW = "628214601328";
+export const AFTERSALES_CS_WA_URL = "https://wa.me/628214601328";
+
 export type FollowUpStatus =
   | "belum_dihubungi"
   | "sudah_dihubungi"

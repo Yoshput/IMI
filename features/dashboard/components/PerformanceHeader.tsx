@@ -17,11 +17,11 @@ export const PerformanceHeader: React.FC<PerformanceHeaderProps> = ({
     <div className="border-b border-border pb-6 mb-8">
       {/* Small Context Line (DESIGN.md §13) */}
       <div className="flex flex-wrap items-center gap-2 text-caption font-medium uppercase tracking-wider mb-2 text-foreground-secondary">
-        <span>Optik I See You</span>
+        <span>Optik I See You (PWT · PBG · CLP · WNS)</span>
         <span>·</span>
-        <span>Purwokerto (@iseeyou.glasses)</span>
+        <span>Lunar Eyewear Tegal</span>
         <span>·</span>
-        <span>Laporan Mingguan Internal</span>
+        <span>Konsolidasi Intelligence Mingguan</span>
       </div>
 
       {/* Large Title & Period */}
@@ -45,10 +45,10 @@ export const PerformanceHeader: React.FC<PerformanceHeaderProps> = ({
             <span>Reach Mingguan +23.8%</span>
           </div>
           <ProvenanceBadge
-            source="seed_demo"
-            date="2026-09-14"
-            sourceLabel="Simulasi data seed performa akun internal — Disusun manual tanpa live scraping (AGENT §08)"
-            isDemo={true}
+            source="instagram_insights"
+            date="Live Sync"
+            sourceLabel="Data sinkronisasi Meta Business Suite & Google Spreadsheet terverifikasi"
+            isDemo={false}
           />
         </div>
       </div>

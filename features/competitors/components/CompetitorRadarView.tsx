@@ -15,7 +15,6 @@ import {
   DollarSign,
   Layers,
   ArrowUpRight,
-  Flame,
 } from "lucide-react";
 
 interface Competitor {

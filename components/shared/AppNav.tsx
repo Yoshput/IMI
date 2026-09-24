@@ -41,25 +41,34 @@ export const AppNav: React.FC = () => {
     <header className="sticky top-0 z-30 w-full bg-surface/90 backdrop-blur-md border-b border-border transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* Brand Identity: Logo Optik I See You di Kiri Atas */}
-          <Link href="/dashboard" className="flex items-center gap-3 group shrink-0">
+          {/* Brand Identity: Logo & Application Emblem */}
+          <Link href="/dashboard" className="flex items-center gap-2.5 group shrink-0">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/brand/imi-icon.png"
+              alt="IMI System Logo"
+              width={36}
+              height={36}
+              style={{ width: 36, height: 36, maxWidth: 36, maxHeight: 36 }}
+              className="w-9 h-9 min-w-9 min-h-9 max-w-9 max-h-9 rounded-xl object-contain ring-1 ring-border/80 shadow-2xs group-hover:scale-105 transition-transform shrink-0 bg-white"
+            />
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/brand/logo-isy-dark.png"
               alt="Optik I See You"
-              className="h-8 sm:h-9 w-auto object-contain transition-opacity group-hover:opacity-90"
+              className="h-7 sm:h-8 w-auto object-contain transition-opacity group-hover:opacity-90"
             />
             <div className="hidden sm:block border-l border-border pl-2.5">
               <div className="flex items-center gap-1.5">
                 <span className="text-[11px] font-bold tracking-tight text-foreground">
                   Marketing Intelligence
                 </span>
-                <span className="text-[9px] uppercase font-semibold px-1.5 py-0.2 rounded bg-brand-light text-brand">
+                <span className="text-[9px] uppercase font-semibold px-1.5 py-0.5 rounded bg-brand-light text-brand">
                   4+1 Cabang
                 </span>
               </div>
               <span className="text-[10px] text-foreground-muted block">
-                Optik I See You (PWT · PBG · CLP · WNS) + Lunar Tegal
+                Optik I See You + Lunar Eyewear
               </span>
             </div>
           </Link>

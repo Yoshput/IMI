@@ -17,11 +17,13 @@ import {
   ChevronRight,
   Plus,
   Info,
-  Sparkles,
+  Phone,
 } from "lucide-react";
 import {
   CustomerAftersalesRecord,
   FollowUpStatus,
+  AFTERSALES_CS_PHONE,
+  AFTERSALES_CS_WA_URL,
 } from "@/lib/aftersales";
 import { CustomerDetailModal } from "./CustomerDetailModal";
 
@@ -241,6 +243,36 @@ export const AftersalesView: React.FC = () => {
             Data customer di halaman ini ditarik langsung dari sheet <strong>DATA CUSTOMER</strong> (resep refraksi, ukuran lensa, model frame) dan sheet <strong>REKAP DATA</strong> (review & komplain 5 cabang) di spreadsheet Google Sheets Optik I See You.
           </p>
         </div>
+      </div>
+
+      {/* Official CS Aftersales Contact Bar */}
+      <div className="p-3.5 rounded-xl bg-surface border border-emerald-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs shadow-2xs">
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-xl bg-emerald-700 text-white flex items-center justify-center shrink-0 shadow-2xs">
+            <Phone className="w-4 h-4" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="font-bold text-foreground">WhatsApp CS Aftersales Resmi:</span>
+              <span className="font-mono font-bold text-emerald-800 dark:text-emerald-400 text-xs sm:text-sm">
+                {AFTERSALES_CS_PHONE}
+              </span>
+            </div>
+            <p className="text-foreground-secondary text-[11px]">
+              Kanal resmi layanan garansi, follow-up kenyamanan lensa, dan respon ulasan Google Maps 5 cabang.
+            </p>
+          </div>
+        </div>
+        <a
+          href={AFTERSALES_CS_WA_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-semibold text-xs transition-all shadow-subtle shrink-0"
+        >
+          <Send className="w-3.5 h-3.5" />
+          <span>Chat WhatsApp CS</span>
+          <ExternalLink className="w-3 h-3 opacity-80" />
+        </a>
       </div>
 
       {/* KPI Status Counts */}

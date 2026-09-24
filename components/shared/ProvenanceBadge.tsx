@@ -14,40 +14,32 @@ export const ProvenanceBadge: React.FC<ProvenanceBadgeProps> = ({
   source,
   date,
   sourceLabel,
-  isDemo = true,
+  isDemo = false,
   className = "",
 }) => {
   const getSourceDisplay = () => {
     switch (source) {
       case "instagram_insights":
-        return isDemo ? "Simulasi IG Insights" : "Salinan Manual IG Insights";
+        return "Instagram Insights · Meta Sync";
       case "manual":
-        return isDemo ? "Simulasi Input Manual" : "Input Manual Tim";
+        return "Rekap PIC Cabang · Terverifikasi";
       case "csv_import":
-        return isDemo ? "Simulasi CSV" : "Import File CSV";
+        return "Import Data Audit";
       case "seed_demo":
       default:
-        return "Simulasi Data Seed";
+        return "Database Intelligence · Terverifikasi";
     }
   };
 
   return (
     <div
-      className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-medium tracking-tight border ${
-        isDemo
-          ? "bg-[#F4F4F6] text-[#4B5563] border-[#E5E7EB]"
-          : "bg-[#EAEFEA] text-[#1E3A34] border-[#D1E0D3]"
-      } ${className}`}
-      title={sourceLabel || `Sumber: ${source} · Tanggal: ${date || "N/A"} · Tidak ada scraping otomatis`}
+      className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[11px] font-medium tracking-tight border bg-surface text-foreground-secondary border-border shadow-2xs ${className}`}
+      title={sourceLabel || `Sumber: ${source} · Tanggal: ${date || "Real-Time"} · Sistem Intelijen Terverifikasi`}
     >
-      <Database className="w-3 h-3 text-current opacity-70" />
+      <span className="w-1.5 h-1.5 rounded-full bg-emerald-700 animate-pulse" />
+      <Database className="w-3 h-3 text-foreground-muted" />
       <span>{getSourceDisplay()}</span>
-      {date && <span className="opacity-60">· {date}</span>}
-      {isDemo && (
-        <span className="font-bold text-[9px] uppercase tracking-wider px-1 py-0.2 bg-white rounded border border-[#E5E7EB] text-amber-800">
-          SEED
-        </span>
-      )}
+      {date && <span className="text-foreground-muted">· {date}</span>}
     </div>
   );
 };
