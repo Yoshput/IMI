@@ -165,3 +165,35 @@ export async function POST(request: Request) {
   }
 }
 
+export async function DELETE(request: Request) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get("id");
+
+    if (!id) {
+      return NextResponse.json({ success: false, error: "Missing id" }, { status: 400 });
+    }
+
+    if (!fs.existsSync(KOL_FILE_PATH)) {
+      return NextResponse.json({ success: false, error: "KOL data file not found" }, { status: 404 });
+    }
+
+    const rawData = fs.readFileSync(KOL_FILE_PATH, "utf-8");
+    let kols = JSON.parse(rawData);
+    kols = kols.filter((k: any) => k.id !== id);
+
+    fs.writeFileSync(KOL_FILE_PATH, JSON.stringify(kols, null, 2), "utf-8");
+
+    return NextResponse.json({
+      success: true,
+      message: "KOL deleted successfully"
+    });
+  } catch (error: any) {
+    return NextResponse.json(
+      { success: false, error: error.message || "Failed to delete KOL" },
+      { status: 500 }
+    );
+  }
+}
+
+

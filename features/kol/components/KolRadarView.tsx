@@ -24,7 +24,8 @@ import {
   Gift,
   Heart,
   Tag,
-  Send
+  Send,
+  Trash2
 } from "lucide-react";
 import initialKolData from "@/lib/kol-data.json";
 
@@ -233,6 +234,16 @@ Have a nicee dayy ya kaa! 🌸✨`;
       alert("Terjadi kesalahan saat menambahkan KOL");
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleDeleteKol = async (id: string, name: string) => {
+    if (!confirm(`Hapus KOL ${name} dari daftar radar?`)) return;
+    setKols((prev: any) => prev.filter((k: any) => k.id !== id));
+    try {
+      await fetch(`/api/kol?id=${id}`, { method: "DELETE" });
+    } catch (e) {
+      console.error("Gagal menghapus KOL:", e);
     }
   };
 
