@@ -345,6 +345,27 @@ Have a nicee dayy ya kaa! 🌸✨`;
         </div>
       </div>
 
+      {/* Exclusion & Blacklist Reminder (Purwokerto & General Rules) */}
+      <div className="bg-red-500/10 border border-red-500/25 rounded-card p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 text-xs text-red-900">
+        <div className="flex items-start gap-2.5">
+          <span className="p-1 rounded bg-red-500/20 text-red-700 font-bold shrink-0 mt-0.5">
+            ⛔
+          </span>
+          <div>
+            <span className="font-bold text-red-950 block">
+              Daftar Eksklusi Influencer Purwokerto (JANGAN DIHUBUNGI / TIDAK COCOK):
+            </span>
+            <p className="mt-0.5 text-red-800 leading-relaxed">
+              <strong>1. Vyna Monica</strong> (Followers terlalu besar & ratecard mahal) · <strong>2. Rafli Chaniago</strong> (Tidak cocok / pernah kolab) · <strong>3. Rakhmi Agustina</strong> (Pernah kolab) · <strong>4. Mas Faqih</strong> (Tidak cocok) · <strong>5. Semua influencer yang pernah kolab dengan Optik I See You</strong>.
+              <br />
+              <span className="text-emerald-900 font-semibold">
+                ✅ 3 Opsi Baru Terpasang: <strong>Risma Anjani</strong> (Viral Menara Teratai), <strong>Maria Reres</strong> (Hijab/Fashion OOTD), dan <strong>Alfinda Putri</strong> (Campus Unsoed) — engagement & view sedang naik pesat dengan ratecard bersahabat.
+              </span>
+            </p>
+          </div>
+        </div>
+      </div>
+
       {/* Filter and Control Bar */}
       <div className="bg-surface p-4 rounded-card border border-border space-y-3">
         {/* Branch Tabs */}
