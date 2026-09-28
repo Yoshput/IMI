@@ -37,3 +37,5 @@ next-env.d.ts
 
 # generated data files (too large, regenerated on sync)
 google_sheets_data.xlsx
+scratch/
+

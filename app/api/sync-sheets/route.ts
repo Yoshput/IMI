@@ -51,15 +51,60 @@ function cleanNumber(val: any): number {
   return isNaN(n) ? 0 : n;
 }
 
-function cleanMetric(val: any): number {
+function cleanMetric(val: any, isViewer = false): number {
   if (val === null || val === undefined || val === "-" || val === "") return 0;
-  if (typeof val === "number") return Math.round(val);
+  
+  if (typeof val === "number") {
+    // Handles decimals like 12.5, 32.9 (representing 12.5k, 32.9k viewers)
+    // or Indonesian thousand separators like 29.156 entered in Excel
+    if (val > 0 && val < 1000) {
+      if (val % 1 !== 0) {
+        return Math.round(val * 1000);
+      }
+      if (isViewer && val < 100) {
+        return Math.round(val * 1000);
+      }
+    }
+    return Math.round(val);
+  }
+
   const str = String(val).toLowerCase().trim();
-  if (str === "libur" || str === "tidak ada" || str === "belum ada") return 0;
+  if (str === "libur" || str === "tidak ada" || str === "belum ada" || str === "-") return 0;
+
+  // Handles: 52,1k, 52.1k, 57,5k, 25rb, 1,1rb, 1.7rb, 14 rb, 214 rb, 643rb
   if (str.includes("rb") || str.includes("k")) {
-    const num = parseFloat(str.replace(/,/g, ".").replace(/[^0-9.]/g, ""));
+    const cleanStr = str
+      .replace(/rb/g, "")
+      .replace(/k/g, "")
+      .replace(/\s+/g, "")
+      .replace(/,/g, ".")
+      .replace(/[^0-9.]/g, "");
+    const num = parseFloat(cleanStr);
     return isNaN(num) ? 0 : Math.round(num * 1000);
   }
+
+  // Indonesian comma decimal e.g. "12,5" or "32,9"
+  if (/^\d+,\d+$/.test(str)) {
+    const num = parseFloat(str.replace(",", "."));
+    if (!isNaN(num) && num < 1000) {
+      return Math.round(num * 1000);
+    }
+  }
+
+  // Indonesian dot thousand separator e.g. "29.156" or "15.934" or "9.797"
+  if (/^\d+\.\d{3}$/.test(str)) {
+    const num = parseInt(str.replace(/\./g, ""), 10);
+    return isNaN(num) ? 0 : num;
+  }
+
+  // Decimal notation e.g. "12.5" or "32.9"
+  if (/^\d+\.\d{1,2}$/.test(str)) {
+    const num = parseFloat(str);
+    if (!isNaN(num) && num < 1000) {
+      return Math.round(num * 1000);
+    }
+  }
+
   const n = parseInt(str.replace(/[,.]/g, "").replace(/[^0-9-]/g, ""), 10);
   return isNaN(n) ? 0 : n;
 }
@@ -97,9 +142,8 @@ async function syncSpreadsheetData() {
   const rawStory: any[] = storySheet ? XLSX.utils.sheet_to_json(storySheet) : [];
   const storyItems = rawStory
     .map((row, idx) => {
-      let maxV = row["Jumlah viewers terbanyak"];
-      if (typeof maxV === "number" && maxV < 100) maxV = Math.round(maxV * 1000);
-      else maxV = cleanNumber(maxV);
+      let maxV = cleanMetric(row["Jumlah viewers terbanyak"], true);
+      let minV = cleanMetric(row["Jumlah viewers paling sedikit"], true);
 
       return {
         id: `story-${idx}`,
@@ -110,7 +154,7 @@ async function syncSpreadsheetData() {
         branchKey: "PWT",
         storiesUploaded: cleanNumber(row["Jumlah Story di Upload"]),
         maxViewers: maxV,
-        minViewers: cleanNumber(row["Jumlah viewers paling sedikit"]),
+        minViewers: minV,
         dmInquiries: cleanNumber(row["Jumlah DM masuk"]),
         frequentQuestions: row["Hal paling sering ditanyakan"] || "-",
         viralComments: cleanNumber(row["Jumlah Komentar Reels Viral"]),
@@ -198,8 +242,8 @@ async function syncSpreadsheetData() {
       const bonus = String((cfg.isPWT ? row[18] : row[17]) || "-").trim();
 
       const isLibur = !evalTitle || evalTitle === "-" || evalTitle.toLowerCase() === "libur";
-      const viewers = cleanMetric(evalViewers);
-      const likes = cleanMetric(evalLikes);
+      const viewers = cleanMetric(evalViewers, true);
+      const likes = cleanMetric(evalLikes, false);
 
       if (!isLibur && targetUploadDate && (viewers > 0 || likes > 0 || evalTitle.length > 2)) {
         const evalObj = {
@@ -331,17 +375,15 @@ async function syncSpreadsheetData() {
         tiktokLink: cleanLink(tiktokLink),
         igFollowers,
         tiktokFollowers,
-        viewers: Math.max((matchedEval && matchedEval.viewers > 0) ? matchedEval.viewers : 0, findLiveReel(actualLink, igLiveCache)?.viewers || 0),
-        likes: Math.max((matchedEval && matchedEval.likes > 0) ? matchedEval.likes : 0, findLiveReel(actualLink, igLiveCache)?.likes || 0),
+        viewers: (matchedEval && matchedEval.viewers > 0) ? matchedEval.viewers : 0,
+        likes: (matchedEval && matchedEval.likes > 0) ? matchedEval.likes : 0,
         bonus: matchedEval ? matchedEval.bonus : "-",
         obstacle: obstacle !== "tidak ada" && obstacle !== "belum ada" ? obstacle : "-",
         isDayOff: false,
-        isEvaluated: !!matchedEval || !!(findLiveReel(actualLink, igLiveCache)?.likes > 0 || findLiveReel(actualLink, igLiveCache)?.viewers > 0),
-        isLiveMetric: !matchedEval && !!(findLiveReel(actualLink, igLiveCache)?.likes > 0 || findLiveReel(actualLink, igLiveCache)?.viewers > 0),
+        isEvaluated: !!(matchedEval && (matchedEval.viewers > 0 || matchedEval.likes > 0)),
+        isLiveMetric: false,
         evaluationCadence: (matchedEval && matchedEval.viewers > 0)
           ? "H+3 Selesai"
-          : (findLiveReel(actualLink, igLiveCache)?.likes > 0 || findLiveReel(actualLink, igLiveCache)?.viewers > 0)
-          ? "Live Instagram (H-1/H-2)"
           : "Menunggu H+3",
       });
     }
@@ -619,8 +661,8 @@ async function syncSpreadsheetData() {
           title: r["Judul Reels 2"] || r["Judul Reels"] || "-",
           uploadDate: parseExcelDate(r["Tanggal Upload"]),
           reviewDate: parseExcelDate(r["Tanggal Laporan"]),
-          viewersH3: cleanMetric(r["Jumlah Viewers"]),
-          likesH3: cleanMetric(r["Jumlah Like"]),
+          viewersH3: cleanMetric(r["Jumlah Viewers"], true),
+          likesH3: cleanMetric(r["Jumlah Like"], false),
           bonusAmount: numB,
           bonusFormatted: "Rp " + numB.toLocaleString("id-ID"),
         });

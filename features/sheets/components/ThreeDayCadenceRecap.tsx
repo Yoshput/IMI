@@ -217,18 +217,15 @@ export const ThreeDayCadenceRecap: React.FC<ThreeDayCadenceRecapProps> = ({
         const d = r.uploadDate || r.reportDate;
         if (!r.isDayOff && r.reelsTitle && d && d >= activeCycle.startDate && d <= activeCycle.endDate) {
           const code = extractShortcode(r.reelsLink);
-          const liveData = code ? liveMap.get(code) : null;
-
-          // If in 1-week or 1-month live mode, take live metrics
-          const isLive = activeCycle.isLiveInstagram && liveData;
-          const viewers = isLive && liveData.viewers ? liveData.viewers : Number(r.viewers || 0);
-          const likes = isLive && liveData.likes ? liveData.likes : Number(r.likes || 0);
+          // Strictly use spreadsheet evaluation metrics (H+3 / sheet report)
+          const viewers = Number(r.viewers || 0);
+          const likes = Number(r.likes || 0);
 
           reelsByBranch[key].push({
             ...r,
             viewers,
             likes,
-            isLiveSync: !!isLive,
+            isLiveSync: false,
           });
         }
       });
@@ -650,17 +647,19 @@ Akses Dashboard Lengkap: https://iseeyou-intelligence.vercel.app/spreadsheet`;
                                 </div>
 
                                 <div className="flex flex-wrap items-center gap-2 text-[11px] text-foreground-muted">
-                                  <span className="font-semibold text-foreground tabular-nums">
-                                    {Number(r.viewers || 0).toLocaleString("id-ID")} viewers
-                                  </span>
-                                  <span>·</span>
-                                  <span className="tabular-nums">
-                                    {Number(r.likes || 0).toLocaleString("id-ID")} likes
-                                  </span>
-                                  {r.isLiveMetric && (
-                                    <span className="px-1.5 py-0.2 rounded-full bg-rose-500/10 text-rose-600 dark:text-rose-400 font-bold text-[9px] border border-rose-500/20 flex items-center gap-1">
-                                      <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
-                                      Live IG
+                                  {Number(r.viewers || 0) > 0 || Number(r.likes || 0) > 0 ? (
+                                    <>
+                                      <span className="font-semibold text-foreground tabular-nums">
+                                        {Number(r.viewers || 0).toLocaleString("id-ID")} viewers
+                                      </span>
+                                      <span>·</span>
+                                      <span className="tabular-nums">
+                                        {Number(r.likes || 0).toLocaleString("id-ID")} likes
+                                      </span>
+                                    </>
+                                  ) : (
+                                    <span className="px-2 py-0.5 rounded bg-amber-500/10 text-amber-700 dark:text-amber-400 font-bold text-[10px] border border-amber-500/20">
+                                      Menunggu H+3 (Belum Waktunya Evaluasi)
                                     </span>
                                   )}
                                   {r.contentPillar && (
