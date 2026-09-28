@@ -14,6 +14,7 @@ import {
   HeartHandshake,
   Coins,
   Lock,
+  Users,
 } from "lucide-react";
 
 interface NavItem {
@@ -28,6 +29,7 @@ const navItems: NavItem[] = [
   { name: "Aftersales CRM", href: "/aftersales", icon: HeartHandshake },
   { name: "Spreadsheet Rekap", href: "/spreadsheet", icon: FileSpreadsheet },
   { name: "Competitor Radar", href: "/competitors", icon: Compass },
+  { name: "KOL Radar", href: "/kol", icon: Users },
   { name: "Content", href: "/content", icon: Film },
   { name: "Analytics", href: "/analytics", icon: BarChart3 },
   { name: "Reports", href: "/reports", icon: FileText, isLocked: true },
