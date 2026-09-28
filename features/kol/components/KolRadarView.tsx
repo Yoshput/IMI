@@ -29,8 +29,52 @@ import {
 } from "lucide-react";
 import initialKolData from "@/lib/kol-data.json";
 
+export interface KolItem {
+  id: string;
+  branchId: string;
+  branchName: string;
+  brand: string;
+  name: string;
+  handle: string;
+  platform: string;
+  profileImg?: string;
+  instagramUrl: string;
+  socialBladeUrl: string;
+  socialBladeGrade?: string;
+  followers: number;
+  followersFormatted: string;
+  engagementRate: number;
+  niche: string;
+  audienceFit?: string;
+  rateCard: {
+    story: string;
+    reels: string;
+    feeds: string;
+    visitStore: string;
+    bundled: string;
+  };
+  benefits: string[];
+  owningRights: {
+    canOwnRaw: boolean;
+    terms: string;
+    extraFeeEstimate: string;
+    adsUsageDays: number;
+    statusNote: string;
+  };
+  status: string;
+  notes: string;
+  contactWa: string;
+  pitchTemplate: string;
+  barterStrategy?: {
+    standardFee: string;
+    barterOption: string;
+    followerVoucher: string;
+    recommendedApproach: string;
+  };
+}
+
 export const KolRadarView: React.FC = () => {
-  const [kols, setKols] = useState(initialKolData);
+  const [kols, setKols] = useState<KolItem[]>((initialKolData as unknown as KolItem[]) || []);
   const [selectedBranch, setSelectedBranch] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [onlyCanOwnRaw, setOnlyCanOwnRaw] = useState<boolean>(false);
@@ -38,7 +82,7 @@ export const KolRadarView: React.FC = () => {
   const [viewMode, setViewMode] = useState<"card" | "table">("card");
   const [copiedPitchId, setCopiedPitchId] = useState<string | null>(null);
   const [copiedReport, setCopiedReport] = useState<boolean>(false);
-  const [activePitchModal, setActivePitchModal] = useState<any | null>(null);
+  const [activePitchModal, setActivePitchModal] = useState<KolItem | null>(null);
   const [senderName, setSenderName] = useState<string>("Yossika");
   const [templateStyle, setTemplateStyle] = useState<"step1_ratecard" | "step2_barter" | "step3_owning">("step1_ratecard");
   const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
@@ -56,19 +100,19 @@ export const KolRadarView: React.FC = () => {
 
   // Branch mapping
   const branchOptions = [
-    { id: "all", label: "Semua Cabang (15)" },
-    { id: "pwt", label: "Purwokerto (3)", brand: "Optik I See You" },
-    { id: "pbg", label: "Purbalingga (3)", brand: "Optik I See You" },
-    { id: "clp", label: "Cilacap (3)", brand: "Optik I See You" },
-    { id: "wsb", label: "Wonosobo (3)", brand: "Optik I See You" },
-    { id: "tegal", label: "Lunar Tegal (3)", brand: "Lunar Eyewear" },
+    { id: "all", label: "Semua Cabang" },
+    { id: "pwt", label: "Purwokerto", brand: "Optik I See You" },
+    { id: "pbg", label: "Purbalingga", brand: "Optik I See You" },
+    { id: "clp", label: "Cilacap", brand: "Optik I See You" },
+    { id: "wsb", label: "Wonosobo", brand: "Optik I See You" },
+    { id: "tegal", label: "Lunar Tegal", brand: "Lunar Eyewear" },
   ];
 
   // Filtering
   const filteredKols = useMemo(() => {
-    return kols.filter((item) => {
+    return kols.filter((item: KolItem) => {
       const matchBranch = selectedBranch === "all" || item.branchId === selectedBranch;
-      const matchOwning = !onlyCanOwnRaw || item.owningRights.canOwnRaw;
+      const matchOwning = !onlyCanOwnRaw || item.owningRights?.canOwnRaw;
       const matchStatus = statusFilter === "all" || item.status === statusFilter;
       const matchSearch =
         searchQuery === "" ||
@@ -83,16 +127,17 @@ export const KolRadarView: React.FC = () => {
 
   // Aggregate stats
   const totalAudience = useMemo(() => {
-    return kols.reduce((acc, curr) => acc + curr.followers, 0);
+    return kols.reduce((acc, curr) => acc + (curr.followers || 0), 0);
   }, [kols]);
 
   const avgER = useMemo(() => {
-    const sum = kols.reduce((acc, curr) => acc + curr.engagementRate, 0);
+    if (kols.length === 0) return "0.0";
+    const sum = kols.reduce((acc, curr) => acc + (curr.engagementRate || 0), 0);
     return (sum / kols.length).toFixed(1);
   }, [kols]);
 
   const owningReadyCount = useMemo(() => {
-    return kols.filter((k) => k.owningRights.canOwnRaw).length;
+    return kols.filter((k) => k.owningRights?.canOwnRaw).length;
   }, [kols]);
 
   // Handle status change
@@ -518,8 +563,26 @@ Have a nicee dayy ya kaa! 🌸✨`;
 
       {/* Main Content Area */}
       {viewMode === "card" ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
-          {filteredKols.map((kol) => (
+        filteredKols.length === 0 ? (
+          <div className="bg-surface rounded-card border border-border p-12 text-center space-y-3">
+            <div className="w-12 h-12 rounded-full bg-brand/10 text-brand flex items-center justify-center mx-auto">
+              <Users className="w-6 h-6" />
+            </div>
+            <h3 className="font-bold text-base text-foreground">Belum Ada Data KOL yang Ditampilkan</h3>
+            <p className="text-xs text-foreground-muted max-w-md mx-auto">
+              Data KOL sedang kosong atau sesuai filter. Silakan klik tombol &quot;+ Input KOL Terverifikasi (&gt;50K)&quot; di atas untuk menambahkan profil influencer yang valid dan reels aktif.
+            </p>
+            <button
+              onClick={() => setIsAddModalOpen(true)}
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-control bg-emerald-600 text-white text-xs font-semibold hover:bg-emerald-700 transition-colors shadow-subtle active:scale-95"
+            >
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>Input KOL Baru Sekarang</span>
+            </button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+            {filteredKols.map((kol) => (
             <div
               key={kol.id}
               className="bg-surface rounded-card border border-border shadow-2xs hover:shadow-subtle transition-all flex flex-col justify-between overflow-hidden group"
@@ -688,6 +751,7 @@ Have a nicee dayy ya kaa! 🌸✨`;
             </div>
           ))}
         </div>
+        )
       ) : (
         /* Table View */
         <div className="bg-surface rounded-card border border-border overflow-hidden">
@@ -707,7 +771,14 @@ Have a nicee dayy ya kaa! 🌸✨`;
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
-                {filteredKols.map((kol) => (
+                {filteredKols.length === 0 ? (
+                  <tr>
+                    <td colSpan={9} className="py-12 text-center text-xs text-foreground-muted">
+                      Belum ada data KOL. Silakan klik tombol &quot;+ Input KOL Terverifikasi (&gt;50K)&quot; untuk menambahkan data.
+                    </td>
+                  </tr>
+                ) : (
+                  filteredKols.map((kol) => (
                   <tr key={kol.id} className="hover:bg-surface-secondary/40 transition-colors">
                     <td className="py-3 px-4">
                       <div className="font-bold text-foreground">{kol.name}</div>
@@ -765,7 +836,7 @@ Have a nicee dayy ya kaa! 🌸✨`;
                       </button>
                     </td>
                   </tr>
-                ))}
+                )))}
               </tbody>
             </table>
           </div>
