@@ -21,9 +21,10 @@ import {
   ChevronRight,
   Info,
   DollarSign,
-  Clapperboard,
-  Camera,
-  Share2
+  Gift,
+  Heart,
+  Tag,
+  Send
 } from "lucide-react";
 import initialKolData from "@/lib/kol-data.json";
 
@@ -37,6 +38,8 @@ export const KolRadarView: React.FC = () => {
   const [copiedPitchId, setCopiedPitchId] = useState<string | null>(null);
   const [copiedReport, setCopiedReport] = useState<boolean>(false);
   const [activePitchModal, setActivePitchModal] = useState<any | null>(null);
+  const [senderName, setSenderName] = useState<string>("Yossika");
+  const [templateStyle, setTemplateStyle] = useState<"friendly" | "barter" | "visit">("friendly");
 
   // Branch mapping
   const branchOptions = [
@@ -96,9 +99,59 @@ export const KolRadarView: React.FC = () => {
     }
   };
 
+  // Helper for generating custom chat text based on style & sender
+  const getRenderedChat = (kol: any, style: "friendly" | "barter" | "visit") => {
+    const firstName = kol.name.split(" ")[0];
+    const isLunar = kol.brand === "Lunar Eyewear";
+    const brandName = isLunar ? "Lunar Eyewear Tegal" : "Optik I See You Glasses";
+    const brandMention = isLunar ? "lunar eyewear" : "optik i see youu";
+    const branchLabel = kol.branchName;
+
+    if (style === "friendly") {
+      return `Hai kak ${firstName}.. ✨👋
+
+Perkenalkan saya ${senderName} dari tim Marketing ${brandName} 👓
+Setelah melihat Social Media kaka yang seru dan kece banget, kami tertarik banget untuk mengajak kerja sama atau berkolaborasi dengan kita ${brandMention} 🥰
+
+Kalo boleh tau, boleh di infokan untuk ratecardnyaa ya ka, sebagai bahan pertimbangan kami? 
+(Kami juga terbuka untuk opsi kolaborasi seru barter produk kacamata kece pilihan kaka + tambahan voucher belanja spesial buat dibagikan ke followers kaka di kolom komen lho ✨)
+
+Terimakasih banyak ditunggu kabar baiknya ya ka 🙏
+Have a nicee dayy ya kaa! 🌸✨`;
+    }
+
+    if (style === "barter") {
+      return `Hai kak ${firstName}.. ✨👋
+
+Perkenalkan aku ${senderName} dari tim Marketing ${brandName} 👓
+Suka banget sama style konten dan vibe feed kaka yang super estetik! Kebetulan kami lagi ada campaign kacamata hits kekinian dan ingin mengajak Kak ${firstName} kolaborasi nih 🥰
+
+Kita mau tawarkan skema kolaborasi barter produk kacamata premium bebas pilih (Full set frame + lensa kustom antiradiasi / photochromic) plus kita siapin voucher diskon belanja kacamata khusus buat followers kaka bagiin di kuis kolom komentar biar interaksi postingannya makin ramai dan seru! 🎁✨
+
+Kira-kira Kak ${firstName} open untuk skema barter + giveaway ini atau ada rate card khusus? Boleh banget diinfokan yaa kak buat pertimbangan kami.
+
+Terimakasih banyak dan ditunggu kabar baiknya ya kak!
+Have a wonderful day ya kaa! 🌸💖`;
+    }
+
+    // style === "visit"
+    return `Halo kak ${firstName}.. ✨👋
+
+Perkenalkan saya ${senderName} dari tim Marketing ${brandName} Cabang ${branchLabel} 👓
+Kami tertarik banget untuk mengundang Kakak visit store & review koleksi kacamata terbaru kami nih. 
+
+Untuk paket kolaborasinya (Visit + 1 Reels + Stories), kami juga membutuhkan hak owning materi video mentahan (raw footage) tanpa watermark untuk bahan iklan Meta Ads dengan hak tayang 60 hari. Sebelumnya kami ada acuan fee standar di kisaran Rp 250.000 atau full barter produk kacamata komplit + voucher kuis followers.
+
+Kira-kira apakah rate card Kak ${firstName} bisa masuk di skema tersebut atau ada penawaran paket bundling lainnya? Boleh diinfokan ya kak sebagai bahan pertimbangan kami.
+
+Terimakasih banyak ditunggu kabar baiknya ya kak!
+Have a nicee and lovely day ya kaa! 🌸✨`;
+  };
+
   // Copy WhatsApp Pitch
   const handleCopyPitch = (item: any) => {
-    navigator.clipboard.writeText(item.pitchTemplate);
+    const text = getRenderedChat(item, templateStyle);
+    navigator.clipboard.writeText(text);
     setCopiedPitchId(item.id);
     setTimeout(() => setCopiedPitchId(null), 2500);
   };
@@ -108,7 +161,7 @@ export const KolRadarView: React.FC = () => {
     let report = `📋 *REKAP REKOMENDASI 15 KOL SELEBGRAM (5 CABANG)*\n`;
     report += `Optik I See You (PWT, PBG, CLP, WSB) & Lunar Eyewear Tegal\n`;
     report += `Tanggal: ${new Date().toLocaleDateString("id-ID", { dateStyle: "long" })}\n\n`;
-    report += `Target: 3 Opsi KOL per Cabang · Cek Social Blade · Rate Card · Benefit · Hak Owning Video Mentahan (Ads)\n\n`;
+    report += `📌 *STANDAR STRATEGI NEGOSIASI:* Acuan fee Rp 250.000 / Barter Produk Kacamata + Voucher Followers Kuis Komentar + Hak Owning Video Mentahan Iklan\n\n`;
 
     const branches = ["Purwokerto", "Purbalingga", "Cilacap", "Wonosobo", "Lunar Eyewear Tegal"];
     
@@ -124,30 +177,13 @@ export const KolRadarView: React.FC = () => {
         report += `• Followers: ${kol.followersFormatted} | Engagement Rate: ${kol.engagementRate}%\n`;
         report += `• Social Blade: ${kol.socialBladeUrl} (Grade: ${kol.socialBladeGrade})\n`;
         report += `• Niche: ${kol.niche}\n`;
-        report += `• Estimasi Rate Card:\n`;
-        report += `   - Reels: ${kol.rateCard.reels}\n`;
-        report += `   - Story: ${kol.rateCard.story}\n`;
-        report += `   - Visit Store: ${kol.rateCard.visitStore}\n`;
-        report += `   - Rekomendasi Paket: ${kol.rateCard.bundled}\n`;
-        report += `• Benefit Didapat:\n`;
-        kol.benefits.forEach((b) => {
-          report += `   - ${b}\n`;
-        });
-        report += `• Hak Owning (Video Mentahan Iklan Ads):\n`;
-        report += `   - Status: ${kol.owningRights.canOwnRaw ? "BISA OWNING RAW" : "TIDAK BISA"}\n`;
-        report += `   - Ketentuan: ${kol.owningRights.terms}\n`;
-        report += `   - Biaya Ekstra: ${kol.owningRights.extraFeeEstimate}\n`;
-        report += `   - Durasi Hak Iklan: ${kol.owningRights.adsUsageDays} Hari\n`;
+        report += `• Skema Budget: Acuan Fee Rp 250.000 / Barter Produk Kacamata Full + Voucher Followers\n`;
+        report += `• Hak Owning (Video Mentahan Iklan Ads): ${kol.owningRights.canOwnRaw ? "BISA OWNING RAW" : "TIDAK BISA"} (${kol.owningRights.adsUsageDays} Hari)\n`;
         report += `• Status Pengajuan: [${kol.status}]\n`;
-        report += `• Catatan: ${kol.notes}\n`;
+        report += `• Draft Chat WA: "${getRenderedChat(kol, "friendly").replace(/\n/g, " ")}"\n`;
       });
       report += `\n`;
     });
-
-    report += `\n📌 *STANDAR PROSEDUR KE MAS RAJA:*\n`;
-    report += `1. Klik link Social Blade tiap KOL di dashboard web untuk screenshot grafik dan riwayat follower asli.\n`;
-    report += `2. Copy draft pesan penawaran resmi untuk menanyakan Rate Card final & ketersediaan tanggal visit toko.\n`;
-    report += `3. Kunci klausul "Hak Owning Video Mentahan 4K tanpa watermark untuk Meta Ads 60-90 hari" dalam perjanjian sebelum DP.\n`;
 
     navigator.clipboard.writeText(report);
     setCopiedReport(true);
@@ -175,7 +211,7 @@ export const KolRadarView: React.FC = () => {
           </h1>
           <p className="text-sm text-foreground-muted mt-1 max-w-2xl">
             Kurasi 15 Selebgram Lokal Pilihan (3 opsi per cabang) dengan data Social Blade langsung, 
-            perkiraan Rate Card, Benefit, dan Hak Owning Video Mentahan untuk Iklan Berbayar (Meta Ads).
+            skema Fee Rp 250rb / Barter Produk + Voucher Giveaway Komen, dan Hak Owning Video Mentahan Iklan.
           </p>
         </div>
 
@@ -207,6 +243,51 @@ export const KolRadarView: React.FC = () => {
             <ExternalLink className="w-3.5 h-3.5 text-foreground-muted" />
             <span>SocialBlade.com</span>
           </a>
+        </div>
+      </div>
+
+      {/* STRATEGIC NEGOTIATION POLICY BANNER (New user points 5 & 6) */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+        <div className="bg-emerald-500/10 border border-emerald-500/25 rounded-card p-4 flex items-start gap-3">
+          <div className="p-2 rounded-lg bg-emerald-500/20 text-emerald-800 shrink-0">
+            <DollarSign className="w-5 h-5" />
+          </div>
+          <div>
+            <span className="text-xs font-bold text-emerald-950 uppercase tracking-wide block">
+              Fee Acuan & Barter
+            </span>
+            <p className="text-xs text-emerald-900 mt-1 leading-relaxed">
+              Dulu acuan fee <strong>Rp 250.000</strong>. Prioritas utama tawarkan <strong>Barter Produk Kacamata</strong> gratis (Frame + Lensa Kustom) sesuai harga endorsement.
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-blue-500/10 border border-blue-500/25 rounded-card p-4 flex items-start gap-3">
+          <div className="p-2 rounded-lg bg-blue-500/20 text-blue-800 shrink-0">
+            <Gift className="w-5 h-5" />
+          </div>
+          <div>
+            <span className="text-xs font-bold text-blue-950 uppercase tracking-wide block">
+              Voucher Followers Kuis Komen
+            </span>
+            <p className="text-xs text-blue-900 mt-1 leading-relaxed">
+              Tambahkan <strong>Voucher Belanja Followers</strong> untuk talent bagikan di kolom komentar. Ini membuat talent senang karena engagement akun mereka ikut naik!
+            </p>
+          </div>
+        </div>
+
+        <div className="bg-violet-500/10 border border-violet-500/25 rounded-card p-4 flex items-start gap-3">
+          <div className="p-2 rounded-lg bg-violet-500/20 text-violet-800 shrink-0">
+            <Video className="w-5 h-5" />
+          </div>
+          <div>
+            <span className="text-xs font-bold text-violet-950 uppercase tracking-wide block">
+              Hak Owning Video Mentahan (Ads)
+            </span>
+            <p className="text-xs text-violet-900 mt-1 leading-relaxed">
+              Wajib dapat <strong>video mentahan (raw footage)</strong> tanpa teks/watermark untuk bahan konten iklan berbayar (Meta Ads) dengan hak pakai 60–90 hari.
+            </p>
+          </div>
         </div>
       </div>
 
@@ -262,23 +343,6 @@ export const KolRadarView: React.FC = () => {
           <span className="text-[11px] text-amber-700 font-medium flex items-center gap-1 mt-1">
             Di atas standar industri lokal (3%)
           </span>
-        </div>
-      </div>
-
-      {/* Guide Note for Mas Raja */}
-      <div className="bg-amber-500/10 border border-amber-500/20 rounded-card p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 text-xs text-amber-900">
-        <div className="flex items-start gap-2.5">
-          <Info className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-          <div>
-            <span className="font-semibold text-amber-950 block">
-              Panduan Eksekusi untuk Mas Raja & Tim Marketing:
-            </span>
-            <p className="mt-0.5 text-amber-800">
-              1. Klik tombol <strong>&quot;Cek Social Blade&quot;</strong> pada masing-masing nama talent untuk memeriksa grafik pertumbuhan dan lakukan screenshot statistik. <br />
-              2. Gunakan tombol <strong>&quot;Draft Pitch WA&quot;</strong> untuk chat langsung menanyakan rate card & ketersediaan visit toko. <br />
-              3. Pastikan klausul <strong>&quot;Owning Raw Video&quot;</strong> (mentahan video tanpa teks untuk bahan iklan internal 60-90 hari) disepakati di awal.
-            </p>
-          </div>
         </div>
       </div>
 
@@ -450,33 +514,20 @@ export const KolRadarView: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Rate Card Breakdown */}
-                <div className="space-y-1.5 text-xs">
-                  <div className="flex items-center justify-between text-foreground-muted text-[11px] font-semibold">
+                {/* Budget & Barter Strategy Tag */}
+                <div className="p-2.5 rounded-control bg-emerald-500/10 border border-emerald-500/20 text-xs space-y-1">
+                  <div className="flex items-center justify-between text-emerald-900 font-bold text-[11px]">
                     <span className="flex items-center gap-1">
-                      <DollarSign className="w-3 h-3 text-amber-500" />
-                      Estimasi Rate Card
+                      <Gift className="w-3 h-3 text-emerald-700" />
+                      Strategi Penawaran Favorit:
                     </span>
-                    <span className="text-[10px] text-foreground-muted font-normal">Perkiraan Range</span>
+                    <span className="text-[10px] bg-emerald-200 text-emerald-800 px-1.5 py-0.2 rounded font-semibold">
+                      Acuan Rp 250k
+                    </span>
                   </div>
-                  <div className="bg-surface-secondary/40 p-2 rounded-control space-y-1 text-[11px]">
-                    <div className="flex justify-between">
-                      <span className="text-foreground-secondary">Instagram Reels:</span>
-                      <span className="font-medium text-foreground">{kol.rateCard.reels}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-foreground-secondary">Instagram Story:</span>
-                      <span className="font-medium text-foreground">{kol.rateCard.story}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-foreground-secondary">Visit Store:</span>
-                      <span className="font-medium text-foreground">{kol.rateCard.visitStore}</span>
-                    </div>
-                    <div className="flex justify-between pt-1 border-t border-border/60 text-brand font-semibold">
-                      <span>Rekomendasi Paket:</span>
-                      <span className="text-right text-[10px]">{kol.rateCard.bundled}</span>
-                    </div>
-                  </div>
+                  <p className="text-[11px] text-emerald-800 leading-snug">
+                    Tawarkan <strong>Barter Kacamata Bebas Pilih + Voucher Giveaway Komen</strong>. Bila berbayar, gunakan acuan fee <strong>Rp 250.000</strong>.
+                  </p>
                 </div>
 
                 {/* Owning Raw Rights (Critical requirement) */}
@@ -533,13 +584,13 @@ export const KolRadarView: React.FC = () => {
                     className="flex items-center gap-1 px-2.5 py-1.5 rounded-control bg-brand-light text-brand text-[11px] font-semibold hover:bg-brand/20 transition-colors"
                   >
                     <MessageSquare className="w-3 h-3" />
-                    <span>Draft Chat</span>
+                    <span>Pilih Kata-Kata WA</span>
                   </button>
 
                   <button
                     onClick={() => handleCopyPitch(kol)}
                     className="p-1.5 rounded-control bg-foreground text-surface hover:opacity-90 transition-opacity"
-                    title="Salin Draft Pitch Langsung"
+                    title="Salin Template Friendly Langsung"
                   >
                     {copiedPitchId === kol.id ? (
                       <Check className="w-3 h-3 text-emerald-400" />
@@ -564,7 +615,7 @@ export const KolRadarView: React.FC = () => {
                   <th className="py-3 px-3 text-center">Followers</th>
                   <th className="py-3 px-3 text-center">ER (%)</th>
                   <th className="py-3 px-3 text-center">Social Blade</th>
-                  <th className="py-3 px-3">Est. Rate Reels</th>
+                  <th className="py-3 px-3">Skema Budget / Fee</th>
                   <th className="py-3 px-3">Owning Raw Video</th>
                   <th className="py-3 px-3">Status</th>
                   <th className="py-3 px-4 text-right">Aksi</th>
@@ -606,8 +657,8 @@ export const KolRadarView: React.FC = () => {
                         <ExternalLink className="w-2.5 h-2.5" />
                       </a>
                     </td>
-                    <td className="py-3 px-3 font-medium text-foreground">
-                      {kol.rateCard.reels}
+                    <td className="py-3 px-3 font-medium text-emerald-800">
+                      Rp 250k / Barter + Voucher
                     </td>
                     <td className="py-3 px-3">
                       <span className="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded bg-violet-100 text-violet-800">
@@ -625,7 +676,7 @@ export const KolRadarView: React.FC = () => {
                         onClick={() => setActivePitchModal(kol)}
                         className="px-2.5 py-1 rounded bg-foreground text-surface text-[10px] font-medium hover:opacity-90"
                       >
-                        Lihat Draft
+                        Pilih Kata-Kata
                       </button>
                     </td>
                   </tr>
@@ -636,17 +687,18 @@ export const KolRadarView: React.FC = () => {
         </div>
       )}
 
-      {/* Pitch Modal */}
+      {/* PITCH & COPYWRITING MODAL */}
       {activePitchModal && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-surface rounded-card border border-border shadow-elevated max-w-lg w-full p-6 space-y-4">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-surface rounded-card border border-border shadow-elevated max-w-xl w-full p-6 space-y-4">
             <div className="flex items-center justify-between border-b border-border pb-3">
               <div>
-                <h3 className="font-bold text-base text-foreground">
-                  Draft WhatsApp Outreach: {activePitchModal.name}
+                <h3 className="font-bold text-base text-foreground flex items-center gap-2">
+                  <MessageSquare className="w-4 h-4 text-brand" />
+                  Pilihan Kata-Kata Chat ke {activePitchModal.name}
                 </h3>
                 <span className="text-xs text-foreground-muted">
-                  @{activePitchModal.handle} · {activePitchModal.branchName}
+                  @{activePitchModal.handle} · {activePitchModal.branchName} ({activePitchModal.brand})
                 </span>
               </div>
               <button
@@ -657,23 +709,78 @@ export const KolRadarView: React.FC = () => {
               </button>
             </div>
 
-            <div className="space-y-2">
-              <label className="text-xs font-semibold text-foreground-secondary block">
-                Teks Pesan Resmi (Sudah Memuat Tanya Rate Card & Klausul Owning Video Iklan):
-              </label>
-              <div className="p-3.5 bg-surface-secondary rounded-control border border-border text-xs text-foreground leading-relaxed whitespace-pre-wrap select-all font-mono">
-                {activePitchModal.pitchTemplate}
+            {/* Pengaturan Pengirim */}
+            <div className="flex items-center justify-between bg-surface-secondary p-3 rounded-control text-xs">
+              <span className="text-foreground-secondary font-medium">Nama Pengirim Chat:</span>
+              <input
+                type="text"
+                value={senderName}
+                onChange={(e) => setSenderName(e.target.value)}
+                placeholder="Contoh: Yossika / Tim Marketing"
+                className="px-2.5 py-1 rounded bg-surface border border-border text-foreground font-semibold text-xs focus:outline-none focus:ring-1 focus:ring-brand w-48 text-right"
+              />
+            </div>
+
+            {/* Template Style Selector Tabs */}
+            <div className="grid grid-cols-3 gap-1.5 p-1 bg-surface-secondary rounded-control">
+              <button
+                onClick={() => setTemplateStyle("friendly")}
+                className={`py-1.5 px-2 text-xs font-semibold rounded transition-all ${
+                  templateStyle === "friendly"
+                    ? "bg-foreground text-surface shadow-2xs"
+                    : "text-foreground-secondary hover:text-foreground"
+                }`}
+              >
+                🌸 Santai & Ramah
+              </button>
+              <button
+                onClick={() => setTemplateStyle("barter")}
+                className={`py-1.5 px-2 text-xs font-semibold rounded transition-all ${
+                  templateStyle === "barter"
+                    ? "bg-foreground text-surface shadow-2xs"
+                    : "text-foreground-secondary hover:text-foreground"
+                }`}
+              >
+                🎁 Barter + Kuis Komen
+              </button>
+              <button
+                onClick={() => setTemplateStyle("visit")}
+                className={`py-1.5 px-2 text-xs font-semibold rounded transition-all ${
+                  templateStyle === "visit"
+                    ? "bg-foreground text-surface shadow-2xs"
+                    : "text-foreground-secondary hover:text-foreground"
+                }`}
+              >
+                📹 Visit + Owning Ads
+              </button>
+            </div>
+
+            {/* Generated Chat Preview */}
+            <div className="space-y-1.5">
+              <div className="flex items-center justify-between text-xs text-foreground-muted">
+                <span className="font-medium">
+                  {templateStyle === "friendly" && "Gaya Santai & Hangat (Tanya Rate Card + Offer Barter)"}
+                  {templateStyle === "barter" && "Gaya Barter Kacamata + Voucher Giveaway Komen (High Engagement)"}
+                  {templateStyle === "visit" && "Gaya Visit Store + Owning Mentahan Ads (Fee 250k / Barter)"}
+                </span>
+                <span className="text-[11px] text-emerald-700 font-semibold flex items-center gap-1">
+                  <Sparkles className="w-3 h-3" /> Siap Kirim WA/DM
+                </span>
+              </div>
+              <div className="p-3.5 bg-surface-secondary/70 rounded-control border border-border text-xs text-foreground leading-relaxed whitespace-pre-wrap select-all font-sans">
+                {getRenderedChat(activePitchModal, templateStyle)}
               </div>
             </div>
 
-            <div className="flex items-center justify-between pt-2">
+            {/* Modal Bottom Actions */}
+            <div className="flex items-center justify-between pt-2 border-t border-border">
               <a
                 href={activePitchModal.socialBladeUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-xs text-brand hover:underline inline-flex items-center gap-1 font-medium"
               >
-                Buka Link Social Blade
+                Buka Social Blade
                 <ExternalLink className="w-3 h-3" />
               </a>
 
@@ -686,21 +793,22 @@ export const KolRadarView: React.FC = () => {
                 </button>
                 <button
                   onClick={() => {
-                    navigator.clipboard.writeText(activePitchModal.pitchTemplate);
+                    const text = getRenderedChat(activePitchModal, templateStyle);
+                    navigator.clipboard.writeText(text);
                     setCopiedPitchId(activePitchModal.id);
                     setTimeout(() => setCopiedPitchId(null), 2000);
                   }}
-                  className="px-3.5 py-1.5 rounded-control bg-foreground text-surface text-xs font-semibold hover:opacity-90 flex items-center gap-1.5"
+                  className="px-4 py-1.5 rounded-control bg-foreground text-surface text-xs font-semibold hover:opacity-90 flex items-center gap-1.5 shadow-subtle active:scale-95"
                 >
                   {copiedPitchId === activePitchModal.id ? (
                     <>
                       <Check className="w-3.5 h-3.5 text-emerald-400" />
-                      <span>Tersalin!</span>
+                      <span>Tersalin ke Clipboard!</span>
                     </>
                   ) : (
                     <>
                       <Copy className="w-3.5 h-3.5" />
-                      <span>Salin Pesan WA</span>
+                      <span>Salin Pesan Chat</span>
                     </>
                   )}
                 </button>
