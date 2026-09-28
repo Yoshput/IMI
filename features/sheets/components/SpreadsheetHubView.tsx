@@ -15,6 +15,7 @@ import {
   Calendar,
   PackageCheck,
   FileText,
+  Coins,
 } from "lucide-react";
 import { PicComplianceTracker, PicStatus } from "./PicComplianceTracker";
 import { RawSheetsTable } from "./RawSheetsTable";
@@ -23,6 +24,7 @@ import { SocialBladeTracker } from "./SocialBladeTracker";
 import { ThreeDayCadenceRecap } from "./ThreeDayCadenceRecap";
 import { FormPengajuanTable } from "./FormPengajuanTable";
 import { FormProposalTable } from "./FormProposalTable";
+import { KasMarketingPurwokertoCard } from "@/features/finance/components/KasMarketingPurwokertoCard";
 
 interface SpreadsheetHubViewProps {
   initialData: {
@@ -43,7 +45,7 @@ interface SpreadsheetHubViewProps {
 export const SpreadsheetHubView: React.FC<SpreadsheetHubViewProps> = ({
   initialData,
 }) => {
-  const [activeTab, setActiveTab] = useState<"cadence" | "pengajuan" | "proposal" | "compliance" | "raw" | "executive" | "socialblade">("cadence");
+  const [activeTab, setActiveTab] = useState<"cadence" | "pengajuan" | "proposal" | "kas" | "compliance" | "raw" | "executive" | "socialblade">("cadence");
   const [data, setData] = useState(initialData);
   const [isSyncing, setIsSyncing] = useState(false);
   const [syncStatus, setSyncStatus] = useState<string | null>(null);
@@ -132,6 +134,12 @@ export const SpreadsheetHubView: React.FC<SpreadsheetHubViewProps> = ({
           return p.eventDate >= new Date().toISOString().slice(0, 10);
         }).length
       } Aktif`,
+    },
+    {
+      key: "kas",
+      label: "Uang Kas 6 PIC",
+      icon: Coins,
+      badge: "Rp 5k/minggu",
     },
     {
       key: "executive",
@@ -362,6 +370,8 @@ export const SpreadsheetHubView: React.FC<SpreadsheetHubViewProps> = ({
           isSyncing={isSyncing}
         />
       )}
+
+      {activeTab === "kas" && <KasMarketingPurwokertoCard />}
 
       {activeTab === "executive" && (
         <ExecutiveMeetingRecap

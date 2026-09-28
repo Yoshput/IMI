@@ -238,7 +238,7 @@ export const getWhatsAppVoucherOfferText = (
     ``,
     `Menindaklanjuti proposal sponsorship yang telah diajukan untuk kegiatan "${eventName.trim()}", pihak manajemen Optik I See You tertarik untuk memberikan dukungan kerja sama.`,
     ``,
-    `Kami dapat berpartisipasi dengan dukungan senilai total Rp1.000.000 (satu juta rupiah) dalam bentuk 20 lembar Voucher Belanja Kacamata masing-masing senilai Rp50.000. Voucher ini dapat dialokasikan oleh panitia sebagai hadiah pemenang lomba, doorprize peserta, maupun apresiasi narasumber.`,
+    `Kami dapat berpartisipasi dengan paket sponsorship senilai total Rp1.000.000 (satu juta rupiah) dalam bentuk 20 lembar Voucher Belanja Kacamata masing-masing senilai Rp50.000 serta produk kacamata untuk doorprize. Voucher ini dapat dialokasikan oleh panitia sebagai hadiah pemenang lomba, doorprize peserta, maupun apresiasi narasumber.`,
     ``,
     `Sebagai timbal balik kerja sama, kami berharap dapat memperoleh fasilitas promosi sponsorship seperti:`,
     `1. Pencantuman logo Optik I See You pada media publikasi utama (backdrop / banner / pamflet)`,
@@ -257,11 +257,64 @@ export const getWhatsAppVoucherOfferText = (
   return lines.join("\n");
 };
 
+/**
+ * Official, professional WhatsApp text tailored by proposal quality category
+ */
+export const getWhatsAppOfferByCategory = (
+  eventName: string,
+  applicantName: string,
+  targetBranch: string,
+  category: "bagus" | "sedang" | "jelek" = "sedang"
+): string => {
+  const cleanBranch = targetBranch?.trim() || "Purwokerto";
+  const name = formatPersonName(applicantName);
+
+  if (category === "jelek") {
+    return [
+      `Selamat siang Kak ${name}, salam kenal dari tim Partnership Optik I See You Cabang ${cleanBranch}.`,
+      ``,
+      `Menindaklanjuti proposal kegiatan "${eventName.trim()}", kami mengucapkan terima kasih atas tawaran kerja sama yang diajukan kepada kami.`,
+      ``,
+      `Setelah kami tinjau bersama manajemen, mohon maaf saat ini kuota sponsorship dana tunai dan produk utama kami untuk periode ini sudah terisi penuh. Namun demikian, sebagai bentuk apresiasi terhadap inisiatif panitia, Optik I See You bersedia memberikan dukungan berupa "Voucher Cuci & Penyetelan Kacamata Gratis" bagi seluruh panitia dan peserta kegiatan yang dapat diambil di store Optik I See You Cabang ${cleanBranch}.`,
+      ``,
+      `Semoga seluruh rangkaian kegiatan Kak ${name} dan rekan-rekan panitia dapat terlaksana dengan lancar dan sukses. Terima kasih atas pengertian dan kerja samanya.`,
+      ``,
+      `Salam hormat,`,
+      `Tim Partnership Optik I See You Cabang ${cleanBranch}`,
+    ].join("\n");
+  }
+
+  if (category === "bagus") {
+    return [
+      `Selamat siang Kak ${name}, salam hangat dari tim Partnership Optik I See You Cabang ${cleanBranch}.`,
+      ``,
+      `Menindaklanjuti pengajuan proposal untuk event akbar "${eventName.trim()}", pihak manajemen Optik I See You sangat antusias untuk berpartisipasi sebagai Official Eyewear Partner.`,
+      ``,
+      `Melihat skala kegiatan yang besar serta audiens yang sangat potensial, kami siap memberikan dukungan terpadu (Paket Golden Sponsorship) berupa:`,
+      `1. Paket Barter Voucher Belanja Kacamata Resmi Optik I See You (Voucher nominal Rp20.000 / Rp50.000 untuk peserta & hadiah lomba)`,
+      `2. Produk Kacamata Trendy / Frame Premium untuk hadiah pemenang lomba atau doorprize utama`,
+      `3. Hak Pembukaan Stand / Booth Pemeriksaan Mata Gratis & Edukasi Visual oleh tim profesional Optik I See You di lokasi acara`,
+      `4. Alokasi dukungan sponsorship proporsional yang dapat diselaraskan dengan hak promosi utama (penempatan logo backdrop, adlibs MC, dan aktivasi booth)`,
+      ``,
+      `Kapan sekiranya ada waktu yang tepat bagi kami untuk berdiskusi lebih lanjut atau bertemu langsung dengan perwakilan panitia guna menyepakati teknis kerja sama ini?`,
+      ``,
+      `Terima kasih dan salam sukses untuk event "${eventName.trim()}".`,
+      ``,
+      `Salam hormat,`,
+      `Tim Partnership Optik I See You Cabang ${cleanBranch}`,
+    ].join("\n");
+  }
+
+  // Kategori Sedang (Default)
+  return getWhatsAppVoucherOfferText(eventName, applicantName, targetBranch);
+};
+
 const formatWhatsAppUrl = (
   rawPhone: string,
   eventName: string,
   applicantName: string,
-  targetBranch: string
+  targetBranch: string,
+  category: "bagus" | "sedang" | "jelek" = "sedang"
 ): string => {
   let clean = (rawPhone || "").replace(/[^0-9]/g, "");
   if (clean.startsWith("08")) {
@@ -269,7 +322,7 @@ const formatWhatsAppUrl = (
   } else if (clean.startsWith("8")) {
     clean = "628" + clean.slice(1);
   }
-  const message = getWhatsAppVoucherOfferText(eventName, applicantName, targetBranch);
+  const message = getWhatsAppOfferByCategory(eventName, applicantName, targetBranch, category);
   return `https://wa.me/${clean}?text=${encodeURIComponent(message)}`;
 };
 
@@ -279,6 +332,12 @@ export interface BarterEvaluation {
   tierLabel: string;
   badgeClass: string;
   reason: string;
+  qualityCategory: "bagus" | "sedang" | "jelek";
+  qualityLabel: string;
+  qualityBadge: string;
+  recommendedDecision: string;
+  packageOffered: string;
+  negotiationNote: string;
 }
 
 export const evaluateBarterVoucher = (item: FormProposalItem): BarterEvaluation => {
@@ -286,7 +345,71 @@ export const evaluateBarterVoucher = (item: FormProposalItem): BarterEvaluation 
   const benefit = (item.benefit || "").toLowerCase();
   const desc = (item.description || "").toLowerCase();
   const name = (item.eventName || "").toLowerCase();
-  const combined = `${name} ${benefit} ${desc} ${note}`;
+  const inst = (item.institution || "").toLowerCase();
+  const combined = `${inst} ${name} ${benefit} ${desc} ${note}`;
+
+  // 1. Check Elite / Expensive Schools (Puhua, National Plus, International, Elite)
+  const isPuhuaOrElite =
+    combined.includes("puhua") ||
+    combined.includes("national plus") ||
+    combined.includes("international") ||
+    combined.includes("internasional") ||
+    combined.includes("al azhar") ||
+    combined.includes("pelita harapan");
+
+  // 2. Regular SMA / SMK / Madrasah
+  const isRegularSmaSmk =
+    !isPuhuaOrElite &&
+    (/\b(sma|smk|man|mas)\b/i.test(combined) ||
+      /sma\s*\d+/i.test(combined) ||
+      /smk\s*\d+/i.test(combined) ||
+      combined.includes("sekolah menengah"));
+
+  // 3. Large Scale / 500+ attendees / Big Events
+  const isBigEventOr500Plus =
+    combined.includes("500") ||
+    combined.includes("1000") ||
+    combined.includes("1.000") ||
+    combined.includes("konser") ||
+    combined.includes("festival") ||
+    combined.includes("dies natalis") ||
+    combined.includes("grand opening") ||
+    combined.includes("expo") ||
+    combined.includes("jalan sehat") ||
+    combined.includes("marathon") ||
+    combined.includes("pns");
+
+  // 4. Small Scale / Under 50 attendees
+  const isSmallOrUnder50 =
+    combined.includes("<50") ||
+    combined.includes("internal kecil") ||
+    ((combined.includes("peserta 2") || combined.includes("peserta 3") || combined.includes("peserta 40")) &&
+      !isBigEventOr500Plus);
+
+  let qualityCategory: "bagus" | "sedang" | "jelek" = "sedang";
+  let qualityLabel = "Kategori Sedang (Peserta >50)";
+  let qualityBadge = "bg-blue-500/10 text-blue-700 dark:text-blue-300 border-blue-500/30";
+  let recommendedDecision = "Setujui Paket Barter Voucher & Produk Kacamata";
+  let packageOffered = "Voucher Belanja Kacamata + Produk Kacamata Hadiah";
+  let negotiationNote = "Target peserta >50. Tawarkan barter voucher belanja kacamata + produk kacamata doorprize.";
+
+  if (isBigEventOr500Plus) {
+    qualityCategory = "bagus";
+    qualityLabel = "Kategori Bagus (Peserta 500+ / Golden Tier)";
+    qualityBadge = "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/30 font-bold";
+    recommendedDecision = "Ambil Paket Golden / Di Atasnya (Nego Teknik Marketing)";
+    packageOffered = "Voucher 20k (80 voucher senilai 8 Juta barter), Produk Kacamata, & Hak Open Stand Cek Mata Gratis";
+    negotiationNote = "Teknik Marketing: Misal penawaran 10 juta -> Nego 8 juta voucher 20k (80 voucher) + 2 juta fresh money. Ambil hak open stand pemeriksaan & giveaway grand opening.";
+  } else if (isRegularSmaSmk || isSmallOrUnder50) {
+    qualityCategory = "jelek";
+    qualityLabel = "Kategori Jelek (Peserta <50 / SMA Biasa)";
+    qualityBadge = "bg-red-500/10 text-red-700 dark:text-red-400 border-red-500/30";
+    recommendedDecision = "Ditolak Utama (Hanya Berikan Voucher Cuci Kacamata)";
+    packageOffered = "Voucher Cuci & Setting Kacamata Gratis Saja";
+    negotiationNote = isRegularSmaSmk
+      ? "Anak SMA/SMK reguler bukan pasar utama kacamata medis (uang jajan ngepas, kecuali SMA Puhua/mahal). Tolak sponsor dana/produk utama, berikan voucher cuci kacamata gratis saja."
+      : "Target peserta < 50 / proposal internal kecil. Ditolak sponsor utama, hanya berikan voucher cuci kacamata gratis.";
+  }
 
   // 1. Sudah disetujui voucher di catatan spreadsheet oleh atasan
   if (note.includes("vou") || note.includes("voucher")) {
@@ -296,10 +419,16 @@ export const evaluateBarterVoucher = (item: FormProposalItem): BarterEvaluation 
       tierLabel: "Disetujui Voucher",
       badgeClass: "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/25",
       reason: `Catatan resmi spreadsheet: ${item.sheetNote}`,
+      qualityCategory,
+      qualityLabel,
+      qualityBadge,
+      recommendedDecision,
+      packageOffered,
+      negotiationNote,
     };
   }
 
-  // 2. Terbuka secara tertulis atau benefit in-kind/branding jelas (Google review, sawalla, in-kind)
+  // 2. Terbuka secara tertulis atau benefit in-kind/branding jelas
   if (
     combined.includes("in-kind") ||
     combined.includes("inkind") ||
@@ -316,6 +445,12 @@ export const evaluateBarterVoucher = (item: FormProposalItem): BarterEvaluation 
       tierLabel: "Prioritas Barter",
       badgeClass: "bg-violet-500/10 text-violet-700 dark:text-violet-300 border-violet-500/25",
       reason: "Tersedia paket In-Kind resmi / benefit barter branding riil (Google review, fleksibilitas kerja sama).",
+      qualityCategory,
+      qualityLabel,
+      qualityBadge,
+      recommendedDecision,
+      packageOffered,
+      negotiationNote,
     };
   }
 
@@ -325,21 +460,33 @@ export const evaluateBarterVoucher = (item: FormProposalItem): BarterEvaluation 
     (benefit.includes("mulai dari rp") && !benefit.includes("in-kind") && !combined.includes("adlibs") && !combined.includes("booth"))
   ) {
     return {
-      isViable: false,
+      isViable: qualityCategory === "bagus",
       tier: "unlikely",
-      tierLabel: "Kurang Sesuai",
+      tierLabel: qualityCategory === "bagus" ? "Nego Golden Tier" : "Kurang Sesuai",
       badgeClass: "bg-neutral-500/10 text-neutral-600 dark:text-neutral-400 border-neutral-500/20",
-      reason: "Penawaran terfokus pada donasi dana tunai tetap, tidak mencantumkan paket barter produk/voucher.",
+      reason: "Penawaran terfokus pada donasi dana tunai; tawarkan barter voucher dan stand promosi.",
+      qualityCategory,
+      qualityLabel,
+      qualityBadge,
+      recommendedDecision,
+      packageOffered,
+      negotiationNote,
     };
   }
 
-  // 4. Potensial ditawarkan barter voucher (Event mahasiswa, ada logo/adlibs MC/booth/pembagian voucher)
+  // 4. Potensial ditawarkan barter voucher
   return {
-    isViable: true,
+    isViable: qualityCategory !== "jelek",
     tier: "negotiable",
     tierLabel: "Potensial Barter",
     badgeClass: "bg-blue-500/10 text-blue-700 dark:text-blue-300 border-blue-500/25",
-    reason: "Segmen mahasiswa/pelajar relevan kacamata; dapat diajukan paket voucher sponsorship / hadiah doorprize.",
+    reason: "Segmen relevan kacamata; ajukan paket sponsorship barter sesuai kualifikasi kategori.",
+    qualityCategory,
+    qualityLabel,
+    qualityBadge,
+    recommendedDecision,
+    packageOffered,
+    negotiationNote,
   };
 };
 
@@ -420,6 +567,7 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
   const [selectedStatus, setSelectedStatus] = useState<"all" | DecisionStatus>("all");
   const [timeFilter, setTimeFilter] = useState<"upcoming" | "all" | "past">("upcoming");
   const [barterOnly, setBarterOnly] = useState(false);
+  const [qualityFilter, setQualityFilter] = useState<"all" | "bagus" | "sedang" | "jelek">("all");
   const [selectedBatch, setSelectedBatch] = useState<"all" | 1 | 2 | 3 | 4>("all");
   const [viewMode, setViewMode] = useState<"cards" | "table">("cards");
   const [expandedId, setExpandedId] = useState<string | null>(null);
@@ -660,7 +808,13 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
   };
 
   const handleCopyChat = (item: FormProposalItem) => {
-    const text = getWhatsAppVoucherOfferText(item.eventName, item.applicantName, item.targetBranch);
+    const barter = evaluateBarterVoucher(item);
+    const text = getWhatsAppOfferByCategory(
+      item.eventName,
+      item.applicantName,
+      item.targetBranch,
+      barter.qualityCategory
+    );
     navigator.clipboard.writeText(text);
     setCopiedChatId(item.id);
     setTimeout(() => setCopiedChatId(null), 2500);
@@ -724,9 +878,14 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
         matchTime = days !== null && days < 0;
       }
 
+      const barter = evaluateBarterVoucher(item);
+
       if (barterOnly) {
-        const barter = evaluateBarterVoucher(item);
         if (!barter.isViable) return false;
+      }
+
+      if (qualityFilter !== "all") {
+        if (barter.qualityCategory !== qualityFilter) return false;
       }
 
       if (selectedBatch !== "all") {
@@ -743,7 +902,7 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
       if (!b.eventDate) return -1;
       return a.eventDate.localeCompare(b.eventDate);
     });
-  }, [validItems, searchQuery, selectedBranch, selectedStatus, timeFilter, barterOnly, selectedBatch, decisions, proposalBatchMap]);
+  }, [validItems, searchQuery, selectedBranch, selectedStatus, timeFilter, barterOnly, qualityFilter, selectedBatch, decisions, proposalBatchMap]);
 
   const stats = useMemo(() => {
     const all = validItems.length;
@@ -777,7 +936,11 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
       return r === "interested" || r === "confirmed";
     }).length;
 
-    return { all, upcoming, past, urgent, approved, pending, rejected, negotiate, contact, barterViable, contacted, respondedPositive };
+    const bagusCount = validItems.filter((i) => evaluateBarterVoucher(i).qualityCategory === "bagus").length;
+    const sedangCount = validItems.filter((i) => evaluateBarterVoucher(i).qualityCategory === "sedang").length;
+    const jelekCount = validItems.filter((i) => evaluateBarterVoucher(i).qualityCategory === "jelek").length;
+
+    return { all, upcoming, past, urgent, approved, pending, rejected, negotiate, contact, barterViable, contacted, respondedPositive, bagusCount, sedangCount, jelekCount };
   }, [validItems, decisions]);
 
   const openPreview = (fileUrl: string, title: string) => {
@@ -937,6 +1100,62 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
           </button>
         </div>
 
+        {/* Mobile Quality Category Filter (Standar Manajemen) */}
+        <div className="bg-surface border border-border p-2.5 rounded-2xl space-y-2 shadow-subtle">
+          <div className="flex items-center justify-between text-[11px] font-bold text-foreground-secondary px-0.5">
+            <span>Filter Kualitas Proposal:</span>
+            <span className="text-[10px] text-foreground-muted">Standar Kurasi</span>
+          </div>
+          <div className="grid grid-cols-4 gap-1">
+            <button
+              onClick={() => setQualityFilter("all")}
+              className={`min-h-[34px] px-1 py-1 rounded-xl text-[11px] font-bold transition-all text-center ${
+                qualityFilter === "all"
+                  ? "bg-foreground text-surface shadow-subtle"
+                  : "bg-surface-secondary text-foreground-secondary"
+              }`}
+            >
+              Semua ({stats.all})
+            </button>
+            <button
+              onClick={() => setQualityFilter("bagus")}
+              className={`min-h-[34px] px-1 py-1 rounded-xl text-[11px] font-bold transition-all text-center flex flex-col items-center justify-center ${
+                qualityFilter === "bagus"
+                  ? "bg-emerald-600 text-white shadow-subtle"
+                  : "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-500/25"
+              }`}
+            >
+              <span>★ Bagus</span>
+              <span className="text-[9px] opacity-80">({stats.bagusCount})</span>
+            </button>
+            <button
+              onClick={() => setQualityFilter("sedang")}
+              className={`min-h-[34px] px-1 py-1 rounded-xl text-[11px] font-bold transition-all text-center flex flex-col items-center justify-center ${
+                qualityFilter === "sedang"
+                  ? "bg-violet-600 text-white shadow-subtle"
+                  : "bg-violet-500/10 text-violet-700 dark:text-violet-300 border border-violet-500/25"
+              }`}
+            >
+              <span>● Sedang</span>
+              <span className="text-[9px] opacity-80">({stats.sedangCount})</span>
+            </button>
+            <button
+              onClick={() => setQualityFilter("jelek")}
+              className={`min-h-[34px] px-1 py-1 rounded-xl text-[11px] font-bold transition-all text-center flex flex-col items-center justify-center ${
+                qualityFilter === "jelek"
+                  ? "bg-rose-600 text-white shadow-subtle"
+                  : "bg-rose-500/10 text-rose-700 dark:text-rose-300 border border-rose-500/25"
+              }`}
+            >
+              <span>✕ Jelek</span>
+              <span className="text-[9px] opacity-80">({stats.jelekCount})</span>
+            </button>
+          </div>
+          <div className="text-[10px] text-foreground-muted px-0.5 leading-tight">
+            *SMA reguler diarahkan Voucher Cuci Kacamata (Jelek). SMA Puhua/mahal masuk Sedang/Bagus.
+          </div>
+        </div>
+
         {/* Mobile Quick Barter Voucher Filter */}
         <button
           onClick={() => {
@@ -1088,7 +1307,8 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
                 item.applicantPhone,
                 item.eventName,
                 item.applicantName,
-                item.targetBranch
+                item.targetBranch,
+                barter.qualityCategory
               );
 
               return (
@@ -1124,6 +1344,7 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
                       <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full border ${barter.badgeClass}`}>
                         {barter.tierLabel}
                       </span>
+                      {barter.qualityBadge}
                       {/* Contacted badge */}
                       {decision?.contactedAt && (
                         <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full border ${
@@ -1167,9 +1388,17 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
                   {/* Barter Analysis Chip */}
                   <div className="flex items-start gap-2 p-2.5 rounded-2xl bg-surface-secondary/50 border border-border/60 text-xs">
                     <Tag className="w-3.5 h-3.5 text-violet-500 shrink-0 mt-0.5" />
-                    <div className="space-y-0.5">
-                      <span className="font-bold text-foreground block">Analisis Barter Voucher:</span>
+                    <div className="space-y-1 flex-1">
+                      <div className="flex items-center justify-between flex-wrap gap-1">
+                        <span className="font-bold text-foreground">Paket: {barter.packageOffered}</span>
+                        {barter.qualityBadge}
+                      </div>
                       <span className="text-foreground-secondary leading-relaxed block">{barter.reason}</span>
+                      {barter.negotiationNote && (
+                        <span className="text-[11px] text-amber-700 dark:text-amber-300 font-semibold block">
+                          Strategi: {barter.negotiationNote}
+                        </span>
+                      )}
                     </div>
                   </div>
 
@@ -1250,6 +1479,10 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
                       <span>
                         {decision?.contactedAt
                           ? `Hubungi Lagi — Sudah Dikirim ${new Date(decision.contactedAt).toLocaleDateString("id-ID", { day: "numeric", month: "short" })}`
+                          : barter.qualityCategory === "jelek"
+                          ? "Kirim Format Voucher Cuci via WhatsApp"
+                          : barter.qualityCategory === "bagus"
+                          ? "Kirim Tawaran Golden Tier via WhatsApp"
                           : "Kirim Penawaran 20 Voucher via WhatsApp"}
                       </span>
                     </a>
@@ -1296,17 +1529,23 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
                     <button
                       onClick={() => handleCopyChat(item)}
                       className="w-full min-h-[42px] py-2 px-3 rounded-xl border border-violet-500/30 bg-violet-500/10 hover:bg-violet-500/15 text-xs font-bold text-violet-700 dark:text-violet-300 flex items-center justify-center gap-1.5 active:scale-95 transition-all"
-                      title="Salin Pesan WA Tawaran 20 Voucher senilai 50rb"
+                      title="Salin Draft Chat WA Sesuai Kategori"
                     >
                       {copiedChatId === item.id ? (
                         <>
                           <Check className="w-3.5 h-3.5 text-emerald-600" />
-                          <span className="text-emerald-600">Draft Chat 20 Voucher Disalin!</span>
+                          <span className="text-emerald-600">Draft Chat Sesuai Kategori Disalin!</span>
                         </>
                       ) : (
                         <>
                           <MessageSquare className="w-3.5 h-3.5 text-violet-600 dark:text-violet-400" />
-                          <span>Salin Draft Chat WA (20 Voucher @ 50rb)</span>
+                          <span>
+                            {barter.qualityCategory === "jelek"
+                              ? "Salin Draft Chat (Voucher Cuci Gratis)"
+                              : barter.qualityCategory === "bagus"
+                              ? "Salin Draft Chat (Paket Golden Tier)"
+                              : "Salin Draft Chat WA (20 Voucher @ 50rb)"}
+                          </span>
                         </>
                       )}
                     </button>
@@ -1686,6 +1925,68 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
           </div>
         </div>
 
+        {/* Desktop Quality Category Filter (Standar Manajemen) */}
+        <div className="flex flex-wrap items-center justify-between gap-3 px-3.5 py-2.5 rounded-2xl bg-surface border border-border shadow-subtle">
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="text-[11px] font-bold text-foreground-secondary uppercase tracking-wider mr-1">
+              Kualitas Proposal:
+            </span>
+            <button
+              onClick={() => setQualityFilter("all")}
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                qualityFilter === "all"
+                  ? "bg-foreground text-surface shadow-subtle"
+                  : "bg-surface-secondary text-foreground-secondary hover:text-foreground"
+              }`}
+            >
+              Semua Kategori ({stats.all})
+            </button>
+            <button
+              onClick={() => setQualityFilter("bagus")}
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+                qualityFilter === "bagus"
+                  ? "bg-emerald-600 text-white shadow-subtle"
+                  : "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 hover:bg-emerald-500/20 border border-emerald-500/25"
+              }`}
+            >
+              <span>★ Kategori Bagus (Peserta 500+)</span>
+              <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-emerald-500/20">
+                {stats.bagusCount}
+              </span>
+            </button>
+            <button
+              onClick={() => setQualityFilter("sedang")}
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+                qualityFilter === "sedang"
+                  ? "bg-violet-600 text-white shadow-subtle"
+                  : "bg-violet-500/10 text-violet-700 dark:text-violet-300 hover:bg-violet-500/20 border border-violet-500/25"
+              }`}
+            >
+              <span>● Kategori Sedang (&gt;50 Peserta)</span>
+              <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-violet-500/20">
+                {stats.sedangCount}
+              </span>
+            </button>
+            <button
+              onClick={() => setQualityFilter("jelek")}
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 ${
+                qualityFilter === "jelek"
+                  ? "bg-rose-600 text-white shadow-subtle"
+                  : "bg-rose-500/10 text-rose-700 dark:text-rose-300 hover:bg-rose-500/20 border border-rose-500/25"
+              }`}
+            >
+              <span>✕ Kategori Jelek (Cuci Kacamata)</span>
+              <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-rose-500/20">
+                {stats.jelekCount}
+              </span>
+            </button>
+          </div>
+
+          <div className="text-[11px] text-foreground-muted italic">
+            *SMA reguler diarahkan Voucher Cuci. SMA Puhua/mahal masuk Sedang/Bagus.
+          </div>
+        </div>
+
         {/* Desktop Batch 5-5 Strategy Banner */}
         <div className="rounded-2xl bg-surface border border-border p-4 flex flex-col lg:flex-row lg:items-center justify-between gap-3 shadow-subtle">
           <div className="space-y-1">
@@ -1783,7 +2084,8 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
                 item.applicantPhone,
                 item.eventName,
                 item.applicantName,
-                item.targetBranch
+                item.targetBranch,
+                barter.qualityCategory
               );
 
               return (
@@ -1824,6 +2126,7 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
                         <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full border ${barter.badgeClass}`}>
                           {barter.tierLabel}
                         </span>
+                        {barter.qualityBadge}
                         {/* Contacted badge desktop */}
                         {decision?.contactedAt && (
                           <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full border ${
@@ -1872,9 +2175,17 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
                     {/* Barter Analysis Chip */}
                     <div className="mt-2.5 flex items-start gap-2 p-2.5 rounded-xl bg-surface-secondary/50 border border-border/60 text-xs">
                       <Tag className="w-3.5 h-3.5 text-violet-500 shrink-0 mt-0.5" />
-                      <div className="space-y-0.5">
-                        <span className="font-bold text-foreground block">Analisis Barter Voucher:</span>
+                      <div className="space-y-1 flex-1">
+                        <div className="flex items-center justify-between flex-wrap gap-1">
+                          <span className="font-bold text-foreground">Paket: {barter.packageOffered}</span>
+                          {barter.qualityBadge}
+                        </div>
                         <span className="text-foreground-secondary leading-relaxed block">{barter.reason}</span>
+                        {barter.negotiationNote && (
+                          <span className="text-[11px] text-amber-700 dark:text-amber-300 font-semibold block">
+                            Strategi: {barter.negotiationNote}
+                          </span>
+                        )}
                       </div>
                     </div>
 
@@ -1960,7 +2271,7 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
                         <button
                           onClick={() => handleCopyChat(item)}
                           className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-violet-500/30 bg-violet-500/10 hover:bg-violet-500/15 text-xs font-bold text-violet-700 dark:text-violet-300 transition-all shadow-subtle active:scale-95"
-                          title="Salin Draft Pesan WhatsApp 20 Voucher senilai 50rb"
+                          title="Salin Draft Pesan WhatsApp Sesuai Kategori"
                         >
                           {copiedChatId === item.id ? (
                             <>
@@ -1970,7 +2281,13 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
                           ) : (
                             <>
                               <MessageSquare className="w-3.5 h-3.5 text-violet-600 dark:text-violet-400" />
-                              <span>Salin Chat WA</span>
+                              <span>
+                                {barter.qualityCategory === "jelek"
+                                  ? "Salin Draft Cuci"
+                                  : barter.qualityCategory === "bagus"
+                                  ? "Salin Draft Golden"
+                                  : "Salin Chat WA"}
+                              </span>
                             </>
                           )}
                         </button>
@@ -1985,10 +2302,18 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
                               ? "bg-emerald-700 hover:bg-emerald-800"
                               : "bg-emerald-600 hover:bg-emerald-700"
                           }`}
-                          title="Kirim penawaran 20 voucher via WhatsApp"
+                          title="Kirim penawaran via WhatsApp"
                         >
                           <Phone className="w-3 h-3" />
-                          <span>{decision?.contactedAt ? "Hubungi Lagi" : "Kirim Penawaran WA"}</span>
+                          <span>
+                            {decision?.contactedAt
+                              ? "Hubungi Lagi"
+                              : barter.qualityCategory === "jelek"
+                              ? "Kirim Voucher Cuci"
+                              : barter.qualityCategory === "bagus"
+                              ? "Kirim Tawaran Golden"
+                              : "Kirim Penawaran WA"}
+                          </span>
                         </a>
                       </div>
                     </div>
@@ -2145,7 +2470,8 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
                       item.applicantPhone,
                       item.eventName,
                       item.applicantName,
-                      item.targetBranch
+                      item.targetBranch,
+                      barter.qualityCategory
                     );
 
                     return (
@@ -2176,6 +2502,10 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
                             <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${barter.badgeClass}`}>
                               {barter.tierLabel}
                             </span>
+                            {barter.qualityBadge}
+                          </div>
+                          <div className="text-[10px] font-semibold text-foreground-secondary mt-1">
+                            Paket: {barter.packageOffered}
                           </div>
                         </td>
                         <td className="py-3.5 px-4 text-foreground-secondary font-medium">{item.institution}</td>
@@ -2298,35 +2628,46 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
                 });
 
                 const lines = [
-                  `REKAP SELEKSI PROPOSAL BARTER VOUCHER - OPTIK I SEE YOU`,
+                  `REKAP SELEKSI PROPOSAL BARTER & SPONSORSHIP - OPTIK I SEE YOU`,
                   `Tanggal Laporan : ${todayStr}`,
-                  `Total Rekomendasi: ${barterProposals.length} Proposal Mendatang`,
-                  `Prinsip Kerja Sama: Barter Voucher Diskon Belanja (Bukan Support Dana Tunai)`,
+                  `Total Proposal Masuk: ${validItems.length} (Aktif Mendatang: ${stats.upcoming})`,
+                  `Rincian Klasifikasi Kualitas:`,
+                  `- Kategori Bagus (Peserta 500+ / Event Akbar) : ${stats.bagusCount} Proposal`,
+                  `- Kategori Sedang (>50 Peserta / Kampus & Umum) : ${stats.sedangCount} Proposal`,
+                  `- Kategori Jelek (<50 Peserta / SMA Reguler)   : ${stats.jelekCount} Proposal`,
                   `========================================`,
+                  ``,
+                  `STANDAR PENANGANAN MANAJEMEN:`,
+                  `1. Kategori Jelek (<50 peserta / SMA SMK reguler non-elit):`,
+                  `   - Berikan Voucher Cuci & Setel Kacamata Gratis; tolak dana tunai & produk utama.`,
+                  `2. Kategori Sedang (>50 peserta / event menengah):`,
+                  `   - Paket Barter 20 Voucher Belanja @ Rp50.000 (Rp1.000.000 barter) + Produk Kacamata Doorprize.`,
+                  `3. Kategori Bagus (Peserta 500+ up / event akbar / segmen campuran):`,
+                  `   - Paket Golden Tier: Barter Voucher Belanja Rp20k/50k, Frame Kacamata, Open Stand Booth Cek Mata Gratis, Nego sponsorship proporsional.`,
+                  `----------------------------------------`,
                   ``,
                   ...barterProposals.map((item, idx) => {
                     const barter = evaluateBarterVoucher(item);
                     const urgency = getUrgencyBadge(getDaysUntilEvent(item.eventDate));
                     const d = formatDate(item.eventDate);
                     return [
-                      `${idx + 1}. [${barter.tierLabel.toUpperCase()}] ${item.eventName}`,
+                      `${idx + 1}. [${barter.qualityLabel.toUpperCase()}] ${item.eventName}`,
                       `   Penyelenggara : ${item.institution}`,
                       `   Jadwal Acara  : ${d} (${urgency?.label || "-"}) | Cabang: ${item.targetBranch}`,
                       `   Kontak Panitia: ${item.applicantName} (${item.applicantPhone})`,
-                      `   Alasan Masuk  : ${barter.reason}`,
+                      `   Paket Solusi  : ${barter.packageOffered}`,
+                      `   Analisis      : ${barter.reason}`,
+                      barter.negotiationNote ? `   Arahan Nego   : ${barter.negotiationNote}` : null,
                       item.sheetNote ? `   Catatan Sheet : ${item.sheetNote}` : null,
                       ``,
                     ].filter(Boolean).join("\n");
                   }),
-                  `----------------------------------------`,
-                  `STRATEGI NEGOSIASI BARTER:`,
-                  `1. Tawarkan paket 5-10 lembar voucher belanja (misal voucher potongan Rp50.000 atau Rp100.000).`,
-                  `2. Target imbal balik: Logo backdrop, adlibs MC, ulasan Google Maps, dan publikasi story/konten media sosial.`,
-                  `3. Voucher menjadi alat penarik pengunjung (customer acquisition) agar datang langsung ke cabang Optik I See You.`,
+                  `========================================`,
+                  `Disusun oleh Tim Partnership & Marketing Intelligence Optik I See You`,
                 ];
 
                 navigator.clipboard.writeText(lines.join("\n"));
-                alert("Rekapan proposal barter voucher untuk atasan telah disalin ke clipboard.");
+                alert("Rekapan proposal terstandarisasi telah disalin ke clipboard.");
               }}
               className="flex-1 sm:flex-initial min-h-[44px] flex items-center justify-center gap-2 px-4 py-2.5 rounded-full bg-violet-600 text-white text-xs font-bold hover:bg-violet-700 transition-all shadow-subtle active:scale-95"
             >

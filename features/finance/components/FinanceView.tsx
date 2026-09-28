@@ -15,6 +15,7 @@ import {
   ExternalLink,
   ShieldCheck,
 } from "lucide-react";
+import { KasMarketingPurwokertoCard } from "./KasMarketingPurwokertoCard";
 
 export const FinanceView: React.FC = () => {
   const [loading, setLoading] = useState(true);
@@ -190,6 +191,9 @@ export const FinanceView: React.FC = () => {
           </p>
         </div>
       </div>
+
+      {/* Kas Mingguan Tim Marketing Purwokerto (6 PIC) */}
+      <KasMarketingPurwokertoCard />
 
       {/* PIC Summary Grid */}
       <div className="space-y-3">
