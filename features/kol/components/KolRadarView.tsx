@@ -40,6 +40,18 @@ export const KolRadarView: React.FC = () => {
   const [activePitchModal, setActivePitchModal] = useState<any | null>(null);
   const [senderName, setSenderName] = useState<string>("Yossika");
   const [templateStyle, setTemplateStyle] = useState<"step1_ratecard" | "step2_barter" | "step3_owning">("step1_ratecard");
+  const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const [newKolForm, setNewKolForm] = useState({
+    name: "",
+    handle: "",
+    branchId: "pwt",
+    branchName: "Purwokerto",
+    followers: "55000",
+    engagementRate: "5.5",
+    niche: "Fashion, Hijab & Lifestyle",
+    notes: "KOL Terverifikasi >50K Followers, Reels aktif & views ramai."
+  });
 
   // Branch mapping
   const branchOptions = [
@@ -189,6 +201,41 @@ Have a nicee dayy ya kaa! 🌸✨`;
     setTimeout(() => setCopiedReport(false), 3000);
   };
 
+  const handleAddKol = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newKolForm.name || !newKolForm.handle) return;
+    setIsSubmitting(true);
+    try {
+      const res = await fetch("/api/kol", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newKolForm),
+      });
+      const data = await res.json();
+      if (data.success && data.data) {
+        setKols((prev: any) => [data.data, ...prev]);
+        setIsAddModalOpen(false);
+        setNewKolForm({
+          name: "",
+          handle: "",
+          branchId: "pwt",
+          branchName: "Purwokerto",
+          followers: "55000",
+          engagementRate: "5.5",
+          niche: "Fashion, Hijab & Lifestyle",
+          notes: "KOL Terverifikasi >50K Followers, Reels aktif & views ramai."
+        });
+      } else {
+        alert(data.error || "Gagal menambahkan KOL");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Terjadi kesalahan saat menambahkan KOL");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div className="space-y-6 pb-12">
       {/* Header section */}
@@ -231,6 +278,13 @@ Have a nicee dayy ya kaa! 🌸✨`;
                 <span>Salin Format Laporan Mas Raja</span>
               </>
             )}
+          </button>
+
+          <button
+            onClick={() => setIsAddModalOpen(true)}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-control bg-emerald-600 text-white text-xs font-semibold hover:bg-emerald-700 transition-colors shadow-subtle active:scale-95"
+          >
+            <span>+ Input KOL Terverifikasi (&gt;50K)</span>
           </button>
 
           <a
@@ -834,6 +888,161 @@ Have a nicee dayy ya kaa! 🌸✨`;
                 </button>
               </div>
             </div>
+          </div>
+        </div>
+      )}
+      {/* ADD VERIFIED KOL MODAL */}
+      {isAddModalOpen && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-surface rounded-card border border-border shadow-elevated max-w-lg w-full p-6 space-y-4">
+            <div className="flex items-center justify-between border-b border-border pb-3">
+              <div>
+                <h3 className="font-bold text-base text-foreground flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-emerald-600" />
+                  Input & Verifikasi KOL Baru (&gt;50K Followers)
+                </h3>
+                <span className="text-xs text-foreground-muted">
+                  Pastikan akun Instagram asli, reels ramai, dan bukan akun bodong.
+                </span>
+              </div>
+              <button
+                onClick={() => setIsAddModalOpen(false)}
+                className="text-foreground-muted hover:text-foreground p-1 text-sm font-bold"
+              >
+                ✕
+              </button>
+            </div>
+
+            <form onSubmit={handleAddKol} className="space-y-3 text-xs">
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-1">
+                  <label className="font-semibold text-foreground-secondary block">
+                    Username / Handle Instagram:
+                  </label>
+                  <div className="relative">
+                    <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-foreground-muted">@</span>
+                    <input
+                      type="text"
+                      required
+                      value={newKolForm.handle}
+                      onChange={(e) => setNewKolForm({ ...newKolForm, handle: e.target.value.replace(/[@]/g, "").trim() })}
+                      placeholder="misal: steffievangelis"
+                      className="w-full pl-6 pr-3 py-1.5 rounded-control bg-surface-secondary border border-border text-foreground font-semibold text-xs focus:ring-1 focus:ring-brand focus:outline-none"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="font-semibold text-foreground-secondary block">
+                    Nama Lengkap / Panggilan:
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={newKolForm.name}
+                    onChange={(e) => setNewKolForm({ ...newKolForm, name: e.target.value })}
+                    placeholder="misal: Steffi Evangelista"
+                    className="w-full px-3 py-1.5 rounded-control bg-surface-secondary border border-border text-foreground font-semibold text-xs focus:ring-1 focus:ring-brand focus:outline-none"
+                  />
+                </div>
+              </div>
+
+              {/* Direct Instagram Profile Check Link */}
+              {newKolForm.handle && (
+                <div className="bg-surface-secondary p-2.5 rounded-control flex items-center justify-between text-[11px]">
+                  <span className="text-foreground-secondary">
+                    Cek langsung di Instagram untuk verifikasi keaslian:
+                  </span>
+                  <a
+                    href={`https://www.instagram.com/${newKolForm.handle}/`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-brand font-semibold hover:underline inline-flex items-center gap-1"
+                  >
+                    Buka @{newKolForm.handle}
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+                </div>
+              )}
+
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-1">
+                  <label className="font-semibold text-foreground-secondary block">
+                    Cabang Alokasi:
+                  </label>
+                  <select
+                    value={newKolForm.branchId}
+                    onChange={(e) => {
+                      const bId = e.target.value;
+                      const bName = bId === "tegal" ? "Lunar Eyewear Tegal" : bId === "pwt" ? "Purwokerto" : bId === "pbg" ? "Purbalingga" : bId === "clp" ? "Cilacap" : "Wonosobo";
+                      setNewKolForm({ ...newKolForm, branchId: bId, branchName: bName });
+                    }}
+                    className="w-full px-3 py-1.5 rounded-control bg-surface-secondary border border-border text-foreground text-xs focus:outline-none"
+                  >
+                    <option value="pwt">Purwokerto (Optik I See You)</option>
+                    <option value="pbg">Purbalingga (Optik I See You)</option>
+                    <option value="clp">Cilacap (Optik I See You)</option>
+                    <option value="wsb">Wonosobo (Optik I See You)</option>
+                    <option value="tegal">Lunar Eyewear Tegal</option>
+                  </select>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="font-semibold text-foreground-secondary block">
+                    Estimasi Followers (Min. &gt;50K):
+                  </label>
+                  <input
+                    type="number"
+                    value={newKolForm.followers}
+                    onChange={(e) => setNewKolForm({ ...newKolForm, followers: e.target.value })}
+                    placeholder="Contoh: 75000"
+                    className="w-full px-3 py-1.5 rounded-control bg-surface-secondary border border-border text-foreground font-semibold text-xs focus:outline-none"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-1">
+                <label className="font-semibold text-foreground-secondary block">
+                  Niche / Kategori Konten:
+                </label>
+                <input
+                  type="text"
+                  value={newKolForm.niche}
+                  onChange={(e) => setNewKolForm({ ...newKolForm, niche: e.target.value })}
+                  placeholder="Contoh: Fashion Hijab, Food & Lifestyle Vlogger"
+                  className="w-full px-3 py-1.5 rounded-control bg-surface-secondary border border-border text-foreground text-xs focus:outline-none"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="font-semibold text-foreground-secondary block">
+                  Catatan / Bukti Reels Ramai:
+                </label>
+                <textarea
+                  rows={2}
+                  value={newKolForm.notes}
+                  onChange={(e) => setNewKolForm({ ...newKolForm, notes: e.target.value })}
+                  className="w-full px-3 py-1.5 rounded-control bg-surface-secondary border border-border text-foreground text-xs focus:outline-none resize-none"
+                />
+              </div>
+
+              <div className="flex items-center justify-end gap-2 pt-2 border-t border-border">
+                <button
+                  type="button"
+                  onClick={() => setIsAddModalOpen(false)}
+                  className="px-3.5 py-1.5 rounded-control bg-surface-secondary border border-border text-xs font-medium text-foreground hover:bg-surface-tertiary"
+                >
+                  Batal
+                </button>
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="px-4 py-1.5 rounded-control bg-emerald-600 text-white text-xs font-semibold hover:bg-emerald-700 transition-colors shadow-subtle flex items-center gap-1.5 disabled:opacity-50"
+                >
+                  {isSubmitting ? "Menyimpan..." : "Simpan & Verifikasi KOL"}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}

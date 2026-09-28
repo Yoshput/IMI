@@ -78,3 +78,90 @@ export async function PATCH(request: Request) {
     );
   }
 }
+
+export async function POST(request: Request) {
+  try {
+    const newKol = await request.json();
+
+    if (!newKol.name || !newKol.handle || !newKol.branchId) {
+      return NextResponse.json(
+        { success: false, error: "Name, handle, and branchId are required" },
+        { status: 400 }
+      );
+    }
+
+    if (!fs.existsSync(KOL_FILE_PATH)) {
+      return NextResponse.json({ success: false, error: "KOL data file not found" }, { status: 404 });
+    }
+
+    const rawData = fs.readFileSync(KOL_FILE_PATH, "utf-8");
+    const kols = JSON.parse(rawData);
+
+    // Sanitize handle
+    const cleanHandle = newKol.handle.replace(/[@]/g, "").trim();
+    const id = `kol-${newKol.branchId}-${Date.now().toString(36)}`;
+
+    const formattedKol = {
+      id,
+      branchId: newKol.branchId,
+      branchName: newKol.branchName || (newKol.branchId === "tegal" ? "Lunar Eyewear Tegal" : newKol.branchId.toUpperCase()),
+      brand: newKol.branchId === "tegal" ? "Lunar Eyewear" : "Optik I See You",
+      name: newKol.name,
+      handle: cleanHandle,
+      platform: "Instagram & TikTok",
+      profileImg: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
+      instagramUrl: `https://www.instagram.com/${cleanHandle}/`,
+      socialBladeUrl: `https://socialblade.com/instagram/user/${cleanHandle}`,
+      socialBladeGrade: newKol.socialBladeGrade || "B+",
+      followers: Number(newKol.followers) || 50000,
+      followersFormatted: newKol.followersFormatted || `${((Number(newKol.followers) || 50000) / 1000).toFixed(1)}K`,
+      engagementRate: Number(newKol.engagementRate) || 5.0,
+      niche: newKol.niche || "Lifestyle & Fashion",
+      audienceFit: newKol.audienceFit || "Verified Local Audience",
+      rateCard: newKol.rateCard || {
+        story: "Rp 250.000 - Rp 350.000",
+        reels: "Rp 750.000 - Rp 1.200.000",
+        feeds: "Rp 500.000",
+        visitStore: "Rp 1.250.000 - Rp 1.800.000",
+        bundled: "Rp 1.650.000 (Visit + Reels + Stories + Raw Ads)"
+      },
+      benefits: newKol.benefits || [
+        "Reels review frame kacamata & store experience",
+        "Stories promosi cabang & tag akun resmi",
+        "Voucher diskon followers untuk kuis di kolom komentar"
+      ],
+      owningRights: {
+        canOwnRaw: true,
+        terms: "Video mentahan 4K/60fps tanpa watermark untuk Meta Ads",
+        extraFeeEstimate: "Include paket visit / negotiable",
+        adsUsageDays: 60,
+        statusNote: "Bisa Owning. Siap diiklanin Meta Ads."
+      },
+      status: "Rekomendasi Utama",
+      notes: newKol.notes || "KOL Terverifikasi manual dengan followers >50K.",
+      contactWa: newKol.contactWa || "-",
+      pitchTemplate: `Hai kak ${newKol.name.split(" ")[0]}.. ✨👋\n\nPerkenalkan saya Yossika dari tim Marketing Optik I See You Glasses 👓\nSetelah melihat Social Media kaka, saya tertarik untuk mengajak kerja sama atau berkolaborasi dengan kita optik i see youu 🥰\n\nKalo boleh tau, boleh di infokan untuk ratecardnyaa, sebagai bahan pertimbangan kami?\n\nTerimakasih ditunggu kabar baiknya ya ka 🙏\nHave a nicee dayy ya kaa! 🌸✨`,
+      barterStrategy: {
+        standardFee: "Rp 250.000",
+        barterOption: "Barter Full Produk Kacamata",
+        followerVoucher: "Voucher Diskon Belanja Followers",
+        recommendedApproach: "Tahap 1: Tanya ratecard dulu. Tahap 2: Tawar barter kacamata + voucher followers."
+      }
+    };
+
+    kols.unshift(formattedKol);
+    fs.writeFileSync(KOL_FILE_PATH, JSON.stringify(kols, null, 2), "utf-8");
+
+    return NextResponse.json({
+      success: true,
+      message: `KOL ${formattedKol.name} (@${cleanHandle}) berhasil ditambahkan dan diverifikasi!`,
+      data: formattedKol
+    });
+  } catch (error: any) {
+    return NextResponse.json(
+      { success: false, error: error.message || "Failed to add KOL" },
+      { status: 500 }
+    );
+  }
+}
+
