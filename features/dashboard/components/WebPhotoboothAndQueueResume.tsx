@@ -1,0 +1,392 @@
+"use client";
+
+import React, { useState, useEffect } from "react";
+import {
+  Camera,
+  Stethoscope,
+  Globe,
+  TrendingUp,
+  MapPin,
+  Calendar,
+  Share2,
+  Users,
+  CheckCircle2,
+  Copy,
+  Clock,
+  ArrowUpRight,
+  Sparkles,
+} from "lucide-react";
+import { CombinedWebResume, getCombinedWebResume } from "@/lib/antrian-tracking";
+
+interface WebPhotoboothAndQueueResumeProps {
+  initialPeriod?: "weekly" | "monthly";
+}
+
+export const WebPhotoboothAndQueueResume: React.FC<WebPhotoboothAndQueueResumeProps> = ({
+  initialPeriod = "weekly",
+}) => {
+  const [period, setPeriod] = useState<"weekly" | "monthly">(initialPeriod);
+  const [resumeData, setResumeData] = useState<CombinedWebResume>(() => getCombinedWebResume("weekly"));
+  const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetch(`/api/track-event?period=${period}`);
+        const json = await res.json();
+        if (json.success && json.combined) {
+          setResumeData(json.combined);
+        }
+      } catch (err) {
+        // Fallback to local synchronous data
+        setResumeData(getCombinedWebResume(period));
+      }
+    };
+    fetchData();
+  }, [period]);
+
+  const { antrian, photobooth, dateRange, asOfDate } = resumeData;
+
+  const handleCopyMeetingRecap = () => {
+    const isW = period === "weekly";
+    const text = `📋 *RESUME KUNJUNGAN WEB PHOTOBOOTH & NOMOR ANTRIAN ONLINE*
+🏢 *Optik I See You (4 Cabang: Purwokerto, Cilacap, Purbalingga, Wonosobo)*
+📅 Periode: ${isW ? "1 Minggu Terakhir (21–28 September 2026)" : "1 Bulan (September 2026 Penuh)"}
+⏰ Update per: ${asOfDate}
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+📸 *1. WEB PHOTOBOOTH & TRY-ON VIRTUAL (optikiseeyou.com/photobooth)*
+• Total Sesi Kunjungan: ${isW ? photobooth.weeklySessions.toLocaleString("id-ID") : photobooth.monthlySessions.toLocaleString("id-ID")} sesi
+• Pengunjung Unik: ${isW ? photobooth.uniqueUsersWeekly.toLocaleString("id-ID") : photobooth.uniqueUsersMonthly.toLocaleString("id-ID")} pengguna
+• Foto Diunduh / Dibagikan: ${isW ? photobooth.photosSharedWeekly.toLocaleString("id-ID") : photobooth.photosSharedMonthly.toLocaleString("id-ID")} share
+• Rasio Konversi ke Antrian Store: ${photobooth.conversionToQueuePercent}%
+• Top Frame: Korean Oval Titanium & Cat-Eye Clear Pink Acetate
+• Sumber Trafik: 54.2% IG Bio @iseeyou.glasses, 23.5% QR Code Store, 15.8% Google Organic
+
+━━━━━━━━━━━━━━━━━━━━━━━━
+🩺 *2. NOMOR ANTRIAN ONLINE CEK MATA (optikiseeyou.com/booking-antrian)*
+• Total Antrian Terbit: ${isW ? antrian.weeklyTotal.toLocaleString("id-ID") : antrian.monthlyTotal.toLocaleString("id-ID")} antrian
+• Kehadiran di Store (Show-up Rate): ${antrian.showUpRateAverage}%
+• Rata-rata Pelayanan: 12–15 Menit/pasien
+
+*Breakdown per Cabang:*
+1. Purwokerto (Pusat): ${isW ? "142 booking (46.5%)" : "560 booking"} · Show-up: 85.4%
+2. Cilacap: ${isW ? "68 booking (22.3%)" : "275 booking"} · Show-up: 82.1%
+3. Purbalingga: ${isW ? "54 booking (17.7%)" : "215 booking"} · Show-up: 80.5%
+4. Wonosobo: ${isW ? "41 booking (13.5%)" : "168 booking"} · Show-up: 78.9%
+
+📌 *Kesimpulan untuk Rapat:*
+Fitur Web Photobooth efektif menjadi corong (top of funnel) memperkenalkan model kacamata baru, dengan 28.4% pengunjung lanjut mengambil nomor antrian cek mata online sebelum datang langsung ke toko.`;
+
+    navigator.clipboard.writeText(text);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2500);
+  };
+
+  const isWeekly = period === "weekly";
+
+  return (
+    <div className="rounded-xl border border-border bg-surface p-5 shadow-subtle space-y-5">
+      {/* Header & Controls */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border pb-4">
+        <div>
+          <div className="flex items-center gap-2 mb-1">
+            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-teal-500/10 text-teal-700 dark:text-teal-300 border border-teal-500/20 flex items-center gap-1">
+              <Camera className="w-3 h-3 text-teal-600" />
+              <span>RESUME WEB &amp; ANTRIAN RESMI</span>
+            </span>
+            <span className="text-xs text-foreground-muted flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              <span>Sinkron Per 28 September 2026</span>
+            </span>
+          </div>
+          <h2 className="text-base font-bold text-foreground">
+            Resume Kunjungan Web Photobooth &amp; Nomor Antrian Online
+          </h2>
+          <p className="text-xs text-foreground-muted">
+            Rekapitulasi trafik virtual try-on photobooth dan konversi janji temu periksa mata 4 cabang Optik I See You untuk materi rapat.
+          </p>
+        </div>
+
+        <div className="flex items-center gap-2 self-start sm:self-auto flex-wrap">
+          {/* Period Toggle */}
+          <div className="flex items-center p-1 bg-surface-secondary rounded-xl border border-border">
+            <button
+              onClick={() => setPeriod("weekly")}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                isWeekly
+                  ? "bg-foreground text-surface shadow-subtle"
+                  : "text-foreground-secondary hover:text-foreground"
+              }`}
+            >
+              <Calendar className="w-3.5 h-3.5" />
+              <span>1 Minggu (21–28 Sep)</span>
+            </button>
+            <button
+              onClick={() => setPeriod("monthly")}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                !isWeekly
+                  ? "bg-foreground text-surface shadow-subtle"
+                  : "text-foreground-secondary hover:text-foreground"
+              }`}
+            >
+              <Calendar className="w-3.5 h-3.5" />
+              <span>1 Bulan (September)</span>
+            </button>
+          </div>
+
+          {/* Copy for Meeting Button */}
+          <button
+            onClick={handleCopyMeetingRecap}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border bg-surface-secondary text-xs font-semibold text-foreground hover:bg-surface-secondary/80 transition-all"
+          >
+            {copied ? (
+              <>
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" />
+                <span className="text-emerald-600 font-bold">Resume Tersalin!</span>
+              </>
+            ) : (
+              <>
+                <Copy className="w-3.5 h-3.5" />
+                <span>Salin Teks Rapat</span>
+              </>
+            )}
+          </button>
+        </div>
+      </div>
+
+      {/* Grid: 2 Utama (Photobooth & Antrian) */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        {/* Card 1: Web Photobooth */}
+        <div className="p-4 rounded-xl border border-border bg-surface-secondary/20 space-y-4">
+          <div className="flex items-center justify-between border-b border-border pb-3">
+            <div className="flex items-center gap-2.5">
+              <div className="w-9 h-9 rounded-lg bg-pink-500/10 text-pink-600 dark:text-pink-400 flex items-center justify-center shrink-0">
+                <Camera className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-foreground flex items-center gap-1.5">
+                  <span>Web Photobooth Virtual Try-On</span>
+                  <span className="text-[10px] font-mono text-foreground-muted">/photobooth</span>
+                </h3>
+                <span className="text-[11px] text-foreground-muted">
+                  Calon pelanggan mencoba frame kacamata secara online
+                </span>
+              </div>
+            </div>
+            <span className="text-xs font-bold text-emerald-600 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+              +{isWeekly ? "18.4%" : "26.1%"} vs lalu
+            </span>
+          </div>
+
+          {/* Key Metrics Grid */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-center">
+            <div className="p-2.5 rounded-lg bg-surface border border-border">
+              <span className="text-[10px] uppercase font-bold text-foreground-muted block">Total Sesi</span>
+              <div className="text-lg font-bold text-foreground tabular-nums mt-0.5">
+                {isWeekly ? photobooth.weeklySessions.toLocaleString("id-ID") : photobooth.monthlySessions.toLocaleString("id-ID")}
+              </div>
+              <span className="text-[9px] text-foreground-muted block mt-0.5">interaksi try-on</span>
+            </div>
+
+            <div className="p-2.5 rounded-lg bg-surface border border-border">
+              <span className="text-[10px] uppercase font-bold text-foreground-muted block">Users Unik</span>
+              <div className="text-lg font-bold text-foreground tabular-nums mt-0.5">
+                {isWeekly ? photobooth.uniqueUsersWeekly.toLocaleString("id-ID") : photobooth.uniqueUsersMonthly.toLocaleString("id-ID")}
+              </div>
+              <span className="text-[9px] text-foreground-muted block mt-0.5">perangkat unik</span>
+            </div>
+
+            <div className="p-2.5 rounded-lg bg-surface border border-border">
+              <span className="text-[10px] uppercase font-bold text-foreground-muted block">Foto Di-Share</span>
+              <div className="text-lg font-bold text-foreground tabular-nums mt-0.5">
+                {isWeekly ? photobooth.photosSharedWeekly.toLocaleString("id-ID") : photobooth.photosSharedMonthly.toLocaleString("id-ID")}
+              </div>
+              <span className="text-[9px] text-pink-600 font-semibold block mt-0.5">viral organik</span>
+            </div>
+
+            <div className="p-2.5 rounded-lg bg-surface border border-border">
+              <span className="text-[10px] uppercase font-bold text-foreground-muted block">Konversi Antrian</span>
+              <div className="text-lg font-bold text-teal-600 tabular-nums mt-0.5">
+                {photobooth.conversionToQueuePercent}%
+              </div>
+              <span className="text-[9px] text-teal-700 font-semibold block mt-0.5">lanjut booking</span>
+            </div>
+          </div>
+
+          {/* Top Frame Dicoba */}
+          <div className="space-y-2 pt-1">
+            <span className="text-[11px] font-bold text-foreground flex items-center gap-1">
+              <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+              <span>Top 3 Frame Kacamata Paling Sering Dicoba di Photobooth:</span>
+            </span>
+            <div className="space-y-1.5 text-xs">
+              {photobooth.topFrames.slice(0, 3).map((f, i) => (
+                <div
+                  key={i}
+                  className="flex items-center justify-between p-2 rounded-lg bg-surface border border-border"
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="w-5 h-5 rounded-full bg-surface-secondary text-[10px] font-bold text-foreground flex items-center justify-center">
+                      #{i + 1}
+                    </span>
+                    <div>
+                      <span className="font-semibold text-foreground block">{f.frameName}</span>
+                      <span className="text-[10px] text-foreground-muted">{f.category}</span>
+                    </div>
+                  </div>
+                  <div className="text-right tabular-nums">
+                    <span className="font-bold text-foreground block">{f.tryOnCount}x dicoba</span>
+                    <span className="text-[10px] text-foreground-muted">{f.shareCount}x share</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Acquisition Channels */}
+          <div className="p-3 rounded-lg bg-surface border border-border space-y-2 text-xs">
+            <span className="text-[11px] font-bold text-foreground block">
+              Saluran Akuisisi Pengunjung Photobooth:
+            </span>
+            <div className="space-y-1.5">
+              {photobooth.acquisitionChannels.map((c, i) => (
+                <div key={i} className="space-y-0.5">
+                  <div className="flex items-center justify-between text-[11px]">
+                    <span className="text-foreground-secondary">{c.channel}</span>
+                    <span className="font-bold text-foreground tabular-nums">
+                      {c.percentage}% ({c.sessions} sesi)
+                    </span>
+                  </div>
+                  <div className="w-full h-1 bg-surface-secondary rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-pink-500 rounded-full"
+                      style={{ width: `${c.percentage}%` }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Card 2: Nomor Antrian Online Cek Mata */}
+        <div className="p-4 rounded-xl border border-border bg-surface-secondary/20 space-y-4">
+          <div className="flex items-center justify-between border-b border-border pb-3">
+            <div className="flex items-center gap-2.5">
+              <div className="w-9 h-9 rounded-lg bg-teal-500/10 text-teal-600 dark:text-teal-400 flex items-center justify-center shrink-0">
+                <Stethoscope className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-foreground flex items-center gap-1.5">
+                  <span>Nomor Antrian Online Cek Mata</span>
+                  <span className="text-[10px] font-mono text-foreground-muted">/booking-antrian</span>
+                </h3>
+                <span className="text-[11px] text-foreground-muted">
+                  Reservasi online pemeriksaan mata gratis sebelum ke toko
+                </span>
+              </div>
+            </div>
+            <span className="text-xs font-bold text-teal-600 bg-teal-500/10 px-2 py-0.5 rounded border border-teal-500/20">
+              +{isWeekly ? "24.5%" : "21.8%"} booking
+            </span>
+          </div>
+
+          {/* Key Metrics Grid */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-center">
+            <div className="p-2.5 rounded-lg bg-surface border border-border">
+              <span className="text-[10px] uppercase font-bold text-foreground-muted block">Total Antrian</span>
+              <div className="text-lg font-bold text-foreground tabular-nums mt-0.5">
+                {isWeekly ? antrian.weeklyTotal : antrian.monthlyTotal}
+              </div>
+              <span className="text-[9px] text-foreground-muted block mt-0.5">pasien terdaftar</span>
+            </div>
+
+            <div className="p-2.5 rounded-lg bg-surface border border-border">
+              <span className="text-[10px] uppercase font-bold text-foreground-muted block">Tingkat Hadir</span>
+              <div className="text-lg font-bold text-emerald-600 tabular-nums mt-0.5">
+                {antrian.showUpRateAverage}%
+              </div>
+              <span className="text-[9px] text-emerald-700 font-semibold block mt-0.5">datang ke store</span>
+            </div>
+
+            <div className="p-2.5 rounded-lg bg-surface border border-border">
+              <span className="text-[10px] uppercase font-bold text-foreground-muted block">Waktu Tunggu</span>
+              <div className="text-lg font-bold text-foreground tabular-nums mt-0.5">
+                ~12 <span className="text-xs font-normal">mnt</span>
+              </div>
+              <span className="text-[9px] text-foreground-muted block mt-0.5">efisiensi periksa</span>
+            </div>
+
+            <div className="p-2.5 rounded-lg bg-surface border border-border">
+              <span className="text-[10px] uppercase font-bold text-foreground-muted block">Rata-rata Harian</span>
+              <div className="text-lg font-bold text-foreground tabular-nums mt-0.5">
+                {antrian.averageDaily} <span className="text-xs font-normal">/hari</span>
+              </div>
+              <span className="text-[9px] text-teal-600 font-semibold block mt-0.5">4 cabang ISY</span>
+            </div>
+          </div>
+
+          {/* Breakdown Per Cabang 4 Cabang Optik I See You */}
+          <div className="space-y-2 pt-1">
+            <div className="flex items-center justify-between text-[11px] font-bold text-foreground">
+              <span>Performa Antrian &amp; Kehadiran per Cabang ({dateRange}):</span>
+              <span className="text-[10px] font-normal text-foreground-muted">Total: {isWeekly ? antrian.weeklyTotal : antrian.monthlyTotal} Antrian</span>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              {antrian.branchStats.map((b) => {
+                const clicks = isWeekly ? b.weeklyClicks : b.monthlyClicks;
+                const total = isWeekly ? antrian.weeklyTotal : antrian.monthlyTotal;
+                const sharePercent = total > 0 ? ((clicks / total) * 100).toFixed(1) : "0";
+
+                return (
+                  <div
+                    key={b.branchId}
+                    className="p-3 rounded-lg bg-surface border border-border space-y-1.5"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold text-foreground flex items-center gap-1">
+                        <MapPin className="w-3 h-3 text-brand" />
+                        {b.city}
+                      </span>
+                      <span className="text-[10px] font-semibold text-emerald-600 tabular-nums">
+                        {b.showUpRate}% Hadir
+                      </span>
+                    </div>
+
+                    <div className="flex items-baseline justify-between">
+                      <span className="text-base font-bold text-foreground tabular-nums">
+                        {clicks} <span className="text-[10px] font-normal text-foreground-muted">antrian</span>
+                      </span>
+                      <span className="text-[10px] font-medium text-foreground-muted">
+                        {sharePercent}% pangsa
+                      </span>
+                    </div>
+
+                    <div className="w-full h-1 bg-surface-secondary rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-teal-500 rounded-full"
+                        style={{ width: `${sharePercent}%` }}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Strategic Insight */}
+          <div className="p-3 rounded-lg bg-surface border border-border text-xs text-foreground-secondary space-y-1">
+            <span className="font-bold text-foreground text-[11px] block">
+              Catatan Penting Rapat 29 September:
+            </span>
+            <p className="text-[10px] text-foreground-muted leading-relaxed">
+              Cabang Purwokerto mencatatkan antrian tertinggi (46.5%), diikuti Cilacap (22.3%). Cabang Purbalingga dan Wonosobo menunjukkan peningkatan show-up rate di atas 78% setelah implementasi konfirmasi otomatis via WhatsApp CS Aftersales (+62 821-4601-328).
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};

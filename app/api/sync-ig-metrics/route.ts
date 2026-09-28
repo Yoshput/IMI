@@ -22,15 +22,7 @@ function formatNumber(n: number): string {
   return String(n);
 }
 
-function estimateViewers(likes: number): number {
-  if (likes >= 10000) return likes * 25;
-  if (likes >= 1000) return likes * 40;
-  if (likes >= 100) return likes * 60;
-  if (likes >= 10) return likes * 100;
-  return likes * 150;
-}
-
-async function fetchReelMeta(url: string): Promise<{ likes: number; comments: number; caption: string; success: boolean }> {
+async function fetchReelMeta(url: string): Promise<{ url: string; likes: number; comments: number; caption: string; success: boolean }> {
   return new Promise((resolve) => {
     try {
       const u = new URL(url);
@@ -41,7 +33,7 @@ async function fetchReelMeta(url: string): Promise<{ likes: number; comments: nu
           "User-Agent": "facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)",
           Accept: "text/html,application/xhtml+xml",
         },
-        timeout: 12000,
+        timeout: 3500,
       };
       // @ts-ignore
       const req = https.get(options, (res: any) => {
@@ -55,27 +47,42 @@ async function fetchReelMeta(url: string): Promise<{ likes: number; comments: nu
             const commentsMatch = descMatch[1].match(/([\d.,KMkm]+)\s+comments/i);
             if (likesMatch) likes = parseMetricStr(likesMatch[1]);
             if (commentsMatch) comments = parseMetricStr(commentsMatch[1]);
-            // Extract caption from the description
             const colonIdx = descMatch[1].indexOf(": ");
             if (colonIdx > -1) caption = descMatch[1].slice(colonIdx + 2, colonIdx + 300);
           }
-          resolve({ likes, comments, caption, success: true });
+          resolve({ url, likes, comments, caption, success: true });
         });
       });
       // @ts-ignore
-      req.on("error", () => resolve({ likes: 0, comments: 0, caption: "", success: false }));
+      req.on("error", () => resolve({ url, likes: 0, comments: 0, caption: "", success: false }));
       // @ts-ignore
-      req.on("timeout", () => { req.destroy(); resolve({ likes: 0, comments: 0, caption: "", success: false }); });
+      req.on("timeout", () => { req.destroy(); resolve({ url, likes: 0, comments: 0, caption: "", success: false }); });
     } catch {
-      resolve({ likes: 0, comments: 0, caption: "", success: false });
+      resolve({ url, likes: 0, comments: 0, caption: "", success: false });
     }
   });
+}
+
+// Fast concurrent batch processor
+async function batchFetch(urls: string[], concurrency = 4): Promise<{ url: string; likes: number; comments: number; caption: string; success: boolean }[]> {
+  const results: any[] = [];
+  for (let i = 0; i < urls.length; i += concurrency) {
+    const batch = urls.slice(i, i + concurrency);
+    const batchResults = await Promise.allSettled(batch.map((u) => fetchReelMeta(u)));
+    for (const r of batchResults) {
+      if (r.status === "fulfilled") {
+        results.push(r.value);
+      }
+    }
+  }
+  return results;
 }
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json().catch(() => ({}));
     const extraUrls: string[] = body.urls || [];
+    const syncAll: boolean = !!body.syncAll;
 
     // Load cache
     let cache: any = { lastSync: null, accounts: {}, reels: {} };
@@ -83,29 +90,45 @@ export async function POST(req: NextRequest) {
       try { cache = JSON.parse(fs.readFileSync(CACHE_PATH, "utf-8")); } catch { /* ignore */ }
     }
 
-    const existingUrls = Object.keys(cache.reels || {});
-    const allUrls = [...new Set([...existingUrls, ...extraUrls])];
+    // Determine target URLs to fetch
+    // If specific URLs requested, ONLY fetch those requested URLs! (Fast & responsive)
+    let targetUrls: string[] = [];
+    if (extraUrls.length > 0) {
+      targetUrls = [...new Set(extraUrls)];
+    } else if (syncAll) {
+      targetUrls = Object.keys(cache.reels || {});
+    } else {
+      // Default fast sync: top 5 high-impact posts
+      targetUrls = [
+        "https://www.instagram.com/reel/DdQ1c06zshy/",
+        "https://www.instagram.com/reel/DdRCcGzvG8h/",
+        "https://www.instagram.com/p/DdLvWkcDzob/",
+        "https://www.instagram.com/p/DdOfUrMj7MU/",
+        "https://www.instagram.com/p/DdoN0GED_8f/",
+      ];
+    }
 
-    const results: { url: string; status: string; likes: number; viewers: number }[] = [];
-    let added = 0, updated = 0;
+    // Fetch concurrently with fast timeout
+    const fetchedResults = await batchFetch(targetUrls, 4);
 
-    for (const url of allUrls) {
-      const meta = await fetchReelMeta(url);
+    let added = 0;
+    let updated = 0;
+    const finalResults: { url: string; status: string; likes: number; viewers: number }[] = [];
+
+    for (const meta of fetchedResults) {
       if (!meta.success || meta.likes === 0) {
-        results.push({ url, status: "no_data", likes: 0, viewers: 0 });
+        finalResults.push({ url: meta.url, status: "no_data_or_cached", likes: 0, viewers: 0 });
         continue;
       }
 
-      const existing = cache.reels[url] || {};
-      const isNew = !cache.reels[url];
-      const existingViewers = existing.viewers || 0;
+      const existing = cache.reels[meta.url] || {};
+      const isNew = !cache.reels[meta.url];
       const finalLikes = Math.max(existing.likes || 0, meta.likes || 0);
       const finalComments = Math.max(existing.comments || 0, meta.comments || 0);
-      // Preserve verified viewers if already set, else estimate
-      const viewers = existingViewers > 0 ? existingViewers : estimateViewers(finalLikes);
+      const viewers = existing.viewers || 0; // Strictly preserve verified viewers, ZERO fake multiplier
 
-      cache.reels[url] = {
-        url,
+      cache.reels[meta.url] = {
+        url: meta.url,
         likes: finalLikes,
         likesFormatted: formatNumber(finalLikes),
         viewers,
@@ -115,11 +138,13 @@ export async function POST(req: NextRequest) {
         lastUpdated: new Date().toISOString(),
       };
 
-      if (isNew) { added++; results.push({ url, status: "added", likes: meta.likes, viewers }); }
-      else { updated++; results.push({ url, status: "updated", likes: meta.likes, viewers }); }
-
-      // Small delay between requests
-      await new Promise((r) => setTimeout(r, 600));
+      if (isNew) {
+        added++;
+        finalResults.push({ url: meta.url, status: "added", likes: meta.likes, viewers });
+      } else {
+        updated++;
+        finalResults.push({ url: meta.url, status: "updated", likes: meta.likes, viewers });
+      }
     }
 
     cache.lastSync = new Date().toISOString();
@@ -128,11 +153,11 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      message: `Auto-sync IG selesai! Ditambah: ${added}, Diperbarui: ${updated}`,
+      message: `Sinkronisasi cepat live Instagram selesai! Ditambah: ${added}, Diperbarui: ${updated}`,
       added,
       updated,
-      total: allUrls.length,
-      results,
+      total: targetUrls.length,
+      results: finalResults,
     });
   } catch (err: any) {
     return NextResponse.json({ success: false, error: err.message }, { status: 500 });

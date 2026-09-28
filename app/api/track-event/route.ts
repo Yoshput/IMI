@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { recordAntrianClick, getAntrianStats } from "@/lib/antrian-tracking";
+import {
+  recordAntrianClick,
+  getAntrianStats,
+  getPhotoboothStats,
+  getCombinedWebResume,
+} from "@/lib/antrian-tracking";
 
 export const dynamic = "force-dynamic";
 
@@ -19,18 +24,31 @@ export async function OPTIONS() {
   });
 }
 
-// GET: returns aggregated statistics for Antrian Cek Mata
-export async function GET() {
+// GET: returns aggregated statistics for Antrian Cek Mata & Web Photobooth
+export async function GET(req: NextRequest) {
+  const { searchParams } = new URL(req.url);
+  const period = (searchParams.get("period") || "weekly") as "weekly" | "monthly";
+
   const stats = getAntrianStats();
+  const photobooth = getPhotoboothStats();
+  const combined = getCombinedWebResume(period);
+
   return NextResponse.json(
-    { success: true, data: stats },
+    {
+      success: true,
+      data: stats,
+      photobooth,
+      combined,
+      period,
+      asOfDate: "2026-09-28",
+    },
     {
       headers: corsHeaders(),
     }
   );
 }
 
-// POST: records click event from optikiseeyou.com
+// POST: records click/interaction event from optikiseeyou.com
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json().catch(() => ({}));
@@ -43,12 +61,13 @@ export async function POST(req: NextRequest) {
       device: body.device,
       userAgent,
       referrer,
+      type: body.eventType || body.type || "antrian_booking",
     });
 
     return NextResponse.json(
       {
         success: true,
-        message: "Event Antrian Cek Mata berhasil dicatat",
+        message: "Event Web & Antrian berhasil dicatat",
         event,
       },
       {

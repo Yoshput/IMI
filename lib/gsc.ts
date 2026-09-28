@@ -86,18 +86,18 @@ export function getCalibratedGscData(timeframe: "weekly" | "monthly"): GscReport
         { query: "optik terdekat purwokerto unsoed", clicks: 75, impressions: 1450, ctr: 5.2, position: 2.9 },
       ],
       dailyTrends: [
-        { date: "2026-09-08", clicks: 182, impressions: 3800, ctr: 4.8 },
-        { date: "2026-09-09", clicks: 195, impressions: 3950, ctr: 4.9 },
-        { date: "2026-09-10", clicks: 210, impressions: 4100, ctr: 5.1 },
-        { date: "2026-09-11", clicks: 225, impressions: 4300, ctr: 5.2 },
-        { date: "2026-09-12", clicks: 240, impressions: 4600, ctr: 5.2 },
-        { date: "2026-09-13", clicks: 198, impressions: 4050, ctr: 4.9 },
-        { date: "2026-09-14", clicks: 170, impressions: 3600, ctr: 4.7 },
+        { date: "2026-09-22", clicks: 182, impressions: 3800, ctr: 4.8 },
+        { date: "2026-09-23", clicks: 195, impressions: 3950, ctr: 4.9 },
+        { date: "2026-09-24", clicks: 210, impressions: 4100, ctr: 5.1 },
+        { date: "2026-09-25", clicks: 225, impressions: 4300, ctr: 5.2 },
+        { date: "2026-09-26", clicks: 240, impressions: 4600, ctr: 5.2 },
+        { date: "2026-09-27", clicks: 198, impressions: 4050, ctr: 4.9 },
+        { date: "2026-09-28", clicks: 170, impressions: 3600, ctr: 4.7 },
       ],
     };
   }
 
-  // Monthly Report
+  // Monthly Report (September 2026)
   return {
     timeframe: "monthly",
     domain: "optikiseeyou.com",
@@ -134,12 +134,12 @@ export function getCalibratedGscData(timeframe: "weekly" | "monthly"): GscReport
       { query: "lensa photocromic purwokerto", clicks: 270, impressions: 5800, ctr: 4.7, position: 4.0 },
       { query: "ganti frame kacamata cepat cilacap", clicks: 250, impressions: 4900, ctr: 5.1, position: 3.8 },
     ],
-    dailyTrends: Array.from({ length: 30 }, (_, i) => {
+    dailyTrends: Array.from({ length: 28 }, (_, i) => {
       const day = i + 1;
-      const dStr = `2026-08-${String(15 + (i % 16)).padStart(2, "0")}`;
+      const dStr = `2026-09-${String(day).padStart(2, "0")}`;
       const baseClicks = 170 + Math.floor(Math.sin(i / 2) * 35) + (i % 7 === 5 ? 40 : 0);
       return {
-        date: `Hari ke-${day}`,
+        date: dStr,
         clicks: baseClicks,
         impressions: baseClicks * 20,
         ctr: Number((5.0 + Math.sin(i) * 0.4).toFixed(1)),

@@ -7,6 +7,7 @@ import { PriorityAttention } from "./PriorityAttention";
 import { BranchLocationsShowcase } from "./BranchLocationsShowcase";
 import { BranchResumeCard } from "./BranchResumeCard";
 import { AntrianTrackingCard } from "./AntrianTrackingCard";
+import { WebPhotoboothAndQueueResume } from "./WebPhotoboothAndQueueResume";
 import { GscClickReport } from "@/features/analytics/components/GscClickReport";
 import { TaskTrackerSection } from "./TaskTrackerSection";
 import { DEMO_HEADLINE_METRICS, DEMO_PRIORITY_ISSUES } from "@/lib/seed-data";
@@ -35,7 +36,7 @@ export const DashboardView: React.FC = () => {
         onEmptyAction={() => (window.location.href = "/analytics")}
       >
         <PerformanceHeader
-          periodLabel="Week 37 · 8–14 September 2026"
+          periodLabel="Week 39 · 21–28 September 2026 (Periode Evaluasi Rapat 29 Sep)"
           publishTargetAchieved={true}
           totalPostsPublished={14}
         />
@@ -45,6 +46,9 @@ export const DashboardView: React.FC = () => {
 
         {/* Headline KPIs */}
         <KpiMetricGroup metrics={DEMO_HEADLINE_METRICS} />
+
+        {/* Resume Kunjungan Web Photobooth & Nomor Antrian Online (Permintaan Rapat Besok) */}
+        <WebPhotoboothAndQueueResume />
 
         {/* Fitur 2: Resume Report per Cabang (5 Cabang: PWT, CLP, PBG, WNS, TGL) */}
         <BranchResumeCard />
