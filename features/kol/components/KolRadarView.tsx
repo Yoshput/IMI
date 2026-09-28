@@ -39,7 +39,7 @@ export const KolRadarView: React.FC = () => {
   const [copiedReport, setCopiedReport] = useState<boolean>(false);
   const [activePitchModal, setActivePitchModal] = useState<any | null>(null);
   const [senderName, setSenderName] = useState<string>("Yossika");
-  const [templateStyle, setTemplateStyle] = useState<"friendly" | "barter" | "visit">("friendly");
+  const [templateStyle, setTemplateStyle] = useState<"step1_ratecard" | "step2_barter" | "step3_owning">("step1_ratecard");
 
   // Branch mapping
   const branchOptions = [
@@ -100,52 +100,51 @@ export const KolRadarView: React.FC = () => {
   };
 
   // Helper for generating custom chat text based on style & sender
-  const getRenderedChat = (kol: any, style: "friendly" | "barter" | "visit") => {
+  const getRenderedChat = (kol: any, style: "step1_ratecard" | "step2_barter" | "step3_owning") => {
     const firstName = kol.name.split(" ")[0];
     const isLunar = kol.brand === "Lunar Eyewear";
     const brandName = isLunar ? "Lunar Eyewear Tegal" : "Optik I See You Glasses";
     const brandMention = isLunar ? "lunar eyewear" : "optik i see youu";
     const branchLabel = kol.branchName;
 
-    if (style === "friendly") {
+    // TAHAP 1: Fokus murni tanya rate card dulu (tanpa sebut barter produk kacamata di awal)
+    if (style === "step1_ratecard") {
       return `Hai kak ${firstName}.. ✨👋
 
 Perkenalkan saya ${senderName} dari tim Marketing ${brandName} 👓
 Setelah melihat Social Media kaka yang seru dan kece banget, kami tertarik banget untuk mengajak kerja sama atau berkolaborasi dengan kita ${brandMention} 🥰
 
-Kalo boleh tau, boleh di infokan untuk ratecardnyaa ya ka, sebagai bahan pertimbangan kami? 
-(Kami juga terbuka untuk opsi kolaborasi seru barter produk kacamata kece pilihan kaka + tambahan voucher belanja spesial buat dibagikan ke followers kaka di kolom komen lho ✨)
+Kalo boleh tau, boleh di infokan untuk ratecardnyaa, sebagai bahan pertimbangan kami?
 
-Terimakasih banyak ditunggu kabar baiknya ya ka 🙏
+Terimakasih ditunggu kabar baiknya ya ka 🙏
 Have a nicee dayy ya kaa! 🌸✨`;
     }
 
-    if (style === "barter") {
-      return `Hai kak ${firstName}.. ✨👋
+    // TAHAP 2: Follow-up setelah rate card dikirim -> Masuk ke penawaran Barter Produk + Voucher Kuis Followers / Fee 250k
+    if (style === "step2_barter") {
+      return `Hai kak ${firstName}.. makasih banyak yaa atas info rate card-nya! 🥰✨
 
-Perkenalkan aku ${senderName} dari tim Marketing ${brandName} 👓
-Suka banget sama style konten dan vibe feed kaka yang super estetik! Kebetulan kami lagi ada campaign kacamata hits kekinian dan ingin mengajak Kak ${firstName} kolaborasi nih 🥰
+Setelah tim kami diskusikan, kami tertarik banget nih kak untuk lanjut berkolaborasi. Kebetulan dari kami ada opsi skema kolaborasi yang seru dan saling menguntungkan:
 
-Kita mau tawarkan skema kolaborasi barter produk kacamata premium bebas pilih (Full set frame + lensa kustom antiradiasi / photochromic) plus kita siapin voucher diskon belanja kacamata khusus buat followers kaka bagiin di kuis kolom komentar biar interaksi postingannya makin ramai dan seru! 🎁✨
+1. Skema Barter Produk Kacamata Premium bebas pilih (Full set frame estetik + lensa kustom antiradiasi / photochromic pilihan Kakak) 👓
+2. Plus tambahan Voucher Diskon Belanja spesial untuk followers Kak ${firstName} yang bisa dibagikan buat kuis / giveaway di kolom komentar biar postingannya makin rame dan banjir interaksi! 🎁✨
+3. (Atau opsi acuan fee standar kami di kisaran Rp 250.000 + barter produk kacamata)
 
-Kira-kira Kak ${firstName} open untuk skema barter + giveaway ini atau ada rate card khusus? Boleh banget diinfokan yaa kak buat pertimbangan kami.
+Kira-kira dari Kak ${firstName} apakah open dan berkenan dengan skema kolaborasi seru ini kak? 
 
-Terimakasih banyak dan ditunggu kabar baiknya ya kak!
-Have a wonderful day ya kaa! 🌸💖`;
+Terimakasih banyak ditunggu kabar baiknya yaa kak, have a wonderful and lovely day! 🌸💖`;
     }
 
-    // style === "visit"
+    // TAHAP 3: Kunci hak Owning Video Mentahan (Raw Footage) untuk Iklan Ads
     return `Halo kak ${firstName}.. ✨👋
 
-Perkenalkan saya ${senderName} dari tim Marketing ${brandName} Cabang ${branchLabel} 👓
-Kami tertarik banget untuk mengundang Kakak visit store & review koleksi kacamata terbaru kami nih. 
+Menyambung rencana kolaborasi kita untuk visit store di Cabang ${branchLabel} 👓
+Untuk paket kontennya (1 Reels + Stories), kami ingin memastikan terkait hak owning materi video mentahan (raw footage) tanpa watermark ya kak, karena akan kami gunakan untuk bahan konten iklan berbayar (Meta Ads) dengan hak tayang 60 hari.
 
-Untuk paket kolaborasinya (Visit + 1 Reels + Stories), kami juga membutuhkan hak owning materi video mentahan (raw footage) tanpa watermark untuk bahan iklan Meta Ads dengan hak tayang 60 hari. Sebelumnya kami ada acuan fee standar di kisaran Rp 250.000 atau full barter produk kacamata komplit + voucher kuis followers.
+Kira-kira apakah file video mentahannya bisa diserahkan via Google Drive setelah proses take video di toko kak? 
 
-Kira-kira apakah rate card Kak ${firstName} bisa masuk di skema tersebut atau ada penawaran paket bundling lainnya? Boleh diinfokan ya kak sebagai bahan pertimbangan kami.
-
-Terimakasih banyak ditunggu kabar baiknya ya kak!
-Have a nicee and lovely day ya kaa! 🌸✨`;
+Terimakasih banyak ya kak, ditunggu konfirmasinya!
+Have a nicee dayy ya kaa! 🌸✨`;
   };
 
   // Copy WhatsApp Pitch
@@ -180,7 +179,7 @@ Have a nicee and lovely day ya kaa! 🌸✨`;
         report += `• Skema Budget: Acuan Fee Rp 250.000 / Barter Produk Kacamata Full + Voucher Followers\n`;
         report += `• Hak Owning (Video Mentahan Iklan Ads): ${kol.owningRights.canOwnRaw ? "BISA OWNING RAW" : "TIDAK BISA"} (${kol.owningRights.adsUsageDays} Hari)\n`;
         report += `• Status Pengajuan: [${kol.status}]\n`;
-        report += `• Draft Chat WA: "${getRenderedChat(kol, "friendly").replace(/\n/g, " ")}"\n`;
+        report += `• Draft Chat WA (Tahap 1): "${getRenderedChat(kol, "step1_ratecard").replace(/\n/g, " ")}"\n`;
       });
       report += `\n`;
     });
@@ -246,32 +245,32 @@ Have a nicee and lovely day ya kaa! 🌸✨`;
         </div>
       </div>
 
-      {/* STRATEGIC NEGOTIATION POLICY BANNER (New user points 5 & 6) */}
+      {/* STRATEGIC NEGOTIATION POLICY BANNER (2-Step Funnel) */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-        <div className="bg-emerald-500/10 border border-emerald-500/25 rounded-card p-4 flex items-start gap-3">
-          <div className="p-2 rounded-lg bg-emerald-500/20 text-emerald-800 shrink-0">
-            <DollarSign className="w-5 h-5" />
+        <div className="bg-amber-500/10 border border-amber-500/25 rounded-card p-4 flex items-start gap-3">
+          <div className="p-2 rounded-lg bg-amber-500/20 text-amber-800 shrink-0">
+            <MessageSquare className="w-5 h-5" />
           </div>
           <div>
-            <span className="text-xs font-bold text-emerald-950 uppercase tracking-wide block">
-              Fee Acuan & Barter
+            <span className="text-xs font-bold text-amber-950 uppercase tracking-wide block">
+              1. Chat Pertama: Tanya Rate Card Dulu
             </span>
-            <p className="text-xs text-emerald-900 mt-1 leading-relaxed">
-              Dulu acuan fee <strong>Rp 250.000</strong>. Prioritas utama tawarkan <strong>Barter Produk Kacamata</strong> gratis (Frame + Lensa Kustom) sesuai harga endorsement.
+            <p className="text-xs text-amber-900 mt-1 leading-relaxed">
+              Fokus <strong>murni menanyakan rate card resmi</strong> talent dulu secara santai & ramah. <em>Jangan langsung sebut barter produk kacamata di chat awal</em> agar talent nyaman & kita tahu patokan harga aslinya.
             </p>
           </div>
         </div>
 
-        <div className="bg-blue-500/10 border border-blue-500/25 rounded-card p-4 flex items-start gap-3">
-          <div className="p-2 rounded-lg bg-blue-500/20 text-blue-800 shrink-0">
+        <div className="bg-emerald-500/10 border border-emerald-500/25 rounded-card p-4 flex items-start gap-3">
+          <div className="p-2 rounded-lg bg-emerald-500/20 text-emerald-800 shrink-0">
             <Gift className="w-5 h-5" />
           </div>
           <div>
-            <span className="text-xs font-bold text-blue-950 uppercase tracking-wide block">
-              Voucher Followers Kuis Komen
+            <span className="text-xs font-bold text-emerald-950 uppercase tracking-wide block">
+              2. Follow-Up: Tawar Barter + Voucher Komen
             </span>
-            <p className="text-xs text-blue-900 mt-1 leading-relaxed">
-              Tambahkan <strong>Voucher Belanja Followers</strong> untuk talent bagikan di kolom komentar. Ini membuat talent senang karena engagement akun mereka ikut naik!
+            <p className="text-xs text-emerald-900 mt-1 leading-relaxed">
+              Setelah rate card masuk, baru ajukan <strong>Barter Produk Kacamata Pilihan Talent + Voucher Kuis Komen Followers</strong> (atau acuan fee Rp 250.000). Skema giveaway kuis ini disukai karena meledakkan komentar talent.
             </p>
           </div>
         </div>
@@ -282,10 +281,10 @@ Have a nicee and lovely day ya kaa! 🌸✨`;
           </div>
           <div>
             <span className="text-xs font-bold text-violet-950 uppercase tracking-wide block">
-              Hak Owning Video Mentahan (Ads)
+              3. Closing: Kunci Owning Raw Video Ads
             </span>
             <p className="text-xs text-violet-900 mt-1 leading-relaxed">
-              Wajib dapat <strong>video mentahan (raw footage)</strong> tanpa teks/watermark untuk bahan konten iklan berbayar (Meta Ads) dengan hak pakai 60–90 hari.
+              Pastikan dalam kesepakatan tertulis: <strong>Wajib menyerahkan video mentahan (raw footage 4K/60fps)</strong> tanpa watermark/teks untuk bahan iklan berbayar Meta Ads durasi 60–90 hari.
             </p>
           </div>
         </div>
@@ -721,47 +720,47 @@ Have a nicee and lovely day ya kaa! 🌸✨`;
               />
             </div>
 
-            {/* Template Style Selector Tabs */}
+            {/* Template Style Selector Tabs (2-Step Funnel) */}
             <div className="grid grid-cols-3 gap-1.5 p-1 bg-surface-secondary rounded-control">
               <button
-                onClick={() => setTemplateStyle("friendly")}
-                className={`py-1.5 px-2 text-xs font-semibold rounded transition-all ${
-                  templateStyle === "friendly"
+                onClick={() => setTemplateStyle("step1_ratecard")}
+                className={`py-2 px-2 text-xs font-semibold rounded text-center transition-all ${
+                  templateStyle === "step1_ratecard"
                     ? "bg-foreground text-surface shadow-2xs"
                     : "text-foreground-secondary hover:text-foreground"
                 }`}
               >
-                🌸 Santai & Ramah
+                💬 1. Tanya Rate Card Dulu
               </button>
               <button
-                onClick={() => setTemplateStyle("barter")}
-                className={`py-1.5 px-2 text-xs font-semibold rounded transition-all ${
-                  templateStyle === "barter"
+                onClick={() => setTemplateStyle("step2_barter")}
+                className={`py-2 px-2 text-xs font-semibold rounded text-center transition-all ${
+                  templateStyle === "step2_barter"
                     ? "bg-foreground text-surface shadow-2xs"
                     : "text-foreground-secondary hover:text-foreground"
                 }`}
               >
-                🎁 Barter + Kuis Komen
+                🎁 2. Tawar Barter + Voucher
               </button>
               <button
-                onClick={() => setTemplateStyle("visit")}
-                className={`py-1.5 px-2 text-xs font-semibold rounded transition-all ${
-                  templateStyle === "visit"
+                onClick={() => setTemplateStyle("step3_owning")}
+                className={`py-2 px-2 text-xs font-semibold rounded text-center transition-all ${
+                  templateStyle === "step3_owning"
                     ? "bg-foreground text-surface shadow-2xs"
                     : "text-foreground-secondary hover:text-foreground"
                 }`}
               >
-                📹 Visit + Owning Ads
+                📹 3. Kunci Owning Raw Ads
               </button>
             </div>
 
             {/* Generated Chat Preview */}
             <div className="space-y-1.5">
               <div className="flex items-center justify-between text-xs text-foreground-muted">
-                <span className="font-medium">
-                  {templateStyle === "friendly" && "Gaya Santai & Hangat (Tanya Rate Card + Offer Barter)"}
-                  {templateStyle === "barter" && "Gaya Barter Kacamata + Voucher Giveaway Komen (High Engagement)"}
-                  {templateStyle === "visit" && "Gaya Visit Store + Owning Mentahan Ads (Fee 250k / Barter)"}
+                <span className="font-semibold text-foreground">
+                  {templateStyle === "step1_ratecard" && "Langkah 1: First Touch (Murni Tanya Rate Card - Tanpa Sebut Barter)"}
+                  {templateStyle === "step2_barter" && "Langkah 2: Follow-up (Tawarkan Barter Produk + Voucher Giveaway Komen)"}
+                  {templateStyle === "step3_owning" && "Langkah 3: Konfirmasi Final (Hak Owning Video Mentahan Tanpa Watermark)"}
                 </span>
                 <span className="text-[11px] text-emerald-700 font-semibold flex items-center gap-1">
                   <Sparkles className="w-3 h-3" /> Siap Kirim WA/DM

@@ -15,9 +15,8 @@ Perkenalkan saya Yossika dari tim Marketing ${brandName} 👓
 Setelah melihat Social Media kaka, saya tertarik untuk mengajak kerja sama atau berkolaborasi dengan kita ${brandMention} 🥰
 
 Kalo boleh tau, boleh di infokan untuk ratecardnyaa, sebagai bahan pertimbangan kami?
-(Kami juga ada opsi menarik untuk barter produk kacamata kece sesuai pilihan kaka + tambahan voucher belanja untuk followers kaka yang bisa dibagikan buat kuis komentar lho ✨)
 
-Terimakasih banyak ditunggu kabar baiknya ya ka 🙏
+Terimakasih ditunggu kabar baiknya ya ka 🙏
 Have a nicee dayy ya kaa! 🌸✨`;
 
   return {
