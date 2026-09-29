@@ -51,8 +51,8 @@ const competitorsData: Competitor[] = [
     avatar: "HK",
     segment: "Fast-Fashion Budget & Korean Aesthetic",
     priceRange: "Rp 120.000 – Rp 350.000",
-    followersIg: "185.000+",
-    followersTiktok: "320.000+",
+    followersIg: "188.000+",
+    followersTiktok: "335.000+",
     location: "Jakarta, Bandung & Online Nationwide",
     signatureHook: "Punya muka bulet/chubby? Stop pilih frame kotak kaku, tonton ini sampai habis!",
     currentTrend:
@@ -72,7 +72,39 @@ const competitorsData: Competitor[] = [
       "Adopsi format 'Rekomendasi Frame untuk Wajah Chubby & Wajah Lebar' di reels Purwokerto. Bedanya, I See You punya keunggulan Refraksionis Optisi resmi dan pilihan lensa anti radiasi index tinggi tipis.",
     primaryChannel: "TikTok & Instagram Reels",
     tag: "Direct Competitor",
-    auditDate: "21 September 2026"
+    auditDate: "29 September 2026"
+  },
+  {
+    id: "berrybarton",
+    name: "Berrybarton Eyewear",
+    handle: "@berrybarton",
+    igUrl: "https://www.instagram.com/berrybarton_official/",
+    tiktokUrl: "https://www.tiktok.com/@berrybarton",
+    avatar: "BB",
+    segment: "Marketplace & TikTok Shop Volume Leader",
+    priceRange: "Rp 69.000 – Rp 199.000",
+    followersIg: "340.000+",
+    followersTiktok: "1.200.000+",
+    location: "Jakarta & Distribusi Nasional (E-Commerce First)",
+    signatureHook: "Frame titanium anti patah cuma 70 ribuan, check out sekarang sebelum kehabisan voucher live!",
+    currentTrend:
+      "Live streaming TikTok tiada henti 18-24 jam sehari dengan affiliate creators ratusan orang. Menonjolkan uji fleksibilitas frame ditekuk ekstrem dan flash sale lensa bluechromic murah.",
+    contentPillars: ["Live Streaming Nonstop", "Uji Ekstrem Ketahanan Frame", "Diskon Kilat Keranjang Kuning", "Affiliate UGC Repost"],
+    strengths: [
+      "Volume penjualan kacamata online nomor 1 di TikTok Shop & Shopee Indonesia",
+      "Ekosistem komisi affiliate kreator yang sangat masif",
+      "Perputaran stok dan variasi model frame baru sangat cepat"
+    ],
+    vulnerabilities: [
+      "Tidak melayani cek mata tatap muka & fitting optometri profesional",
+      "Tingkat komplain resep minus tidak cocok cukup sering terjadi pada pembeli online",
+      "Hubungan emosional brand rendah karena mengandalkan perang harga"
+    ],
+    tacticalStealForISeeYou:
+      "Jadikan celah 'beli kacamata online sering pusing karena pupil distance (PD) salah' sebagai konten edukasi utama I See You: tekankan bahwa kacamata kesehatan wajib diukur langsung oleh RO berlisensi.",
+    primaryChannel: "TikTok Shop Live & Shopee Video",
+    tag: "Direct Competitor",
+    auditDate: "29 September 2026"
   },
   {
     id: "kacamatamoo",
@@ -83,12 +115,12 @@ const competitorsData: Competitor[] = [
     avatar: "KM",
     segment: "Mass-Market Pelajar & Mahasiswa",
     priceRange: "Rp 99.000 – Rp 250.000",
-    followersIg: "460.000+",
-    followersTiktok: "650.000+",
+    followersIg: "465.000+",
+    followersTiktok: "660.000+",
     location: "Yogyakarta, Solo, Semarang & Online",
     signatureHook: "Nyesel baru tau kacamata minus + silinder bisa dapet seharga 150rb doang di Jogja!",
     currentTrend:
-      "Sedang ramai dengan kampanye tahun ajaran baru & mahasiswa baru (Unsoed, UGM, UNS). Konten sketsa lucu mahasiswa ganti kacamata pecah, serta spill frame yang mirip dipakai idol Korea saat konser.",
+      "Sedang ramai dengan kampanye mahasiswa baru (Unsoed, UGM, UNS). Konten sketsa lucu mahasiswa ganti kacamata pecah, serta spill frame yang mirip dipakai idol Korea saat konser.",
     contentPillars: ["Diskon Mahasiswa & Kampus", "Before-After Pasang Lensa", "Spill Frame Dipakai Artis Korea", "Live Streaming Nonstop"],
     strengths: [
       "Penetrasi komunitas kampus Jogja/Solo/Jawa Tengah luar biasa tinggi",
@@ -104,7 +136,69 @@ const competitorsData: Competitor[] = [
       "Terapkan program aktivasi kampus regional Barlingmascakeb: Promo khusus mahasiswa Unsoed, UMP, dan perguruan tinggi Purbalingga dengan diskon tukar frame lama atau gratis upgrade lensa Blueray.",
     primaryChannel: "TikTok Live & Instagram Reels",
     tag: "Direct Competitor",
-    auditDate: "21 September 2026"
+    auditDate: "29 September 2026"
+  },
+  {
+    id: "mollucas",
+    name: "Mollucas Eyewear",
+    handle: "@mollucaseyewear",
+    igUrl: "https://www.instagram.com/mollucaseyewear/",
+    tiktokUrl: "https://www.tiktok.com/@mollucaseyewear",
+    avatar: "ME",
+    segment: "Regional Aesthetic & Vintage Student D2C",
+    priceRange: "Rp 129.000 – Rp 320.000",
+    followersIg: "95.000+",
+    followersTiktok: "110.000+",
+    location: "Yogyakarta, Semarang & Jawa Tengah",
+    signatureHook: "Rekomendasi kacamata vintage aesthetic yang bikin aura kuliah kamu kayak anak seni!",
+    currentTrend:
+      "Kurasi frame bergaya retro/vintage 90-an dengan packaging kotak kayu / pouch kain kanvas estetik. Menggandeng micro-influencer kampus seni dan coffee shop indie.",
+    contentPillars: ["OOTD Cafe Hopping", "Vintage Frame Showcase", "Lookbook Mahasiswa", "Review Kacamata Tipis"],
+    strengths: [
+      "Tone warna feed sangat selaras, warm, dan disukai penikmat fotografi estetik",
+      "Pilihan frame unik yang jarang ada di optik konvensional",
+      "Targeting komunitas kreatif lokal Jawa Tengah kuat"
+    ],
+    vulnerabilities: [
+      "Fasilitas laboratorium perakitan lensa terbatas",
+      "Waktu pengerjaan lensa minus custom memakan waktu 2-3 hari kerja"
+    ],
+    tacticalStealForISeeYou:
+      "Padukan keunggulan 'Frame Vintage Estetik ala Mollucas' dengan kecepatan 'Faset Kilat 20 Menit Jadi' milik I See You agar customer tidak perlu menunggu berhari-hari.",
+    primaryChannel: "Instagram Reels & TikTok",
+    tag: "Direct Competitor",
+    auditDate: "29 September 2026"
+  },
+  {
+    id: "bridgeseyewear",
+    name: "Bridges Eyewear",
+    handle: "@bridgeseyewear",
+    igUrl: "https://www.instagram.com/bridgeseyewear/",
+    websiteUrl: "https://bridgeseyewear.com",
+    avatar: "BE",
+    segment: "Modern Mid-Tier Lifestyle (Melawai Group)",
+    priceRange: "Rp 800.000 – Rp 1.600.000",
+    followersIg: "148.000+",
+    followersTiktok: "48.000+",
+    location: "Jakarta, Surabaya, Bandung, Semarang & Mall Besar",
+    signatureHook: "Glasses designed for urban thinkers. Timeless frames with Japanese acetate.",
+    currentTrend:
+      "Kolaborasi dengan ilustrator & desainer grafis lokal, showcase frame eco-acetate ramah lingkungan, dan kampanye aesthetic workspace look untuk pekerja remote/kantoran.",
+    contentPillars: ["Creative Collaboration Series", "Behind the Design & Material", "Workspace & Creative Lifestyle", "Store Ambience Minimalist"],
+    strengths: [
+      "Didukung standar supply chain & laboratorium lensa Optik Melawai",
+      "Desain kontemporer elegan yang sangat disukai pekerja profesional muda",
+      "Penataan display toko bergaya galeri seni modern minimalis"
+    ],
+    vulnerabilities: [
+      "Penetrasi terbatas hanya di mall tier-1 kota metropolitan",
+      "Harga di atas daya beli mayoritas kantong mahasiswa daerah"
+    ],
+    tacticalStealForISeeYou:
+      "Adopsi gaya visual storytelling 'Kacamata untuk Produktivitas Laptop/Kerja' yang bersih, namun tawarkan solusi bundling lensa anti-radiasi terjangkau di cabang I See You.",
+    primaryChannel: "Instagram Feed, Reels & Offline Boutiques",
+    tag: "Aspirational Benchmark",
+    auditDate: "29 September 2026"
   },
   {
     id: "saturdays",
@@ -115,8 +209,8 @@ const competitorsData: Competitor[] = [
     avatar: "ST",
     segment: "Premium Lifestyle & Artisanal Experience",
     priceRange: "Rp 1.295.000 – Rp 2.495.000",
-    followersIg: "128.000+",
-    followersTiktok: "75.000+",
+    followersIg: "132.000+",
+    followersTiktok: "78.000+",
     location: "Jabodetabek, Surabaya, Bandung & Bali (Mall Premium)",
     signatureHook: "Beli kacamata sambil ngopi artisan free cookie? Here is our store experience.",
     currentTrend:
@@ -136,7 +230,7 @@ const competitorsData: Competitor[] = [
       "Tiru estetika pencahayaan video (warm minimalist), unboxing box eksklusif, dan suasana store yang ramah serta instagramable di cabang Purwokerto agar pelanggan bangga foto di dalam toko.",
     primaryChannel: "Instagram Feed & Reels",
     tag: "Aspirational Benchmark",
-    auditDate: "21 September 2026"
+    auditDate: "29 September 2026"
   },
   {
     id: "optik-melawai",
@@ -147,8 +241,8 @@ const competitorsData: Competitor[] = [
     avatar: "OM",
     segment: "Legacy Healthcare Authority & Designer Luxury",
     priceRange: "Rp 1.500.000 – Rp 15.000.000+",
-    followersIg: "168.000+",
-    followersTiktok: "24.000+",
+    followersIg: "172.000+",
+    followersTiktok: "26.000+",
     location: "Seluruh Indonesia (Ratusan Cabang Mall & Standalone)",
     signatureHook: "Pemeriksaan mata standar Zeiss dengan dokter & optometris bersertifikat.",
     currentTrend:
@@ -168,7 +262,7 @@ const competitorsData: Competitor[] = [
       "Tunjukkan keahlian cek mata dan sertifikasi Refraksionis Optisi I See You, namun dikemas secara fun, hangat, dan tanpa rasa intimidasi harga mahal yang melekat pada optik mall lama.",
     primaryChannel: "Website, Offline Mall & Instagram",
     tag: "Incumbent Giant",
-    auditDate: "21 September 2026"
+    auditDate: "29 September 2026"
   },
   {
     id: "lunar-eyewear",
@@ -178,15 +272,15 @@ const competitorsData: Competitor[] = [
     avatar: "LN",
     segment: "Sister Brand / Experimental Regional Outlet",
     priceRange: "Rp 150.000 – Rp 450.000",
-    followersIg: "3.986 (Live IG)",
+    followersIg: "4.016 (Sheets 28 Sep)",
     followersTiktok: "3.031",
     location: "Tegal (Second Brand I See You)",
     signatureHook: "POV: Ketika kamu akhirnya nemu optik yang gak maksa beli frame jutaan tapi hasilnya estetik.",
     currentTrend:
-      "Reel viral 'pengen normal lagi' tembus 11.000 likes & 87 komentar (per 21 Sept 2026 live sync). Konten daily vlog toko dan soft selling gratis periksa mata 15 menit.",
+      "Reel viral POV Amanda tembus viewers masif. Konten daily vlog toko kasual, try-on model frame cat-eye untuk ciwi-ciwi Tegal, dan soft selling gratis periksa mata 15 menit.",
     contentPillars: ["POV Video Relatable", "Daily Vlog Tim Toko", "Promo Soft Sell", "Review Pelanggan Asli"],
     strengths: [
-      "Reels viral: reel 'pengen normal lagi' tembus 11.000 likes (per 21 Sept 2026, sumber: Instagram)",
+      "Reels viral POV yang tembus viewers tinggi dan interaksi organik anak muda",
       "Pendekatan konten sangat kasual dan relatable dengan anak muda Pantura",
       "Kombinasi second brand yang memperluas pasar I See You ke wilayah Tegal"
     ],
@@ -198,7 +292,7 @@ const competitorsData: Competitor[] = [
       "Format reels POV Amanda di Tegal yang tembus 128k viewers harus segera dibuatkan SOP dan direplikasi ke Purwokerto, Purbalingga, dan Cilacap.",
     primaryChannel: "Instagram Reels & TikTok",
     tag: "Internal Sibling",
-    auditDate: "21 September 2026"
+    auditDate: "29 September 2026"
   },
 ];
 

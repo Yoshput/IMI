@@ -39,6 +39,8 @@ export interface KolItem {
   platform: string;
   profileImg?: string;
   instagramUrl: string;
+  tiktokUrl?: string;
+  videoUrl?: string;
   socialBladeUrl: string;
   socialBladeGrade?: string;
   followers: number;
@@ -408,10 +410,10 @@ Have a nicee dayy ya kaa! 🌸✨`;
             <Users className="w-4 h-4 text-brand" />
           </div>
           <div className="text-xl font-bold text-foreground">
-            15 <span className="text-xs font-normal text-foreground-muted">KOL (3 per cabang)</span>
+            {kols.length} <span className="text-xs font-normal text-foreground-muted">KOL (5 Cabang Aktif)</span>
           </div>
           <span className="text-[11px] text-emerald-800 font-medium flex items-center gap-1 mt-1">
-            <CheckCircle2 className="w-3 h-3 text-emerald-700" /> 100% Sesuai Kuota
+            <CheckCircle2 className="w-3 h-3 text-emerald-700" /> Terverifikasi per Cabang
           </span>
         </div>
 
@@ -421,7 +423,7 @@ Have a nicee dayy ya kaa! 🌸✨`;
             <Video className="w-4 h-4 text-violet-500" />
           </div>
           <div className="text-xl font-bold text-foreground">
-            {owningReadyCount}/15 <span className="text-xs font-normal text-foreground-muted">KOL</span>
+            {owningReadyCount}/{kols.length} <span className="text-xs font-normal text-foreground-muted">KOL</span>
           </div>
           <span className="text-[11px] text-violet-700 font-medium flex items-center gap-1 mt-1">
             <ShieldCheck className="w-3 h-3 text-violet-600" /> Siap Jadi Bahan Iklan Ads
@@ -635,15 +637,31 @@ Have a nicee dayy ya kaa! 🌸✨`;
                         {kol.name}
                       </h3>
                     </div>
-                    <a
-                      href={kol.instagramUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-xs text-brand hover:underline inline-flex items-center gap-0.5 font-medium"
-                    >
-                      @{kol.handle}
-                      <ExternalLink className="w-2.5 h-2.5 opacity-70" />
-                    </a>
+                    <div className="flex items-center gap-2 mt-0.5 flex-wrap">
+                      <a
+                        href={kol.tiktokUrl || kol.instagramUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-xs text-brand hover:underline inline-flex items-center gap-0.5 font-medium"
+                      >
+                        @{kol.handle}
+                        <ExternalLink className="w-2.5 h-2.5 opacity-70" />
+                      </a>
+                      <span className="text-[9px] px-1.5 py-0.2 rounded bg-surface-secondary text-foreground-muted border border-border">
+                        {kol.platform}
+                      </span>
+                      {kol.videoUrl && (
+                        <a
+                          href={kol.videoUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-[10px] text-pink-600 hover:text-pink-700 font-semibold inline-flex items-center gap-0.5 bg-pink-500/10 px-1.5 py-0.2 rounded border border-pink-500/20"
+                        >
+                          <Video className="w-2.5 h-2.5" />
+                          Sampel Video
+                        </a>
+                      )}
+                    </div>
                     <p className="text-[11px] text-foreground-muted truncate mt-0.5">
                       {kol.niche}
                     </p>
@@ -661,6 +679,18 @@ Have a nicee dayy ya kaa! 🌸✨`;
                     <span className="font-bold text-emerald-700">{kol.engagementRate}%</span>
                   </div>
                 </div>
+
+                {/* Notes from Tim / User Evaluation */}
+                {kol.notes && (
+                  <div className="p-2.5 rounded-control bg-amber-500/10 border border-amber-500/20 text-xs">
+                    <span className="text-[10px] font-bold text-amber-900 block mb-0.5">
+                      Catatan Evaluasi & Observasi Tim:
+                    </span>
+                    <p className="text-[11px] text-amber-950 leading-relaxed font-medium">
+                      {kol.notes}
+                    </p>
+                  </div>
+                )}
 
                 {/* Budget & Barter Strategy Tag */}
                 <div className="p-2.5 rounded-control bg-emerald-500/10 border border-emerald-500/20 text-xs space-y-1">
@@ -783,7 +813,7 @@ Have a nicee dayy ya kaa! 🌸✨`;
                     <td className="py-3 px-4">
                       <div className="font-bold text-foreground">{kol.name}</div>
                       <a
-                        href={kol.instagramUrl}
+                        href={kol.tiktokUrl || kol.instagramUrl}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-[11px] text-brand hover:underline inline-flex items-center gap-0.5"
