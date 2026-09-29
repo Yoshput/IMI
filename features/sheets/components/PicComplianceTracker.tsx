@@ -57,7 +57,7 @@ export const PicComplianceTracker: React.FC<PicComplianceTrackerProps> = ({
               Status Pengisian Laporan 6 PIC Cabang
             </h3>
             <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-surface-secondary text-foreground-secondary border border-border">
-              Per 14 September 2026
+              Cutoff: 29 September 2026
             </span>
           </div>
           <p className="text-xs text-foreground-secondary mt-1">

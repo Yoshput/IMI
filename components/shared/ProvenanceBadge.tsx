@@ -19,13 +19,18 @@ export const ProvenanceBadge: React.FC<ProvenanceBadgeProps> = ({
 }) => {
   const getSourceDisplay = () => {
     switch (source) {
+      case "sheets_sync":
+        return "Google Sheets · 5 Cabang Sync";
       case "instagram_insights":
         return "Instagram Insights · Meta Sync";
+      case "google_search_console":
+        return "Google Search Console API";
       case "manual":
         return "Rekap PIC Cabang · Terverifikasi";
       case "csv_import":
         return "Import Data Audit";
       case "seed_demo":
+        return isDemo ? "Menunggu Verifikasi Data" : "Database Intelligence";
       default:
         return "Database Intelligence · Terverifikasi";
     }

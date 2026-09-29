@@ -34,6 +34,14 @@ export interface TikTokBranchData {
   underperformingPosts: TikTokPostItem[];
 }
 
+// ⚠️  CATATAN DATA PENTING — Dibaca sebelum tampilkan di rapat:
+// - followers: Diperbarui dari Google Sheets tracker (27–28 Sep 2026) ✅ VERIFIED
+// - followersGrowth, weeklyViews, weeklyLikes, weeklyShares, avgEngagementRate: BELUM DIVERIFIKASI
+//   Angka-angka ini adalah estimasi internal, bukan dari TikTok Analytics resmi.
+// - trendingPosts & underperformingPosts: BELUM DIVERIFIKASI — bukan dari TikTok Analytics API.
+//   Jangan tampilkan sebagai data aktual di rapat. Gunakan sebagai contoh format saja.
+// Last followers sync: 2026-09-27 (dari Google Sheets)
+
 export const TIKTOK_BRANCH_REGISTRY: TikTokBranchData[] = [
   {
     branchId: "pwt",
@@ -42,12 +50,12 @@ export const TIKTOK_BRANCH_REGISTRY: TikTokBranchData[] = [
     handle: "@iseeyouglasses",
     profileUrl: "https://www.tiktok.com/@iseeyouglasses",
     picName: "Ilya",
-    followers: 87200,
-    followersGrowth: 340,
-    weeklyViews: 145200,
-    weeklyLikes: 11400,
-    weeklyShares: 1280,
-    avgEngagementRate: 8.7,
+    followers: 87000, // ✅ Real: Google Sheets 27 Sep 2026
+    followersGrowth: 0, // ⚠️ Belum terverifikasi
+    weeklyViews: 0, // ⚠️ Belum terverifikasi dari TikTok Analytics
+    weeklyLikes: 0, // ⚠️ Belum terverifikasi
+    weeklyShares: 0, // ⚠️ Belum terverifikasi
+    avgEngagementRate: 0, // ⚠️ Belum terverifikasi
     trendingPosts: [
       {
         id: "tt-pwt-01",
@@ -61,7 +69,7 @@ export const TIKTOK_BRANCH_REGISTRY: TikTokBranchData[] = [
         comments: 184,
         shares: 742,
         engagementRate: 10.6,
-        keyTakeaway: "Format POV try-on wajah lonjong sangat viral di kalangan mahasiswa Unsoed & Banyumas.",
+        keyTakeaway: "⚠️ DATA BELUM DIVERIFIKASI — Angka estimasi internal, bukan dari TikTok Analytics.",
       },
       {
         id: "tt-pwt-02",
@@ -75,7 +83,7 @@ export const TIKTOK_BRANCH_REGISTRY: TikTokBranchData[] = [
         comments: 142,
         shares: 310,
         engagementRate: 8.5,
-        keyTakeaway: "Edukasi visual demonstratif menghasilkan share tinggi dan direct inquiry via DM/Bio.",
+        keyTakeaway: "⚠️ DATA BELUM DIVERIFIKASI — Angka estimasi internal, bukan dari TikTok Analytics.",
       },
     ],
     underperformingPosts: [
@@ -91,7 +99,7 @@ export const TIKTOK_BRANCH_REGISTRY: TikTokBranchData[] = [
         comments: 6,
         shares: 4,
         engagementRate: 3.5,
-        keyTakeaway: "Format slide gambar statis kaku di TikTok ditekan algoritma, segera ganti ke format video reaksi staf/customer.",
+        keyTakeaway: "⚠️ DATA BELUM DIVERIFIKASI — Angka estimasi internal, bukan dari TikTok Analytics.",
       },
     ],
   },

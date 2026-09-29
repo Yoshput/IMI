@@ -19,10 +19,10 @@ export const KpiMetricGroup: React.FC<KpiMetricGroupProps> = ({ metrics }) => {
     <div className="space-y-4 mb-10">
       <div className="flex items-center justify-between">
         <h2 className="text-xs font-bold uppercase tracking-wider text-foreground-secondary">
-          Metrik Kunci & Provenance (Week 37)
+          Metrik Kunci & Provenance (Week 39 · 22–28 September 2026)
         </h2>
         <span className="text-[11px] text-foreground-muted">
-          Komparasi terhadap Week 36 (1–7 Sep 2026)
+          Komparasi terhadap Week 38 (15–21 September 2026) · Cutoff 29 Sep 2026
         </span>
       </div>
 
@@ -62,7 +62,7 @@ export const KpiMetricGroup: React.FC<KpiMetricGroupProps> = ({ metrics }) => {
           </div>
         </div>
 
-        {/* Secondary Focus Metric: Save-to-Reach Ratio (Spans 5 cols on desktop) */}
+        {/* Secondary Focus Metric: Output / Save-to-Reach Ratio (Spans 5 cols on desktop) */}
         <div className="lg:col-span-5 p-6 rounded-container bg-surface border border-border shadow-subtle flex flex-col justify-between">
           <div className="flex items-start justify-between">
             <div>
@@ -71,10 +71,10 @@ export const KpiMetricGroup: React.FC<KpiMetricGroupProps> = ({ metrics }) => {
               </span>
               <div className="flex items-baseline gap-2 mt-2">
                 <span className="display-hero text-foreground tracking-tight text-brand">
-                  {saveRateMetric.value}%
+                  {saveRateMetric.value}
                 </span>
                 <span className="text-xs text-foreground-muted">
-                  minat simpan frame
+                  {saveRateMetric.unit || "konten terverifikasi"}
                 </span>
               </div>
             </div>

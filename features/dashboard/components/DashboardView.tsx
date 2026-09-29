@@ -10,7 +10,7 @@ import { AntrianTrackingCard } from "./AntrianTrackingCard";
 import { WebPhotoboothAndQueueResume } from "./WebPhotoboothAndQueueResume";
 import { GscClickReport } from "@/features/analytics/components/GscClickReport";
 import { TaskTrackerSection } from "./TaskTrackerSection";
-import { DEMO_HEADLINE_METRICS, DEMO_PRIORITY_ISSUES } from "@/lib/seed-data";
+import { ACTUAL_HEADLINE_METRICS, ACTUAL_PRIORITY_ISSUES } from "@/lib/actual-marketing-data";
 import { StateRenderer } from "@/components/shared/StateRenderer";
 import { PicSubmissionBanner } from "@/features/sheets/components/PicSubmissionBanner";
 import { DevStateSwitcher } from "@/components/shared/DevStateSwitcher";
@@ -36,16 +36,16 @@ export const DashboardView: React.FC = () => {
         onEmptyAction={() => (window.location.href = "/analytics")}
       >
         <PerformanceHeader
-          periodLabel="Week 39 · 21–28 September 2026 (Periode Evaluasi Rapat 29 Sep)"
+          periodLabel="Week 39 · 22–28 September 2026 (Periode Evaluasi Rapat 29 Sep)"
           publishTargetAchieved={true}
-          totalPostsPublished={14}
+          totalPostsPublished={36}
         />
 
         {/* Real-time Google Sheets PIC Submission Alert Banner */}
         <PicSubmissionBanner />
 
         {/* Headline KPIs */}
-        <KpiMetricGroup metrics={DEMO_HEADLINE_METRICS} />
+        <KpiMetricGroup metrics={ACTUAL_HEADLINE_METRICS} />
 
         {/* Resume Kunjungan Web Photobooth & Nomor Antrian Online (Permintaan Rapat Besok) */}
         <WebPhotoboothAndQueueResume />
@@ -66,7 +66,7 @@ export const DashboardView: React.FC = () => {
         <BranchLocationsShowcase />
 
         {/* Peluang & Perhatian Strategis */}
-        <PriorityAttention issues={DEMO_PRIORITY_ISSUES} />
+        <PriorityAttention issues={ACTUAL_PRIORITY_ISSUES} />
       </StateRenderer>
     </div>
   );

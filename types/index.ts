@@ -2,6 +2,8 @@ export type DataSource =
   | "manual"
   | "instagram_insights"
   | "csv_import"
+  | "sheets_sync"
+  | "google_search_console"
   | "seed_demo";
 
 export interface MetricProvenance {

@@ -42,12 +42,12 @@ export const PerformanceHeader: React.FC<PerformanceHeaderProps> = ({
           </div>
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-control bg-status-successBg text-status-success text-xs font-semibold">
             <TrendingUp className="w-3.5 h-3.5" />
-            <span>Reach Mingguan +23.8%</span>
+            <span>Tayangan Reels +90.3% WoW</span>
           </div>
           <ProvenanceBadge
-            source="instagram_insights"
-            date="Live Sync"
-            sourceLabel="Data sinkronisasi Meta Business Suite & Google Spreadsheet terverifikasi"
+            source="sheets_sync"
+            date="29 September 2026"
+            sourceLabel="Data sinkronisasi Google Sheets 5 Cabang terverifikasi per 29 September 2026"
             isDemo={false}
           />
         </div>

@@ -1,10 +1,10 @@
 import React from "react";
-import { DEMO_HISTORICAL_TRENDS } from "@/lib/seed-data";
+import { ACTUAL_HISTORICAL_TRENDS } from "@/lib/actual-marketing-data";
 import { formatNumber } from "@/lib/utils";
 import { ProvenanceBadge } from "@/components/shared/ProvenanceBadge";
 
 export const SingleQuestionChart: React.FC = () => {
-  const maxReach = Math.max(...DEMO_HISTORICAL_TRENDS.map((t) => t.reach));
+  const maxReach = Math.max(...ACTUAL_HISTORICAL_TRENDS.map((t) => t.reach));
 
   return (
     <div className="p-6 rounded-container bg-surface border border-border shadow-subtle flex flex-col justify-between">
@@ -14,23 +14,28 @@ export const SingleQuestionChart: React.FC = () => {
           <span className="text-xs font-bold uppercase tracking-wider text-brand">
             Pertanyaan Utama #1
           </span>
-          <ProvenanceBadge source="instagram_insights" date="2026-09-14" isDemo={true} />
+          <ProvenanceBadge
+            source="sheets_sync"
+            date="29 September 2026"
+            isDemo={false}
+            sourceLabel="Akumulasi Tayangan Reels Google Sheets 5 Cabang (Evaluasi H+3)"
+          />
         </div>
 
         <h3 className="heading-section text-foreground leading-snug">
-          &ldquo;Bagaimana tren jangkauan akun (Reach) dan interaksi selama 5 minggu terakhir?&rdquo;
+          &ldquo;Bagaimana tren tayangan Reels (Viewers) selama 5 minggu terakhir?&rdquo;
         </h3>
         <p className="text-xs text-foreground-secondary mt-1">
-          Menampilkan pertumbuhan akun dari Week 33 hingga Week 37. Perhatikan lonjakan pada W37 setelah tim beralih ke video Reels POV Try-on.
+          Menampilkan pertumbuhan tayangan Reels jaringan 5 cabang dari Week 35 hingga Week 39 (22–28 Sep 2026). Terverifikasi lonjakan tajam pada W39 mencapai 231.866 tayangan.
         </p>
       </div>
 
       {/* Clean Bar Visualization with Clear Values */}
       <div className="mt-8 space-y-4">
         <div className="grid grid-cols-5 gap-3 items-end h-44 pt-6 pb-2 border-b border-border/80">
-          {DEMO_HISTORICAL_TRENDS.map((t, idx) => {
+          {ACTUAL_HISTORICAL_TRENDS.map((t, idx) => {
             const heightPercent = Math.round((t.reach / maxReach) * 100);
-            const isLatest = idx === DEMO_HISTORICAL_TRENDS.length - 1;
+            const isLatest = idx === ACTUAL_HISTORICAL_TRENDS.length - 1;
 
             return (
               <div key={t.week} className="flex flex-col items-center h-full justify-end group">
@@ -68,7 +73,7 @@ export const SingleQuestionChart: React.FC = () => {
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-1.5">
               <span className="w-3 h-3 rounded-sm bg-brand" />
-              <span>Minggu Berjalan (W37)</span>
+              <span>Minggu Berjalan (W39)</span>
             </div>
             <div className="flex items-center gap-1.5">
               <span className="w-3 h-3 rounded-sm bg-[#9FB2A9]" />
@@ -76,7 +81,7 @@ export const SingleQuestionChart: React.FC = () => {
             </div>
           </div>
           <span className="text-[11px] text-foreground-muted">
-            +52.9% kenaikan total reach sejak Week 33
+            +168.9% kenaikan tayangan video sejak Week 35
           </span>
         </div>
       </div>

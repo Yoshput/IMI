@@ -36,6 +36,7 @@ interface ExecutiveMeetingRecapProps {
       tiktok: number;
     };
     periods?: {
+      currentMeeting?: any;
       lastTuesday: any;
       nextTuesday: any;
     };
@@ -65,33 +66,33 @@ export const ExecutiveMeetingRecap: React.FC<ExecutiveMeetingRecapProps> = ({
   executiveRecap,
   picTracker,
 }) => {
-  const [selectedPeriodKey, setSelectedPeriodKey] = useState<"lastTuesday" | "nextTuesday">(
-    (executiveRecap.activePeriodKey as "lastTuesday" | "nextTuesday") || "nextTuesday"
+  const [selectedPeriodKey, setSelectedPeriodKey] = useState<"currentMeeting" | "nextTuesday" | "lastTuesday">(
+    (executiveRecap.activePeriodKey as any) || "currentMeeting"
   );
   const [activeAudienceTab, setActiveAudienceTab] = useState<"all" | "hrd" | "head" | "owner">("all");
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [quickCopied, setQuickCopied] = useState(false);
 
   const periods = executiveRecap.periods || {
-    lastTuesday: {
-      periodKey: "2026-09-08_to_2026-09-14",
-      startDate: "2026-09-08",
-      endDate: "2026-09-14",
-      meetingDateTitle: "Selasa, 15 September 2026 (Periode 8–14 Sep)",
-      meetingStatus: "Sudah Berjalan / Evaluasi Resmi",
-      totalReelsUploaded: (executiveRecap.topViralReels || []).length,
-      totalStoriesRecorded: 5,
-      totalDmInquiries: 32,
-      topViralReels: executiveRecap.topViralReels || [],
-      frequentStoryInquiries: executiveRecap.frequentStoryInquiries || [],
-      obstacleLogs: executiveRecap.obstacleLogs || [],
+    currentMeeting: {
+      periodKey: "2026-09-22_to_2026-09-28",
+      startDate: "2026-09-22",
+      endDate: "2026-09-28",
+      meetingDateTitle: "Selasa, 29 September 2026 (Periode 22–28 Sep)",
+      meetingStatus: "Evaluasi Rapat Hari Ini (29 Sep 2026)",
+      totalReelsUploaded: 36,
+      totalStoriesRecorded: 7,
+      totalDmInquiries: 27,
+      topViralReels: [],
+      frequentStoryInquiries: [],
+      obstacleLogs: [],
     },
     nextTuesday: {
       periodKey: "2026-09-15_to_2026-09-21",
       startDate: "2026-09-15",
       endDate: "2026-09-21",
       meetingDateTitle: "Selasa, 22 September 2026 (Periode 15–21 Sep)",
-      meetingStatus: "Pemantauan Berjalan (Live Monitor H-7)",
+      meetingStatus: "Evaluasi Rapat Minggu Lalu (22 Sep 2026)",
       totalReelsUploaded: 0,
       totalStoriesRecorded: 0,
       totalDmInquiries: 0,
@@ -99,21 +100,39 @@ export const ExecutiveMeetingRecap: React.FC<ExecutiveMeetingRecapProps> = ({
       frequentStoryInquiries: [],
       obstacleLogs: [],
     },
+    lastTuesday: {
+      periodKey: "2026-09-08_to_2026-09-14",
+      startDate: "2026-09-08",
+      endDate: "2026-09-14",
+      meetingDateTitle: "Selasa, 15 September 2026 (Periode 8–14 Sep)",
+      meetingStatus: "Evaluasi Historis (15 Sep 2026)",
+      totalReelsUploaded: (executiveRecap.topViralReels || []).length,
+      totalStoriesRecorded: 5,
+      totalDmInquiries: 32,
+      topViralReels: executiveRecap.topViralReels || [],
+      frequentStoryInquiries: executiveRecap.frequentStoryInquiries || [],
+      obstacleLogs: executiveRecap.obstacleLogs || [],
+    },
   };
 
-  const activePeriod = periods[selectedPeriodKey];
+  const activePeriod = (periods as any)[selectedPeriodKey] || (periods as any).currentMeeting || (periods as any).nextTuesday || (periods as any).lastTuesday;
   const pendingPics = picTracker.filter((p) => !p.isUpToDate);
 
   const periodOptions = [
     {
-      key: "lastTuesday",
-      label: "Evaluasi Selasa Kemarin",
-      dateRange: "8–14 Sep 2026",
+      key: "currentMeeting",
+      label: "Rapat Hari Ini (29 Sep 2026)",
+      dateRange: "22–28 Sep 2026",
     },
     {
       key: "nextTuesday",
-      label: "Monitoring Menuju Selasa Depan",
+      label: "Rapat Minggu Lalu (22 Sep 2026)",
       dateRange: "15–21 Sep 2026",
+    },
+    {
+      key: "lastTuesday",
+      label: "Rapat 15 Sep 2026",
+      dateRange: "8–14 Sep 2026",
     },
   ];
 
@@ -205,18 +224,18 @@ Link Akses Web: https://imi-puce.vercel.app/spreadsheet`;
           </span>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <button
-            onClick={() => setSelectedPeriodKey("lastTuesday")}
+            onClick={() => setSelectedPeriodKey("currentMeeting")}
             className={`px-3 py-1.5 rounded-control text-xs font-semibold transition-all ${
-              selectedPeriodKey === "lastTuesday"
+              selectedPeriodKey === "currentMeeting"
                 ? "bg-foreground text-surface shadow-subtle"
                 : "bg-surface border border-border text-foreground-secondary hover:text-foreground"
             }`}
           >
-            <span>Selasa Kemarin (8–14 Sep 2026)</span>
-            <span className="ml-1.5 text-[9px] uppercase px-1.5 py-0.2 rounded bg-emerald-100 text-emerald-900 border border-emerald-300">
-              Evaluasi Resmi
+            <span>Rapat Hari Ini (22–28 Sep 2026)</span>
+            <span className="ml-1.5 text-[9px] uppercase px-1.5 py-0.2 rounded bg-emerald-600 text-white font-bold">
+              Aktual 29 Sep
             </span>
           </button>
 
@@ -228,9 +247,23 @@ Link Akses Web: https://imi-puce.vercel.app/spreadsheet`;
                 : "bg-surface border border-border text-foreground-secondary hover:text-foreground"
             }`}
           >
-            <span>Selasa Depan (15–21 Sep 2026)</span>
+            <span>Rapat 22 Sep (15–21 Sep)</span>
             <span className="ml-1.5 text-[9px] uppercase px-1.5 py-0.2 rounded bg-brand-light text-brand">
-              Live Monitor
+              Minggu Lalu
+            </span>
+          </button>
+
+          <button
+            onClick={() => setSelectedPeriodKey("lastTuesday")}
+            className={`px-3 py-1.5 rounded-control text-xs font-semibold transition-all ${
+              selectedPeriodKey === "lastTuesday"
+                ? "bg-foreground text-surface shadow-subtle"
+                : "bg-surface border border-border text-foreground-secondary hover:text-foreground"
+            }`}
+          >
+            <span>Rapat 15 Sep (8–14 Sep)</span>
+            <span className="ml-1.5 text-[9px] uppercase px-1.5 py-0.2 rounded bg-surface-secondary text-foreground-muted border border-border">
+              Historis
             </span>
           </button>
         </div>

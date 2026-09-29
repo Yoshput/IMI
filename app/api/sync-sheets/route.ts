@@ -608,14 +608,21 @@ async function syncSpreadsheetData() {
     "2026-09-08",
     "2026-09-14",
     "Selasa, 15 September 2026 (Periode 8–14 Sep)",
-    "Sudah Berjalan / Evaluasi Resmi"
+    "Evaluasi Historis (15 Sep 2026)"
   );
 
   const periodNextTuesday = buildPeriodRecap(
     "2026-09-15",
     "2026-09-21",
     "Selasa, 22 September 2026 (Periode 15–21 Sep)",
-    "Pemantauan Berjalan (Live Monitor H-7)"
+    "Evaluasi Rapat Minggu Lalu (22 Sep 2026)"
+  );
+
+  const periodCurrentMeeting = buildPeriodRecap(
+    "2026-09-22",
+    "2026-09-28",
+    "Selasa, 29 September 2026 (Periode 22–28 Sep)",
+    "Evaluasi Rapat Hari Ini (29 Sep 2026)"
   );
 
   // Extract spreadsheet followers per branch (H+3 latest recorded)
@@ -767,20 +774,21 @@ async function syncSpreadsheetData() {
     formProposal: formProposal,
     formPengajuan: formPengajuan,
     executiveRecap: {
-      meetingTarget: "Selasa Depan (Weekly Executive Board: HRD, Head, Finance, Owner)",
+      meetingTarget: "Rapat Direksi Hari Ini (Selasa, 29 September 2026)",
       liveFollowersByBranch: igLiveCache?.accounts || null,
       spreadsheetFollowersByBranch: spreadsheetFollowersByBranch,
       igLiveCache: igLiveCache || null,
       bonusSummary: bonusSummary,
       latestTotalNetworkFollowers: {
-        instagram: 226581 + 6195 + 3946 + 7361 + 1248,
-        tiktok: 87200 + 979 + 3031 + 42 + 541,
+        instagram: 226230 + 6198 + 7408 + 1264 + 4016, // 245,116 real IG followers across 5 branches
+        tiktok: 87000 + 997 + 57 + 540 + 3031, // 91,625 real TikTok followers across 5 branches
       },
       periods: {
-        lastTuesday: periodLastTuesday,
+        currentMeeting: periodCurrentMeeting,
         nextTuesday: periodNextTuesday,
+        lastTuesday: periodLastTuesday,
       },
-      activePeriodKey: "lastTuesday",
+      activePeriodKey: "currentMeeting",
     },
   };
 

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { DEMO_WEEKLY_REPORT } from "@/lib/seed-data";
+import { ACTUAL_WEEKLY_REPORT } from "@/lib/actual-marketing-data";
 import { ReportSectionNav } from "./ReportSectionNav";
 import { ReportEditorialDocument } from "./ReportEditorialDocument";
 import { ReportConfigPanel } from "./ReportConfigPanel";
@@ -66,7 +66,7 @@ export const ReportBuilderView: React.FC = () => {
 
           {/* Center: Editorial Document */}
           <ReportEditorialDocument
-            report={DEMO_WEEKLY_REPORT}
+            report={ACTUAL_WEEKLY_REPORT}
             showAiLayer={showAiLayer}
             selectedStakeholder={selectedStakeholder}
             reportStatus={reportStatus}
@@ -74,7 +74,7 @@ export const ReportBuilderView: React.FC = () => {
 
           {/* Right: Configuration Panel */}
           <ReportConfigPanel
-            report={DEMO_WEEKLY_REPORT}
+            report={ACTUAL_WEEKLY_REPORT}
             showAiLayer={showAiLayer}
             onToggleAiLayer={setShowAiLayer}
             selectedStakeholder={selectedStakeholder}

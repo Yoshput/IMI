@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { DEMO_HEADLINE_METRICS } from "@/lib/seed-data";
+import { ACTUAL_HEADLINE_METRICS } from "@/lib/actual-marketing-data";
 import { MetricRecord } from "@/types";
 import { SingleQuestionChart } from "./SingleQuestionChart";
 import { FormatEfficiencyChart } from "./FormatEfficiencyChart";
@@ -16,7 +16,7 @@ import { DevStateSwitcher } from "@/components/shared/DevStateSwitcher";
 export const AnalyticsView: React.FC = () => {
   const [viewState, setViewState] = useState<"success" | "loading" | "empty" | "error">("success");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [historyRecords, setHistoryRecords] = useState<MetricRecord[]>(DEMO_HEADLINE_METRICS);
+  const [historyRecords, setHistoryRecords] = useState<MetricRecord[]>(ACTUAL_HEADLINE_METRICS);
 
   const handleAddRecord = (record: MetricRecord) => {
     setHistoryRecords((prev) => [record, ...prev]);
