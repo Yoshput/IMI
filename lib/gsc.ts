@@ -134,17 +134,36 @@ export function getCalibratedGscData(timeframe: "weekly" | "monthly"): GscReport
       { query: "lensa photocromic purwokerto", clicks: 270, impressions: 5800, ctr: 4.7, position: 4.0 },
       { query: "ganti frame kacamata cepat cilacap", clicks: 250, impressions: 4900, ctr: 5.1, position: 3.8 },
     ],
-    dailyTrends: Array.from({ length: 28 }, (_, i) => {
-      const day = i + 1;
-      const dStr = `2026-09-${String(day).padStart(2, "0")}`;
-      const baseClicks = 170 + Math.floor(Math.sin(i / 2) * 35) + (i % 7 === 5 ? 40 : 0);
-      return {
-        date: dStr,
-        clicks: baseClicks,
-        impressions: baseClicks * 20,
-        ctr: Number((5.0 + Math.sin(i) * 0.4).toFixed(1)),
-      };
-    }),
+    dailyTrends: [
+      { date: "2026-09-01", clicks: 185, impressions: 3700, ctr: 5.0 },
+      { date: "2026-09-02", clicks: 190, impressions: 3800, ctr: 5.0 },
+      { date: "2026-09-03", clicks: 205, impressions: 4100, ctr: 5.0 },
+      { date: "2026-09-04", clicks: 215, impressions: 4300, ctr: 5.0 },
+      { date: "2026-09-05", clicks: 240, impressions: 4800, ctr: 5.0 },
+      { date: "2026-09-06", clicks: 235, impressions: 4700, ctr: 5.0 },
+      { date: "2026-09-07", clicks: 195, impressions: 3900, ctr: 5.0 },
+      { date: "2026-09-08", clicks: 180, impressions: 3600, ctr: 5.0 },
+      { date: "2026-09-09", clicks: 190, impressions: 3800, ctr: 5.0 },
+      { date: "2026-09-10", clicks: 200, impressions: 4000, ctr: 5.0 },
+      { date: "2026-09-11", clicks: 210, impressions: 4200, ctr: 5.0 },
+      { date: "2026-09-12", clicks: 230, impressions: 4600, ctr: 5.0 },
+      { date: "2026-09-13", clicks: 220, impressions: 4400, ctr: 5.0 },
+      { date: "2026-09-14", clicks: 185, impressions: 3700, ctr: 5.0 },
+      { date: "2026-09-15", clicks: 190, impressions: 3800, ctr: 5.0 },
+      { date: "2026-09-16", clicks: 205, impressions: 4100, ctr: 5.0 },
+      { date: "2026-09-17", clicks: 215, impressions: 4300, ctr: 5.0 },
+      { date: "2026-09-18", clicks: 225, impressions: 4500, ctr: 5.0 },
+      { date: "2026-09-19", clicks: 245, impressions: 4900, ctr: 5.0 },
+      { date: "2026-09-20", clicks: 230, impressions: 4600, ctr: 5.0 },
+      { date: "2026-09-21", clicks: 190, impressions: 3800, ctr: 5.0 },
+      { date: "2026-09-22", clicks: 182, impressions: 3800, ctr: 4.8 },
+      { date: "2026-09-23", clicks: 195, impressions: 3950, ctr: 4.9 },
+      { date: "2026-09-24", clicks: 210, impressions: 4100, ctr: 5.1 },
+      { date: "2026-09-25", clicks: 225, impressions: 4300, ctr: 5.2 },
+      { date: "2026-09-26", clicks: 240, impressions: 4600, ctr: 5.2 },
+      { date: "2026-09-27", clicks: 198, impressions: 4050, ctr: 4.9 },
+      { date: "2026-09-28", clicks: 170, impressions: 3600, ctr: 4.7 },
+    ],
   };
 }
 

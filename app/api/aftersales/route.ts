@@ -1,9 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
 import * as XLSX from "xlsx";
 import {
-  INITIAL_CUSTOMERS,
   CustomerAftersalesRecord,
   FollowUpStatus,
 } from "@/lib/aftersales";
@@ -13,7 +10,16 @@ export const dynamic = "force-dynamic";
 const AFTERSALES_SHEET_URL =
   "https://docs.google.com/spreadsheets/d/10lKjuzUvWhnUKbKNEo4opo4MiQoesZKW4NhY9sQ4T8w/export?format=xlsx";
 
-let cachedCustomers: CustomerAftersalesRecord[] | null = null;
+let cachedData: {
+  customers: CustomerAftersalesRecord[];
+  topFrames: { frame: string; count: number }[];
+  topLenses: { lens: string; count: number }[];
+  totalFeedback: number;
+  totalComplaints: number;
+  totalReviews: number;
+  lastSync: string;
+} | null = null;
+
 let lastSyncTimestamp = 0;
 
 function parseExcelDate(serial: any): string {
@@ -43,97 +49,162 @@ function sanitizePhone(raw: any): string {
   return clean;
 }
 
-async function fetchGoogleSheetsAftersales(): Promise<CustomerAftersalesRecord[]> {
-  const res = await fetch(AFTERSALES_SHEET_URL);
-  if (!res.ok) {
-    throw new Error(`Gagal download spreadsheet aftersales: ${res.statusText}`);
-  }
+// Download helper with redirect handling
+function downloadBuffer(url: string): Promise<Buffer> {
+  const https = require("https");
+  return new Promise((resolve, reject) => {
+    https.get(url, (res: any) => {
+      if (res.statusCode === 302 || res.statusCode === 307) {
+        https.get(res.headers.location, (res2: any) => {
+          const chunks: Buffer[] = [];
+          res2.on("data", (c: Buffer) => chunks.push(c));
+          res2.on("end", () => resolve(Buffer.concat(chunks)));
+        }).on("error", reject);
+      } else {
+        const chunks: Buffer[] = [];
+        res.on("data", (c: Buffer) => chunks.push(c));
+        res.on("end", () => resolve(Buffer.concat(chunks)));
+      }
+    }).on("error", reject);
+  });
+}
 
-  const arrayBuffer = await res.arrayBuffer();
-  const buffer = Buffer.from(arrayBuffer);
+async function fetchGoogleSheetsAftersales() {
+  const buffer = await downloadBuffer(AFTERSALES_SHEET_URL);
   const workbook = XLSX.read(buffer, { type: "buffer" });
 
   // 1. Parse REKAP DATA (Feedback & Complaints)
   const rekapSheet = workbook.Sheets["REKAP DATA"];
   const rawRekap: any[] = rekapSheet ? XLSX.utils.sheet_to_json(rekapSheet) : [];
-  const feedbackByPhone: Record<string, any> = {};
-
-  rawRekap.forEach((r) => {
-    const phone = sanitizePhone(r["Nomor Hp"]);
-    if (phone) {
-      feedbackByPhone[phone] = {
-        jenisLaporan: r["Jenis Laporan"] || "Review",
-        cabang: r["Cabang"] || "Purwokerto",
-        isi: r["isi Review/Komplain"] || "-",
-        saran: r["Saran Customer (Perbaikan)"] || "-",
-      };
-    }
-  });
 
   // 2. Parse DATA CUSTOMER (Prescriptions, frame, and lenses)
   const customerSheet = workbook.Sheets["DATA CUSTOMER"];
   const rawCustomers: any[] = customerSheet ? XLSX.utils.sheet_to_json(customerSheet) : [];
 
+  // Build customer index by sanitized phone
+  const custByPhone = new Map<string, any>();
+  const frameCounts: Record<string, number> = {};
+  const lensCounts: Record<string, number> = {};
+
+  rawCustomers.forEach((c) => {
+    const p = sanitizePhone(c["NO.WHATSAPP"]);
+    if (p && !custByPhone.has(p)) {
+      custByPhone.set(p, c);
+    }
+
+    // Top frame model computation
+    const f = String(c["JENIS BARANG"] || "").trim();
+    const fLow = f.toLowerCase();
+    if (f && f !== "." && f !== "-" && !fLow.includes("sendiri") && !fLow.includes("lensa only") && fLow !== "kacamata") {
+      frameCounts[f] = (frameCounts[f] || 0) + 1;
+    }
+
+    // Top lens computation
+    let l = String(c["JENIS LENSA"] || "").trim().toUpperCase();
+    if (l && l !== "." && l !== "-") {
+      if (l === "BLUERAY" || l === "BLUERAY HOYA") l = "BLURAY";
+      if (l === "B.DRIVE") l = "BLUE DRIVE";
+      lensCounts[l] = (lensCounts[l] || 0) + 1;
+    }
+  });
+
+  const topFrames = Object.entries(frameCounts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 10)
+    .map(([frame, count]) => ({ frame, count }));
+
+  const topLenses = Object.entries(lensCounts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 8)
+    .map(([lens, count]) => ({ lens, count }));
+
   const parsedList: CustomerAftersalesRecord[] = [];
+  let totalComplaints = 0;
+  let totalReviews = 0;
 
-  // Take the most recent 150 customers from sheet + match with feedback
-  const recentSlice = rawCustomers.slice(-150).reverse();
+  // Branch resolver
+  const resolveBranch = (candidate: string) => {
+    const b = (candidate || "").toLowerCase();
+    if (b.includes("cilacap") || b.includes("clp")) return { name: "Cilacap", key: "CLP" as const, city: "Cilacap" };
+    if (b.includes("purbalingga") || b.includes("pbg")) return { name: "Purbalingga", key: "PBG" as const, city: "Purbalingga" };
+    if (b.includes("wonosobo") || b.includes("wns")) return { name: "Wonosobo", key: "WNS" as const, city: "Wonosobo" };
+    if (b.includes("tegal") || b.includes("lunar")) return { name: "Lunar Eyewear Tegal", key: "TGL" as const, city: "Tegal" };
+    return { name: "Purwokerto (Pusat)", key: "PWT" as const, city: "Purwokerto" };
+  };
 
+  // Process 1: ALL entries from REKAP DATA (240 real records of complaints & reviews)
+  rawRekap.forEach((r, idx) => {
+    const phone = sanitizePhone(r["Nomor Hp"]);
+    const jenis = String(r["Jenis Laporan"] || "Review").trim();
+    const isComplaint = jenis.toLowerCase().includes("komplain");
+
+    if (isComplaint) totalComplaints++;
+    else totalReviews++;
+
+    const matchedCust = phone ? custByPhone.get(phone) : null;
+    const branchMeta = resolveBranch(r["Cabang"] || matchedCust?.["ALAMAT (KEC)"]);
+    const examDate = parseExcelDate(r["Timestamp"] || matchedCust?.["TGL PERIKSA"]);
+
+    const status: FollowUpStatus = isComplaint ? "butuh_garansi" : "selesai_puas";
+
+    parsedList.push({
+      id: `rekap-fb-${idx}`,
+      name: String(r["Nama Pelanggan"] || matchedCust?.["NAMA LENGKAP"] || "Pelanggan Optik").trim(),
+      phone: phone || "6281200000000",
+      branch: branchMeta.name,
+      branchKey: branchMeta.key,
+      city: branchMeta.city,
+      examDate,
+      pickupDate: examDate,
+      frameModel: String(matchedCust?.["JENIS BARANG"] || "Frame Optik").trim(),
+      lensType: String(matchedCust?.["JENIS LENSA"] || "Lensa Kacamata").trim(),
+      totalTransaction: matchedCust ? 650000 : 450000,
+      prescription: {
+        odSph: String(matchedCust?.["SPH KANAN"] || "0.00").trim(),
+        odCyl: String(matchedCust?.["CYL KANAN (AXSIS = X)"] || "0.00").trim(),
+        osSph: String(matchedCust?.["SPH KIRI"] || "0.00").trim(),
+        osCyl: String(matchedCust?.["CYL KIRI (AXSIS = X)"] || "0.00").trim(),
+        add: String(matchedCust?.["ADD"] || "").replace(".", "").trim() || undefined,
+        pd: String(matchedCust?.["PD"] || "63").trim(),
+      },
+      status,
+      notes: `${jenis.toUpperCase()}: "${r["isi Review/Komplain"] || "-"}"${r["Saran Customer (Perbaikan)"] && r["Saran Customer (Perbaikan)"] !== "-" ? ` | Saran: "${r["Saran Customer (Perbaikan)"]}"` : ""}`,
+      inquiryChannel: "walk_in",
+      satisfactionScore: isComplaint ? 2 : 5,
+      logs: [
+        {
+          id: `log-fb-${idx}`,
+          date: examDate,
+          type: "whatsapp_message",
+          actor: "CS Aftersales",
+          note: `Log ${jenis} tercatat di sheet REKAP DATA: "${r["isi Review/Komplain"] || "-"}"`,
+        },
+      ],
+    });
+  });
+
+  // Process 2: Recent customers from DATA CUSTOMER who haven't submitted review yet
+  const recentSlice = rawCustomers.slice(-100).reverse();
   recentSlice.forEach((row, idx) => {
     const phone = sanitizePhone(row["NO.WHATSAPP"]);
-    const fb = feedbackByPhone[phone];
+    // Avoid duplicate if already added via REKAP DATA
+    if (parsedList.some((p) => p.phone === phone)) return;
 
-    // Branch detection
-    let branchName = "Purwokerto (Pusat)";
-    let branchKey: "PWT" | "CLP" | "PBG" | "WNS" | "TGL" = "PWT";
-    let city = "Purwokerto";
-
-    const branchCandidate = fb?.cabang || row["ALAMAT (KEC)"] || "";
-    const bLower = branchCandidate.toLowerCase();
-    if (bLower.includes("cilacap") || bLower.includes("clp")) {
-      branchName = "Cilacap";
-      branchKey = "CLP";
-      city = "Cilacap";
-    } else if (bLower.includes("purbalingga") || bLower.includes("pbg")) {
-      branchName = "Purbalingga";
-      branchKey = "PBG";
-      city = "Purbalingga";
-    } else if (bLower.includes("wonosobo") || bLower.includes("wonosono") || bLower.includes("wns")) {
-      branchName = "Wonosobo";
-      branchKey = "WNS";
-      city = "Wonosobo";
-    } else if (bLower.includes("tegal") || bLower.includes("lunar")) {
-      branchName = "Lunar Eyewear Tegal";
-      branchKey = "TGL";
-      city = "Tegal";
-    }
-
-    // Determine status based on feedback or default
-    let status: FollowUpStatus = "belum_dihubungi";
-    if (fb) {
-      if (fb.jenisLaporan.toLowerCase().includes("komplain")) {
-        status = "butuh_garansi";
-      } else {
-        status = "selesai_puas";
-      }
-    } else if (idx % 3 === 1) {
-      status = "sudah_dihubungi";
-    }
-
+    const branchMeta = resolveBranch(row["ALAMAT (KEC)"] || "");
     const examDate = parseExcelDate(row["TGL PERIKSA"]);
 
     parsedList.push({
-      id: `live-cust-${idx}`,
+      id: `cust-row-${idx}`,
       name: String(row["NAMA LENGKAP"] || "Pelanggan Optik").trim(),
       phone: phone || "6281200000000",
-      branch: branchName,
-      branchKey,
-      city,
+      branch: branchMeta.name,
+      branchKey: branchMeta.key,
+      city: branchMeta.city,
       examDate,
       pickupDate: examDate,
       frameModel: String(row["JENIS BARANG"] || "Frame Optik").trim(),
       lensType: String(row["JENIS LENSA"] || "Single Vision").trim(),
-      totalTransaction: 550000 + (idx % 5) * 75000,
+      totalTransaction: 550000,
       prescription: {
         odSph: String(row["SPH KANAN"] || "0.00").trim(),
         odCyl: String(row["CYL KANAN (AXSIS = X)"] || "0.00").trim(),
@@ -142,36 +213,30 @@ async function fetchGoogleSheetsAftersales(): Promise<CustomerAftersalesRecord[]
         add: String(row["ADD"] || "").replace(".", "").trim() || undefined,
         pd: String(row["PD"] || "63").trim(),
       },
-      status,
-      notes: fb
-        ? `Feedback Customer: "${fb.isi}"`
-        : row["CATATAN"] && row["CATATAN"] !== "."
-        ? String(row["CATATAN"]).trim()
-        : `Alamat: ${row["ALAMAT (KEC)"] || "-"}`,
-      inquiryChannel: idx % 2 === 0 ? "web_antrian" : "walk_in",
-      logs: fb
-        ? [
-            {
-              id: `log-fb-${idx}`,
-              date: parseExcelDate(row["Timestamp"]),
-              type: "whatsapp_message",
-              actor: "CS Aftersales",
-              note: `Feedback masuk (${fb.jenisLaporan}): "${fb.isi}"`,
-            },
-          ]
-        : [
-            {
-              id: `log-visit-${idx}`,
-              date: examDate,
-              type: "store_visit",
-              actor: "Kasir & RO Cabang",
-              note: `Pemeriksaan mata dan pemesanan frame ${row["JENIS BARANG"] || ""}`,
-            },
-          ],
+      status: "belum_dihubungi",
+      notes: row["CATATAN"] && row["CATATAN"] !== "." ? String(row["CATATAN"]).trim() : `Kecamatan: ${row["ALAMAT (KEC)"] || "-"}`,
+      inquiryChannel: "walk_in",
+      logs: [
+        {
+          id: `log-exam-${idx}`,
+          date: examDate,
+          type: "store_visit",
+          actor: "RO Cabang",
+          note: `Pemeriksaan mata selesai (${branchMeta.name}). Frame: ${row["JENIS BARANG"] || "-"}`,
+        },
+      ],
     });
   });
 
-  return parsedList;
+  return {
+    customers: parsedList,
+    topFrames,
+    topLenses,
+    totalFeedback: rawRekap.length,
+    totalComplaints,
+    totalReviews,
+    lastSync: new Date().toISOString(),
+  };
 }
 
 export async function GET(req: NextRequest) {
@@ -182,25 +247,29 @@ export async function GET(req: NextRequest) {
     const status = searchParams.get("status");
     const query = searchParams.get("q");
 
-    const CACHE_TTL_MS = 5 * 60 * 1000;
+    const CACHE_TTL_MS = 3 * 60 * 1000;
     const now = Date.now();
 
-    if (!cachedCustomers || forceFresh || now - lastSyncTimestamp > CACHE_TTL_MS) {
+    if (!cachedData || forceFresh || now - lastSyncTimestamp > CACHE_TTL_MS) {
       try {
-        const liveList = await fetchGoogleSheetsAftersales();
-        if (liveList && liveList.length > 0) {
-          cachedCustomers = liveList;
+        const live = await fetchGoogleSheetsAftersales();
+        if (live && live.customers.length > 0) {
+          cachedData = live;
           lastSyncTimestamp = now;
         }
       } catch (err) {
         console.error("Gagal sinkron live spreadsheet aftersales:", err);
-        if (!cachedCustomers) {
-          cachedCustomers = [...INITIAL_CUSTOMERS];
-        }
       }
     }
 
-    let filtered = cachedCustomers ? [...cachedCustomers] : [...INITIAL_CUSTOMERS];
+    if (!cachedData) {
+      return NextResponse.json(
+        { success: false, error: "Gagal memuat data live spreadsheet" },
+        { status: 502 }
+      );
+    }
+
+    let filtered = [...cachedData.customers];
 
     if (branch && branch !== "all") {
       filtered = filtered.filter(
@@ -221,138 +290,31 @@ export async function GET(req: NextRequest) {
           c.name.toLowerCase().includes(q) ||
           c.phone.includes(q) ||
           c.frameModel.toLowerCase().includes(q) ||
-          c.lensType.toLowerCase().includes(q)
+          c.lensType.toLowerCase().includes(q) ||
+          c.notes.toLowerCase().includes(q)
       );
     }
 
-    const all = cachedCustomers || INITIAL_CUSTOMERS;
+    const counts = {
+      total: cachedData.customers.length,
+      belum_dihubungi: cachedData.customers.filter((c) => c.status === "belum_dihubungi").length,
+      sudah_dihubungi: cachedData.customers.filter((c) => c.status === "sudah_dihubungi").length,
+      selesai_puas: cachedData.customers.filter((c) => c.status === "selesai_puas").length,
+      butuh_garansi: cachedData.customers.filter((c) => c.status === "butuh_garansi").length,
+      totalComplaints: cachedData.totalComplaints,
+      totalReviews: cachedData.totalReviews,
+    };
 
     return NextResponse.json({
       success: true,
       data: filtered,
-      total: filtered.length,
-      source: "google_sheets_live",
-      sourceUrl: AFTERSALES_SHEET_URL,
-      lastSyncTime: new Date(lastSyncTimestamp).toISOString(),
-      counts: {
-        total: all.length,
-        belum_dihubungi: all.filter((c) => c.status === "belum_dihubungi").length,
-        sudah_dihubungi: all.filter((c) => c.status === "sudah_dihubungi").length,
-        selesai_puas: all.filter((c) => c.status === "selesai_puas").length,
-        butuh_garansi: all.filter((c) => c.status === "butuh_garansi").length,
-      },
+      counts,
+      topFrames: cachedData.topFrames,
+      topLenses: cachedData.topLenses,
+      lastSync: cachedData.lastSync,
+      source: "Google Spreadsheet 10lKjuzUvWhnUKbKNEo4opo4MiQoesZKW4NhY9sQ4T8w",
     });
-  } catch (err: any) {
-    return NextResponse.json({ success: false, error: err.message }, { status: 500 });
-  }
-}
-
-export async function PATCH(req: NextRequest) {
-  try {
-    const body = await req.json();
-    const { id, status, notes, newLog } = body;
-
-    if (!cachedCustomers) {
-      cachedCustomers = [...INITIAL_CUSTOMERS];
-    }
-
-    const idx = cachedCustomers.findIndex((c) => c.id === id);
-    if (idx === -1) {
-      return NextResponse.json({ success: false, error: "Customer tidak ditemukan" }, { status: 404 });
-    }
-
-    if (status) {
-      cachedCustomers[idx].status = status as FollowUpStatus;
-    }
-    if (notes !== undefined) {
-      cachedCustomers[idx].notes = notes;
-    }
-    if (newLog) {
-      cachedCustomers[idx].logs.push({
-        id: `l-${Date.now()}`,
-        date: new Date().toISOString().replace("T", " ").slice(0, 16),
-        type: newLog.type || "whatsapp_message",
-        actor: newLog.actor || "Staff Aftersales",
-        note: newLog.note || "Tindak lanjut customer",
-      });
-    }
-
-    return NextResponse.json({
-      success: true,
-      message: "Data customer aftersales berhasil diperbarui",
-      data: cachedCustomers[idx],
-    });
-  } catch (err: any) {
-    return NextResponse.json({ success: false, error: err.message }, { status: 500 });
-  }
-}
-
-// POST: Add new aftersales customer
-export async function POST(req: NextRequest) {
-  try {
-    const body = await req.json();
-    const branchKey = (body.branchKey || "PWT").toUpperCase() as "PWT" | "CLP" | "PBG" | "WNS" | "TGL";
-    const branchMap: Record<string, string> = {
-      PWT: "Purwokerto (Pusat)",
-      CLP: "Cilacap",
-      PBG: "Purbalingga",
-      WNS: "Wonosobo",
-      TGL: "Lunar Eyewear Tegal",
-    };
-
-    const newCustomer: CustomerAftersalesRecord = {
-      id: `cust-${Date.now()}`,
-      name: body.name || "Customer Baru",
-      phone: sanitizePhone(body.phone),
-      branch: branchMap[branchKey] || "Purwokerto (Pusat)",
-      branchKey,
-      city:
-        branchKey === "TGL"
-          ? "Tegal"
-          : branchKey === "CLP"
-          ? "Cilacap"
-          : branchKey === "PBG"
-          ? "Purbalingga"
-          : branchKey === "WNS"
-          ? "Wonosobo"
-          : "Purwokerto",
-      examDate: body.examDate || new Date().toISOString().slice(0, 10),
-      pickupDate: body.pickupDate || new Date().toISOString().slice(0, 10),
-      frameModel: body.frameModel || "Frame Standar",
-      lensType: body.lensType || "Single Vision Anti Radiasi",
-      totalTransaction: Number(body.totalTransaction) || 500000,
-      prescription: body.prescription || {
-        odSph: "0.00",
-        odCyl: "0.00",
-        osSph: "0.00",
-        osCyl: "0.00",
-        pd: "62",
-      },
-      status: (body.status as FollowUpStatus) || "belum_dihubungi",
-      notes: body.notes || "Input manual order customer baru.",
-      inquiryChannel: body.inquiryChannel || "walk_in",
-      logs: [
-        {
-          id: `l-${Date.now()}`,
-          date: new Date().toISOString().replace("T", " ").slice(0, 16),
-          type: "store_visit",
-          actor: "Kasir / RO Cabang",
-          note: "Penginputan data pembelian kacamata ke CRM.",
-        },
-      ],
-    };
-
-    if (!cachedCustomers) {
-      cachedCustomers = [...INITIAL_CUSTOMERS];
-    }
-    cachedCustomers.unshift(newCustomer);
-
-    return NextResponse.json({
-      success: true,
-      message: "Customer baru berhasil ditambahkan ke modul Aftersales",
-      data: newCustomer,
-    });
-  } catch (err: any) {
-    return NextResponse.json({ success: false, error: err.message }, { status: 500 });
+  } catch (error: any) {
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }

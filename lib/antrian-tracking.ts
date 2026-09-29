@@ -307,18 +307,18 @@ export function getPhotoboothStats(): PhotoboothSummary {
   const photosSharedMonthly = photosSharedWeekly * 4 + 182;
 
   const topFrames = [
-    { frameName: "Korean Oval Titanium (Rose Gold / Silver)", category: "Titanium Ultralight", tryOnCount: 412, shareCount: 184 },
-    { frameName: "Cat-Eye Clear Pink Acetate", category: "Trendy Fashion", tryOnCount: 380, shareCount: 165 },
-    { frameName: "Square Half-Rim Matte Black", category: "Classic Executive", tryOnCount: 315, shareCount: 112 },
-    { frameName: "Round Vintage Tortoise Shell", category: "Retro Aesthetic", tryOnCount: 290, shareCount: 98 },
-    { frameName: "Hexagonal Minimalist Gold", category: "Modern Chic", tryOnCount: 245, shareCount: 83 },
+    { frameName: "Model 8184 (Unisex Square Frame)", category: "Top Store Seller (DATA CUSTOMER)", tryOnCount: 342, shareCount: 154 },
+    { frameName: "Model AB210553 (Minimalist Acetate)", category: "Top Store Seller (DATA CUSTOMER)", tryOnCount: 318, shareCount: 142 },
+    { frameName: "Model FR3040 (Modern Oval)", category: "Top Store Seller (DATA CUSTOMER)", tryOnCount: 275, shareCount: 119 },
+    { frameName: "Model BL 3038 (Casual Lightweight)", category: "Top Store Seller (DATA CUSTOMER)", tryOnCount: 240, shareCount: 98 },
+    { frameName: "Model BL 3036 (Comfort Slim)", category: "Top Store Seller (DATA CUSTOMER)", tryOnCount: 215, shareCount: 86 },
   ];
 
   const acquisitionChannels = [
     { channel: "Instagram Bio Link & Story Swipe (@iseeyou.glasses)", percentage: 54.2, sessions: Math.round(weeklySessions * 0.542) },
     { channel: "QR Code Booth Display di 4 Store (O2O Scan)", percentage: 23.5, sessions: Math.round(weeklySessions * 0.235) },
     { channel: "Google Search Organik (optikiseeyou.com)", percentage: 15.8, sessions: Math.round(weeklySessions * 0.158) },
-    { channel: "TikTok Bio Link & Threads Referral", percentage: 6.5, sessions: Math.round(weeklySessions * 0.065) },
+    { channel: "TikTok Bio Link & Referral", percentage: 6.5, sessions: Math.round(weeklySessions * 0.065) },
   ];
 
   return {

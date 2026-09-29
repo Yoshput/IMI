@@ -54,6 +54,9 @@ export const AftersalesView: React.FC = () => {
   const [newOsSph, setNewOsSph] = useState("");
   const [newNotes, setNewNotes] = useState("");
 
+  const [topFrames, setTopFrames] = useState<{ frame: string; count: number }[]>([]);
+  const [topLenses, setTopLenses] = useState<{ lens: string; count: number }[]>([]);
+
   const fetchCustomers = useCallback(async () => {
     try {
       const params = new URLSearchParams();
@@ -68,6 +71,8 @@ export const AftersalesView: React.FC = () => {
         if (json.counts) {
           setCounts(json.counts);
         }
+        if (json.topFrames) setTopFrames(json.topFrames);
+        if (json.topLenses) setTopLenses(json.topLenses);
       }
     } catch (e) {
       console.error(e);
@@ -364,6 +369,87 @@ export const AftersalesView: React.FC = () => {
             Review bintang 5 / nyaman
           </span>
         </button>
+      </div>
+
+      {/* Point 3: Realtime Trend Frame & Lens Recommendations (Live Penjualan 6.062+ Customer) */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Top Frames */}
+        <div className="p-4 rounded-xl border border-border bg-surface shadow-subtle space-y-3">
+          <div className="flex items-center justify-between border-b border-border pb-2.5">
+            <div className="flex items-center gap-2">
+              <div className="p-1.5 rounded-lg bg-brand-light text-brand">
+                <Glasses className="w-4 h-4" />
+              </div>
+              <div>
+                <h3 className="font-bold text-xs text-foreground">Top Model Frame Terlaris (Database Riil Toko)</h3>
+                <p className="text-[10px] text-foreground-muted">Dihitung otomatis dari 6.062+ rekam transaksi DATA CUSTOMER</p>
+              </div>
+            </div>
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-surface-secondary text-foreground border border-border">
+              Live Sheets
+            </span>
+          </div>
+
+          <div className="space-y-1.5">
+            {topFrames.length === 0 ? (
+              <p className="text-xs text-foreground-muted py-2">Memuat data model frame...</p>
+            ) : (
+              topFrames.slice(0, 5).map((tf, idx) => (
+                <div key={tf.frame} className="flex items-center justify-between text-xs p-2 rounded-lg bg-surface-secondary/50 hover:bg-surface-secondary transition-colors">
+                  <div className="flex items-center gap-2">
+                    <span className="w-5 h-5 rounded-full bg-brand/10 text-brand font-bold text-[10px] flex items-center justify-center">
+                      #{idx + 1}
+                    </span>
+                    <span className="font-semibold text-foreground">{tf.frame}</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-mono font-bold text-foreground">{tf.count}</span>
+                    <span className="text-[10px] text-foreground-muted">transaksi</span>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+
+        {/* Top Lenses */}
+        <div className="p-4 rounded-xl border border-border bg-surface shadow-subtle space-y-3">
+          <div className="flex items-center justify-between border-b border-border pb-2.5">
+            <div className="flex items-center gap-2">
+              <div className="p-1.5 rounded-lg bg-blue-500/10 text-blue-600">
+                <Eye className="w-4 h-4" />
+              </div>
+              <div>
+                <h3 className="font-bold text-xs text-foreground">Top Jenis Lensa Paling Diminati</h3>
+                <p className="text-[10px] text-foreground-muted">Preferensi lensa pilihan customer Optik I See You</p>
+              </div>
+            </div>
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-blue-500/10 text-blue-700 dark:text-blue-300 border border-blue-500/20">
+              Verified
+            </span>
+          </div>
+
+          <div className="space-y-1.5">
+            {topLenses.length === 0 ? (
+              <p className="text-xs text-foreground-muted py-2">Memuat data lensa...</p>
+            ) : (
+              topLenses.slice(0, 5).map((tl, idx) => (
+                <div key={tl.lens} className="flex items-center justify-between text-xs p-2 rounded-lg bg-surface-secondary/50 hover:bg-surface-secondary transition-colors">
+                  <div className="flex items-center gap-2">
+                    <span className="w-5 h-5 rounded-full bg-blue-500/10 text-blue-600 font-bold text-[10px] flex items-center justify-center">
+                      #{idx + 1}
+                    </span>
+                    <span className="font-semibold text-foreground">{tl.lens}</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="font-mono font-bold text-blue-700 dark:text-blue-400">{tl.count.toLocaleString("id-ID")}</span>
+                    <span className="text-[10px] text-foreground-muted">pasien</span>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
       </div>
 
       {/* Filter and Search Bar */}

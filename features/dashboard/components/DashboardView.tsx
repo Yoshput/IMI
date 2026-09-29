@@ -9,7 +9,6 @@ import { BranchResumeCard } from "./BranchResumeCard";
 import { AntrianTrackingCard } from "./AntrianTrackingCard";
 import { WebPhotoboothAndQueueResume } from "./WebPhotoboothAndQueueResume";
 import { GscClickReport } from "@/features/analytics/components/GscClickReport";
-import { TaskTrackerSection } from "./TaskTrackerSection";
 import { ACTUAL_HEADLINE_METRICS, ACTUAL_PRIORITY_ISSUES } from "@/lib/actual-marketing-data";
 import { StateRenderer } from "@/components/shared/StateRenderer";
 import { PicSubmissionBanner } from "@/features/sheets/components/PicSubmissionBanner";
@@ -58,9 +57,6 @@ export const DashboardView: React.FC = () => {
 
         {/* Fitur 1: Google Search Console — Click Report optikiseeyou.com */}
         <GscClickReport />
-
-        {/* Fitur 7: Task Tracker Kreatif — Termasuk task Yanuar "Design Grafis Feed" */}
-        <TaskTrackerSection />
 
         {/* Jaringan Cabang & Foto Lokasi Nyata */}
         <BranchLocationsShowcase />

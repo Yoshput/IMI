@@ -60,23 +60,24 @@ export const WebPhotoboothAndQueueResume: React.FC<WebPhotoboothAndQueueResumePr
 • Pengunjung Unik: ${isW ? photobooth.uniqueUsersWeekly.toLocaleString("id-ID") : photobooth.uniqueUsersMonthly.toLocaleString("id-ID")} pengguna
 • Foto Diunduh / Dibagikan: ${isW ? photobooth.photosSharedWeekly.toLocaleString("id-ID") : photobooth.photosSharedMonthly.toLocaleString("id-ID")} share
 • Rasio Konversi ke Antrian Store: ${photobooth.conversionToQueuePercent}%
-• Top Frame: Korean Oval Titanium & Cat-Eye Clear Pink Acetate
-• Sumber Trafik: 54.2% IG Bio @iseeyou.glasses, 23.5% QR Code Store, 15.8% Google Organic
+• Top Frame: Model 8184, Model AB210553, & Model FR3040 (DATA CUSTOMER)
+• Saluran Trafik: IG Bio @iseeyou.glasses (54.2%), QR Code Store (23.5%), Google Organic (15.8%)
 
 ━━━━━━━━━━━━━━━━━━━━━━━━
 🩺 *2. NOMOR ANTRIAN ONLINE CEK MATA (optikiseeyou.com/booking-antrian)*
-• Total Antrian Terbit: ${isW ? antrian.weeklyTotal.toLocaleString("id-ID") : antrian.monthlyTotal.toLocaleString("id-ID")} antrian
-• Kehadiran di Store (Show-up Rate): ${antrian.showUpRateAverage}%
-• Rata-rata Pelayanan: 12–15 Menit/pasien
+• Total Antrian Terbit: ${isW ? antrian.weeklyTotal.toLocaleString("id-ID") : antrian.monthlyTotal.toLocaleString("id-ID")} booking online
+• Rata-rata Reservasi Harian: ${antrian.averageDaily} booking/hari (4 Cabang ISY)
+• Status Kehadiran Toko Fisik: Sensor / POS Toko Offline Belum Terintegrasi (N/A)
+• Konfirmasi CS: Follow-up WhatsApp Terpusat (+62 821-4601-328)
 
 *Breakdown per Cabang:*
-1. Purwokerto (Pusat): ${isW ? "142 booking (46.5%)" : "560 booking"} · Show-up: 85.4%
-2. Cilacap: ${isW ? "68 booking (22.3%)" : "275 booking"} · Show-up: 82.1%
-3. Purbalingga: ${isW ? "54 booking (17.7%)" : "215 booking"} · Show-up: 80.5%
-4. Wonosobo: ${isW ? "41 booking (13.5%)" : "168 booking"} · Show-up: 78.9%
+1. Purwokerto (Pusat): ${isW ? "142 booking (46.5%)" : "560 booking"} · Terdaftar Online
+2. Cilacap: ${isW ? "68 booking (22.3%)" : "275 booking"} · Terdaftar Online
+3. Purbalingga: ${isW ? "54 booking (17.7%)" : "215 booking"} · Terdaftar Online
+4. Wonosobo: ${isW ? "41 booking (13.5%)" : "168 booking"} · Terdaftar Online
 
 📌 *Kesimpulan untuk Rapat:*
-Fitur Web Photobooth efektif menjadi corong (top of funnel) memperkenalkan model kacamata baru, dengan 28.4% pengunjung lanjut mengambil nomor antrian cek mata online sebelum datang langsung ke toko.`;
+Fitur Web Photobooth efektif menjadi corong (top of funnel) mengarahkan calon customer mencoba frame terlaris sebelum melakukan janji temu pemeriksaan mata di cabang terdekat.`;
 
     navigator.clipboard.writeText(text);
     setCopied(true);
@@ -299,38 +300,38 @@ Fitur Web Photobooth efektif menjadi corong (top of funnel) memperkenalkan model
               <div className="text-lg font-bold text-foreground tabular-nums mt-0.5">
                 {isWeekly ? antrian.weeklyTotal : antrian.monthlyTotal}
               </div>
-              <span className="text-[9px] text-foreground-muted block mt-0.5">pasien terdaftar</span>
-            </div>
-
-            <div className="p-2.5 rounded-lg bg-surface border border-border">
-              <span className="text-[10px] uppercase font-bold text-foreground-muted block">Tingkat Hadir</span>
-              <div className="text-lg font-bold text-emerald-600 tabular-nums mt-0.5">
-                {antrian.showUpRateAverage}%
-              </div>
-              <span className="text-[9px] text-emerald-700 font-semibold block mt-0.5">datang ke store</span>
-            </div>
-
-            <div className="p-2.5 rounded-lg bg-surface border border-border">
-              <span className="text-[10px] uppercase font-bold text-foreground-muted block">Waktu Tunggu</span>
-              <div className="text-lg font-bold text-foreground tabular-nums mt-0.5">
-                ~12 <span className="text-xs font-normal">mnt</span>
-              </div>
-              <span className="text-[9px] text-foreground-muted block mt-0.5">efisiensi periksa</span>
+              <span className="text-[9px] text-foreground-muted block mt-0.5">pasien booking web</span>
             </div>
 
             <div className="p-2.5 rounded-lg bg-surface border border-border">
               <span className="text-[10px] uppercase font-bold text-foreground-muted block">Rata-rata Harian</span>
-              <div className="text-lg font-bold text-foreground tabular-nums mt-0.5">
+              <div className="text-lg font-bold text-teal-600 tabular-nums mt-0.5">
                 {antrian.averageDaily} <span className="text-xs font-normal">/hari</span>
               </div>
-              <span className="text-[9px] text-teal-600 font-semibold block mt-0.5">4 cabang ISY</span>
+              <span className="text-[9px] text-teal-700 font-semibold block mt-0.5">4 cabang ISY</span>
+            </div>
+
+            <div className="p-2.5 rounded-lg bg-surface border border-border">
+              <span className="text-[10px] uppercase font-bold text-foreground-muted block">Kehadiran Store</span>
+              <div className="text-sm font-bold text-foreground-muted mt-1">
+                POS Offline
+              </div>
+              <span className="text-[9px] text-foreground-muted block mt-0.5">sensor fisik belum ada</span>
+            </div>
+
+            <div className="p-2.5 rounded-lg bg-surface border border-border">
+              <span className="text-[10px] uppercase font-bold text-foreground-muted block">Validasi CS</span>
+              <div className="text-sm font-bold text-emerald-600 mt-1">
+                WA Terpusat
+              </div>
+              <span className="text-[9px] text-emerald-700 font-semibold block mt-0.5">+62 821-4601-328</span>
             </div>
           </div>
 
           {/* Breakdown Per Cabang 4 Cabang Optik I See You */}
           <div className="space-y-2 pt-1">
             <div className="flex items-center justify-between text-[11px] font-bold text-foreground">
-              <span>Performa Antrian &amp; Kehadiran per Cabang ({dateRange}):</span>
+              <span>Performa Antrian per Cabang ({dateRange}):</span>
               <span className="text-[10px] font-normal text-foreground-muted">Total: {isWeekly ? antrian.weeklyTotal : antrian.monthlyTotal} Antrian</span>
             </div>
 
@@ -350,14 +351,14 @@ Fitur Web Photobooth efektif menjadi corong (top of funnel) memperkenalkan model
                         <MapPin className="w-3 h-3 text-brand" />
                         {b.city}
                       </span>
-                      <span className="text-[10px] font-semibold text-emerald-600 tabular-nums">
-                        {b.showUpRate}% Hadir
+                      <span className="text-[10px] font-semibold text-teal-600 tabular-nums">
+                        Booking Aktif
                       </span>
                     </div>
 
                     <div className="flex items-baseline justify-between">
                       <span className="text-base font-bold text-foreground tabular-nums">
-                        {clicks} <span className="text-[10px] font-normal text-foreground-muted">antrian</span>
+                        {clicks} <span className="text-[10px] font-normal text-foreground-muted">booking</span>
                       </span>
                       <span className="text-[10px] font-medium text-foreground-muted">
                         {sharePercent}% pangsa

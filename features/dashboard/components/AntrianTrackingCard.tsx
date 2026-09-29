@@ -149,7 +149,7 @@ export const AntrianTrackingCard: React.FC = () => {
             {stats.monthlyTotal} <span className="text-xs font-normal text-foreground-muted">klik</span>
           </div>
           <span className="text-[10px] text-foreground-muted block mt-0.5">
-            Estimasi 62% reservasi
+            4 Cabang Terintegrasi
           </span>
         </div>
 
