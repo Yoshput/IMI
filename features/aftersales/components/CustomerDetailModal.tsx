@@ -218,16 +218,32 @@ Silakan balas pesan ini apabila ada yang bisa kami bantu ya Kak. Terima kasih ba
               {customer.name.slice(0, 2).toUpperCase()}
             </div>
             <div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-wrap">
                 <h2 className="text-base font-bold text-foreground">{customer.name}</h2>
                 <span className="text-[10px] px-2 py-0.5 rounded-full font-semibold bg-surface-secondary border border-border text-foreground-secondary">
                   {customer.city}
                 </span>
+                {customer.reportType && (
+                  <span
+                    className={`text-[10px] px-2 py-0.5 rounded-full font-bold border ${
+                      customer.reportType === "Komplain"
+                        ? "bg-red-500/10 text-red-700 dark:text-red-400 border-red-500/20"
+                        : customer.reportType === "Review"
+                        ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/20"
+                        : "bg-blue-500/10 text-blue-700 dark:text-blue-400 border-blue-500/20"
+                    }`}
+                  >
+                    {customer.reportType}
+                  </span>
+                )}
               </div>
-              <p className="text-xs text-foreground-muted flex items-center gap-2 mt-0.5">
+              <p className="text-xs text-foreground-muted flex items-center gap-2 mt-0.5 flex-wrap">
                 <span>{customer.phone}</span>
                 <span>·</span>
-                <span className="capitalize">Channel: {customer.inquiryChannel.replace(/_/g, " ")}</span>
+                <span className="flex items-center gap-1 font-mono text-[11px] text-foreground-secondary">
+                  <Clock className="w-3 h-3 text-brand" />
+                  {customer.timestampFormatted || customer.examDate}
+                </span>
               </p>
             </div>
           </div>
@@ -410,6 +426,23 @@ Silakan balas pesan ini apabila ada yang bisa kami bantu ya Kak. Terima kasih ba
               </span>
             </div>
           </div>
+
+          {/* Suara Pelanggan Asli (Customer Feedback & Suggestions) */}
+          {customer.feedbackText && (
+            <div className="p-3.5 rounded-xl border border-border bg-surface-secondary/40 space-y-2">
+              <span className="text-[10px] text-foreground-muted font-bold uppercase tracking-wider block">
+                Catatan Asli Customer ({customer.reportType}):
+              </span>
+              <p className="text-xs text-foreground italic bg-surface p-2.5 rounded-lg border border-border leading-relaxed">
+                &quot;{customer.feedbackText}&quot;
+              </p>
+              {customer.suggestionText && customer.suggestionText !== "-" && (
+                <div className="text-[11px] text-foreground-secondary">
+                  <strong className="text-foreground">Saran Perbaikan Customer:</strong> &quot;{customer.suggestionText}&quot;
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Status Follow-up & Editable Notes */}
           <div className="space-y-3 pt-2 border-t border-border">

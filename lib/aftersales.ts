@@ -36,6 +36,10 @@ export interface CustomerAftersalesRecord {
   branch: string;
   branchKey: "PWT" | "CLP" | "PBG" | "WNS" | "TGL";
   city: string;
+  timestamp: string; // Exact ISO timestamp from Column A (e.g. "2026-09-24T16:16:12.000Z")
+  timestampFormatted: string; // Formatted datetime string (e.g. "24 Sep 2026, 16:16 WIB")
+  timestampDate: string; // Date string for filtering (e.g. "2026-09-24")
+  reportType: "Review" | "Komplain" | "Pemeriksaan";
   examDate: string;
   pickupDate: string;
   frameModel: string;
@@ -44,6 +48,8 @@ export interface CustomerAftersalesRecord {
   prescription: CustomerPrescription;
   status: FollowUpStatus;
   notes: string;
+  feedbackText?: string;
+  suggestionText?: string;
   inquiryChannel: "web_antrian" | "walk_in" | "instagram_dm" | "tiktok_dm";
   satisfactionScore?: number; // 1-5
   logs: CustomerInteractionLog[];
