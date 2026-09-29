@@ -217,7 +217,7 @@ Have a nicee dayy ya kaa! 🌸✨`;
 
   // Copy Comprehensive Report for Mas Raja
   const handleCopyFullReport = () => {
-    let report = `📋 *REKAP REKOMENDASI 15 KOL SELEBGRAM (5 CABANG)*\n`;
+    let report = `📋 *REKAP REKOMENDASI ${kols.length} KOL CREATOR (5 CABANG)*\n`;
     report += `Optik I See You (PWT, PBG, CLP, WSB) & Lunar Eyewear Tegal\n`;
     report += `Tanggal: ${new Date().toLocaleDateString("id-ID", { dateStyle: "long" })}\n\n`;
     report += `📌 *STANDAR STRATEGI NEGOSIASI:* Acuan fee Rp 250.000 / Barter Produk Kacamata + Voucher Followers Kuis Komentar + Hak Owning Video Mentahan Iklan\n\n`;
@@ -314,7 +314,7 @@ Have a nicee dayy ya kaa! 🌸✨`;
             KOL & Influencer Radar
           </h1>
           <p className="text-sm text-foreground-muted mt-1 max-w-2xl">
-            Kurasi 15 Selebgram Lokal Pilihan (3 opsi per cabang) dengan data Social Blade langsung, 
+            Kurasi {kols.length} Selebgram &amp; TikTok Creator Lokal Pilihan (5 cabang) dengan data Social Blade langsung, 
             skema Fee Rp 250rb / Barter Produk + Voucher Giveaway Komen, dan Hak Owning Video Mentahan Iklan.
           </p>
         </div>

@@ -11,11 +11,11 @@ import { DevStateSwitcher } from "@/components/shared/DevStateSwitcher";
 
 export const ContentView: React.FC = () => {
   const [viewState, setViewState] = useState<"success" | "loading" | "empty" | "error">("success");
-  const [period, setPeriod] = useState<"weekly" | "monthly">("monthly");
+  const [period, setPeriod] = useState<"weekly" | "monthly">("weekly");
   const [activeBranch, setActiveBranch] = useState<string>("all");
   const [activeFormat, setActiveFormat] = useState<string>("all");
   const [sortBy, setSortBy] = useState<"reach" | "likes" | "engagement" | "rank">("reach");
-  const [contentList, setContentList] = useState(() => getRealContentItems(undefined, "monthly"));
+  const [contentList, setContentList] = useState(() => getRealContentItems(undefined, "weekly"));
   const [isSyncing, setIsSyncing] = useState(false);
   const [syncStatus, setSyncStatus] = useState<string | null>(null);
   const [lastSyncTime, setLastSyncTime] = useState<string | null>(null);
