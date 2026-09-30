@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { AppNav } from "@/components/shared/AppNav";
 import { FooterDevToggle } from "@/components/shared/FooterDevToggle";
+import { ProductByBadge } from "@/components/shared/ProductByBadge";
 
 export const metadata: Metadata = {
   title: "Optik I See You & Lunar Eyewear · Marketing Intelligence System",
@@ -26,10 +27,13 @@ export default function RootLayout({
           {children}
         </main>
         <footer className="w-full border-t border-border bg-surface py-4 mt-auto">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-2 text-[12px] text-foreground-muted">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-3 text-[12px] text-foreground-muted">
             <div className="flex items-center gap-2">
               <span className="font-semibold text-foreground">Optik I See You & Lunar Eyewear</span>
-              <span>— Marketing Intelligence Enterprise System</span>
+              <span className="hidden sm:inline">— Marketing Intelligence Enterprise System</span>
+            </div>
+            <div className="flex items-center justify-center my-1 md:my-0">
+              <ProductByBadge />
             </div>
             <div className="flex items-center gap-3">
               <span className="inline-flex items-center gap-1.5 text-emerald-800 font-medium">
@@ -37,8 +41,8 @@ export default function RootLayout({
                 Live Sync Active
               </span>
               <span>·</span>
-              <span>Meta Graph & Sheets Data Engine</span>
-              <span>·</span>
+              <span className="hidden lg:inline">Meta Graph & Sheets Data Engine</span>
+              <span className="hidden lg:inline">·</span>
               <FooterDevToggle />
             </div>
           </div>
