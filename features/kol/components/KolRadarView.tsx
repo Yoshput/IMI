@@ -48,6 +48,10 @@ export interface KolItem {
   engagementRate: number;
   niche: string;
   audienceFit?: string;
+  contentFocus?: string;
+  rateCardNote?: string;
+  rateCardImage?: string;
+  rateCardPdf?: string;
   rateCard: {
     story: string;
     reels: string;
@@ -81,10 +85,12 @@ export const KolRadarView: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [onlyCanOwnRaw, setOnlyCanOwnRaw] = useState<boolean>(false);
   const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [focusFilter, setFocusFilter] = useState<string>("all");
   const [viewMode, setViewMode] = useState<"card" | "table">("card");
   const [copiedPitchId, setCopiedPitchId] = useState<string | null>(null);
   const [copiedReport, setCopiedReport] = useState<boolean>(false);
   const [activePitchModal, setActivePitchModal] = useState<KolItem | null>(null);
+  const [previewRateCard, setPreviewRateCard] = useState<KolItem | null>(null);
   const [senderName, setSenderName] = useState<string>("Yossika");
   const [templateStyle, setTemplateStyle] = useState<"step1_ratecard" | "step2_barter" | "step3_owning">("step1_ratecard");
   const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
@@ -116,16 +122,20 @@ export const KolRadarView: React.FC = () => {
       const matchBranch = selectedBranch === "all" || item.branchId === selectedBranch;
       const matchOwning = !onlyCanOwnRaw || item.owningRights?.canOwnRaw;
       const matchStatus = statusFilter === "all" || item.status === statusFilter;
+      const matchFocus =
+        focusFilter === "all" ||
+        (item.contentFocus && item.contentFocus.toLowerCase().includes(focusFilter.toLowerCase()));
       const matchSearch =
         searchQuery === "" ||
         item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.handle.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.branchName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.niche.toLowerCase().includes(searchQuery.toLowerCase());
+        item.niche.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (item.contentFocus && item.contentFocus.toLowerCase().includes(searchQuery.toLowerCase()));
 
-      return matchBranch && matchOwning && matchStatus && matchSearch;
+      return matchBranch && matchOwning && matchStatus && matchFocus && matchSearch;
     });
-  }, [kols, selectedBranch, onlyCanOwnRaw, statusFilter, searchQuery]);
+  }, [kols, selectedBranch, onlyCanOwnRaw, statusFilter, focusFilter, searchQuery]);
 
   // Aggregate stats
   const totalAudience = useMemo(() => {
@@ -533,6 +543,19 @@ Have a nicee dayy ya kaa! 🌸✨`;
               <option value="Telah Dihubungi">Telah Dihubungi</option>
               <option value="Deal">Deal</option>
             </select>
+
+            <select
+              value={focusFilter}
+              onChange={(e) => setFocusFilter(e.target.value)}
+              className="px-2.5 py-1.5 rounded-control bg-surface-secondary border border-border text-xs text-foreground-secondary focus:outline-none font-medium"
+            >
+              <option value="all">🎯 Semua Fokus Konten</option>
+              <option value="aesthetic">🎨 Video Aesthetic & Lookbook</option>
+              <option value="simple">⚡ Video Simple & Direct / Spill</option>
+              <option value="relatable">🎬 Video Relatable / Ngapak / Daily</option>
+              <option value="duo">👥 Creative Duo / Couple Lookbook</option>
+              <option value="food">🍔 Food & Lifestyle Mix</option>
+            </select>
           </div>
 
           {/* View mode toggle */}
@@ -623,8 +646,17 @@ Have a nicee dayy ya kaa! 🌸✨`;
                 {/* Profile Info */}
                 <div className="flex items-start gap-3.5">
                   <div className="relative shrink-0">
-                    <div className="w-12 h-12 rounded-full bg-brand/10 border-2 border-brand/20 flex items-center justify-center font-bold text-brand text-base overflow-hidden">
-                      {kol.name.charAt(0)}
+                    <div className="w-14 h-14 rounded-full bg-brand/10 border-2 border-brand/20 flex items-center justify-center font-bold text-brand text-base overflow-hidden">
+                      {kol.profileImg ? (
+                        <img
+                          src={kol.profileImg}
+                          alt={kol.name}
+                          className="w-full h-full object-cover object-top"
+                          loading="lazy"
+                        />
+                      ) : (
+                        kol.name.charAt(0)
+                      )}
                     </div>
                     <span className="absolute -bottom-1 -right-1 px-1 py-0.2 rounded text-[8px] font-bold bg-foreground text-surface">
                       {kol.socialBladeGrade}
@@ -662,7 +694,15 @@ Have a nicee dayy ya kaa! 🌸✨`;
                         </a>
                       )}
                     </div>
-                    <p className="text-[11px] text-foreground-muted truncate mt-0.5">
+                    {kol.contentFocus && (
+                      <div className="mt-1">
+                        <span className="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-violet-100 text-violet-800 border border-violet-200">
+                          <Sparkles className="w-2.5 h-2.5 text-violet-600" />
+                          <span>Fokus: {kol.contentFocus}</span>
+                        </span>
+                      </div>
+                    )}
+                    <p className="text-[11px] text-foreground-muted truncate mt-1">
                       {kol.niche}
                     </p>
                   </div>
@@ -678,6 +718,49 @@ Have a nicee dayy ya kaa! 🌸✨`;
                     <span className="text-[10px] text-foreground-muted block">Engagement Rate</span>
                     <span className="font-bold text-emerald-700">{kol.engagementRate}%</span>
                   </div>
+                </div>
+
+                {/* Real Rate Card Breakdown Box (Bahan Diskusi Rapat Selasa) */}
+                <div className="p-3 rounded-control bg-surface-secondary border border-border space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold text-foreground flex items-center gap-1">
+                      <DollarSign className="w-3.5 h-3.5 text-emerald-600" />
+                      Rate Card & Deliverables
+                    </span>
+                    {kol.rateCard?.bundled && (
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300">
+                        {kol.rateCard.bundled.includes("Rp") ? kol.rateCard.bundled.split("(")[0].trim() : "Paket Khusus"}
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-1.5 text-[11px]">
+                    <div className="bg-surface p-1.5 rounded border border-border/60">
+                      <span className="text-[9px] text-foreground-muted block">Video Reels / TikTok</span>
+                      <span className="font-semibold text-foreground truncate block">{kol.rateCard?.reels || "-"}</span>
+                    </div>
+                    <div className="bg-surface p-1.5 rounded border border-border/60">
+                      <span className="text-[9px] text-foreground-muted block">Story (IG/TikTok)</span>
+                      <span className="font-semibold text-foreground truncate block">{kol.rateCard?.story || "-"}</span>
+                    </div>
+                  </div>
+
+                  {kol.rateCardNote && (
+                    <p className="text-[10px] text-foreground-secondary leading-snug bg-amber-500/10 p-1.5 rounded border border-amber-500/20">
+                      <strong className="text-amber-950">Detail Paket:</strong> {kol.rateCardNote}
+                    </p>
+                  )}
+
+                  {/* Tombol Lihat Dokumen/Foto Asli Rate Card */}
+                  {(kol.rateCardImage || kol.rateCardPdf || kol.rateCardNote) && (
+                    <button
+                      onClick={() => setPreviewRateCard(kol)}
+                      className="w-full mt-1 py-1.5 px-2.5 rounded-control bg-brand/10 hover:bg-brand/20 text-brand text-[11px] font-semibold flex items-center justify-center gap-1.5 transition-colors border border-brand/25 active:scale-98"
+                    >
+                      <Eye className="w-3.5 h-3.5" />
+                      <span>Lihat Bukti Foto / Dokumen Rate Card Asli</span>
+                    </button>
+                  )}
                 </div>
 
                 {/* Notes from Tim / User Evaluation */}
@@ -757,6 +840,19 @@ Have a nicee dayy ya kaa! 🌸✨`;
                 </a>
 
                 <div className="flex items-center gap-1.5">
+                  {kol.contactWa && kol.contactWa !== "-" && (
+                    <a
+                      href={kol.contactWa.startsWith("08") ? `https://wa.me/62${kol.contactWa.slice(1)}` : kol.contactWa.startsWith("+") ? `https://wa.me/${kol.contactWa.replace(/\+/g, "")}` : `https://wa.me/${kol.contactWa}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-2 py-1.5 rounded-control bg-emerald-50 text-emerald-800 border border-emerald-300 hover:bg-emerald-100 text-[11px] font-semibold flex items-center gap-1 transition-colors"
+                      title={`Hubungi via WA: ${kol.contactWa}`}
+                    >
+                      <MessageSquare className="w-3 h-3 text-emerald-700" />
+                      <span>WA</span>
+                    </a>
+                  )}
+
                   <button
                     onClick={() => setActivePitchModal(kol)}
                     className="flex items-center gap-1 px-2.5 py-1.5 rounded-control bg-brand-light text-brand text-[11px] font-semibold hover:bg-brand/20 transition-colors"
@@ -789,13 +885,14 @@ Have a nicee dayy ya kaa! 🌸✨`;
             <table className="w-full text-xs text-left">
               <thead className="bg-surface-secondary border-b border-border text-foreground-muted font-semibold text-[11px]">
                 <tr>
-                  <th className="py-3 px-4">KOL / Handle</th>
+                  <th className="py-3 px-4">KOL & Gaya Konten</th>
                   <th className="py-3 px-3">Cabang / Brand</th>
                   <th className="py-3 px-3 text-center">Followers</th>
                   <th className="py-3 px-3 text-center">ER (%)</th>
                   <th className="py-3 px-3 text-center">Social Blade</th>
-                  <th className="py-3 px-3">Skema Budget / Fee</th>
-                  <th className="py-3 px-3">Owning Raw Video</th>
+                  <th className="py-3 px-3">Rate Card Resmi</th>
+                  <th className="py-3 px-3">Dokumen Bukti</th>
+                  <th className="py-3 px-3">Owning Ads</th>
                   <th className="py-3 px-3">Status</th>
                   <th className="py-3 px-4 text-right">Aksi</th>
                 </tr>
@@ -803,24 +900,47 @@ Have a nicee dayy ya kaa! 🌸✨`;
               <tbody className="divide-y divide-border">
                 {filteredKols.length === 0 ? (
                   <tr>
-                    <td colSpan={9} className="py-12 text-center text-xs text-foreground-muted">
-                      Belum ada data KOL. Silakan klik tombol &quot;+ Input KOL Terverifikasi (&gt;50K)&quot; untuk menambahkan data.
+                    <td colSpan={10} className="py-12 text-center text-xs text-foreground-muted">
+                      Belum ada data KOL. Silakan sesuaikan filter atau tambahkan data baru.
                     </td>
                   </tr>
                 ) : (
                   filteredKols.map((kol) => (
                   <tr key={kol.id} className="hover:bg-surface-secondary/40 transition-colors">
                     <td className="py-3 px-4">
-                      <div className="font-bold text-foreground">{kol.name}</div>
-                      <a
-                        href={kol.tiktokUrl || kol.instagramUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-[11px] text-brand hover:underline inline-flex items-center gap-0.5"
-                      >
-                        @{kol.handle}
-                        <ExternalLink className="w-2.5 h-2.5 opacity-60" />
-                      </a>
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-8 h-8 rounded-full overflow-hidden shrink-0 bg-brand/10 border border-border flex items-center justify-center font-bold text-brand text-xs">
+                          {kol.profileImg ? (
+                            <img
+                              src={kol.profileImg}
+                              alt={kol.name}
+                              className="w-full h-full object-cover object-top"
+                              loading="lazy"
+                            />
+                          ) : (
+                            kol.name.charAt(0)
+                          )}
+                        </div>
+                        <div>
+                          <div className="font-bold text-foreground">{kol.name}</div>
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            <a
+                              href={kol.tiktokUrl || kol.instagramUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-[11px] text-brand hover:underline inline-flex items-center gap-0.5"
+                            >
+                              @{kol.handle}
+                              <ExternalLink className="w-2.5 h-2.5 opacity-60" />
+                            </a>
+                            {kol.contentFocus && (
+                              <span className="text-[9px] font-semibold px-1.5 py-0.2 rounded-full bg-violet-100 text-violet-800">
+                                {kol.contentFocus}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
                     </td>
                     <td className="py-3 px-3">
                       <span className="font-medium text-foreground block">{kol.branchName}</span>
@@ -843,13 +963,31 @@ Have a nicee dayy ya kaa! 🌸✨`;
                         <ExternalLink className="w-2.5 h-2.5" />
                       </a>
                     </td>
-                    <td className="py-3 px-3 font-medium text-emerald-800">
-                      Rp 250k / Barter + Voucher
+                    <td className="py-3 px-3">
+                      <div className="font-semibold text-foreground text-[11px]">
+                        {kol.rateCard?.bundled ? kol.rateCard.bundled.split("(")[0].trim() : (kol.rateCard?.reels || "-")}
+                      </div>
+                      <div className="text-[10px] text-foreground-muted">
+                        Reels: {kol.rateCard?.reels?.split("(")[0].trim() || "-"}
+                      </div>
+                    </td>
+                    <td className="py-3 px-3">
+                      {(kol.rateCardImage || kol.rateCardPdf || kol.rateCardNote) ? (
+                        <button
+                          onClick={() => setPreviewRateCard(kol)}
+                          className="inline-flex items-center gap-1 px-2 py-1 rounded bg-brand/10 text-brand text-[10px] font-semibold hover:bg-brand/20 transition-colors border border-brand/25"
+                        >
+                          <Eye className="w-3 h-3" />
+                          <span>Lihat Bukti</span>
+                        </button>
+                      ) : (
+                        <span className="text-[10px] text-foreground-muted">-</span>
+                      )}
                     </td>
                     <td className="py-3 px-3">
                       <span className="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded bg-violet-100 text-violet-800">
                         <Video className="w-2.5 h-2.5" />
-                        Bisa Owning ({kol.owningRights.adsUsageDays}h)
+                        Bisa ({kol.owningRights.adsUsageDays}h)
                       </span>
                     </td>
                     <td className="py-3 px-3">
@@ -858,12 +996,26 @@ Have a nicee dayy ya kaa! 🌸✨`;
                       </span>
                     </td>
                     <td className="py-3 px-4 text-right">
-                      <button
-                        onClick={() => setActivePitchModal(kol)}
-                        className="px-2.5 py-1 rounded bg-foreground text-surface text-[10px] font-medium hover:opacity-90"
-                      >
-                        Pilih Kata-Kata
-                      </button>
+                      <div className="flex items-center justify-end gap-1.5">
+                        {kol.contactWa && kol.contactWa !== "-" && (
+                          <a
+                            href={kol.contactWa.startsWith("08") ? `https://wa.me/62${kol.contactWa.slice(1)}` : kol.contactWa.startsWith("+") ? `https://wa.me/${kol.contactWa.replace(/\+/g, "")}` : `https://wa.me/${kol.contactWa}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="p-1 px-2 rounded bg-emerald-50 text-emerald-800 border border-emerald-300 hover:bg-emerald-100 text-[10px] font-semibold inline-flex items-center gap-0.5"
+                            title={`WA: ${kol.contactWa}`}
+                          >
+                            <MessageSquare className="w-2.5 h-2.5 text-emerald-700" />
+                            <span>WA</span>
+                          </a>
+                        )}
+                        <button
+                          onClick={() => setActivePitchModal(kol)}
+                          className="px-2.5 py-1 rounded bg-foreground text-surface text-[10px] font-medium hover:opacity-90"
+                        >
+                          Chat
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 )))}
@@ -1155,6 +1307,160 @@ Have a nicee dayy ya kaa! 🌸✨`;
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* RATE CARD DOCUMENT & FLYER PREVIEW MODAL (BAHAN DISKUSI RAPAT SELASA) */}
+      {previewRateCard && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-surface rounded-dialog border border-border shadow-elevated max-w-2xl w-full p-6 space-y-4 max-h-[92vh] flex flex-col">
+            <div className="flex items-center justify-between border-b border-border pb-3 shrink-0">
+              <div className="flex items-center gap-3">
+                <div className="w-11 h-11 rounded-full overflow-hidden shrink-0 bg-brand/10 border border-border flex items-center justify-center font-bold text-brand text-sm">
+                  {previewRateCard.profileImg ? (
+                    <img
+                      src={previewRateCard.profileImg}
+                      alt={previewRateCard.name}
+                      className="w-full h-full object-cover object-top"
+                    />
+                  ) : (
+                    previewRateCard.name.charAt(0)
+                  )}
+                </div>
+                <div>
+                  <h3 className="font-bold text-base text-foreground flex items-center gap-1.5">
+                    <span>Dokumen Rate Card: {previewRateCard.name}</span>
+                    <span className="text-xs px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300 font-semibold">
+                      Terverifikasi Asli
+                    </span>
+                  </h3>
+                  <div className="flex items-center gap-2 text-xs text-foreground-muted">
+                    <span>@{previewRateCard.handle}</span>
+                    <span>·</span>
+                    <span>Cabang {previewRateCard.branchName}</span>
+                    <span>·</span>
+                    <span className="text-violet-700 font-semibold">{previewRateCard.contentFocus || previewRateCard.niche}</span>
+                  </div>
+                </div>
+              </div>
+              <button
+                onClick={() => setPreviewRateCard(null)}
+                className="text-foreground-muted hover:text-foreground p-1 text-lg font-bold"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="overflow-y-auto flex-1 space-y-4 pr-1">
+              {/* Highlight Ringkasan Paket */}
+              <div className="bg-emerald-500/10 border border-emerald-500/25 p-3.5 rounded-control text-xs space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-emerald-950 flex items-center gap-1">
+                    <DollarSign className="w-4 h-4 text-emerald-700" />
+                    Penawaran & Deliverables Resmi:
+                  </span>
+                  {previewRateCard.rateCard?.bundled && (
+                    <span className="font-bold text-xs bg-emerald-200 text-emerald-900 px-2 py-0.5 rounded-full">
+                      {previewRateCard.rateCard.bundled.split("(")[0].trim()}
+                    </span>
+                  )}
+                </div>
+                <p className="text-emerald-900 font-medium leading-relaxed">
+                  {previewRateCard.rateCardNote || previewRateCard.notes}
+                </p>
+              </div>
+
+              {/* Rincian Paket */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                <div className="bg-surface-secondary p-2.5 rounded-control border border-border">
+                  <span className="text-[10px] text-foreground-muted block">1x Reels / Video</span>
+                  <span className="font-bold text-foreground">{previewRateCard.rateCard?.reels || "-"}</span>
+                </div>
+                <div className="bg-surface-secondary p-2.5 rounded-control border border-border">
+                  <span className="text-[10px] text-foreground-muted block">Story (IG/TikTok)</span>
+                  <span className="font-bold text-foreground">{previewRateCard.rateCard?.story || "-"}</span>
+                </div>
+                <div className="bg-surface-secondary p-2.5 rounded-control border border-border">
+                  <span className="text-[10px] text-foreground-muted block">Foto Feeds</span>
+                  <span className="font-bold text-foreground">{previewRateCard.rateCard?.feeds || "-"}</span>
+                </div>
+                <div className="bg-surface-secondary p-2.5 rounded-control border border-border">
+                  <span className="text-[10px] text-foreground-muted block">Visit Store</span>
+                  <span className="font-bold text-foreground">{previewRateCard.rateCard?.visitStore || "-"}</span>
+                </div>
+              </div>
+
+              {/* Rate Card Image Preview */}
+              {previewRateCard.rateCardImage && (
+                <div className="space-y-1.5">
+                  <span className="text-xs font-semibold text-foreground-secondary block">
+                    Foto / Flyer Rate Card Resmi Creator:
+                  </span>
+                  <div className="rounded-control overflow-hidden border border-border bg-slate-900 flex items-center justify-center p-2">
+                    <img
+                      src={previewRateCard.rateCardImage}
+                      alt={`Flyer Rate Card ${previewRateCard.name}`}
+                      className="max-h-[55vh] object-contain rounded"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {/* PDF Document Button */}
+              {previewRateCard.rateCardPdf && (
+                <div className="p-3 bg-surface-secondary rounded-control border border-border flex items-center justify-between">
+                  <div className="text-xs">
+                    <span className="font-bold text-foreground block">Dokumen Asli (Format PDF)</span>
+                    <span className="text-foreground-muted">Tersedia dokumen PDF lengkap dari manajemen talent.</span>
+                  </div>
+                  <a
+                    href={previewRateCard.rateCardPdf}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-control bg-brand text-white text-xs font-semibold hover:bg-brand-hover transition-colors shadow-subtle"
+                  >
+                    <ExternalLink className="w-3.5 h-3.5" />
+                    <span>Buka PDF di Tab Baru</span>
+                  </a>
+                </div>
+              )}
+
+              {/* Rekomendasi Tim untuk Rapat Selasa */}
+              <div className="p-3 bg-violet-50/70 border border-violet-200 rounded-control text-xs space-y-1">
+                <span className="font-bold text-violet-950 flex items-center gap-1">
+                  <Sparkles className="w-3.5 h-3.5 text-violet-700" />
+                  Poin Analisis untuk Rapat Selasa:
+                </span>
+                <p className="text-violet-900 leading-relaxed">
+                  Fokus gaya konten: <strong>{previewRateCard.contentFocus || previewRateCard.niche}</strong>.
+                  Hak owning video mentahan iklan: <strong>{previewRateCard.owningRights?.canOwnRaw ? `Bisa Owning (${previewRateCard.owningRights.adsUsageDays} hari Meta Ads)` : "Tidak bisa"}</strong>.
+                  {previewRateCard.notes}
+                </p>
+              </div>
+            </div>
+
+            <div className="border-t border-border pt-3 flex items-center justify-between shrink-0">
+              {previewRateCard.contactWa && previewRateCard.contactWa !== "-" ? (
+                <a
+                  href={previewRateCard.contactWa.startsWith("08") ? `https://wa.me/62${previewRateCard.contactWa.slice(1)}` : previewRateCard.contactWa.startsWith("+") ? `https://wa.me/${previewRateCard.contactWa.replace(/\+/g, "")}` : `https://wa.me/${previewRateCard.contactWa}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-control bg-emerald-600 text-white text-xs font-semibold hover:bg-emerald-700 transition-colors shadow-subtle"
+                >
+                  <MessageSquare className="w-3.5 h-3.5" />
+                  <span>Hubungi Langsung WA ({previewRateCard.contactWa})</span>
+                </a>
+              ) : (
+                <div />
+              )}
+              <button
+                onClick={() => setPreviewRateCard(null)}
+                className="px-4 py-1.5 rounded-control bg-foreground text-surface text-xs font-semibold hover:opacity-90 transition-opacity"
+              >
+                Tutup
+              </button>
+            </div>
           </div>
         </div>
       )}
