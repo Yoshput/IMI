@@ -19,7 +19,7 @@ export const DominantPerformer: React.FC<DominantPerformerProps> = ({ item }) =>
         <div className="flex items-center gap-2">
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-control bg-brand text-white text-xs font-bold uppercase tracking-wider">
             <Trophy className="w-3.5 h-3.5 text-amber-300" />
-            Rank #1 Top Performer Minggu Ini
+            Rank #1 Top Performer {item.format === "carousel" ? "Carousel" : "Reels"}
           </span>
           <span className="text-xs font-semibold px-2.5 py-0.5 rounded bg-brand-light text-brand">
             {item.category}
@@ -45,7 +45,11 @@ export const DominantPerformer: React.FC<DominantPerformerProps> = ({ item }) =>
 
           <div className="relative z-10 flex items-center justify-between">
             <span className="text-[10px] font-bold tracking-wider px-2.5 py-1 rounded bg-black/60 backdrop-blur-md uppercase border border-white/10">
-              {item.branchName ? `Reels @ ${item.branchName}` : "Reels Instagram"}
+              {item.branchName
+                ? `${item.format === "carousel" ? "Carousel" : "Reels"} @ ${item.branchName}`
+                : item.format === "carousel"
+                ? "Carousel Instagram"
+                : "Reels Instagram"}
             </span>
             <span className="text-xs font-bold text-amber-300 px-2 py-0.5 rounded bg-black/50 backdrop-blur-sm">
               Save Rate {item.saveRate}%

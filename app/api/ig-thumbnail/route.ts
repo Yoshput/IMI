@@ -46,22 +46,60 @@ export async function GET(request: NextRequest) {
   // 1. Check local static covers first (ultra crisp local backups)
   if (shortcode === "DdOfUrMj7MU") {
     const filePath = path.join(process.cwd(), "public", "covers", "edukasi-lupa-kedip.png");
-    if (fs.existsSync(filePath)) {
-      sourceBuffer = fs.readFileSync(filePath);
-    }
+    if (fs.existsSync(filePath)) sourceBuffer = fs.readFileSync(filePath);
   } else if (shortcode === "DdLvWkcDzob" || shortcode === "DdIvWkcDzoh") {
     const filePath = path.join(process.cwd(), "public", "covers", "trend-dewasa-passwordnya.png");
-    if (fs.existsSync(filePath)) {
-      sourceBuffer = fs.readFileSync(filePath);
-    }
+    if (fs.existsSync(filePath)) sourceBuffer = fs.readFileSync(filePath);
   } else if (shortcode === "DdQ1c06zshy") {
     const filePath = path.join(process.cwd(), "public", "covers", "lunar-mata-minus.png");
-    if (fs.existsSync(filePath)) {
-      sourceBuffer = fs.readFileSync(filePath);
+    if (fs.existsSync(filePath)) sourceBuffer = fs.readFileSync(filePath);
+  } else if (shortcode === "BatikDaySale2026") {
+    const filePath = path.join(process.cwd(), "public", "covers", "carousel-batik-day.png");
+    if (fs.existsSync(filePath)) sourceBuffer = fs.readFileSync(filePath);
+  } else if (shortcode === "KacamataMiring2026") {
+    const filePath = path.join(process.cwd(), "public", "covers", "carousel-kacamata-miring.png");
+    if (fs.existsSync(filePath)) sourceBuffer = fs.readFileSync(filePath);
+  } else if (shortcode === "Warasnt5Penyebab") {
+    const filePath = path.join(process.cwd(), "public", "covers", "carousel-warasnt.png");
+    if (fs.existsSync(filePath)) sourceBuffer = fs.readFileSync(filePath);
+  }
+
+  // 2. If not local, check liveCache for direct CDN image URL
+  if (!sourceBuffer) {
+    try {
+      const cachePath = path.join(process.cwd(), "lib", "instagram-live-cache.json");
+      if (fs.existsSync(cachePath)) {
+        const cache = JSON.parse(fs.readFileSync(cachePath, "utf-8"));
+        let cdnImageUrl = "";
+        for (const [u, item] of Object.entries((cache.reels || {}) as Record<string, any>)) {
+          if (u.includes(shortcode) && item.image) {
+            cdnImageUrl = item.image;
+            break;
+          }
+        }
+        if (cdnImageUrl) {
+          const controller = new AbortController();
+          const timeout = setTimeout(() => controller.abort(), 4500);
+          const cdnRes = await fetch(cdnImageUrl, {
+            signal: controller.signal,
+            headers: {
+              "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+              Accept: "image/*,*/*;q=0.8",
+            },
+          });
+          clearTimeout(timeout);
+          if (cdnRes.ok) {
+            const arrBuf = await cdnRes.arrayBuffer();
+            sourceBuffer = Buffer.from(arrBuf);
+          }
+        }
+      }
+    } catch {
+      // fallback to standard igMediaUrl below
     }
   }
 
-  // 2. If not local, fetch live from Instagram CDN
+  // 3. If still not loaded, fallback to Instagram media endpoint
   if (!sourceBuffer) {
     try {
       const controller = new AbortController();

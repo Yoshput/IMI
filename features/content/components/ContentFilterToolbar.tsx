@@ -68,7 +68,7 @@ export const ContentFilterToolbar: React.FC<ContentFilterToolbarProps> = ({
             }`}
           >
             <Calendar className="w-3.5 h-3.5" />
-            <span>Bulanan (September 2026)</span>
+            <span>Bulanan (September - Oktober 2026)</span>
           </button>
         </div>
 

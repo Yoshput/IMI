@@ -36,6 +36,11 @@ export const ContentView: React.FC = () => {
 
   useEffect(() => {
     loadData(period);
+    // Background polling every 60s for automatic realtime sync
+    const interval = setInterval(() => {
+      loadData(period);
+    }, 60000);
+    return () => clearInterval(interval);
   }, [period]);
 
   const handlePeriodChange = (newPeriod: "weekly" | "monthly") => {
@@ -64,7 +69,11 @@ export const ContentView: React.FC = () => {
       return a.rank - b.rank;
     });
 
-    return items;
+    return items.map((it, idx) => ({
+      ...it,
+      rank: idx + 1,
+      isDominantPerformer: idx === 0,
+    }));
   }, [contentList, activeBranch, activeFormat, sortBy]);
 
   const topPerformer = filteredItems[0] || contentList[0];
@@ -179,7 +188,7 @@ export const ContentView: React.FC = () => {
             <h3 className="heading-section text-foreground flex items-center gap-2">
               <span>
                 Daftar Seluruh Konten & Ranking Bukti (
-                {period === "weekly" ? "Mingguan · 7 Hari Terakhir" : "Bulanan · September 2026"}
+                {period === "weekly" ? "Mingguan · 7 Hari Terakhir" : "Bulanan · September - Oktober 2026"}
                 )
               </span>
               <span className="text-xs font-normal text-foreground-secondary">
