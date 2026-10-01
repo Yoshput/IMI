@@ -25,7 +25,11 @@ import {
   Heart,
   Tag,
   Send,
-  Trash2
+  Trash2,
+  ZoomIn,
+  ZoomOut,
+  RotateCcw,
+  Maximize2
 } from "lucide-react";
 import initialKolData from "@/lib/kol-data.json";
 
@@ -91,6 +95,7 @@ export const KolRadarView: React.FC = () => {
   const [copiedReport, setCopiedReport] = useState<boolean>(false);
   const [activePitchModal, setActivePitchModal] = useState<KolItem | null>(null);
   const [previewRateCard, setPreviewRateCard] = useState<KolItem | null>(null);
+  const [zoomScale, setZoomScale] = useState<number>(1);
   const [senderName, setSenderName] = useState<string>("Yossika");
   const [templateStyle, setTemplateStyle] = useState<"step1_ratecard" | "step2_barter" | "step3_owning">("step1_ratecard");
   const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
@@ -1391,18 +1396,72 @@ Have a nicee dayy ya kaa! 🌸✨`;
                 </div>
               </div>
 
-              {/* Rate Card Image Preview */}
+              {/* Rate Card Image Preview with Interactive Zoom Toolbar */}
               {previewRateCard.rateCardImage && (
-                <div className="space-y-1.5">
-                  <span className="text-xs font-semibold text-foreground-secondary block">
-                    Foto / Flyer Rate Card Resmi Creator:
-                  </span>
-                  <div className="rounded-control overflow-hidden border border-border bg-slate-900 flex items-center justify-center p-2">
-                    <img
-                      src={previewRateCard.rateCardImage}
-                      alt={`Flyer Rate Card ${previewRateCard.name}`}
-                      className="max-h-[55vh] object-contain rounded"
-                    />
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-semibold text-foreground-secondary flex items-center gap-1.5">
+                      <span>Foto / Flyer Rate Card Resmi:</span>
+                      <span className="text-[10px] text-foreground-muted font-normal">
+                        (Klik foto atau tombol zoom untuk perbesar)
+                      </span>
+                    </span>
+                    <div className="flex items-center gap-1 bg-surface-secondary border border-border p-1 rounded-control shadow-2xs">
+                      <button
+                        type="button"
+                        onClick={() => setZoomScale((prev) => Math.max(0.7, Number((prev - 0.25).toFixed(2))))}
+                        disabled={zoomScale <= 0.75}
+                        className="p-1 rounded text-foreground-muted hover:text-foreground hover:bg-surface disabled:opacity-30 transition-colors"
+                        title="Zoom Out (-)"
+                      >
+                        <ZoomOut className="w-3.5 h-3.5" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setZoomScale(1)}
+                        className="px-2 py-0.5 text-[10px] font-bold text-foreground hover:bg-surface rounded transition-colors flex items-center gap-1"
+                        title="Reset Zoom ke 100%"
+                      >
+                        <RotateCcw className="w-2.5 h-2.5 opacity-60" />
+                        <span>{Math.round(zoomScale * 100)}%</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setZoomScale((prev) => Math.min(3, Number((prev + 0.25).toFixed(2))))}
+                        disabled={zoomScale >= 3}
+                        className="p-1 rounded text-foreground-muted hover:text-foreground hover:bg-surface disabled:opacity-30 transition-colors"
+                        title="Zoom In (+)"
+                      >
+                        <ZoomIn className="w-3.5 h-3.5" />
+                      </button>
+                      <a
+                        href={previewRateCard.rateCardImage}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-1 rounded text-foreground-muted hover:text-foreground hover:bg-surface transition-colors ml-1 border-l border-border pl-1.5"
+                        title="Buka Foto Asli Resolusi Penuh di Tab Baru"
+                      >
+                        <Maximize2 className="w-3.5 h-3.5" />
+                      </a>
+                    </div>
+                  </div>
+
+                  <div className="rounded-control overflow-auto border border-border bg-slate-950 flex items-center justify-center p-3 min-h-[320px] max-h-[62vh] relative select-none">
+                    <div
+                      className="transition-transform duration-200 ease-out origin-center inline-block cursor-pointer"
+                      style={{
+                        transform: `scale(${zoomScale})`,
+                      }}
+                      onClick={() => setZoomScale((prev) => (prev > 1.2 ? 1 : 2))}
+                      title={zoomScale > 1.2 ? "Klik untuk kembalikan ukuran (1x)" : "Klik untuk zoom 2x"}
+                    >
+                      <img
+                        src={previewRateCard.rateCardImage}
+                        alt={`Flyer Rate Card ${previewRateCard.name}`}
+                        className="max-h-[56vh] object-contain rounded shadow-elevated"
+                        draggable={false}
+                      />
+                    </div>
                   </div>
                 </div>
               )}

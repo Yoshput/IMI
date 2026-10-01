@@ -387,28 +387,26 @@ export const evaluateBarterVoucher = (item: FormProposalItem): BarterEvaluation 
       !isBigEventOr500Plus);
 
   let qualityCategory: "bagus" | "sedang" | "jelek" = "sedang";
-  let qualityLabel = "Kategori Sedang (Peserta >50)";
+  let qualityLabel = "Skala Kampus / Menengah";
   let qualityBadge = "bg-blue-500/10 text-blue-700 dark:text-blue-300 border-blue-500/30";
   let recommendedDecision = "Setujui Paket Barter Voucher & Produk Kacamata";
   let packageOffered = "Voucher Belanja Kacamata + Produk Kacamata Hadiah";
-  let negotiationNote = "Target peserta >50. Tawarkan barter voucher belanja kacamata + produk kacamata doorprize.";
+  let negotiationNote = "Skala kegiatan menengah. Tawarkan barter voucher belanja kacamata resmi + produk kacamata doorprize tanpa dana tunai.";
 
   if (isBigEventOr500Plus) {
     qualityCategory = "bagus";
-    qualityLabel = "Kategori Bagus (Peserta 500+ / Golden Tier)";
+    qualityLabel = "Skala Besar (Event Publik / 500+ Peserta)";
     qualityBadge = "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/30 font-bold";
-    recommendedDecision = "Ambil Paket Golden / Di Atasnya (Nego Teknik Marketing)";
-    packageOffered = "Voucher 20k (80 voucher senilai 8 Juta barter), Produk Kacamata, & Hak Open Stand Cek Mata Gratis";
-    negotiationNote = "Teknik Marketing: Misal penawaran 10 juta -> Nego 8 juta voucher 20k (80 voucher) + 2 juta fresh money. Ambil hak open stand pemeriksaan & giveaway grand opening.";
+    recommendedDecision = "Prioritas Kemitraan (Barter Voucher + Stand Edukasi & Cek Mata Gratis)";
+    packageOffered = "Paket Voucher Belanja + Free Cek Mata & Produk Kacamata Hadiah";
+    negotiationNote = "Event berskala besar. Maksimalkan aktivasi kemitraan dengan pembukaan booth/stand pemeriksaan mata gratis & barter voucher.";
   } else if (isRegularSmaSmk || isSmallOrUnder50) {
     qualityCategory = "jelek";
-    qualityLabel = "Kategori Jelek (Peserta <50 / SMA Biasa)";
-    qualityBadge = "bg-red-500/10 text-red-700 dark:text-red-400 border-red-500/30";
-    recommendedDecision = "Ditolak Utama (Hanya Berikan Voucher Cuci Kacamata)";
-    packageOffered = "Voucher Cuci & Setting Kacamata Gratis Saja";
-    negotiationNote = isRegularSmaSmk
-      ? "Anak SMA/SMK reguler bukan pasar utama kacamata medis (uang jajan ngepas, kecuali SMA Puhua/mahal). Tolak sponsor dana/produk utama, berikan voucher cuci kacamata gratis saja."
-      : "Target peserta < 50 / proposal internal kecil. Ditolak sponsor utama, hanya berikan voucher cuci kacamata gratis.";
+    qualityLabel = "Skala Pelajar / Komunitas";
+    qualityBadge = "bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/30";
+    recommendedDecision = "Dukungan Layanan Servis & Pembersihan Kacamata Gratis";
+    packageOffered = "Voucher Perawatan & Pembersihan Kacamata Gratis";
+    negotiationNote = "Sesuaikan alokasi sponsorship dengan skala kegiatan; prioritaskan paket layanan perawatan kacamata gratis bagi peserta/panitia atau penolakan santun jika kuota periode ini telah terisi.";
   }
 
   // 1. Sudah disetujui voucher di catatan spreadsheet oleh atasan
@@ -2631,19 +2629,19 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
                   `REKAP SELEKSI PROPOSAL BARTER & SPONSORSHIP - OPTIK I SEE YOU`,
                   `Tanggal Laporan : ${todayStr}`,
                   `Total Proposal Masuk: ${validItems.length} (Aktif Mendatang: ${stats.upcoming})`,
-                  `Rincian Klasifikasi Kualitas:`,
-                  `- Kategori Bagus (Peserta 500+ / Event Akbar) : ${stats.bagusCount} Proposal`,
-                  `- Kategori Sedang (>50 Peserta / Kampus & Umum) : ${stats.sedangCount} Proposal`,
-                  `- Kategori Jelek (<50 Peserta / SMA Reguler)   : ${stats.jelekCount} Proposal`,
+                  `Rincian Klasifikasi Skala Event:`,
+                  `- Skala Besar (Event Publik / 500+ Peserta) : ${stats.bagusCount} Proposal`,
+                  `- Skala Menengah (Kampus & Komunitas)      : ${stats.sedangCount} Proposal`,
+                  `- Skala Pelajar / Sekolah                   : ${stats.jelekCount} Proposal`,
                   `========================================`,
                   ``,
-                  `STANDAR PENANGANAN MANAJEMEN:`,
-                  `1. Kategori Jelek (<50 peserta / SMA SMK reguler non-elit):`,
-                  `   - Berikan Voucher Cuci & Setel Kacamata Gratis; tolak dana tunai & produk utama.`,
-                  `2. Kategori Sedang (>50 peserta / event menengah):`,
-                  `   - Paket Barter 20 Voucher Belanja @ Rp50.000 (Rp1.000.000 barter) + Produk Kacamata Doorprize.`,
-                  `3. Kategori Bagus (Peserta 500+ up / event akbar / segmen campuran):`,
-                  `   - Paket Golden Tier: Barter Voucher Belanja Rp20k/50k, Frame Kacamata, Open Stand Booth Cek Mata Gratis, Nego sponsorship proporsional.`,
+                  `STANDAR PENANGANAN KEMITRAAN:`,
+                  `1. Skala Pelajar / Sekolah:`,
+                  `   - Berikan Voucher Layanan Perawatan & Pembersihan Kacamata Gratis; efisiensi dana tunai.`,
+                  `2. Skala Menengah (Kampus & Komunitas):`,
+                  `   - Paket Barter 20 Voucher Belanja @ Rp50.000 (Total Rp1.000.000) + Produk Kacamata Doorprize.`,
+                  `3. Skala Besar (Event Publik / Festival / Expo):`,
+                  `   - Paket Kemitraan Terpadu: Barter Voucher Belanja, Frame Kacamata, Open Stand Booth Cek Mata Gratis.`,
                   `----------------------------------------`,
                   ``,
                   ...barterProposals.map((item, idx) => {
