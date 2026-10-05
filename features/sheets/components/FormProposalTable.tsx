@@ -310,6 +310,51 @@ export const getWhatsAppOfferByCategory = (
   return getWhatsAppVoucherOfferText(eventName, applicantName, targetBranch);
 };
 
+/**
+ * Konfirmasi penerimaan berkas awal (sedang diajukan ke atasan / tidak langsung tolak atau terima)
+ */
+export const getWhatsAppAcknowledgementReplyText = (
+  eventName: string,
+  applicantName: string,
+  targetBranch: string
+): string => {
+  const cleanBranch = targetBranch?.trim() || "Purwokerto";
+  const name = formatPersonName(applicantName);
+
+  return [
+    `Halo Kak ${name}, salam kenal dari Tim Marketing & Partnership Optik I See You Cabang ${cleanBranch}.`,
+    ``,
+    `Terima kasih banyak sudah mengonfirmasi dan mengajukan proposal sponsorship untuk kegiatan "${eventName.trim()}". Berkas dan detail kegiatannya sudah kami terima dengan baik di antrean sistem kami ya Kak.`,
+    ``,
+    `Untuk tahapan selanjutnya, berkas proposal ini kami tampung terlebih dahulu dan akan segera kami ajukan ke pihak atasan / manajemen untuk ditinjau kelayakan jadwal serta ketersediaan kuota sponsorship cabang ${cleanBranch}.`,
+    ``,
+    `Mohon kesediaannya menunggu ya Kak. Jika proposal lolos tahap kurasi dan kuota kemitraan tersedia, tim kami akan segera menghubungi Kakak kembali melalui WhatsApp ini.`,
+    ``,
+    `Semoga seluruh rangkaian persiapan acaranya berjalan dengan lancar dan sukses selalu. Terima kasih atas pengertian dan kerja samanya Kak!`,
+    ``,
+    `Salam hormat,`,
+    `Tim Marketing & Partnership Optik I See You Cabang ${cleanBranch}`,
+    `www.optikiseeyou.com`,
+  ].join("\n");
+};
+
+export const formatWhatsAppAckUrl = (
+  rawPhone: string,
+  eventName: string,
+  applicantName: string,
+  targetBranch: string
+): string => {
+  let clean = (rawPhone || "").replace(/[^0-9]/g, "");
+  clean = clean.replace(/^0+/, "0");
+  if (clean.startsWith("08")) {
+    clean = "628" + clean.slice(2);
+  } else if (clean.startsWith("8")) {
+    clean = "628" + clean.slice(1);
+  }
+  const message = getWhatsAppAcknowledgementReplyText(eventName, applicantName, targetBranch);
+  return `https://wa.me/${clean}?text=${encodeURIComponent(message)}`;
+};
+
 const formatWhatsAppUrl = (
   rawPhone: string,
   eventName: string,
@@ -318,6 +363,8 @@ const formatWhatsAppUrl = (
   category: "bagus" | "sedang" | "jelek" = "sedang"
 ): string => {
   let clean = (rawPhone || "").replace(/[^0-9]/g, "");
+  // Normalize leading zeros (e.g. 008... -> 08...)
+  clean = clean.replace(/^0+/, "0");
   if (clean.startsWith("08")) {
     clean = "628" + clean.slice(2);
   } else if (clean.startsWith("8")) {
@@ -544,6 +591,8 @@ const saveDecisions = (decisions: ProposalDecision) => {
  */
 const getGoogleDrivePreviewUrl = (url: string): string | null => {
   if (!url) return null;
+  // Direct PDF or Cloudflare R2 link
+  if (url.toLowerCase().includes(".pdf") || url.includes("r2.dev")) return url;
   // Already a preview URL
   if (url.includes("/preview")) return url;
   // Format: /file/d/FILE_ID/view or /file/d/FILE_ID/...
@@ -572,6 +621,7 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [copiedChatId, setCopiedChatId] = useState<string | null>(null);
+  const [copiedAckId, setCopiedAckId] = useState<string | null>(null);
   const [decisions, setDecisions] = useState<ProposalDecision>(loadDecisions);
   const [saveIndicator, setSaveIndicator] = useState<"saving" | "saved">("saved");
   const [noteEditing, setNoteEditing] = useState<string | null>(null);
@@ -819,6 +869,17 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
     setTimeout(() => setCopiedChatId(null), 2500);
   };
 
+  const handleCopyAck = (item: FormProposalItem) => {
+    const text = getWhatsAppAcknowledgementReplyText(
+      item.eventName,
+      item.applicantName,
+      item.targetBranch
+    );
+    navigator.clipboard.writeText(text);
+    setCopiedAckId(item.id);
+    setTimeout(() => setCopiedAckId(null), 2500);
+  };
+
   const branches = useMemo(
     () => Array.from(new Set(validItems.map((i) => i.targetBranch).filter(Boolean))),
     [validItems]
@@ -969,13 +1030,13 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
               </div>
               <div className="flex items-center gap-2 shrink-0">
                 <a
-                  href={previewUrl.replace("/preview", "/view")}
+                  href={previewUrl.includes("drive.google.com") ? previewUrl.replace("/preview", "/view") : previewUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border bg-surface hover:bg-surface-secondary text-xs font-semibold text-foreground transition-all"
                 >
                   <ExternalLink className="w-3.5 h-3.5" />
-                  <span>Buka di Drive</span>
+                  <span>{previewUrl.includes("drive.google.com") ? "Buka di Drive" : "Buka Dokumen"}</span>
                 </a>
                 <button
                   onClick={() => { setPreviewUrl(null); setPreviewTitle(""); }}
@@ -1552,6 +1613,24 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
                               ? "Salin Draft Chat (Paket Golden Tier)"
                               : "Salin Draft Chat WA (20 Voucher @ 50rb)"}
                           </span>
+                        </>
+                      )}
+                    </button>
+
+                    <button
+                      onClick={() => handleCopyAck(item)}
+                      className="w-full min-h-[38px] py-2 px-3 rounded-xl border border-border bg-surface-secondary/70 hover:bg-surface-secondary text-xs font-semibold text-foreground-secondary hover:text-foreground flex items-center justify-center gap-1.5 active:scale-95 transition-all"
+                      title="Salin Format Balasan Konfirmasi Penerimaan Proposal (Diajukan ke Atasan)"
+                    >
+                      {copiedAckId === item.id ? (
+                        <>
+                          <Check className="w-3.5 h-3.5 text-emerald-600" />
+                          <span className="text-emerald-600 font-bold">Format Konfirmasi (Proses Atasan) Disalin!</span>
+                        </>
+                      ) : (
+                        <>
+                          <MessageSquare className="w-3.5 h-3.5 text-foreground-muted" />
+                          <span>Salin Konfirmasi Terima (Proses Atasan)</span>
                         </>
                       )}
                     </button>

@@ -742,6 +742,74 @@ async function syncSpreadsheetData() {
       };
     });
 
+  // ─── Live Web Proposals from optikiseeyou.com / Cloudflare R2 ───
+  let webProposals: any[] = [];
+  try {
+    const r2Url = "https://pub-e4717ece411e494f82f5057d8bb6382b.r2.dev/data/sponsorships.json";
+    const sponsorRes = await fetch(r2Url, {
+      cache: "no-store",
+      headers: { "User-Agent": "OptikISeeYou-Intelligence/1.0" },
+    });
+    if (sponsorRes.ok) {
+      const liveJson = await sponsorRes.json();
+      if (Array.isArray(liveJson)) {
+        webProposals = liveJson.map((item: any, i: number) => {
+          const eventClean = String(item.namaKegiatan || item.instansi || "event")
+            .toLowerCase()
+            .replace(/[^a-z0-9]/g, "")
+            .slice(0, 24);
+          const dateClean = String(item.tanggalKegiatan || "nodate").replace(/[^a-z0-9]/g, "");
+          const phoneClean = String(item.whatsapp || "").replace(/[^0-9]/g, "").slice(-4);
+          const stableId = item.id || `prop_${eventClean}_${dateClean}_${phoneClean || i}`;
+          const benefitStr = Array.isArray(item.bentukSponsor)
+            ? item.bentukSponsor.join(", ")
+            : String(item.bentukSponsor || "-");
+
+          let noteText = "Pengajuan Website (optikiseeyou.com)";
+          if (item.status && item.status !== "Menunggu Review") {
+            noteText = `Status Web: ${item.status}`;
+            if (item.catatanInternal) {
+              noteText += ` (${item.catatanInternal})`;
+            }
+          }
+
+          return {
+            id: item.id || `web-proposal-${i}`,
+            stableId,
+            timestamp: item.createdAt ? item.createdAt.slice(0, 10) : null,
+            institution: String(item.instansi || "-").trim(),
+            targetBranch: String(item.cabang || "Purwokerto").trim(),
+            eventName: String(item.namaKegiatan || "-").trim(),
+            eventDate: item.tanggalKegiatan ? String(item.tanggalKegiatan).slice(0, 10) : null,
+            description: String(item.resumeKegiatan || "-").trim(),
+            benefit: benefitStr,
+            applicantName: String(item.nama || "-").trim(),
+            applicantPhone: String(item.whatsapp || "-").trim(),
+            fileUrl: String(item.proposalUrl || "").trim(),
+            sheetNote: noteText,
+          };
+        });
+      }
+    }
+  } catch (errWeb) {
+    console.warn("Failed to fetch live web proposals from R2:", errWeb);
+  }
+
+  // Merge web proposals (placed first) with Google Sheet proposals, avoiding duplicates
+  const combinedProposal = [...webProposals];
+  for (const p of formProposal) {
+    const isDup = combinedProposal.some(
+      (w) =>
+        w.id === p.id ||
+        w.stableId === p.stableId ||
+        (w.eventName.toLowerCase() === p.eventName.toLowerCase() &&
+          w.applicantPhone.replace(/[^0-9]/g, "").slice(-8) === p.applicantPhone.replace(/[^0-9]/g, "").slice(-8))
+    );
+    if (!isDup) {
+      combinedProposal.push(p);
+    }
+  }
+
   const pengajuanSheet = workbook.Sheets["Form Pengajuan"];
   const rawPengajuan: any[] = pengajuanSheet ? XLSX.utils.sheet_to_json(pengajuanSheet) : [];
   const formPengajuan = rawPengajuan.map((r, i) => ({
@@ -771,7 +839,7 @@ async function syncSpreadsheetData() {
     spreadsheetFollowersByBranch: spreadsheetFollowersByBranch,
     bonusSummary: bonusSummary,
     databaseDesain: databaseDesain,
-    formProposal: formProposal,
+    formProposal: combinedProposal,
     formPengajuan: formPengajuan,
     executiveRecap: {
       meetingTarget: "Rapat Direksi Terkini (Selasa, 6 Oktober 2026)",
