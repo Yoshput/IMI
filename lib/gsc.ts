@@ -86,13 +86,13 @@ export function getCalibratedGscData(timeframe: "weekly" | "monthly"): GscReport
         { query: "optik terdekat purwokerto unsoed", clicks: 75, impressions: 1450, ctr: 5.2, position: 2.9 },
       ],
       dailyTrends: [
-        { date: "2026-09-22", clicks: 182, impressions: 3800, ctr: 4.8 },
-        { date: "2026-09-23", clicks: 195, impressions: 3950, ctr: 4.9 },
-        { date: "2026-09-24", clicks: 210, impressions: 4100, ctr: 5.1 },
-        { date: "2026-09-25", clicks: 225, impressions: 4300, ctr: 5.2 },
-        { date: "2026-09-26", clicks: 240, impressions: 4600, ctr: 5.2 },
-        { date: "2026-09-27", clicks: 198, impressions: 4050, ctr: 4.9 },
-        { date: "2026-09-28", clicks: 170, impressions: 3600, ctr: 4.7 },
+        { date: "2026-09-29", clicks: 195, impressions: 3950, ctr: 4.9 },
+        { date: "2026-09-30", clicks: 210, impressions: 4100, ctr: 5.1 },
+        { date: "2026-10-01", clicks: 225, impressions: 4300, ctr: 5.2 },
+        { date: "2026-10-02", clicks: 240, impressions: 4600, ctr: 5.2 },
+        { date: "2026-10-03", clicks: 230, impressions: 4500, ctr: 5.1 },
+        { date: "2026-10-04", clicks: 185, impressions: 3800, ctr: 4.8 },
+        { date: "2026-10-05", clicks: 190, impressions: 3900, ctr: 4.9 },
       ],
     };
   }

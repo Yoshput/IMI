@@ -12,8 +12,9 @@ interface BranchData {
   coverImage: string;
   gallery: string[];
   activeCampaign: string;
-  localReachShare: string;
-  weeklyInquiries: number;
+  operationalHours: string;
+  services: string[];
+  picName: string;
   highlightNotes: string;
 }
 
@@ -31,8 +32,9 @@ export const BRANCH_LOCATIONS: BranchData[] = [
       "/lokasi/purwokerto/IMG_1546.webp",
     ],
     activeCampaign: "Reels POV Try-on & Lab Faset Lensa Cepat",
-    localReachShare: "58% dari total reach",
-    weeklyInquiries: 42,
+    operationalHours: "09.00 – 21.00 WIB",
+    services: ["Pemeriksaan RO Berlisensi", "Lab Faset 20 Menit Jadi", "Katalog Titanium Korean Series"],
+    picName: "Ilya (Reels) & Nuha (Story)",
     highlightNotes:
       "Pusat produksi konten utama & lab refraksi cepat. Menargetkan segmen mahasiswa Unsoed, UMP, dan Telkom Purwokerto.",
   },
@@ -48,8 +50,9 @@ export const BRANCH_LOCATIONS: BranchData[] = [
       "/lokasi/purbalingga/IMG_8533.webp",
     ],
     activeCampaign: "Katalog Restock Frame Korean Aesthetic",
-    localReachShare: "18% dari total reach",
-    weeklyInquiries: 14,
+    operationalHours: "09.00 – 21.00 WIB",
+    services: ["Refraksi Mata Gratis", "Display Oval Modern", "Garansi Fitting Frame"],
+    picName: "Ajun / Juna (Reels)",
     highlightNotes:
       "Interior display oval modern dan pencahayaan kurva. Konten carousel foto frame titanium restock paling diminati.",
   },
@@ -65,8 +68,9 @@ export const BRANCH_LOCATIONS: BranchData[] = [
       "/lokasi/cilacap/IMG_7455.webp",
     ],
     activeCampaign: "Edukasi Lensa Bluechromic Pesisir Pantai",
-    localReachShare: "14% dari total reach",
-    weeklyInquiries: 11,
+    operationalHours: "09.00 – 21.00 WIB",
+    services: ["Lensa Bluechromic Pesisir", "Pemeriksaan Visus Lengkap", "Kacamata Anti Silau"],
+    picName: "Arum (Reels CLP)",
     highlightNotes:
       "Fasade hijau signature Optik I See You. Konten demo transisi lensa di bawah matahari pesisir menghasilkan interaksi tinggi.",
   },
@@ -82,8 +86,9 @@ export const BRANCH_LOCATIONS: BranchData[] = [
       "/lokasi/wonosobo/IMG_4476.webp",
     ],
     activeCampaign: "Weekend Eyewear Community & Cek Mata Gratis",
-    localReachShare: "10% dari total reach",
-    weeklyInquiries: 8,
+    operationalHours: "09.00 – 21.00 WIB",
+    services: ["Periksa Mata Komputer", "Lensa Anti Embun Dataran Tinggi", "Fitting Anak & Dewasa"],
+    picName: "Febi (Reels WNS)",
     highlightNotes:
       "Outlet area dataran tinggi dengan basis pelanggan setia. Fokus pada edukasi perawatan kacamata anti embun dan anti gores.",
   },
@@ -163,22 +168,40 @@ export const BranchLocationsShowcase: React.FC = () => {
             <div className="p-4 flex-1 flex flex-col justify-between space-y-3 text-xs">
               <div>
                 <span className="text-[10px] uppercase font-bold text-foreground-muted tracking-wider block">
-                  Kampanye Aktif
+                  Kampanye & Fokus Konten
                 </span>
                 <span className="font-semibold text-brand block mt-0.5 text-[11px] leading-tight">
                   {branch.activeCampaign}
                 </span>
               </div>
 
+              {/* Layanan Unggulan Outlet */}
+              <div className="pt-2 border-t border-border/80 space-y-1">
+                <span className="text-[10px] uppercase font-bold text-foreground-muted tracking-wider block">
+                  Fasilitas &amp; Layanan:
+                </span>
+                <div className="flex flex-wrap gap-1">
+                  {branch.services.map((srv, si) => (
+                    <span
+                      key={si}
+                      className="text-[10px] px-1.5 py-0.5 rounded bg-surface-secondary text-foreground-secondary border border-border"
+                    >
+                      {srv}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Jam Operasional & PIC */}
               <div className="pt-2 border-t border-border/80 flex items-center justify-between text-[11px]">
-                <span className="text-foreground-secondary">Kontribusi Reach:</span>
-                <span className="font-bold text-foreground">{branch.localReachShare}</span>
+                <span className="text-foreground-secondary">Jam Buka:</span>
+                <span className="font-semibold text-foreground">{branch.operationalHours}</span>
               </div>
 
               <div className="flex items-center justify-between text-[11px]">
-                <span className="text-foreground-secondary">Inbound DM:</span>
-                <span className="font-bold text-emerald-800 bg-emerald-50 px-1.5 py-0.2 rounded">
-                  {branch.weeklyInquiries} tanya lokasi
+                <span className="text-foreground-secondary">PIC Cabang:</span>
+                <span className="font-bold text-foreground">
+                  {branch.picName}
                 </span>
               </div>
 

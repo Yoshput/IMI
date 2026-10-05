@@ -35,7 +35,7 @@ export const DashboardView: React.FC = () => {
         onEmptyAction={() => (window.location.href = "/analytics")}
       >
         <PerformanceHeader
-          periodLabel="Week 39 · 22–28 September 2026 (Periode Evaluasi Rapat 29 Sep)"
+          periodLabel="Week 40 · 29 September – 5 Oktober 2026 (Periode Evaluasi Rapat Selasa 6 Okt)"
           publishTargetAchieved={true}
           totalPostsPublished={36}
         />

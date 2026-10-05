@@ -46,8 +46,8 @@ export const PerformanceHeader: React.FC<PerformanceHeaderProps> = ({
           </div>
           <ProvenanceBadge
             source="sheets_sync"
-            date="29 September 2026"
-            sourceLabel="Data sinkronisasi Google Sheets 5 Cabang terverifikasi per 29 September 2026"
+            date="5 Oktober 2026"
+            sourceLabel="Data sinkronisasi Google Sheets 5 Cabang terverifikasi per 5 Oktober 2026"
             isDemo={false}
           />
         </div>

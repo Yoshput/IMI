@@ -15,6 +15,9 @@ import {
   DollarSign,
   Layers,
   ArrowUpRight,
+  ShoppingBag,
+  Store,
+  Sparkles,
 } from "lucide-react";
 
 interface Competitor {
@@ -24,6 +27,8 @@ interface Competitor {
   igUrl: string;
   tiktokUrl?: string;
   websiteUrl?: string;
+  shopeeUrl?: string;
+  tokopediaUrl?: string;
   avatar: string;
   segment: string;
   priceRange: string;
@@ -39,6 +44,7 @@ interface Competitor {
   primaryChannel: string;
   tag: "Direct Competitor" | "Aspirational Benchmark" | "Incumbent Giant" | "Internal Sibling";
   auditDate: string;
+  catalogItems?: { name: string; tag: string; price: string }[];
 }
 
 const competitorsData: Competitor[] = [
@@ -48,15 +54,17 @@ const competitorsData: Competitor[] = [
     handle: "@heykama.id",
     igUrl: "https://www.instagram.com/heykama.id/",
     tiktokUrl: "https://www.tiktok.com/@heykama.id",
+    shopeeUrl: "https://shopee.co.id/heykama",
+    tokopediaUrl: "https://www.tokopedia.com/heykama",
     avatar: "HK",
     segment: "Fast-Fashion Budget & Korean Aesthetic",
     priceRange: "Rp 120.000 – Rp 350.000",
-    followersIg: "188.000+",
-    followersTiktok: "335.000+",
+    followersIg: "192.000+",
+    followersTiktok: "340.000+",
     location: "Jakarta, Bandung & Online Nationwide",
     signatureHook: "Punya muka bulet/chubby? Stop pilih frame kotak kaku, tonton ini sampai habis!",
     currentTrend:
-      "Sedang sangat ramai dengan konten kurasi 'Kacamata Sesuai Bentuk Wajah Bulat/Oval' menggunakan filter transisi musik K-Pop. Aktif live streaming TikTok Shop 2x sehari dengan paket bundling frame + lensa blueray Rp 149.000.",
+      "Sedang sangat ramai dengan konten kurasi 'Kacamata Sesuai Bentuk Wajah Bulat/Oval' menggunakan filter transisi musik K-Pop. Aktif live streaming TikTok Shop & Shopee Live 2x sehari dengan bundling frame + lensa blueray.",
     contentPillars: ["POV Face Shape Matching", "Unboxing Paket 100k", "OOTD Kpop Style", "Flash Sale Shopee Live"],
     strengths: [
       "Sangat kuat di TikTok Shop dan live selling interaktif",
@@ -72,23 +80,30 @@ const competitorsData: Competitor[] = [
       "Adopsi format 'Rekomendasi Frame untuk Wajah Chubby & Wajah Lebar' di reels Purwokerto. Bedanya, I See You punya keunggulan Refraksionis Optisi resmi dan pilihan lensa anti radiasi index tinggi tipis.",
     primaryChannel: "TikTok & Instagram Reels",
     tag: "Direct Competitor",
-    auditDate: "29 September 2026"
+    auditDate: "5 Oktober 2026",
+    catalogItems: [
+      { name: "Heykama Pastel Acetate K-Wave Series", tag: "Viral Shopee Live", price: "Rp 149.000" },
+      { name: "Heykama Square Round Anti Chubby", tag: "Top Try-On TikTok", price: "Rp 169.000" },
+      { name: "Heykama Thin Titanium Oval Frame", tag: "Koleksi Ringan", price: "Rp 189.000" },
+    ],
   },
   {
     id: "berrybarton",
     name: "Berrybarton Eyewear",
-    handle: "@berrybarton",
-    igUrl: "https://www.instagram.com/berrybarton_official/",
+    handle: "@berrybartoneyewear",
+    igUrl: "https://www.instagram.com/berrybartoneyewear/",
     tiktokUrl: "https://www.tiktok.com/@berrybarton",
+    shopeeUrl: "https://shopee.co.id/berrybartonofficial",
+    tokopediaUrl: "https://www.tokopedia.com/berrybarton",
     avatar: "BB",
     segment: "Marketplace & TikTok Shop Volume Leader",
     priceRange: "Rp 69.000 – Rp 199.000",
-    followersIg: "340.000+",
-    followersTiktok: "1.200.000+",
+    followersIg: "348.000+",
+    followersTiktok: "1.250.000+",
     location: "Jakarta & Distribusi Nasional (E-Commerce First)",
     signatureHook: "Frame titanium anti patah cuma 70 ribuan, check out sekarang sebelum kehabisan voucher live!",
     currentTrend:
-      "Live streaming TikTok tiada henti 18-24 jam sehari dengan affiliate creators ratusan orang. Menonjolkan uji fleksibilitas frame ditekuk ekstrem dan flash sale lensa bluechromic murah.",
+      "Live streaming TikTok tiada henti 18-24 jam sehari dengan affiliate creators ratusan orang. Menonjolkan uji fleksibilitas frame ditekuk ekstrem dan flash sale lensa bluechromic murah di Shopee & TikTok Shop.",
     contentPillars: ["Live Streaming Nonstop", "Uji Ekstrem Ketahanan Frame", "Diskon Kilat Keranjang Kuning", "Affiliate UGC Repost"],
     strengths: [
       "Volume penjualan kacamata online nomor 1 di TikTok Shop & Shopee Indonesia",
@@ -104,7 +119,12 @@ const competitorsData: Competitor[] = [
       "Jadikan celah 'beli kacamata online sering pusing karena pupil distance (PD) salah' sebagai konten edukasi utama I See You: tekankan bahwa kacamata kesehatan wajib diukur langsung oleh RO berlisensi.",
     primaryChannel: "TikTok Shop Live & Shopee Video",
     tag: "Direct Competitor",
-    auditDate: "29 September 2026"
+    auditDate: "5 Oktober 2026",
+    catalogItems: [
+      { name: "Berrybarton Titanium Series TR-9021", tag: "Bestseller No. 1 Shopee", price: "Rp 129.000" },
+      { name: "Berrybarton Cat Eye Vintage BB810", tag: "Affiliate Video FYP", price: "Rp 89.000" },
+      { name: "Berrybarton Clip-on Polarized 5-in-1", tag: "Marketplace Terlaris", price: "Rp 159.000" },
+    ],
   },
   {
     id: "kacamatamoo",
@@ -112,11 +132,13 @@ const competitorsData: Competitor[] = [
     handle: "@kacamatamoo",
     igUrl: "https://www.instagram.com/kacamatamoo/",
     tiktokUrl: "https://www.tiktok.com/@kacamatamoo",
+    shopeeUrl: "https://shopee.co.id/kacamatamoo",
+    tokopediaUrl: "https://www.tokopedia.com/kacamatamoo",
     avatar: "KM",
     segment: "Mass-Market Pelajar & Mahasiswa",
     priceRange: "Rp 99.000 – Rp 250.000",
-    followersIg: "465.000+",
-    followersTiktok: "660.000+",
+    followersIg: "468.000+",
+    followersTiktok: "675.000+",
     location: "Yogyakarta, Solo, Semarang & Online",
     signatureHook: "Nyesel baru tau kacamata minus + silinder bisa dapet seharga 150rb doang di Jogja!",
     currentTrend:
@@ -136,19 +158,26 @@ const competitorsData: Competitor[] = [
       "Terapkan program aktivasi kampus regional Barlingmascakeb: Promo khusus mahasiswa Unsoed, UMP, dan perguruan tinggi Purbalingga dengan diskon tukar frame lama atau gratis upgrade lensa Blueray.",
     primaryChannel: "TikTok Live & Instagram Reels",
     tag: "Direct Competitor",
-    auditDate: "29 September 2026"
+    auditDate: "5 Oktober 2026",
+    catalogItems: [
+      { name: "Paket Pelajar Blueray Korean Square", tag: "Campus Bestseller", price: "Rp 135.000" },
+      { name: "Frame Bening Rose Gold Aviator KM", tag: "Mahasiswa Favorit", price: "Rp 115.000" },
+      { name: "Vintage Hexagonal Metal Frame", tag: "Promo Bundling", price: "Rp 145.000" },
+    ],
   },
   {
     id: "mollucas",
     name: "Mollucas Eyewear",
-    handle: "@mollucaseyewear",
-    igUrl: "https://www.instagram.com/mollucaseyewear/",
-    tiktokUrl: "https://www.tiktok.com/@mollucaseyewear",
+    handle: "@mollucas.id",
+    igUrl: "https://www.instagram.com/mollucas.id/",
+    tiktokUrl: "https://www.tiktok.com/@mollucas.id",
+    shopeeUrl: "https://shopee.co.id/mollucas",
+    tokopediaUrl: "https://www.tokopedia.com/mollucas",
     avatar: "ME",
     segment: "Regional Aesthetic & Vintage Student D2C",
     priceRange: "Rp 129.000 – Rp 320.000",
-    followersIg: "95.000+",
-    followersTiktok: "110.000+",
+    followersIg: "98.000+",
+    followersTiktok: "115.000+",
     location: "Yogyakarta, Semarang & Jawa Tengah",
     signatureHook: "Rekomendasi kacamata vintage aesthetic yang bikin aura kuliah kamu kayak anak seni!",
     currentTrend:
@@ -167,7 +196,12 @@ const competitorsData: Competitor[] = [
       "Padukan keunggulan 'Frame Vintage Estetik ala Mollucas' dengan kecepatan 'Faset Kilat 20 Menit Jadi' milik I See You agar customer tidak perlu menunggu berhari-hari.",
     primaryChannel: "Instagram Reels & TikTok",
     tag: "Direct Competitor",
-    auditDate: "29 September 2026"
+    auditDate: "5 Oktober 2026",
+    catalogItems: [
+      { name: "Mollucas Banda Series Acetate Retro", tag: "Signature Aesthetic", price: "Rp 289.000" },
+      { name: "Mollucas Saparua Titanium Slim", tag: "Artisan Series", price: "Rp 320.000" },
+      { name: "Mollucas Ambon Vintage Round Frame", tag: "Student Aesthetic", price: "Rp 210.000" },
+    ],
   },
   {
     id: "bridgeseyewear",
@@ -175,11 +209,12 @@ const competitorsData: Competitor[] = [
     handle: "@bridgeseyewear",
     igUrl: "https://www.instagram.com/bridgeseyewear/",
     websiteUrl: "https://bridgeseyewear.com",
+    tokopediaUrl: "https://www.tokopedia.com/bridgeseyewear",
     avatar: "BE",
     segment: "Modern Mid-Tier Lifestyle (Melawai Group)",
     priceRange: "Rp 800.000 – Rp 1.600.000",
-    followersIg: "148.000+",
-    followersTiktok: "48.000+",
+    followersIg: "150.000+",
+    followersTiktok: "50.000+",
     location: "Jakarta, Surabaya, Bandung, Semarang & Mall Besar",
     signatureHook: "Glasses designed for urban thinkers. Timeless frames with Japanese acetate.",
     currentTrend:
@@ -198,7 +233,11 @@ const competitorsData: Competitor[] = [
       "Adopsi gaya visual storytelling 'Kacamata untuk Produktivitas Laptop/Kerja' yang bersih, namun tawarkan solusi bundling lensa anti-radiasi terjangkau di cabang I See You.",
     primaryChannel: "Instagram Feed, Reels & Offline Boutiques",
     tag: "Aspirational Benchmark",
-    auditDate: "29 September 2026"
+    auditDate: "5 Oktober 2026",
+    catalogItems: [
+      { name: "Bridges Japanese Acetate Series", tag: "Urban Lifestyle", price: "Rp 950.000" },
+      { name: "Bridges Eco-Titanium Minimalist", tag: "Contemporary Luxury", price: "Rp 1.450.000" },
+    ],
   },
   {
     id: "saturdays",
@@ -209,8 +248,8 @@ const competitorsData: Competitor[] = [
     avatar: "ST",
     segment: "Premium Lifestyle & Artisanal Experience",
     priceRange: "Rp 1.295.000 – Rp 2.495.000",
-    followersIg: "132.000+",
-    followersTiktok: "78.000+",
+    followersIg: "135.000+",
+    followersTiktok: "80.000+",
     location: "Jabodetabek, Surabaya, Bandung & Bali (Mall Premium)",
     signatureHook: "Beli kacamata sambil ngopi artisan free cookie? Here is our store experience.",
     currentTrend:
@@ -230,7 +269,11 @@ const competitorsData: Competitor[] = [
       "Tiru estetika pencahayaan video (warm minimalist), unboxing box eksklusif, dan suasana store yang ramah serta instagramable di cabang Purwokerto agar pelanggan bangga foto di dalam toko.",
     primaryChannel: "Instagram Feed & Reels",
     tag: "Aspirational Benchmark",
-    auditDate: "29 September 2026"
+    auditDate: "5 Oktober 2026",
+    catalogItems: [
+      { name: "Saturdays Roaster Series Acetate", tag: "The Cafe Experience", price: "Rp 1.495.000" },
+      { name: "Saturdays Titanium Studio Edition", tag: "Artisanal Premium", price: "Rp 2.195.000" },
+    ],
   },
   {
     id: "optik-melawai",
@@ -241,8 +284,8 @@ const competitorsData: Competitor[] = [
     avatar: "OM",
     segment: "Legacy Healthcare Authority & Designer Luxury",
     priceRange: "Rp 1.500.000 – Rp 15.000.000+",
-    followersIg: "172.000+",
-    followersTiktok: "26.000+",
+    followersIg: "174.000+",
+    followersTiktok: "27.000+",
     location: "Seluruh Indonesia (Ratusan Cabang Mall & Standalone)",
     signatureHook: "Pemeriksaan mata standar Zeiss dengan dokter & optometris bersertifikat.",
     currentTrend:
@@ -262,18 +305,23 @@ const competitorsData: Competitor[] = [
       "Tunjukkan keahlian cek mata dan sertifikasi Refraksionis Optisi I See You, namun dikemas secara fun, hangat, dan tanpa rasa intimidasi harga mahal yang melekat pada optik mall lama.",
     primaryChannel: "Website, Offline Mall & Instagram",
     tag: "Incumbent Giant",
-    auditDate: "29 September 2026"
+    auditDate: "5 Oktober 2026",
+    catalogItems: [
+      { name: "Zeiss MyoCare Clinical Eyewear", tag: "Lensa Medis Anak", price: "Rp 2.800.000" },
+      { name: "Ray-Ban Aviator Classic Official", tag: "Heritage Luxury", price: "Rp 3.100.000" },
+    ],
   },
   {
     id: "lunar-eyewear",
     name: "Lunar Eyewear Tegal",
     handle: "@lunareyewear.co",
     igUrl: "https://www.instagram.com/lunareyewear.co",
+    tiktokUrl: "https://www.tiktok.com/@lunareyewear.co",
     avatar: "LN",
     segment: "Sister Brand / Experimental Regional Outlet",
     priceRange: "Rp 150.000 – Rp 450.000",
-    followersIg: "4.016 (Sheets 28 Sep)",
-    followersTiktok: "3.031",
+    followersIg: "4.034 (Update 5 Okt)",
+    followersTiktok: "3.047",
     location: "Tegal (Second Brand I See You)",
     signatureHook: "POV: Ketika kamu akhirnya nemu optik yang gak maksa beli frame jutaan tapi hasilnya estetik.",
     currentTrend:
@@ -292,7 +340,11 @@ const competitorsData: Competitor[] = [
       "Format reels POV Amanda di Tegal yang tembus 128k viewers harus segera dibuatkan SOP dan direplikasi ke Purwokerto, Purbalingga, dan Cilacap.",
     primaryChannel: "Instagram Reels & TikTok",
     tag: "Internal Sibling",
-    auditDate: "29 September 2026"
+    auditDate: "5 Oktober 2026",
+    catalogItems: [
+      { name: "Lunar Cat-Eye Acetate Pastel Tegal", tag: "Best Seller Pantura", price: "Rp 185.000" },
+      { name: "Lunar Korean Slim Titanium Frame", tag: "Reels Viral Amanda", price: "Rp 225.000" },
+    ],
   },
 ];
 
@@ -534,6 +586,30 @@ export const CompetitorRadarView: React.FC = () => {
                             <ExternalLink className="w-3 h-3 text-foreground-muted" />
                           </a>
                         )}
+                        {comp.shopeeUrl && (
+                          <a
+                            href={comp.shopeeUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-control bg-orange-500/10 border border-orange-500/20 hover:border-orange-500/50 text-[11px] font-semibold text-orange-700 dark:text-orange-300 transition-colors"
+                          >
+                            <ShoppingBag className="w-3 h-3 text-orange-600" />
+                            <span>Shopee</span>
+                            <ExternalLink className="w-3 h-3 text-orange-500" />
+                          </a>
+                        )}
+                        {comp.tokopediaUrl && (
+                          <a
+                            href={comp.tokopediaUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-control bg-emerald-500/10 border border-emerald-500/20 hover:border-emerald-500/50 text-[11px] font-semibold text-emerald-700 dark:text-emerald-300 transition-colors"
+                          >
+                            <Store className="w-3 h-3 text-emerald-600" />
+                            <span>Tokopedia</span>
+                            <ExternalLink className="w-3 h-3 text-emerald-500" />
+                          </a>
+                        )}
                         {comp.websiteUrl && (
                           <a
                             href={comp.websiteUrl}
@@ -550,6 +626,36 @@ export const CompetitorRadarView: React.FC = () => {
                     <p className="text-xs text-foreground-secondary leading-relaxed">
                       {comp.currentTrend}
                     </p>
+
+                    {/* Katalog Produk & Bestseller Trend Nyata */}
+                    {comp.catalogItems && comp.catalogItems.length > 0 && (
+                      <div className="pt-2 border-t border-border/80 space-y-2">
+                        <span className="text-[11px] font-bold text-foreground flex items-center gap-1">
+                          <Sparkles className="w-3 h-3 text-amber-500" />
+                          <span>Katalog Model Bestseller &amp; Frame Tren Terkini:</span>
+                        </span>
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                          {comp.catalogItems.map((cat, ci) => (
+                            <div
+                              key={ci}
+                              className="p-2.5 rounded-lg bg-surface-secondary/50 border border-border flex flex-col justify-between"
+                            >
+                              <div>
+                                <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-brand-light text-brand inline-block mb-1">
+                                  {cat.tag}
+                                </span>
+                                <h5 className="text-xs font-semibold text-foreground leading-snug">
+                                  {cat.name}
+                                </h5>
+                              </div>
+                              <span className="text-[11px] font-bold text-foreground mt-2">
+                                {cat.price}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
                   {/* Hook & Location */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

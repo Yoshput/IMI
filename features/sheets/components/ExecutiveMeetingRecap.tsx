@@ -75,11 +75,24 @@ export const ExecutiveMeetingRecap: React.FC<ExecutiveMeetingRecapProps> = ({
 
   const periods = executiveRecap.periods || {
     currentMeeting: {
+      periodKey: "2026-09-29_to_2026-10-05",
+      startDate: "2026-09-29",
+      endDate: "2026-10-05",
+      meetingDateTitle: "Selasa, 6 Oktober 2026 (Periode 29 Sep – 5 Okt)",
+      meetingStatus: "Evaluasi Rapat Terkini (6 Okt 2026)",
+      totalReelsUploaded: 38,
+      totalStoriesRecorded: 7,
+      totalDmInquiries: 31,
+      topViralReels: [],
+      frequentStoryInquiries: [],
+      obstacleLogs: [],
+    },
+    lastTuesday: {
       periodKey: "2026-09-22_to_2026-09-28",
       startDate: "2026-09-22",
       endDate: "2026-09-28",
       meetingDateTitle: "Selasa, 29 September 2026 (Periode 22–28 Sep)",
-      meetingStatus: "Evaluasi Rapat Hari Ini (29 Sep 2026)",
+      meetingStatus: "Evaluasi Rapat Minggu Lalu (29 Sep 2026)",
       totalReelsUploaded: 36,
       totalStoriesRecorded: 7,
       totalDmInquiries: 27,
@@ -92,47 +105,34 @@ export const ExecutiveMeetingRecap: React.FC<ExecutiveMeetingRecapProps> = ({
       startDate: "2026-09-15",
       endDate: "2026-09-21",
       meetingDateTitle: "Selasa, 22 September 2026 (Periode 15–21 Sep)",
-      meetingStatus: "Evaluasi Rapat Minggu Lalu (22 Sep 2026)",
-      totalReelsUploaded: 0,
-      totalStoriesRecorded: 0,
-      totalDmInquiries: 0,
+      meetingStatus: "Evaluasi Historis (22 Sep 2026)",
+      totalReelsUploaded: 28,
+      totalStoriesRecorded: 6,
+      totalDmInquiries: 22,
       topViralReels: [],
       frequentStoryInquiries: [],
       obstacleLogs: [],
     },
-    lastTuesday: {
-      periodKey: "2026-09-08_to_2026-09-14",
-      startDate: "2026-09-08",
-      endDate: "2026-09-14",
-      meetingDateTitle: "Selasa, 15 September 2026 (Periode 8–14 Sep)",
-      meetingStatus: "Evaluasi Historis (15 Sep 2026)",
-      totalReelsUploaded: (executiveRecap.topViralReels || []).length,
-      totalStoriesRecorded: 5,
-      totalDmInquiries: 32,
-      topViralReels: executiveRecap.topViralReels || [],
-      frequentStoryInquiries: executiveRecap.frequentStoryInquiries || [],
-      obstacleLogs: executiveRecap.obstacleLogs || [],
-    },
   };
 
-  const activePeriod = (periods as any)[selectedPeriodKey] || (periods as any).currentMeeting || (periods as any).nextTuesday || (periods as any).lastTuesday;
+  const activePeriod = (periods as any)[selectedPeriodKey] || (periods as any).currentMeeting || (periods as any).lastTuesday || (periods as any).nextTuesday;
   const pendingPics = picTracker.filter((p) => !p.isUpToDate);
 
   const periodOptions = [
     {
       key: "currentMeeting",
-      label: "Rapat Hari Ini (29 Sep 2026)",
+      label: "Rapat Terkini (6 Okt 2026)",
+      dateRange: "29 Sep – 5 Okt 2026",
+    },
+    {
+      key: "lastTuesday",
+      label: "Rapat Minggu Lalu (29 Sep 2026)",
       dateRange: "22–28 Sep 2026",
     },
     {
       key: "nextTuesday",
-      label: "Rapat Minggu Lalu (22 Sep 2026)",
+      label: "Rapat Historis (22 Sep 2026)",
       dateRange: "15–21 Sep 2026",
-    },
-    {
-      key: "lastTuesday",
-      label: "Rapat 15 Sep 2026",
-      dateRange: "8–14 Sep 2026",
     },
   ];
 

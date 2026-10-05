@@ -213,16 +213,13 @@ export function getAntrianStats(): AntrianSummary {
       weeklyClicks: 41,
       monthlyClicks: 168,
       conversionRate: 51.2,
-      showUpRate: 78.9,
+      showUpRate: 0,
     },
   ];
 
   const todayTotal = branchStats.reduce((sum, b) => sum + b.todayClicks, 0);
   const weeklyTotal = branchStats.reduce((sum, b) => sum + b.weeklyClicks, 0);
   const monthlyTotal = branchStats.reduce((sum, b) => sum + b.monthlyClicks, 0);
-  const showUpRateAverage = parseFloat(
-    (branchStats.reduce((sum, b) => sum + b.showUpRate, 0) / branchStats.length).toFixed(1)
-  );
 
   const embedSnippet = `<!-- Embed Tracking CTA Antrian Cek Mata optikiseeyou.com -->
 <script>
@@ -249,7 +246,7 @@ export function getAntrianStats(): AntrianSummary {
     monthlyTotal,
     averageDaily: Math.round(weeklyTotal / 7),
     growthPercent: 24.5,
-    showUpRateAverage,
+    showUpRateAverage: 0,
     branchStats,
     recentClicks: inMemoryEvents.slice(0, 10),
     embedSnippet,
@@ -342,8 +339,8 @@ export function getCombinedWebResume(period: "weekly" | "monthly" = "weekly"): C
 
   return {
     period,
-    dateRange: period === "weekly" ? "21–28 September 2026 (7 Hari Terakhir)" : "1–28 September 2026 (Bulan Berjalan)",
-    asOfDate: "28 September 2026",
+    dateRange: period === "weekly" ? "29 September – 5 Oktober 2026 (7 Hari Terakhir)" : "1 September – 5 Oktober 2026 (35 Hari Kumulatif)",
+    asOfDate: "5 Oktober 2026",
     antrian,
     photobooth,
   };

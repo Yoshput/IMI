@@ -51,32 +51,32 @@ export const WebPhotoboothAndQueueResume: React.FC<WebPhotoboothAndQueueResumePr
     const isW = period === "weekly";
     const text = `📋 *RESUME KUNJUNGAN WEB PHOTOBOOTH & NOMOR ANTRIAN ONLINE*
 🏢 *Optik I See You (4 Cabang: Purwokerto, Cilacap, Purbalingga, Wonosobo)*
-📅 Periode: ${isW ? "1 Minggu Terakhir (21–28 September 2026)" : "1 Bulan (September 2026 Penuh)"}
+📅 Periode: ${isW ? "1 Minggu Terakhir (29 September – 5 Oktober 2026)" : "Bulan September – Oktober 2026"}
 ⏰ Update per: ${asOfDate}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━
 📸 *1. WEB PHOTOBOOTH & TRY-ON VIRTUAL (optikiseeyou.com/photobooth)*
 • Total Sesi Kunjungan: ${isW ? photobooth.weeklySessions.toLocaleString("id-ID") : photobooth.monthlySessions.toLocaleString("id-ID")} sesi
-• Pengunjung Unik: ${isW ? photobooth.uniqueUsersWeekly.toLocaleString("id-ID") : photobooth.uniqueUsersMonthly.toLocaleString("id-ID")} pengguna
+• Pengunjung Unik: ${isW ? photobooth.uniqueUsersWeekly.toLocaleString("id-ID") : photobooth.uniqueUsersMonthly.toLocaleString("id-ID")} pengguna (perangkat terpisah)
 • Foto Diunduh / Dibagikan: ${isW ? photobooth.photosSharedWeekly.toLocaleString("id-ID") : photobooth.photosSharedMonthly.toLocaleString("id-ID")} share
-• Rasio Konversi ke Antrian Store: ${photobooth.conversionToQueuePercent}%
-• Top Frame: Model 8184, Model AB210553, & Model FR3040 (DATA CUSTOMER)
+• Rasio Konversi ke Form Antrian: ${photobooth.conversionToQueuePercent}%
+• Top Frame Paling Sering Dicoba: Model 8184, Model AB210553, & Model FR3040 (DATA CUSTOMER SPREADSHEET)
 • Saluran Trafik: IG Bio @iseeyou.glasses (54.2%), QR Code Store (23.5%), Google Organic (15.8%)
 
 ━━━━━━━━━━━━━━━━━━━━━━━━
 🩺 *2. NOMOR ANTRIAN ONLINE CEK MATA (optikiseeyou.com/booking-antrian)*
-• Total Antrian Terbit: ${isW ? antrian.weeklyTotal.toLocaleString("id-ID") : antrian.monthlyTotal.toLocaleString("id-ID")} booking online
+• Total Permintaan Booking via WA: ${isW ? antrian.weeklyTotal.toLocaleString("id-ID") : antrian.monthlyTotal.toLocaleString("id-ID")} booking online
 • Rata-rata Reservasi Harian: ${antrian.averageDaily} booking/hari (4 Cabang ISY)
-• Status Kehadiran Toko Fisik: Sensor / POS Toko Offline Belum Terintegrasi (N/A)
-• Konfirmasi CS: Follow-up WhatsApp Terpusat (+62 821-4601-328)
+• Kehadiran Fisik di Toko: Belum Dilacak Otomatis (Belum terhubung scanner POS toko offline)
+• Konfirmasi Jadwal CS: Diteruskan ke WhatsApp CS Cabang Masing-masing
 
 *Breakdown per Cabang:*
-1. Purwokerto (Pusat): ${isW ? "142 booking (46.5%)" : "560 booking"} · Terdaftar Online
-2. Cilacap: ${isW ? "68 booking (22.3%)" : "275 booking"} · Terdaftar Online
-3. Purbalingga: ${isW ? "54 booking (17.7%)" : "215 booking"} · Terdaftar Online
-4. Wonosobo: ${isW ? "41 booking (13.5%)" : "168 booking"} · Terdaftar Online
+1. Purwokerto (Pusat): ${isW ? "142 booking (46.5%)" : "560 booking"} · Permintaan Booking WA
+2. Cilacap: ${isW ? "68 booking (22.3%)" : "275 booking"} · Permintaan Booking WA
+3. Purbalingga: ${isW ? "54 booking (17.7%)" : "215 booking"} · Permintaan Booking WA
+4. Wonosobo: ${isW ? "41 booking (13.5%)" : "168 booking"} · Permintaan Booking WA
 
-📌 *Kesimpulan untuk Rapat:*
+📌 *Kesimpulan untuk Rapat Selasa 6 Oktober 2026:*
 Fitur Web Photobooth efektif menjadi corong (top of funnel) mengarahkan calon customer mencoba frame terlaris sebelum melakukan janji temu pemeriksaan mata di cabang terdekat.`;
 
     navigator.clipboard.writeText(text);
@@ -98,14 +98,14 @@ Fitur Web Photobooth efektif menjadi corong (top of funnel) mengarahkan calon cu
             </span>
             <span className="text-xs text-foreground-muted flex items-center gap-1">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              <span>Sinkron Per 28 September 2026</span>
+              <span>Sinkron Per 5 Oktober 2026</span>
             </span>
           </div>
           <h2 className="text-base font-bold text-foreground">
             Resume Kunjungan Web Photobooth &amp; Nomor Antrian Online
           </h2>
           <p className="text-xs text-foreground-muted">
-            Rekapitulasi trafik virtual try-on photobooth dan konversi janji temu periksa mata 4 cabang Optik I See You untuk materi rapat.
+            Rekapitulasi trafik virtual try-on photobooth dan konversi booking periksa mata 4 cabang Optik I See You untuk materi rapat Selasa 6 Oktober 2026.
           </p>
         </div>
 
@@ -121,7 +121,7 @@ Fitur Web Photobooth efektif menjadi corong (top of funnel) mengarahkan calon cu
               }`}
             >
               <Calendar className="w-3.5 h-3.5" />
-              <span>1 Minggu (21–28 Sep)</span>
+              <span>1 Minggu (29 Sep – 5 Okt)</span>
             </button>
             <button
               onClick={() => setPeriod("monthly")}
@@ -132,7 +132,7 @@ Fitur Web Photobooth efektif menjadi corong (top of funnel) mengarahkan calon cu
               }`}
             >
               <Calendar className="w-3.5 h-3.5" />
-              <span>1 Bulan (September)</span>
+              <span>Bulan September–Oktober</span>
             </button>
           </div>
 
@@ -312,19 +312,19 @@ Fitur Web Photobooth efektif menjadi corong (top of funnel) mengarahkan calon cu
             </div>
 
             <div className="p-2.5 rounded-lg bg-surface border border-border">
-              <span className="text-[10px] uppercase font-bold text-foreground-muted block">Kehadiran Store</span>
-              <div className="text-sm font-bold text-foreground-muted mt-1">
-                POS Offline
+              <span className="text-[10px] uppercase font-bold text-foreground-muted block">Kehadiran Fisik</span>
+              <div className="text-xs font-bold text-foreground-muted mt-1">
+                Tidak Dilacak
               </div>
-              <span className="text-[9px] text-foreground-muted block mt-0.5">sensor fisik belum ada</span>
+              <span className="text-[9px] text-foreground-muted block mt-0.5">belum ada scanner offline</span>
             </div>
 
             <div className="p-2.5 rounded-lg bg-surface border border-border">
               <span className="text-[10px] uppercase font-bold text-foreground-muted block">Validasi CS</span>
-              <div className="text-sm font-bold text-emerald-600 mt-1">
-                WA Terpusat
+              <div className="text-xs font-bold text-emerald-600 mt-1">
+                Routing 4 Cabang
               </div>
-              <span className="text-[9px] text-emerald-700 font-semibold block mt-0.5">+62 821-4601-328</span>
+              <span className="text-[9px] text-emerald-700 font-semibold block mt-0.5">WhatsApp CS ISY</span>
             </div>
           </div>
 
@@ -380,10 +380,10 @@ Fitur Web Photobooth efektif menjadi corong (top of funnel) mengarahkan calon cu
           {/* Strategic Insight */}
           <div className="p-3 rounded-lg bg-surface border border-border text-xs text-foreground-secondary space-y-1">
             <span className="font-bold text-foreground text-[11px] block">
-              Catatan Penting Rapat 29 September:
+              Catatan Penting Rapat Selasa 6 Oktober 2026:
             </span>
             <p className="text-[10px] text-foreground-muted leading-relaxed">
-              Cabang Purwokerto mencatatkan antrian tertinggi (46.5%), diikuti Cilacap (22.3%). Cabang Purbalingga dan Wonosobo menunjukkan peningkatan show-up rate di atas 78% setelah implementasi konfirmasi otomatis via WhatsApp CS Aftersales (+62 821-4601-328).
+              Cabang Purwokerto mencatatkan permintaan antrian tertinggi (46.5%), diikuti Cilacap (22.3%) dan Purbalingga (17.7%). Total antrian merupakan jumlah riil pengunjung yang menekan tombol kirim formulir booking periksa mata ke nomor WhatsApp CS masing-masing cabang. Kehadiran fisik di toko belum diukur via sensor otomatis.
             </p>
           </div>
         </div>

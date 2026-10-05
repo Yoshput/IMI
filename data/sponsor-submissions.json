@@ -1,0 +1,50 @@
+[
+  {
+    "id": "spons-01",
+    "createdAt": "2026-10-04T14:30:00.000Z",
+    "applicantName": "Fajar Pratama",
+    "institution": "BEM Fakultas Ekonomi & Bisnis UNSOED",
+    "applicantPhone": "081234567890",
+    "targetBranch": "Purwokerto (Pusat)",
+    "eventName": "National Economics Summit & Career Expo 2026",
+    "eventDate": "2026-10-24",
+    "description": "Seminar nasional dan bursa karir mahasiswa tingkat Jawa Tengah & DIY dengan 3 pembicara nasional dan expo industri kreatif.",
+    "targetAudience": 650,
+    "proposalUrl": "https://drive.google.com/drive/folders/1BEM-FEB-UNSOED-SUMMIT-2026",
+    "offeredBenefits": "Pemasangan logo pada backdrop panggung utama, adlibs MC 4x, pemutaran video bumper promosi Optik I See You, serta booth konsultasi mata di venue Graha Widyatama.",
+    "status": "pending",
+    "notes": "Menunggu review rapat marketing Selasa depan"
+  },
+  {
+    "id": "spons-02",
+    "createdAt": "2026-10-03T11:15:00.000Z",
+    "applicantName": "Dinda Ayu",
+    "institution": "Himpunan Mahasiswa Ilmu Komunikasi UMP",
+    "applicantPhone": "085712345678",
+    "targetBranch": "Purwokerto (Pusat)",
+    "eventName": "Festival Film Pendek & Kreatif Barlingmascakeb 2026",
+    "eventDate": "2026-10-28",
+    "description": "Kompetisi film pendek sineas muda regional Banyumas dan workshop estetika visual bersama praktisi konten kreator.",
+    "targetAudience": 400,
+    "proposalUrl": "https://drive.google.com/drive/folders/1FFP-KOMUNIKASI-UMP-2026",
+    "offeredBenefits": "Logo di pamflet dan katalog resmi, voucher belanja I See You sebagai hadiah pemenang film terfavorit, serta live report IG Story.",
+    "status": "reviewed",
+    "notes": "Paket barter voucher belanja 20 lembar Rp50k direkomendasikan"
+  },
+  {
+    "id": "spons-03",
+    "createdAt": "2026-10-02T09:40:00.000Z",
+    "applicantName": "Rizky Firmansyah",
+    "institution": "Karang Taruna Kertanegara Purbalingga",
+    "applicantPhone": "081398765432",
+    "targetBranch": "Purbalingga",
+    "eventName": "Turnamen Futsal Pemuda & Bazar UMKM Purbalingga",
+    "eventDate": "2026-11-01",
+    "description": "Pekan olahraga pemuda antar kecamatan di Purbalingga dengan pameran produk lokal.",
+    "targetAudience": 500,
+    "proposalUrl": "https://drive.google.com/drive/folders/1FUTSAL-PURBALINGGA-2026",
+    "offeredBenefits": "Pemasangan banner di lapangan utama dan sebutan sponsor saat pembukaan serta penyerahan piala.",
+    "status": "pending",
+    "notes": "Koordinasi dengan PIC Purbalingga (Ajun)"
+  }
+]

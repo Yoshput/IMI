@@ -1,0 +1,50 @@
+[
+  {
+    "id": "hs-01",
+    "createdAt": "2026-10-04T16:00:00.000Z",
+    "customerName": "Ibu Ratna Dewi",
+    "customerPhone": "081229384756",
+    "targetBranch": "Purwokerto (Pusat)",
+    "branchKey": "pwt",
+    "csPhone": "081228678088",
+    "serviceDate": "2026-10-08",
+    "serviceTime": "14:00",
+    "address": "Perumahan Arcawinangun Estate Blok B No. 12, Purwokerto Timur",
+    "participantCount": 3,
+    "complaint": "Pemeriksaan mata untuk lansia (orang tua) yang kesulitan mobilitas ke toko, serta ganti lensa progresif dan minus anak.",
+    "status": "scheduled",
+    "notes": "Tim RO Purwokerto membawa koper alat refraksi portabel dan koleksi frame titanium"
+  },
+  {
+    "id": "hs-02",
+    "createdAt": "2026-10-03T10:20:00.000Z",
+    "customerName": "Bapak Hendra Gunawan",
+    "customerPhone": "085291827364",
+    "targetBranch": "Purbalingga",
+    "branchKey": "pbg",
+    "csPhone": "081390494490",
+    "serviceDate": "2026-10-09",
+    "serviceTime": "10:30",
+    "address": "Kantor Notaris Hendra & Rekan, Jl. MT Haryono No. 45, Purbalingga",
+    "participantCount": 5,
+    "complaint": "Skrining mata lelah & mata kering staf kantor akibat radiasi komputer seharian, butuh kacamata lensa Bluechromic & anti silau.",
+    "status": "pending",
+    "notes": "Jadwal slot pagi dikonfirmasi ke CS Purbalingga"
+  },
+  {
+    "id": "hs-03",
+    "createdAt": "2026-10-02T13:45:00.000Z",
+    "customerName": "dr. Anita Kusuma",
+    "customerPhone": "081328901234",
+    "targetBranch": "Cilacap",
+    "branchKey": "clp",
+    "csPhone": "085227771788",
+    "serviceDate": "2026-10-10",
+    "serviceTime": "16:00",
+    "address": "Jl. Kalimantan No. 88, Kel. Sidakaya, Cilacap Selatan",
+    "participantCount": 2,
+    "complaint": "Pemeriksaan mata minus & silinder tinggi pasca operasi, membutuhkan fitting frame ringan anti melorot.",
+    "status": "pending",
+    "notes": "CS Cilacap konfirmasi jadwal akhir pekan"
+  }
+]

@@ -12,6 +12,7 @@ import {
   FileSpreadsheet,
   Compass,
   HeartHandshake,
+  Handshake,
   Coins,
   Lock,
   Users,
@@ -27,6 +28,7 @@ interface NavItem {
 const navItems: NavItem[] = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { name: "Aftersales CRM", href: "/aftersales", icon: HeartHandshake },
+  { name: "Pengajuan & Layanan", href: "/pengajuan", icon: Handshake },
   { name: "Spreadsheet Rekap", href: "/spreadsheet", icon: FileSpreadsheet },
   { name: "Competitor Radar", href: "/competitors", icon: Compass },
   { name: "KOL Radar", href: "/kol", icon: Users },
