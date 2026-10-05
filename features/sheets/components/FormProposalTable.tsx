@@ -1350,7 +1350,7 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
                       <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full border ${barter.badgeClass}`}>
                         {barter.tierLabel}
                       </span>
-                      {barter.qualityBadge}
+                      <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full border whitespace-nowrap ${barter.qualityBadge}`}>{barter.qualityLabel}</span>
                       {/* Contacted badge */}
                       {decision?.contactedAt && (
                         <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full border ${
@@ -1397,7 +1397,7 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
                     <div className="space-y-1 flex-1">
                       <div className="flex items-center justify-between flex-wrap gap-1">
                         <span className="font-bold text-foreground">Paket: {barter.packageOffered}</span>
-                        {barter.qualityBadge}
+                        <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full border whitespace-nowrap ${barter.qualityBadge}`}>{barter.qualityLabel}</span>
                       </div>
                       <span className="text-foreground-secondary leading-relaxed block">{barter.reason}</span>
                       {barter.negotiationNote && (
@@ -2139,7 +2139,7 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
                         <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full border ${barter.badgeClass}`}>
                           {barter.tierLabel}
                         </span>
-                        {barter.qualityBadge}
+                        <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full border whitespace-nowrap ${barter.qualityBadge}`}>{barter.qualityLabel}</span>
                         {/* Contacted badge desktop */}
                         {decision?.contactedAt && (
                           <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full border ${
@@ -2191,7 +2191,7 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
                       <div className="space-y-1 flex-1">
                         <div className="flex items-center justify-between flex-wrap gap-1">
                           <span className="font-bold text-foreground">Paket: {barter.packageOffered}</span>
-                          {barter.qualityBadge}
+                          <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full border whitespace-nowrap ${barter.qualityBadge}`}>{barter.qualityLabel}</span>
                         </div>
                         <span className="text-foreground-secondary leading-relaxed block">{barter.reason}</span>
                         {barter.negotiationNote && (
@@ -2515,7 +2515,7 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
                             <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${barter.badgeClass}`}>
                               {barter.tierLabel}
                             </span>
-                            {barter.qualityBadge}
+                            <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full border whitespace-nowrap ${barter.qualityBadge}`}>{barter.qualityLabel}</span>
                           </div>
                           <div className="text-[10px] font-semibold text-foreground-secondary mt-1">
                             Paket: {barter.packageOffered}
