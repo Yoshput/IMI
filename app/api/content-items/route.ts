@@ -47,6 +47,9 @@ export async function POST(req: NextRequest) {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             urls: [
+              "https://www.instagram.com/p/DeD1caAFTLt/",
+              "https://www.instagram.com/p/Dd6NUqNCaGK/",
+              "https://www.instagram.com/p/Dd3pyGtibMB/",
               "https://www.instagram.com/p/Dd02jIAj2jm/",
               "https://www.instagram.com/p/DdyW-wbj6aC/",
               "https://www.instagram.com/p/Ddv6HAxj1KY/",

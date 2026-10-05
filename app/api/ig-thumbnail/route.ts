@@ -71,10 +71,10 @@ export async function GET(request: NextRequest) {
   } else if (shortcode === "BatikDaySale2026") {
     const filePath = path.join(process.cwd(), "public", "covers", "carousel-batik-day.png");
     if (fs.existsSync(filePath)) sourceBuffer = fs.readFileSync(filePath);
-  } else if (shortcode === "KacamataMiring2026") {
+  } else if (shortcode === "KacamataMiring2026" || shortcode === "Dd6NUqNCaGK" || shortcode === "Dd6NuqNCAgK") {
     const filePath = path.join(process.cwd(), "public", "covers", "carousel-kacamata-miring.png");
     if (fs.existsSync(filePath)) sourceBuffer = fs.readFileSync(filePath);
-  } else if (shortcode === "Warasnt5Penyebab") {
+  } else if (shortcode === "Warasnt5Penyebab" || shortcode === "Dd3pyGtibMB") {
     const filePath = path.join(process.cwd(), "public", "covers", "carousel-warasnt.png");
     if (fs.existsSync(filePath)) sourceBuffer = fs.readFileSync(filePath);
   }
