@@ -358,7 +358,7 @@ export const AppleMediaSheet: React.FC<AppleMediaSheetProps> = ({
             </div>
 
             {/* Metrics Breakdown Apple Style Chips */}
-            <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 pt-1">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
               <div className="p-3 rounded-[20px] bg-surface-secondary border border-border/80 text-center">
                 <span className="text-[10px] uppercase font-bold text-foreground-muted block">
                   Reach / Views
@@ -391,16 +391,7 @@ export const AppleMediaSheet: React.FC<AppleMediaSheetProps> = ({
                   Shares
                 </span>
                 <span className="text-base font-bold text-foreground mt-0.5 block tabular-nums">
-                  {formatNumber(item.shares || 0)}
-                </span>
-              </div>
-
-              <div className="p-3 rounded-[20px] bg-surface-secondary border border-border/80 text-center">
-                <span className="text-[10px] uppercase font-bold text-foreground-muted block">
-                  Saves
-                </span>
-                <span className="text-base font-bold text-brand mt-0.5 block tabular-nums">
-                  {formatNumber(item.saves || 0)}
+                  {item.shares ? formatNumber(item.shares) : "—"}
                 </span>
               </div>
             </div>

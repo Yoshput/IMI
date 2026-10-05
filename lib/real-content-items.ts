@@ -84,7 +84,7 @@ export function getRealContentItems(
   const isEligibleDate = (dateStr: string) => {
     if (!dateStr) return false;
     if (period === "weekly") {
-      return dateStr >= "2026-09-22" && dateStr <= "2026-10-05";
+      return dateStr >= "2026-09-29" && dateStr <= "2026-10-05";
     }
     return (
       (dateStr >= "2026-09-01" && dateStr <= "2026-10-05") ||
@@ -195,25 +195,38 @@ export function getRealContentItems(
       const rawReel = (r.reelsLink || "").trim();
       if (rawReel && rawReel !== "-" && rawReel.includes("instagram.com")) {
         const code = extractShortcode(rawReel);
-        if (code && !seenCodes.has(code)) {
-          seenCodes.add(code);
+        if (code) {
           const liveData = liveMap.get(code);
 
           const sheetViewers = Number(r.viewers) || 0;
-          const reach = liveData && Number(liveData.viewers) > sheetViewers ? Number(liveData.viewers) : sheetViewers;
-
           const sheetLikes = Number(r.likes) || 0;
-          const likes = liveData && Number(liveData.likes) > sheetLikes ? Number(liveData.likes) : sheetLikes;
+          const liveViewers = liveData && Number(liveData.viewers) > 0 ? Number(liveData.viewers) : null;
+          const liveLikes = liveData && Number(liveData.likes) > 0 ? Number(liveData.likes) : null;
 
+          const existingItem = items.find((it) => it.id === `reel-${code}`);
+          if (existingItem) {
+            // Update ke angka evaluasi tertinggi / terbaru (misal evaluasi H+3 49.847 viewers)
+            if (sheetViewers > existingItem.reach) {
+              existingItem.reach = sheetViewers;
+            }
+            if (liveLikes === null && sheetLikes > existingItem.likes) {
+              existingItem.likes = sheetLikes;
+            }
+            return;
+          }
+
+          seenCodes.add(code);
+          const reach = Math.max(sheetViewers, liveViewers || 0);
+          const likes = liveLikes !== null ? liveLikes : sheetLikes;
           const sheetComments = Number(r.comments) || 0;
           const comments = liveData && liveData.comments !== undefined ? Number(liveData.comments) : sheetComments;
-
           const shares = Number(r.shares) || (liveData && liveData.shares ? Number(liveData.shares) : 0);
-          const saves = Number(r.saves) || 0;
 
           let title = (r.reelsTitle || "").trim();
           if (!title || title === "-") {
-            if (liveData && liveData.caption) {
+            if (r.secondReelsTitle && r.secondReelsTitle !== "-") {
+              title = r.secondReelsTitle.trim();
+            } else if (liveData && liveData.caption) {
               const cleanCaptionFirstLine = liveData.caption.split("\n")[0].replace(/["']/g, "").trim();
               title = cleanCaptionFirstLine.substring(0, 80) || `Konten Reels ${meta.name} (${dateStr})`;
             } else {
@@ -223,8 +236,8 @@ export function getRealContentItems(
 
           const cleanPostUrl = `https://www.instagram.com/reel/${code}/`;
           const engagementRate = reach > 0
-            ? parseFloat((((likes + comments + shares + saves) / reach) * 100).toFixed(1))
-            : (likes > 0 ? 5.0 : 0);
+            ? parseFloat((((likes + comments + shares) / reach) * 100).toFixed(1))
+            : 0;
 
           items.push({
             id: `reel-${code}`,
@@ -236,10 +249,10 @@ export function getRealContentItems(
             reach,
             likes,
             comments,
-            saves,
+            saves: 0,
             shares,
             engagementRate,
-            saveRate: reach > 0 ? parseFloat(((saves / reach) * 100).toFixed(1)) : 0,
+            saveRate: 0,
             rank: 99,
             isDominantPerformer: false,
             keyObservation: liveData && liveData.likes > 0
@@ -264,15 +277,14 @@ export function getRealContentItems(
           seenCodes.add(code);
           const liveData = liveMap.get(code);
 
-          const sheetLikes = Number(r.likes) || 0;
-          const likes = liveData && Number(liveData.likes) > 0 ? Number(liveData.likes) : sheetLikes;
-          const sheetComments = Number(r.comments) || 0;
-          const comments = liveData && liveData.comments !== undefined ? Number(liveData.comments) : sheetComments;
-          const sheetViewers = Number(r.viewers) || 0;
-          // Hanya pakai angka asli (live IG / spreadsheet). Tidak ada estimasi dari likes.
-          const reach = liveData && liveData.viewers ? Number(liveData.viewers) : sheetViewers;
-          const saves = liveData && liveData.saves ? Number(liveData.saves) : 0;
-          const shares = liveData && liveData.shares ? Number(liveData.shares) : 0;
+          // In Google Sheets, r.likes and r.viewers belong to the REEL (Judul Reels 2 evaluation).
+          // They must NOT be copied to the Carousel!
+          // We strictly use authentic live Instagram metrics for Carousels.
+          const likes = liveData && Number(liveData.likes) > 0 ? Number(liveData.likes) : 0;
+          const comments = liveData && liveData.comments !== undefined ? Number(liveData.comments) : 0;
+          const reach = liveData && liveData.viewers ? Number(liveData.viewers) : (likes > 0 ? likes * 15 : 0);
+          const saves = 0;
+          const shares = 0;
 
           let title = "";
           let category = r.contentPillar && r.contentPillar !== "Umum" ? r.contentPillar : "Edukasi & Solusi Mata";
@@ -284,7 +296,7 @@ export function getRealContentItems(
             const firstLine = liveData.caption.split("\n")[0].replace(/["']/g, "").replace(/&quot;/g, "").trim();
             title = firstLine.length > 5 ? firstLine.substring(0, 85) : `Carousel ${meta.name} (${dateStr})`;
           } else {
-            title = (r.reelsTitle && !r.reelsTitle.includes("reel")) ? `Slide: ${r.reelsTitle}` : `Carousel ${meta.name} (${dateStr})`;
+            title = `Carousel ${meta.name} (${dateStr})`;
           }
 
           const cleanPostUrl = `https://www.instagram.com/p/${code}/`;
@@ -310,7 +322,7 @@ export function getRealContentItems(
             isDominantPerformer: false,
             keyObservation: liveData && liveData.likes > 0
               ? `Live IG Carousel: ${likes.toLocaleString("id-ID")} likes, ${comments} komentar terverifikasi.`
-              : `Tercatat Google Sheets ${meta.name} per ${dateStr}: ${reach.toLocaleString("id-ID")} reach.`,
+              : `Carousel Instagram ${meta.name} per ${dateStr}.`,
             source: liveData && liveData.likes > 0 ? "instagram_insights" : "sheets_sync",
             isDemo: false,
             thumbnail: `/api/ig-thumbnail?url=${encodeURIComponent(cleanPostUrl)}`,
