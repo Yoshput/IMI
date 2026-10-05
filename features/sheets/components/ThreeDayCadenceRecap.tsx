@@ -49,8 +49,47 @@ export const ThreeDayCadenceRecap: React.FC<ThreeDayCadenceRecapProps> = ({
   const [isPresentationMode, setIsPresentationMode] = useState(false);
   const [selectedMediaItem, setSelectedMediaItem] = useState<AppleMediaItem | null>(null);
 
-  // Cycle definitions up to October 2026 with auto-expansion
+  // Helper functions for dynamic rolling date calculation
+  const toIsoDate = (d: Date) => {
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${y}-${m}-${day}`;
+  };
+
+  const formatShortIndo = (isoStr: string) => {
+    if (!isoStr) return "";
+    const parts = isoStr.split("-");
+    if (parts.length < 3) return isoStr;
+    const day = parseInt(parts[2], 10);
+    const mIdx = parseInt(parts[1], 10) - 1;
+    const months = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
+    return `${day} ${months[mIdx] || ""}`;
+  };
+
+  // Cycle definitions up to October 2026 with auto-expansion and dynamic rolling 7 days
   const cycles = useMemo(() => {
+    // Determine dynamic anchor date
+    const systemToday = toIsoDate(new Date());
+    let maxDataDate = "2026-10-05";
+
+    (storyData || []).forEach((s) => {
+      if (s.reportDate && s.reportDate > maxDataDate) maxDataDate = s.reportDate;
+    });
+    Object.values(branchReels || {}).forEach((list) => {
+      (list || []).forEach((r) => {
+        const d = r.uploadDate || r.reportDate;
+        if (d && d > maxDataDate && d.startsWith("2026")) maxDataDate = d;
+      });
+    });
+
+    const anchorDate = systemToday >= maxDataDate ? systemToday : maxDataDate;
+    const anchorObj = new Date(anchorDate);
+    const rolling7StartObj = new Date(anchorObj.getTime() - 6 * 24 * 60 * 60 * 1000);
+    const rolling7StartIso = toIsoDate(rolling7StartObj);
+
+    const isAfterMeetingCycle7 = anchorDate >= "2026-10-06";
+
     const map: Record<
       string,
       {
@@ -127,24 +166,33 @@ export const ThreeDayCadenceRecap: React.FC<ThreeDayCadenceRecapProps> = ({
       },
       "cycle-7": {
         id: "cycle-7",
-        name: "Siklus 7 (29 Sep – 5 Okt) — Rapat Besok",
-        periodLabel: "29 September s/d 5 Oktober 2026 (Live H-1 Rapat)",
-        status: "Pemantauan Berjalan (Siap untuk Rapat Besok 6 Okt)",
+        name: isAfterMeetingCycle7
+          ? "Siklus 7 (29 Sep – 5 Okt) · Selesai Rapat"
+          : "Siklus 7 (29 Sep – 5 Okt) — Rapat Besok",
+        periodLabel: isAfterMeetingCycle7
+          ? "29 September s/d 5 Oktober 2026 (Rapat 6 Okt)"
+          : "29 September s/d 5 Oktober 2026 (Live H-1 Rapat)",
+        status: isAfterMeetingCycle7
+          ? "Selesai Evaluasi Rapat 6 Okt"
+          : "Pemantauan Berjalan (Siap untuk Rapat Besok 6 Okt)",
         startDate: "2026-09-29",
         endDate: "2026-10-05",
         isLiveInstagram: true,
-        description: "Evaluasi berjalan 7 hari penuh (29 Sep – 5 Okt 2026) untuk persiapan rapat evaluasi mingguan besok Selasa, 6 Oktober 2026.",
-        badge: "RAPAT BESOK (6 OKT)",
+        description: isAfterMeetingCycle7
+          ? "Evaluasi 7 hari penuh (29 Sep – 5 Okt 2026) untuk rapat evaluasi mingguan Selasa, 6 Oktober 2026."
+          : "Evaluasi berjalan 7 hari penuh (29 Sep – 5 Okt 2026) untuk persiapan rapat evaluasi mingguan besok Selasa, 6 Oktober 2026.",
+        badge: isAfterMeetingCycle7 ? undefined : "RAPAT BESOK (6 OKT)",
       },
       "full-week": {
         id: "full-week",
-        name: "1 Minggu Terakhir (29 Sep – 5 Okt) · Live IG",
-        periodLabel: "29 Sep s/d 5 Oktober 2026 (7 Hari Terakhir)",
-        status: "Live Sync Instagram + Sheet H+3",
-        startDate: "2026-09-29",
-        endDate: "2026-10-05",
+        name: `1 Minggu Terakhir (${formatShortIndo(rolling7StartIso)} – ${formatShortIndo(anchorDate)}) · Rolling`,
+        periodLabel: `${formatShortIndo(rolling7StartIso)} s/d ${formatShortIndo(anchorDate)} (Rolling 7 Hari Realtime)`,
+        status: "Rolling 7 Hari Realtime (Auto-Update Harian)",
+        startDate: rolling7StartIso,
+        endDate: anchorDate,
         isLiveInstagram: true,
-        description: "Performa 7 hari terakhir dengan data live Instagram langsung dari crawl resmi dan inputan spreadsheet.",
+        description: `Jendela pemantauan rolling 7 hari terakhir (${rolling7StartIso} s/d ${anchorDate}) yang otomatis bergeser maju setiap hari seiring waktu dan sinkronisasi data spreadsheet tanpa perlu diubah manual.`,
+        badge: "AUTO-ROLLING 7 HARI",
       },
       "full-month": {
         id: "full-month",
@@ -152,35 +200,45 @@ export const ThreeDayCadenceRecap: React.FC<ThreeDayCadenceRecapProps> = ({
         periodLabel: "1 September s/d 5 Oktober 2026 (Bulan Penuh)",
         status: "Konsolidasi Bulanan Resmi Rapat",
         startDate: "2026-09-01",
-        endDate: "2026-10-05",
+        endDate: anchorDate,
         isLiveInstagram: true,
         description: "Rangkuman komprehensif performa 1 bulan penuh lintas 5 cabang (4 ISY + 1 Lunar).",
       },
     };
 
-    // Auto-detect future cycles beyond 2026-10-05 from spreadsheet rows
-    let maxDate = "2026-10-05";
-    (storyData || []).forEach((s) => {
-      if (s.reportDate && s.reportDate > maxDate) maxDate = s.reportDate;
-    });
-    Object.values(branchReels || {}).forEach((list) => {
-      (list || []).forEach((r) => {
-        const d = r.uploadDate || r.reportDate;
-        if (d && d > maxDate && d.startsWith("2026")) maxDate = d;
-      });
-    });
+    // Siklus 8: 6 Okt - 12 Okt (Rapat 13 Okt)
+    map["cycle-8"] = {
+      id: "cycle-8",
+      name: anchorDate >= "2026-10-13"
+        ? "Siklus 8 (6–12 Okt) · Selesai Rapat"
+        : anchorDate >= "2026-10-06"
+        ? "Siklus 8 (6–12 Okt) — Rapat 13 Okt"
+        : "Siklus 8 (6–12 Okt) — Berjalan",
+      periodLabel: "6 s/d 12 Oktober 2026",
+      status: anchorDate >= "2026-10-13"
+        ? "Selesai Evaluasi Rapat 13 Okt"
+        : anchorDate >= "2026-10-06"
+        ? "Siklus Berjalan (Rapat Selasa 13 Okt)"
+        : "Siklus Rapat Berikutnya",
+      startDate: "2026-10-06",
+      endDate: anchorDate >= "2026-10-12" ? "2026-10-12" : (anchorDate >= "2026-10-06" ? anchorDate : "2026-10-12"),
+      isLiveInstagram: true,
+      description: "Siklus evaluasi mingguan pekan berjalan (6 s/d 12 Oktober 2026) untuk rapat evaluasi hari Selasa, 13 Oktober 2026.",
+      badge: anchorDate >= "2026-10-06" && anchorDate < "2026-10-13" ? "SIKLUS AKTIF" : undefined,
+    };
 
-    if (maxDate > "2026-10-05") {
-      map["cycle-8"] = {
-        id: "cycle-8",
-        name: "Siklus 8 (6–12 Okt) — Berjalan",
-        periodLabel: "6 s/d 12 Oktober 2026",
-        status: "Pemantauan Berjalan",
-        startDate: "2026-10-06",
-        endDate: maxDate,
+    // Siklus 9 if date advances beyond 12 Okt
+    if (anchorDate >= "2026-10-13") {
+      map["cycle-9"] = {
+        id: "cycle-9",
+        name: "Siklus 9 (13–19 Okt) — Rapat 20 Okt",
+        periodLabel: "13 s/d 19 Oktober 2026",
+        status: "Siklus Berjalan (Rapat Selasa 20 Okt)",
+        startDate: "2026-10-13",
+        endDate: anchorDate >= "2026-10-19" ? "2026-10-19" : anchorDate,
         isLiveInstagram: true,
-        description: `Siklus berjalan otomatis diperluas dari spreadsheet hingga ${maxDate}.`,
-        badge: "TERBARU",
+        description: "Siklus evaluasi mingguan pekan ke-3 Oktober 2026 untuk rapat evaluasi hari Selasa, 20 Oktober 2026.",
+        badge: "SIKLUS AKTIF",
       };
     }
 
@@ -230,13 +288,13 @@ export const ThreeDayCadenceRecap: React.FC<ThreeDayCadenceRecapProps> = ({
       dmInquiriesList.push({ topic, count });
     });
 
-  // Filter Reels from all branches
-  const reelsByBranch: Record<string, any[]> = {
-    PWT: [],
-    PBG: [],
-    TGL: [],
-    CLP: [],
-    WNS: [],
+  // Filter and Deduplicate Reels from all branches
+  const branchMap: Record<string, Map<string, any>> = {
+    PWT: new Map(),
+    PBG: new Map(),
+    TGL: new Map(),
+    CLP: new Map(),
+    WNS: new Map(),
   };
 
   const branchKeyMap: Record<string, string> = {
@@ -262,20 +320,52 @@ export const ThreeDayCadenceRecap: React.FC<ThreeDayCadenceRecapProps> = ({
         const d = r.uploadDate || r.reportDate;
         if (!r.isDayOff && r.reelsTitle && d && d >= activeCycle.startDate && d <= activeCycle.endDate) {
           const code = extractShortcode(r.reelsLink);
-          // Strictly use spreadsheet evaluation metrics (H+3 / sheet report)
+          const normTitle = (r.reelsTitle || "").toLowerCase().trim().replace(/\s+/g, " ");
+          const dedupKey = code ? `sc_${code}` : `title_${normTitle}`;
+
           const viewers = Number(r.viewers || 0);
           const likes = Number(r.likes || 0);
 
-          reelsByBranch[key].push({
-            ...r,
-            viewers,
-            likes,
-            isLiveSync: false,
-          });
+          if (branchMap[key].has(dedupKey)) {
+            const existing = branchMap[key].get(dedupKey);
+            const existingViewers = Number(existing.viewers || 0);
+            const existingLikes = Number(existing.likes || 0);
+
+            // Keep record with higher viewers or latest evaluation date
+            const isBetter =
+              viewers > existingViewers ||
+              (viewers === existingViewers && likes > existingLikes) ||
+              (viewers === existingViewers && (r.reportDate || "") >= (existing.reportDate || ""));
+
+            if (isBetter) {
+              branchMap[key].set(dedupKey, {
+                ...existing,
+                ...r,
+                viewers: Math.max(existingViewers, viewers),
+                likes: Math.max(existingLikes, likes),
+                isLiveSync: false,
+              });
+            }
+          } else {
+            branchMap[key].set(dedupKey, {
+              ...r,
+              viewers,
+              likes,
+              isLiveSync: false,
+            });
+          }
         }
       });
     }
   });
+
+  const reelsByBranch: Record<string, any[]> = {
+    PWT: Array.from(branchMap.PWT.values()),
+    PBG: Array.from(branchMap.PBG.values()),
+    TGL: Array.from(branchMap.TGL.values()),
+    CLP: Array.from(branchMap.CLP.values()),
+    WNS: Array.from(branchMap.WNS.values()),
+  };
 
   const totalReelsUploadedInCycle = Object.values(reelsByBranch).reduce((acc, list) => acc + list.length, 0);
 
