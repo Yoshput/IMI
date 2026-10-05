@@ -4,21 +4,52 @@
 
 :root {
   --bg-primary: #F5F5F7;
-  --bg-surface: #FFFFFF;
-  --bg-secondary: #FAFAFA;
-  --text-primary: #111111;
-  --text-secondary: #6E6E73;
-  --text-muted: #86868B;
-  --border-color: rgba(0, 0, 0, 0.08);
-  --border-strong: rgba(0, 0, 0, 0.16);
-  --brand-primary: #1E3A34;
-  --brand-accent: #C88A35;
+  --bg-surface: 255 255 255;
+  --bg-secondary: 250 250 250;
+  --bg-subtle: 240 240 242;
+  --text-primary: 17 17 17;
+  --text-secondary: 82 82 91;
+  --text-muted: 113 113 122;
+  --border-color: 0 0 0;
+  --border-alpha: 0.08;
+  --brand-primary: 30 58 52;
+  --brand-light: 234 239 234;
+  --brand-hover: 22 43 39;
+  --brand-accent: 200 138 53;
+  --brand-accent-light: 248 241 231;
+  --status-success-bg: #EDF7F1;
+  --status-warning-bg: #FEF7EC;
+  --status-error-bg: #FEF2F2;
+}
+
+html.dark {
+  --bg-primary: #0B0D13;
+  --bg-surface: 21 24 33;
+  --bg-secondary: 30 34 45;
+  --bg-subtle: 39 44 58;
+  --text-primary: 243 244 246;
+  --text-secondary: 161 161 170;
+  --text-muted: 113 113 122;
+  --border-color: 255 255 255;
+  --border-alpha: 0.12;
+  --brand-primary: 45 90 80;
+  --brand-light: 35 55 50;
+  --brand-hover: 59 114 102;
+  --brand-accent: 229 169 85;
+  --brand-accent-light: 50 40 25;
+  --status-success-bg: rgba(31, 122, 77, 0.2);
+  --status-warning-bg: rgba(178, 94, 9, 0.2);
+  --status-error-bg: rgba(192, 38, 38, 0.2);
+}
+
+html {
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 html,
 body {
   background-color: var(--bg-primary);
-  color: var(--text-primary);
+  color: rgb(var(--text-primary));
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -37,7 +68,7 @@ body {
   font-weight: 700;
   line-height: 1.05;
   letter-spacing: -0.035em;
-  color: #111111;
+  color: rgb(var(--text-primary));
 }
 
 .display-large {
@@ -45,7 +76,7 @@ body {
   font-weight: 700;
   line-height: 1.15;
   letter-spacing: -0.025em;
-  color: #111111;
+  color: rgb(var(--text-primary));
 }
 
 .heading-page {
@@ -53,7 +84,7 @@ body {
   font-weight: 650;
   line-height: 1.2;
   letter-spacing: -0.02em;
-  color: #111111;
+  color: rgb(var(--text-primary));
 }
 
 .heading-section {
@@ -61,26 +92,26 @@ body {
   font-weight: 600;
   line-height: 1.3;
   letter-spacing: -0.015em;
-  color: #111111;
+  color: rgb(var(--text-primary));
 }
 
 .text-body {
   font-size: 0.9375rem;
   line-height: 1.5;
-  color: #111111;
+  color: rgb(var(--text-primary));
 }
 
 .text-secondary-body {
   font-size: 0.875rem;
   line-height: 1.45;
-  color: #6E6E73;
+  color: rgb(var(--text-secondary));
 }
 
 .text-caption {
   font-size: 0.75rem;
   line-height: 1.4;
   letter-spacing: 0.02em;
-  color: #86868B;
+  color: rgb(var(--text-muted));
 }
 
 /* Skeleton animation for loading states (DESIGN.md §31) */
@@ -105,10 +136,23 @@ body {
   border-radius: 6px;
 }
 
+html.dark .skeleton {
+  background: linear-gradient(
+    90deg,
+    #1E222D 25%,
+    #272D3B 50%,
+    #1E222D 75%
+  );
+  background-size: 200% 100%;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .skeleton {
     animation: none;
     background: #ECECEE;
+  }
+  html.dark .skeleton {
+    background: #1E222D;
   }
 }
 
@@ -137,11 +181,11 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.12);
+  background: rgba(120, 120, 128, 0.28);
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.22);
+  background: rgba(120, 120, 128, 0.48);
 }
 
 /* ---------- Print: Proposal Sponsorship (A4) ---------- */

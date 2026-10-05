@@ -17,6 +17,7 @@ import {
   Lock,
   Users,
 } from "lucide-react";
+import { ThemeToggle } from "@/components/shared/ThemeToggle";
 
 interface NavItem {
   name: string;
@@ -60,7 +61,13 @@ export const AppNav: React.FC = () => {
             <img
               src="/brand/logo-isy-dark.png"
               alt="Optik I See You"
-              className="h-7 sm:h-8 w-auto object-contain transition-opacity group-hover:opacity-90"
+              className="h-7 sm:h-8 w-auto object-contain transition-opacity group-hover:opacity-90 dark:hidden"
+            />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/brand/logo-isy-white.png"
+              alt="Optik I See You"
+              className="h-7 sm:h-8 w-auto object-contain transition-opacity group-hover:opacity-90 hidden dark:block"
             />
             <div className="hidden sm:block border-l border-border pl-2.5">
               <div className="flex items-center gap-1.5">
@@ -136,8 +143,14 @@ export const AppNav: React.FC = () => {
             </Link>
           </nav>
 
-          {/* Right Header Area: Brand Tagline Mark */}
-          <div className="flex items-center gap-3 sm:gap-4">
+          {/* Right Header Area: Theme Toggle & Brand Tagline */}
+          <div className="flex items-center gap-2 sm:gap-3">
+            {/* Theme Toggle Pill on sm+ and Icon on mobile */}
+            <ThemeToggle variant="pill" className="hidden sm:inline-flex" />
+            <ThemeToggle variant="icon" className="sm:hidden" />
+
+            <div className="h-5 w-px bg-border hidden lg:block" />
+
             <div className="hidden lg:block text-right">
               <span className="text-xs font-semibold text-foreground block">
                 Week 37 · 2026
@@ -147,14 +160,20 @@ export const AppNav: React.FC = () => {
               </span>
             </div>
 
-            <div className="h-5 w-px bg-border hidden lg:block" />
+            <div className="h-5 w-px bg-border hidden sm:block" />
 
             <div className="flex items-center">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="/brand/logo-for-every-you.png"
                 alt="for every you"
-                className="h-5 sm:h-5.5 w-auto object-contain opacity-85 hover:opacity-100 transition-opacity"
+                className="h-5 sm:h-5.5 w-auto object-contain opacity-85 hover:opacity-100 transition-opacity dark:hidden"
+              />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/brand/logo-for-every-you-white.png"
+                alt="for every you"
+                className="h-5 sm:h-5.5 w-auto object-contain opacity-85 hover:opacity-100 transition-opacity hidden dark:block"
               />
             </div>
           </div>
