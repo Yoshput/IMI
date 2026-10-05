@@ -689,6 +689,18 @@ Have a nicee dayy ya kaa! 🌸✨`;
                       <span className="text-[9px] px-1.5 py-0.2 rounded bg-surface-secondary text-foreground-muted border border-border">
                         {kol.platform}
                       </span>
+                      {kol.tiktokUrl && (
+                        <a
+                          href={kol.tiktokUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-[10px] text-pink-600 hover:text-pink-700 font-semibold inline-flex items-center gap-1 bg-pink-500/10 px-1.5 py-0.2 rounded border border-pink-500/20 hover:bg-pink-500/20 transition-colors"
+                          title="Buka TikTok Profil Langsung"
+                        >
+                          <span>TikTok</span>
+                          <ExternalLink className="w-2 h-2 opacity-80" />
+                        </a>
+                      )}
                       {kol.videoUrl && (
                         <a
                           href={kol.videoUrl}
