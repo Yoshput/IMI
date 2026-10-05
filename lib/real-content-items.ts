@@ -107,8 +107,7 @@ export function getRealContentItems(
       reach: 2450,
       likes: 29,
       comments: 0,
-      saves: 18,
-      shares: 6,
+      saves: 0,      shares: 0,
       branchName: "Purwokerto (Pusat)",
       branchKey: "pwt",
       pic: "Ilya & Nuha",
@@ -125,8 +124,7 @@ export function getRealContentItems(
       reach: 3120,
       likes: 38,
       comments: 2,
-      saves: 26,
-      shares: 9,
+      saves: 0,      shares: 0,
       branchName: "Purwokerto (Pusat)",
       branchKey: "pwt",
       pic: "Ilya",
@@ -143,8 +141,7 @@ export function getRealContentItems(
       reach: 3890,
       likes: 47,
       comments: 3,
-      saves: 34,
-      shares: 12,
+      saves: 0,      shares: 0,
       branchName: "Purwokerto (Pusat)",
       branchKey: "pwt",
       pic: "Ilya",
@@ -272,9 +269,10 @@ export function getRealContentItems(
           const sheetComments = Number(r.comments) || 0;
           const comments = liveData && liveData.comments !== undefined ? Number(liveData.comments) : sheetComments;
           const sheetViewers = Number(r.viewers) || 0;
-          const reach = liveData && liveData.viewers ? Number(liveData.viewers) : (sheetViewers > 0 ? sheetViewers : (likes > 0 ? likes * 25 : 1200));
-          const saves = liveData && liveData.saves ? Number(liveData.saves) : (likes > 0 ? Math.round(likes * 0.35) : 0);
-          const shares = liveData && liveData.shares ? Number(liveData.shares) : (likes > 0 ? Math.round(likes * 0.15) : 0);
+          // Hanya pakai angka asli (live IG / spreadsheet). Tidak ada estimasi dari likes.
+          const reach = liveData && liveData.viewers ? Number(liveData.viewers) : sheetViewers;
+          const saves = liveData && liveData.saves ? Number(liveData.saves) : 0;
+          const shares = liveData && liveData.shares ? Number(liveData.shares) : 0;
 
           let title = "";
           let category = r.contentPillar && r.contentPillar !== "Umum" ? r.contentPillar : "Edukasi & Solusi Mata";
@@ -292,7 +290,7 @@ export function getRealContentItems(
           const cleanPostUrl = `https://www.instagram.com/p/${code}/`;
           const engagementRate = reach > 0
             ? parseFloat((((likes + comments + shares + saves) / reach) * 100).toFixed(1))
-            : (likes > 0 ? 5.0 : 0);
+            : 0;
 
           items.push({
             id: `carousel-${code}`,

@@ -143,3 +143,24 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(0, 0, 0, 0.22);
 }
+
+/* ---------- Print: Proposal Sponsorship (A4) ---------- */
+@media print {
+  @page { size: A4; margin: 0; }
+  html, body { background: #ffffff !important; }
+  body > header, body > footer, .no-print { display: none !important; }
+  body > main { max-width: none !important; padding: 0 !important; margin: 0 !important; }
+  .proposal-doc { overflow: visible !important; padding: 0 !important; }
+  .proposal-page {
+    width: 210mm !important;
+    min-height: 297mm !important;
+    max-width: none !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    page-break-after: always;
+    break-after: page;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .proposal-page:last-child { page-break-after: auto; break-after: auto; }
+}

@@ -309,15 +309,24 @@ export const PengajuanHubView: React.FC = () => {
                 </p>
               </div>
             </div>
-            <a
-              href={`https://wa.me/62${MARKETING_STAFF_PHONE.replace(/^0/, "")}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs whitespace-nowrap shadow-xs transition-colors shrink-0"
-            >
-              <MessageSquare className="w-3.5 h-3.5" />
-              <span>Chat Mas Yoshput WA</span>
-            </a>
+            <div className="flex flex-wrap items-center gap-2 shrink-0">
+              <a
+                href="/proposal-sponsor"
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-[#800020] hover:bg-[#600018] text-white font-bold text-xs whitespace-nowrap shadow-xs transition-colors"
+              >
+                <FileText className="w-3.5 h-3.5" />
+                <span>Proposal &quot;Buka Class Konten&quot; (PDF)</span>
+              </a>
+              <a
+                href={`https://wa.me/62${MARKETING_STAFF_PHONE.replace(/^0/, "")}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs whitespace-nowrap shadow-xs transition-colors"
+              >
+                <MessageSquare className="w-3.5 h-3.5" />
+                <span>Chat Mas Yoshput WA</span>
+              </a>
+            </div>
           </div>
 
           {/* Grid: Form Input (Left) & Live Submissions List (Right) */}

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ContentItem } from "@/types";
 import { formatNumber } from "@/lib/utils";
-import { Eye, Bookmark, MessageSquare, ThumbsUp, Layers, Video, Image as ImageIcon, ExternalLink, ZoomIn } from "lucide-react";
+import { Eye, MessageSquare, ThumbsUp, Layers, Video, Image as ImageIcon, ExternalLink, ZoomIn } from "lucide-react";
 import { ProvenanceBadge } from "@/components/shared/ProvenanceBadge";
 import { AppleMediaSheet } from "@/components/shared/AppleMediaSheet";
 
@@ -34,8 +34,6 @@ export const RankedContentTable: React.FC<RankedContentTableProps> = ({ items })
               <th className="py-3.5 px-4">Konten & Cover Instagram</th>
               <th className="py-3.5 px-3">Format</th>
               <th className="py-3.5 px-3 text-right">Reach</th>
-              <th className="py-3.5 px-3 text-right">Saves</th>
-              <th className="py-3.5 px-3 text-right">Save %</th>
               <th className="py-3.5 px-3 text-right">Interaksi</th>
               <th className="py-3.5 px-4">Observasi Analis</th>
             </tr>
@@ -131,30 +129,7 @@ export const RankedContentTable: React.FC<RankedContentTableProps> = ({ items })
                   </div>
                 </td>
 
-                {/* Saves */}
-                <td className="py-4 px-3 text-right font-medium text-foreground whitespace-nowrap">
-                  <div className="flex items-center justify-end gap-1">
-                    <Bookmark className="w-3 h-3 text-foreground-muted" />
-                    <span>{item.saves > 0 ? formatNumber(item.saves) : "—"}</span>
-                  </div>
-                </td>
 
-                {/* Save Rate */}
-                <td className="py-4 px-3 text-right whitespace-nowrap">
-                  {item.saves > 0 ? (
-                    <span
-                      className={`font-semibold px-1.5 py-0.5 rounded text-[11px] ${
-                        item.saveRate >= 4.0
-                          ? "bg-status-successBg text-status-success"
-                          : "bg-surface-secondary text-foreground-muted"
-                      }`}
-                    >
-                      {item.saveRate}%
-                    </span>
-                  ) : (
-                    <span className="text-foreground-muted text-[11px]">—</span>
-                  )}
-                </td>
 
                 {/* Interactions breakdown */}
                 <td className="py-4 px-3 text-right text-foreground-secondary whitespace-nowrap">

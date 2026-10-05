@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ContentItem } from "@/types";
 import { formatNumber } from "@/lib/utils";
-import { Trophy, Bookmark, MessageCircle, Eye, Share2, TrendingUp, Heart, ZoomIn } from "lucide-react";
+import { Trophy, MessageCircle, Eye, Share2, TrendingUp, Heart, ZoomIn } from "lucide-react";
 import { ProvenanceBadge } from "@/components/shared/ProvenanceBadge";
 import { AppleMediaSheet } from "@/components/shared/AppleMediaSheet";
 
@@ -51,8 +51,8 @@ export const DominantPerformer: React.FC<DominantPerformerProps> = ({ item }) =>
                 ? "Carousel Instagram"
                 : "Reels Instagram"}
             </span>
-            <span className="text-xs font-bold text-amber-300 px-2 py-0.5 rounded bg-black/50 backdrop-blur-sm">
-              Save Rate {item.saveRate}%
+            <span className="text-xs font-bold text-emerald-300 px-2 py-0.5 rounded bg-black/50 backdrop-blur-sm">
+              Top Performer
             </span>
           </div>
 
@@ -92,8 +92,8 @@ export const DominantPerformer: React.FC<DominantPerformerProps> = ({ item }) =>
             </p>
           </div>
 
-          {/* Metric Breakdown Grid (Dominant Performer has 5 Key Live Stats) */}
-          <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 py-4 border-y border-border">
+          {/* Metric Breakdown Grid */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 py-4 border-y border-border">
             <div className="p-3 rounded-control bg-surface-secondary">
               <div className="flex items-center gap-1.5 text-xs text-foreground-secondary mb-1">
                 <Eye className="w-3.5 h-3.5" />
@@ -143,19 +143,6 @@ export const DominantPerformer: React.FC<DominantPerformerProps> = ({ item }) =>
               </span>
               <span className="text-[10px] text-status-success font-semibold">
                 Dibagikan audiens
-              </span>
-            </div>
-
-            <div className="p-3 rounded-control bg-surface-secondary border border-border">
-              <div className="flex items-center gap-1.5 text-xs text-foreground-secondary mb-1">
-                <Bookmark className="w-3.5 h-3.5 text-amber-700" />
-                <span>Saves</span>
-              </div>
-              <span className="text-xl font-bold text-foreground block">
-                {item.saves > 0 ? formatNumber(item.saves) : "—"}
-              </span>
-              <span className="text-[10px] text-foreground-muted font-medium">
-                {item.saves > 0 ? `Save Rate ${item.saveRate}%` : "Data Privat IG"}
               </span>
             </div>
           </div>
