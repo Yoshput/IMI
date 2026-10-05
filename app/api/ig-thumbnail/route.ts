@@ -9,7 +9,7 @@ function extractShortcode(input: string): string | null {
   if (!input) return null;
   const match = input.match(/\/(?:p|reel|tv)\/([A-Za-z0-9_-]+)/);
   if (match && match[1]) return match[1];
-  if (/^[A-Za-z0-9_-]{8,15}$/.test(input.trim())) {
+  if (/^[A-Za-z0-9_-]{2,60}$/.test(input.trim())) {
     return input.trim();
   }
   return null;
@@ -26,7 +26,22 @@ export async function GET(request: NextRequest) {
   const shortcode = extractShortcode(rawUrl) || extractShortcode(rawCode);
 
   if (!shortcode) {
-    return new NextResponse("Invalid Instagram post URL or code", { status: 400 });
+    const svgFallback = `
+      <svg width="400" height="400" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+        <rect width="100%" height="100%" fill="#121820"/>
+        <circle cx="200" cy="180" r="50" fill="#202A36" stroke="#2DD4BF" stroke-width="3"/>
+        <path d="M185 165 L225 180 L185 195 Z" fill="#2DD4BF"/>
+        <text x="200" y="260" fill="#E2E8F0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="bold" text-anchor="middle">Instagram Cover</text>
+        <text x="200" y="282" fill="#94A3B8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" text-anchor="middle">Optik I See You</text>
+      </svg>
+    `.trim();
+    return new NextResponse(svgFallback, {
+      status: 200,
+      headers: {
+        "Content-Type": "image/svg+xml",
+        "Cache-Control": "public, max-age=3600",
+      },
+    });
   }
 
   const cacheKey = `${shortcode}-${tier}`;

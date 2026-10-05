@@ -40,6 +40,10 @@ export const DominantPerformer: React.FC<DominantPerformerProps> = ({ item }) =>
             src={item.thumbnail || "/covers/trend-dewasa-passwordnya.png"}
             alt={item.title}
             className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            onError={(e) => {
+              e.currentTarget.onerror = null;
+              e.currentTarget.src = "/covers/trend-dewasa-passwordnya.png";
+            }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/30" />
 

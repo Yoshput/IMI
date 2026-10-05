@@ -233,23 +233,9 @@ Link Akses Web: https://imi-puce.vercel.app/spreadsheet`;
                 : "bg-surface border border-border text-foreground-secondary hover:text-foreground"
             }`}
           >
-            <span>Rapat Hari Ini (22–28 Sep 2026)</span>
+            <span>Rapat Besok (29 Sep – 5 Okt 2026)</span>
             <span className="ml-1.5 text-[9px] uppercase px-1.5 py-0.2 rounded bg-emerald-600 text-white font-bold">
-              Aktual 29 Sep
-            </span>
-          </button>
-
-          <button
-            onClick={() => setSelectedPeriodKey("nextTuesday")}
-            className={`px-3 py-1.5 rounded-control text-xs font-semibold transition-all ${
-              selectedPeriodKey === "nextTuesday"
-                ? "bg-foreground text-surface shadow-subtle"
-                : "bg-surface border border-border text-foreground-secondary hover:text-foreground"
-            }`}
-          >
-            <span>Rapat 22 Sep (15–21 Sep)</span>
-            <span className="ml-1.5 text-[9px] uppercase px-1.5 py-0.2 rounded bg-brand-light text-brand">
-              Minggu Lalu
+              Aktual 6 Okt (Rapat Besok)
             </span>
           </button>
 
@@ -261,7 +247,21 @@ Link Akses Web: https://imi-puce.vercel.app/spreadsheet`;
                 : "bg-surface border border-border text-foreground-secondary hover:text-foreground"
             }`}
           >
-            <span>Rapat 15 Sep (8–14 Sep)</span>
+            <span>Rapat 29 Sep (22–28 Sep 2026)</span>
+            <span className="ml-1.5 text-[9px] uppercase px-1.5 py-0.2 rounded bg-brand-light text-brand">
+              Minggu Lalu
+            </span>
+          </button>
+
+          <button
+            onClick={() => setSelectedPeriodKey("nextTuesday")}
+            className={`px-3 py-1.5 rounded-control text-xs font-semibold transition-all ${
+              selectedPeriodKey === "nextTuesday"
+                ? "bg-foreground text-surface shadow-subtle"
+                : "bg-surface border border-border text-foreground-secondary hover:text-foreground"
+            }`}
+          >
+            <span>Rapat 22 Sep (15–21 Sep 2026)</span>
             <span className="ml-1.5 text-[9px] uppercase px-1.5 py-0.2 rounded bg-surface-secondary text-foreground-muted border border-border">
               Historis
             </span>

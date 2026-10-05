@@ -43,7 +43,9 @@ export const BranchFollowersBreakdown: React.FC<BranchFollowersBreakdownProps> =
       (official.id === "pwt" ? cache?.accounts?.["pwt-pusat"] : null) ||
       (official.id === "lunar" ? cache?.accounts?.["tgl"] : null);
 
-    if (match) return match;
+    const sheetData =
+      spreadsheetFollowers?.[official.id.toUpperCase()] ||
+      (official.id === "lunar" ? spreadsheetFollowers?.["TGL"] : null);
 
     const fallbackDefaults: Record<string, IgAccountLive> = {
       pwt: {
@@ -53,7 +55,7 @@ export const BranchFollowersBreakdown: React.FC<BranchFollowersBreakdownProps> =
         url: official.url,
         city: official.city,
         picName: official.picName,
-        followers: 226000,
+        followers: 226010,
         followersFormatted: "226K",
         following: 112,
         posts: 2946,
@@ -66,8 +68,8 @@ export const BranchFollowersBreakdown: React.FC<BranchFollowersBreakdownProps> =
         url: official.url,
         city: official.city,
         picName: official.picName,
-        followers: 6196,
-        followersFormatted: "6,196",
+        followers: 6211,
+        followersFormatted: "6.211",
         following: 6,
         posts: 572,
         lastUpdated: new Date().toISOString(),
@@ -79,8 +81,8 @@ export const BranchFollowersBreakdown: React.FC<BranchFollowersBreakdownProps> =
         url: official.url,
         city: official.city,
         picName: official.picName,
-        followers: 7395,
-        followersFormatted: "7,395",
+        followers: 7408,
+        followersFormatted: "7.408",
         following: 6,
         posts: 1412,
         lastUpdated: new Date().toISOString(),
@@ -92,8 +94,8 @@ export const BranchFollowersBreakdown: React.FC<BranchFollowersBreakdownProps> =
         url: official.url,
         city: official.city,
         picName: official.picName,
-        followers: 1255,
-        followersFormatted: "1,255",
+        followers: 1257,
+        followersFormatted: "1.257",
         following: 6,
         posts: 343,
         lastUpdated: new Date().toISOString(),
@@ -105,29 +107,37 @@ export const BranchFollowersBreakdown: React.FC<BranchFollowersBreakdownProps> =
         url: official.url,
         city: official.city,
         picName: official.picName,
-        followers: 3986,
-        followersFormatted: "3,986",
+        followers: 4034,
+        followersFormatted: "4.034",
         following: 5,
         posts: 359,
         lastUpdated: new Date().toISOString(),
       },
     };
 
-    return (
-      fallbackDefaults[official.id] || {
-        id: official.id,
-        name: official.name,
-        handle: official.handle,
-        url: official.url,
-        city: official.city,
-        picName: official.picName,
-        followers: 0,
-        followersFormatted: "0",
-        following: 0,
-        posts: 0,
-        lastUpdated: new Date().toISOString(),
-      }
-    );
+    const base = match || fallbackDefaults[official.id] || {
+      id: official.id,
+      name: official.name,
+      handle: official.handle,
+      url: official.url,
+      city: official.city,
+      picName: official.picName,
+      followers: 0,
+      followersFormatted: "0",
+      following: 0,
+      posts: 0,
+      lastUpdated: new Date().toISOString(),
+    };
+
+    if (sheetData && sheetData.followers && sheetData.followers > base.followers) {
+      return {
+        ...base,
+        followers: sheetData.followers,
+        followersFormatted: sheetData.followersFormatted,
+      };
+    }
+
+    return base;
   });
 
   const handleManualSync = async () => {

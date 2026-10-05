@@ -44,105 +44,150 @@ export const ThreeDayCadenceRecap: React.FC<ThreeDayCadenceRecapProps> = ({
   bonusSummary,
   spreadsheetFollowersByBranch,
 }) => {
-  const [selectedCycle, setSelectedCycle] = useState<
-    | "cycle-1"
-    | "cycle-2"
-    | "cycle-3"
-    | "cycle-4"
-    | "cycle-5"
-    | "cycle-current"
-    | "full-week"
-    | "full-month"
-  >("cycle-current");
+  const [selectedCycle, setSelectedCycle] = useState<string>("cycle-7");
   const [copiedText, setCopiedText] = useState(false);
   const [isPresentationMode, setIsPresentationMode] = useState(false);
   const [selectedMediaItem, setSelectedMediaItem] = useState<AppleMediaItem | null>(null);
 
-  // Cycle definitions up to 28 September 2026
-  const cycles = {
-    "cycle-1": {
-      id: "cycle-1",
-      name: "Siklus 1 (8–10 Sep)",
-      periodLabel: "8 s/d 10 September 2026",
-      status: "Selesai Evaluasi H+3",
-      startDate: "2026-09-08",
-      endDate: "2026-09-10",
-      isLiveInstagram: false,
-      description: "Fokus awal pekan: campaign promo awal bulan & testing pilar konten adaptif/POV.",
-    },
-    "cycle-2": {
-      id: "cycle-2",
-      name: "Siklus 2 (11–13 Sep)",
-      periodLabel: "11 s/d 13 September 2026",
-      status: "Selesai Evaluasi H+3",
-      startDate: "2026-09-11",
-      endDate: "2026-09-13",
-      isLiveInstagram: false,
-      description: "Fokus akhir pekan: konten edukasi lensa, restock kacamata, dan tren viral akhir pekan.",
-    },
-    "cycle-3": {
-      id: "cycle-3",
-      name: "Siklus 3 (14–17 Sep)",
-      periodLabel: "14 s/d 17 September 2026",
-      status: "Selesai Evaluasi H+3",
-      startDate: "2026-09-14",
-      endDate: "2026-09-17",
-      isLiveInstagram: false,
-      description: "Siklus evaluasi pertengahan bulan: rilis OTW CEK MATA & video edukasi silinder.",
-    },
-    "cycle-4": {
-      id: "cycle-4",
-      name: "Siklus 4 (18–20 Sep)",
-      periodLabel: "18 s/d 20 September 2026",
-      status: "Selesai Evaluasi H+3",
-      startDate: "2026-09-18",
-      endDate: "2026-09-20",
-      isLiveInstagram: false,
-      description: "Siklus gathering internal Indah Sinergi Yuwana & dokumentasi POV store crew.",
-    },
-    "cycle-5": {
-      id: "cycle-5",
-      name: "Siklus 5 (21–24 Sep)",
-      periodLabel: "21 s/d 24 September 2026",
-      status: "Selesai Evaluasi H+3",
-      startDate: "2026-09-21",
-      endDate: "2026-09-24",
-      isLiveInstagram: false,
-      description: "Siklus edukasi astigmatisme, tren cewek naik motor siang hari, dan cek mata bareng orang tua.",
-    },
-    "cycle-current": {
-      id: "cycle-current",
-      name: "Siklus 6 (25–28 Sep) — Hari Ini",
-      periodLabel: "25 s/d 28 September 2026 (Live H-1 Rapat)",
-      status: "Pemantauan Berjalan (Siap untuk Rapat Besok 29 Sep)",
-      startDate: "2026-09-25",
-      endDate: "2026-09-28",
-      isLiveInstagram: false,
-      description: "Evaluasi berjalan per tanggal hari ini (28 Sep 2026) untuk persiapan rapat evaluasi besok.",
-    },
-    "full-week": {
-      id: "full-week",
-      name: "1 Minggu Terakhir (21–28 Sep) · Live IG",
-      periodLabel: "21 s/d 28 September 2026 (7 Hari Terakhir)",
-      status: "Live Sync Instagram + Sheet H+3",
-      startDate: "2026-09-21",
-      endDate: "2026-09-28",
-      isLiveInstagram: true,
-      description: "Performa 7 hari terakhir dengan data live Instagram langsung dari crawl resmi.",
-    },
-    "full-month": {
-      id: "full-month",
-      name: "1 Bulan Penuh (Sep 2026) · Live IG",
-      periodLabel: "1 s/d 28 September 2026 (Bulan Penuh)",
-      status: "Konsolidasi Bulanan Resmi Rapat",
-      startDate: "2026-09-01",
-      endDate: "2026-09-28",
-      isLiveInstagram: true,
-      description: "Rangkuman komprehensif performa 1 bulan penuh September 2026 lintas 5 cabang (4 ISY + 1 Lunar).",
-    },
-  };
+  // Cycle definitions up to October 2026 with auto-expansion
+  const cycles = useMemo(() => {
+    const map: Record<
+      string,
+      {
+        id: string;
+        name: string;
+        periodLabel: string;
+        status: string;
+        startDate: string;
+        endDate: string;
+        isLiveInstagram: boolean;
+        description: string;
+        badge?: string;
+      }
+    > = {
+      "cycle-1": {
+        id: "cycle-1",
+        name: "Siklus 1 (8–10 Sep)",
+        periodLabel: "8 s/d 10 September 2026",
+        status: "Selesai Evaluasi H+3",
+        startDate: "2026-09-08",
+        endDate: "2026-09-10",
+        isLiveInstagram: false,
+        description: "Fokus awal pekan: campaign promo awal bulan & testing pilar konten adaptif/POV.",
+      },
+      "cycle-2": {
+        id: "cycle-2",
+        name: "Siklus 2 (11–13 Sep)",
+        periodLabel: "11 s/d 13 September 2026",
+        status: "Selesai Evaluasi H+3",
+        startDate: "2026-09-11",
+        endDate: "2026-09-13",
+        isLiveInstagram: false,
+        description: "Fokus akhir pekan: konten edukasi lensa, restock kacamata, dan tren viral akhir pekan.",
+      },
+      "cycle-3": {
+        id: "cycle-3",
+        name: "Siklus 3 (14–17 Sep)",
+        periodLabel: "14 s/d 17 September 2026",
+        status: "Selesai Evaluasi H+3",
+        startDate: "2026-09-14",
+        endDate: "2026-09-17",
+        isLiveInstagram: false,
+        description: "Siklus evaluasi pertengahan bulan: rilis OTW CEK MATA & video edukasi silinder.",
+      },
+      "cycle-4": {
+        id: "cycle-4",
+        name: "Siklus 4 (18–20 Sep)",
+        periodLabel: "18 s/d 20 September 2026",
+        status: "Selesai Evaluasi H+3",
+        startDate: "2026-09-18",
+        endDate: "2026-09-20",
+        isLiveInstagram: false,
+        description: "Siklus gathering internal Indah Sinergi Yuwana & dokumentasi POV store crew.",
+      },
+      "cycle-5": {
+        id: "cycle-5",
+        name: "Siklus 5 (21–24 Sep)",
+        periodLabel: "21 s/d 24 September 2026",
+        status: "Selesai Evaluasi H+3",
+        startDate: "2026-09-21",
+        endDate: "2026-09-24",
+        isLiveInstagram: false,
+        description: "Siklus edukasi astigmatisme, tren cewek naik motor siang hari, dan cek mata bareng orang tua.",
+      },
+      "cycle-6": {
+        id: "cycle-6",
+        name: "Siklus 6 (25–28 Sep)",
+        periodLabel: "25 s/d 28 September 2026",
+        status: "Selesai Evaluasi Rapat 29 Sep",
+        startDate: "2026-09-25",
+        endDate: "2026-09-28",
+        isLiveInstagram: false,
+        description: "Evaluasi rapat pekan lalu (Selasa 29 Sep): performa video tren, edukasi anatomi, dan minus tinggi.",
+      },
+      "cycle-7": {
+        id: "cycle-7",
+        name: "Siklus 7 (29 Sep – 5 Okt) — Rapat Besok",
+        periodLabel: "29 September s/d 5 Oktober 2026 (Live H-1 Rapat)",
+        status: "Pemantauan Berjalan (Siap untuk Rapat Besok 6 Okt)",
+        startDate: "2026-09-29",
+        endDate: "2026-10-05",
+        isLiveInstagram: true,
+        description: "Evaluasi berjalan 7 hari penuh (29 Sep – 5 Okt 2026) untuk persiapan rapat evaluasi mingguan besok Selasa, 6 Oktober 2026.",
+        badge: "RAPAT BESOK (6 OKT)",
+      },
+      "full-week": {
+        id: "full-week",
+        name: "1 Minggu Terakhir (29 Sep – 5 Okt) · Live IG",
+        periodLabel: "29 Sep s/d 5 Oktober 2026 (7 Hari Terakhir)",
+        status: "Live Sync Instagram + Sheet H+3",
+        startDate: "2026-09-29",
+        endDate: "2026-10-05",
+        isLiveInstagram: true,
+        description: "Performa 7 hari terakhir dengan data live Instagram langsung dari crawl resmi dan inputan spreadsheet.",
+      },
+      "full-month": {
+        id: "full-month",
+        name: "1 Bulan Penuh (Sep – Okt 2026) · Live IG",
+        periodLabel: "1 September s/d 5 Oktober 2026 (Bulan Penuh)",
+        status: "Konsolidasi Bulanan Resmi Rapat",
+        startDate: "2026-09-01",
+        endDate: "2026-10-05",
+        isLiveInstagram: true,
+        description: "Rangkuman komprehensif performa 1 bulan penuh lintas 5 cabang (4 ISY + 1 Lunar).",
+      },
+    };
 
-  const activeCycle = cycles[selectedCycle];
+    // Auto-detect future cycles beyond 2026-10-05 from spreadsheet rows
+    let maxDate = "2026-10-05";
+    (storyData || []).forEach((s) => {
+      if (s.reportDate && s.reportDate > maxDate) maxDate = s.reportDate;
+    });
+    Object.values(branchReels || {}).forEach((list) => {
+      (list || []).forEach((r) => {
+        const d = r.uploadDate || r.reportDate;
+        if (d && d > maxDate && d.startsWith("2026")) maxDate = d;
+      });
+    });
+
+    if (maxDate > "2026-10-05") {
+      map["cycle-8"] = {
+        id: "cycle-8",
+        name: "Siklus 8 (6–12 Okt) — Berjalan",
+        periodLabel: "6 s/d 12 Oktober 2026",
+        status: "Pemantauan Berjalan",
+        startDate: "2026-10-06",
+        endDate: maxDate,
+        isLiveInstagram: true,
+        description: `Siklus berjalan otomatis diperluas dari spreadsheet hingga ${maxDate}.`,
+        badge: "TERBARU",
+      };
+    }
+
+    return map;
+  }, [storyData, branchReels]);
+
+  const activeCycle = cycles[selectedCycle] || cycles["cycle-7"] || cycles["cycle-1"];
 
   // Index live Instagram cache by shortcode
   const liveMap = useMemo(() => {
@@ -351,9 +396,9 @@ Akses Dashboard Lengkap: https://iseeyou-intelligence.vercel.app/spreadsheet`;
             >
               <Calendar className={`w-3.5 h-3.5 ${isActive ? "text-brand" : "text-foreground-muted"}`} />
               <span>{c.name}</span>
-              {k === "cycle-current" && (
-                <span className="text-[9px] uppercase px-1.5 py-0.2 rounded bg-brand text-white font-bold">
-                  Hari Ini (28 Sep)
+              {c.badge && (
+                <span className="text-[9px] uppercase px-1.5 py-0.2 rounded bg-brand text-white font-bold shadow-2xs">
+                  {c.badge}
                 </span>
               )}
               {c.isLiveInstagram && (

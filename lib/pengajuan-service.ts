@@ -58,6 +58,50 @@ export function buildSponsorWhatsAppMessage(item: {
   return lines.join("\n");
 }
 
+/**
+ * Format outbound pitching template for Marketing Staff (Yoshput) reaching out to external brands
+ */
+export function buildBrandPitchWhatsAppMessage(params: {
+  brandName: string;
+  picName: string;
+  category: string;
+  recommendedPackage: string;
+}): string {
+  const lines = [
+    `Yth. Bapak/Ibu *${params.picName || "Brand Manager"}*,`,
+    `Tim Marketing *${params.brandName || "Mitra Brand"}*,`,
+    ``,
+    `Salam hangat dari Optik I See You.`,
+    `Perkenalkan saya *Yoshput* dari Divisi Marketing & Kemitraan Optik I See You.`,
+    ``,
+    `Kami melihat keselarasan yang sangat kuat antara produk *${params.brandName}* (${params.category}) dengan audiens muda, mahasiswa, dan kreator konten aktif di wilayah Purwokerto dan jaringan 4 cabang kami (Purwokerto, Purbalingga, Cilacap, Wonosobo).`,
+    ``,
+    `Bersama ini, kami bermaksud mengundang *${params.brandName}* untuk berkolaborasi sebagai mitra resmi dalam program unggulan kami:`,
+    `🎯 *"Buka Class Konten"* — Kelas Pembuatan Konten & Digital Creator Masterclass`,
+    ``,
+    `💎 *Peluang Eksposur Multi-Channel yang Kami Sediakan:*`,
+    `1. Space Open Booth / Interactive Activation di lokasi event.`,
+    `2. Penayangan iklan video/banner di layar TV Showroom 4 cabang ritel Optik I See You.`,
+    `3. Sesi Product Demo & Sampling langsung ke tangan puluhan kreator & peserta.`,
+    `4. Promosi digital terintegrasi di media sosial resmi (@iseeyou.glasses) dengan total 244.000+ pengikut.`,
+    ``,
+    `Paket rekomendasi untuk ${params.brandName}: *Paket ${params.recommendedPackage}*`,
+    ``,
+    `📄 *Dokumen Proposal Resmi & Rincian Fasilitas Lengkap:*`,
+    `https://iseeyou-marketing-intelligence.vercel.app/proposal-sponsor`,
+    ``,
+    `Besar harapan kami untuk dapat menjadwalkan diskusi singkat via WhatsApp guna membahas bentuk sinergi yang paling optimal.`,
+    ``,
+    `Terima kasih atas perhatian dan waktu Bapak/Ibu. 🙏✨`,
+    ``,
+    `Hormat kami,`,
+    `*Yoshput* · Marketing & Partnership Optik I See You`,
+    `WhatsApp: 0877-7868-3766`,
+    `optikiseeyou.com`,
+  ];
+  return lines.join("\n");
+}
+
 export function buildSponsorWhatsAppUrl(item: {
   applicantName: string;
   institution: string;

@@ -39,16 +39,24 @@ const DEFAULT_FIELDS: EditableFields = {
   participants: PLACEHOLDER,
 };
 
-const STORAGE_KEY = "isy-proposal-sponsor-fields-v1";
+const STORAGE_KEY = "isy-proposal-sponsor-fields-v2";
 
-// Brand palette
+// =====================================================================
+// STRICT 2-TONE PALETTE: HIJAU EMERALD & PUTIH IVORY
+// =====================================================================
 const C = {
-  maroon: "#800020",
-  navy: "#002147",
-  pink: "#FFC0CB",
-  rose: "#B76E79",
-  cream: "#FFFDD0",
-  beige: "#F5F5DC",
+  emeraldDark: "#064E3B",   // Emerald Tua / Utama (Header, Judul, Border Kuat)
+  emerald: "#047857",       // Emerald Sedang (Aksen, Tombol, Ceklis)
+  emeraldMid: "#059669",    // Emerald Cerah
+  emeraldLight: "#ECFDF5",  // Tint Emerald Halus
+  emeraldBorder: "#10B981", // Garis Tepi Emerald
+  ivory: "#FDFBF7",         // Putih Ivory Kertas Utama
+  ivoryLight: "#FFFFFF",    // Putih Bersih Permukaan Kartu
+  ivoryMuted: "#F4F1EA",    // Putih Ivory Aksen Garis & Tabel
+  ivoryBorder: "#E2DDD2",   // Border Halus Ivory
+  textTitle: "#064E3B",     // Warna Judul & Subjudul (Emerald Tegas)
+  textBody: "#111827",      // Teks Isi Hitam Arang Berkontras Tinggi
+  textMuted: "#4B5563",     // Teks Keterangan Abu Gelap
 };
 
 const fmt = (n: number) => n.toLocaleString("id-ID");
@@ -96,7 +104,7 @@ const PACKAGES = [
     name: "DIAMOND",
     tag: "Tier Utama / Eksklusif",
     price: "Rp 5.000.000",
-    color: C.maroon,
+    color: C.emeraldDark,
     items: [
       "Hak eksklusif space Open Stand / Interactive Booth di area event Buka Class Konten.",
       "Penayangan Video Profil / Iklan Produk di Layar TV Showroom 4 cabang Optik I See You selama 1 bulan penuh.",
@@ -111,7 +119,7 @@ const PACKAGES = [
     name: "PLATINUM",
     tag: "Eksposur Ritel & Digital",
     price: "Rp 3.000.000",
-    color: C.navy,
+    color: C.emerald,
     items: [
       "Penayangan Video Profil / Iklan Produk di Layar TV Showroom 4 cabang selama 2 minggu.",
       "Logo ukuran Sedang (Medium) pada Backdrop, Banner, Frame Photobooth, dan media promosi.",
@@ -125,7 +133,7 @@ const PACKAGES = [
     name: "GOLD",
     tag: "Visibilitas Event & Digital",
     price: "Rp 1.500.000",
-    color: C.rose,
+    color: C.emeraldMid,
     items: [
       "Logo ukuran Standard pada Banner Event & Flyer Digital media sosial.",
       "Penayangan Slide Poster / Image Banner di TV Showroom 4 cabang selama 1 minggu.",
@@ -137,7 +145,7 @@ const PACKAGES = [
     name: "SILVER",
     tag: "In-Kind / Produk & Voucher",
     price: "In-Kind",
-    color: "#6B6B6B",
+    color: "#0F766E",
     items: [
       "Menyediakan Goodie Bag, Voucher Diskon, Gift Set, atau Product Sampling untuk peserta / doorprize.",
       "Logo ukuran Small pada Banner Kolektif Sponsor.",
@@ -158,26 +166,26 @@ const Page: React.FC<{ children: React.ReactNode; className?: string; style?: Re
 }) => (
   <section
     className={`proposal-page relative mx-auto w-full max-w-[210mm] min-h-[297mm] shadow-xl print:shadow-none overflow-hidden ${className}`}
-    style={{ backgroundColor: C.cream, color: "#1F1F1F", ...style }}
+    style={{ backgroundColor: C.ivory, color: C.textBody, ...style }}
   >
     {children}
   </section>
 );
 
 const PageHeader: React.FC<{ no: string; title: string }> = ({ no, title }) => (
-  <div className="flex items-end justify-between gap-4 pb-3 mb-6 border-b-2" style={{ borderColor: C.maroon }}>
+  <div className="flex items-end justify-between gap-4 pb-3 mb-6 border-b-2" style={{ borderColor: C.emeraldDark }}>
     <div>
-      <div className="text-[10px] font-bold tracking-[0.25em] uppercase" style={{ color: C.rose }}>
+      <div className="text-[10px] font-black tracking-[0.25em] uppercase" style={{ color: C.emerald }}>
         Bagian {no}
       </div>
-      <h2 className="text-[22px] font-extrabold leading-tight tracking-tight" style={{ color: C.navy }}>
+      <h2 className="text-[22px] font-black leading-tight tracking-tight mt-0.5" style={{ color: C.textTitle }}>
         {title}
       </h2>
     </div>
-    <div className="text-right text-[9px] font-semibold uppercase tracking-widest" style={{ color: C.maroon }}>
+    <div className="text-right text-[10px] font-bold uppercase tracking-widest" style={{ color: C.emeraldDark }}>
       Optik I See You
       <br />
-      Buka Class Konten
+      <span className="text-[9px] font-semibold text-emerald-700">Buka Class Konten</span>
     </div>
   </div>
 );
@@ -185,28 +193,31 @@ const PageHeader: React.FC<{ no: string; title: string }> = ({ no, title }) => (
 const PageFooter: React.FC<{ page: number }> = ({ page }) => (
   <div
     className="absolute bottom-0 left-0 right-0 px-[18mm] py-3 flex items-center justify-between text-[9px] font-semibold"
-    style={{ backgroundColor: C.navy, color: C.cream }}
+    style={{ backgroundColor: C.emeraldDark, color: C.ivory }}
   >
     <span>Proposal Sponsorship · Buka Class Konten · Optik I See You</span>
-    <span style={{ color: C.pink }}>optikiseeyou.com · Hal. {page}</span>
+    <span style={{ color: C.emeraldLight }}>optikiseeyou.com · Hal. {page}</span>
   </div>
 );
 
 const Body: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <div className="px-[18mm] pt-[16mm] pb-[22mm] text-[11.5px] leading-[1.65]">{children}</div>
+  <div className="px-[18mm] pt-[16mm] pb-[22mm] text-[11.5px] leading-[1.65]" style={{ color: C.textBody }}>
+    {children}
+  </div>
 );
 
 const SubTitle: React.FC<{ children: React.ReactNode }> = ({ children }) => (
-  <h3 className="text-[13px] font-extrabold uppercase tracking-wide mt-5 mb-2" style={{ color: C.maroon }}>
-    {children}
+  <h3 className="text-[13px] font-black uppercase tracking-wide mt-5 mb-2 flex items-center gap-2" style={{ color: C.emeraldDark }}>
+    <span className="w-1.5 h-3.5 rounded-full" style={{ backgroundColor: C.emerald }} />
+    <span>{children}</span>
   </h3>
 );
 
 const Bullets: React.FC<{ items: React.ReactNode[] }> = ({ items }) => (
   <ul className="space-y-1.5">
     {items.map((it, i) => (
-      <li key={i} className="flex gap-2.5">
-        <span className="mt-[7px] w-1.5 h-1.5 shrink-0 rounded-full" style={{ backgroundColor: C.maroon }} />
+      <li key={i} className="flex gap-2.5 items-start">
+        <span className="mt-[6px] w-1.5 h-1.5 shrink-0 rounded-full" style={{ backgroundColor: C.emerald }} />
         <span>{it}</span>
       </li>
     ))}
@@ -214,9 +225,9 @@ const Bullets: React.FC<{ items: React.ReactNode[] }> = ({ items }) => (
 );
 
 const renderCell = (c: Cell) => {
-  if (c === true) return <span style={{ color: C.maroon }} className="font-extrabold">✓</span>;
-  if (c === false) return <span className="text-neutral-400">—</span>;
-  return <span className="font-bold" style={{ color: C.navy }}>{c}</span>;
+  if (c === true) return <span style={{ color: C.emerald }} className="font-extrabold text-[13px]">✓</span>;
+  if (c === false) return <span className="text-neutral-300 font-bold">—</span>;
+  return <span className="font-black text-[11px]" style={{ color: C.emeraldDark }}>{c}</span>;
 };
 
 /* ------------------------------------------------------------------ */
@@ -264,15 +275,15 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers, sourceUrl 
 
   const Val: React.FC<{ v: string }> = ({ v }) =>
     pending(v) ? (
-      <span className="italic font-semibold" style={{ color: C.rose }}>
+      <span className="italic font-bold" style={{ color: C.emerald }}>
         {PLACEHOLDER}
       </span>
     ) : (
-      <span className="font-semibold">{v}</span>
+      <span className="font-bold text-gray-950">{v}</span>
     );
 
   const inputCls =
-    "w-full px-3 py-2 rounded-lg border border-border bg-surface text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-[#800020]/30";
+    "w-full px-3 py-2 rounded-lg border border-border bg-surface text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-[#047857]/40";
 
   return (
     <div className="space-y-6">
@@ -280,28 +291,27 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers, sourceUrl 
       <div className="no-print rounded-2xl border border-border bg-surface p-5 shadow-subtle space-y-4">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
           <div>
-            <h1 className="text-lg font-bold text-foreground flex items-center gap-2">
-              <PencilLine className="w-4 h-4" style={{ color: C.maroon }} />
+            <h1 className="text-lg font-black text-foreground flex items-center gap-2">
+              <PencilLine className="w-5 h-5 text-emerald-700" />
               Proposal Sponsorship · Buka Class Konten
             </h1>
             <p className="text-xs text-foreground-secondary mt-1">
-              Isi data di bawah, dokumen langsung ter-update. Klik <b>Download PDF</b> lalu pilih
-              &quot;Save as PDF&quot; (ukuran A4, centang &quot;Background graphics&quot;).
+              Dokumen resmi standar <b>Hijau Emerald &amp; Putih Ivory</b>. Isi parameter di bawah, dokumen langsung ter-update secara real-time. Klik <b>Download PDF</b> lalu pilih &quot;Save as PDF&quot; (Ukuran A4).
             </p>
           </div>
           <div className="flex items-center gap-2 shrink-0">
             <button
               onClick={() => setF(DEFAULT_FIELDS)}
-              className="flex items-center gap-1.5 px-3.5 py-2 rounded-full border border-border bg-surface-secondary text-xs font-semibold text-foreground hover:bg-surface-secondary/70"
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-full border border-border bg-surface-secondary text-xs font-semibold text-foreground hover:bg-surface-secondary/70 transition-colors"
             >
               <RotateCcw className="w-3.5 h-3.5" /> Reset
             </button>
             <button
               onClick={() => window.print()}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-bold text-white shadow-subtle active:scale-95"
-              style={{ backgroundColor: C.maroon }}
+              className="flex items-center gap-1.5 px-5 py-2 rounded-full text-xs font-bold text-white shadow-subtle active:scale-95 transition-all"
+              style={{ backgroundColor: C.emeraldDark }}
             >
-              <Download className="w-3.5 h-3.5" /> Download PDF
+              <Download className="w-3.5 h-3.5" /> Download PDF (A4)
             </button>
           </div>
         </div>
@@ -338,52 +348,51 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers, sourceUrl 
         </div>
 
         {pendingCount > 0 && (
-          <div className="flex items-start gap-2 text-xs rounded-xl px-3 py-2 border" style={{ backgroundColor: "#FFF5F7", borderColor: "#F3C6D0", color: C.maroon }}>
-            <Info className="w-3.5 h-3.5 mt-0.5 shrink-0" />
+          <div className="flex items-start gap-2 text-xs rounded-xl px-3 py-2 border bg-emerald-50 dark:bg-emerald-950/40 border-emerald-300 dark:border-emerald-800 text-emerald-900 dark:text-emerald-200">
+            <Info className="w-3.5 h-3.5 mt-0.5 shrink-0 text-emerald-700" />
             <span>
-              Masih ada <b>{pendingCount} data</b> yang belum diisi. Di dokumen akan tertulis &quot;{PLACEHOLDER}&quot;
-              (tidak diisi angka karangan).
+              Terdapat <b>{pendingCount} field</b> yang masih default. Pada cetakan dokumen akan bertuliskan &quot;{PLACEHOLDER}&quot; secara profesional tanpa data fiktif.
             </span>
           </div>
         )}
       </div>
 
-      {/* ===================== Document ===================== */}
+      {/* ===================== Document Pages ===================== */}
       <div className="proposal-doc space-y-8 print:space-y-0 overflow-x-auto pb-4">
         {/* ---------- 1. COVER ---------- */}
-        <Page style={{ backgroundColor: C.navy, color: C.cream }}>
-          <div className="absolute top-0 left-0 right-0 h-3" style={{ backgroundColor: C.maroon }} />
-          <div className="absolute top-3 left-0 right-0 h-1" style={{ backgroundColor: C.pink }} />
+        <Page style={{ backgroundColor: C.emeraldDark, color: C.ivory }}>
+          <div className="absolute top-0 left-0 right-0 h-3" style={{ backgroundColor: C.emerald }} />
+          <div className="absolute top-3 left-0 right-0 h-1" style={{ backgroundColor: C.emeraldBorder }} />
           <div
-            className="absolute -right-24 top-40 w-96 h-96 rounded-full opacity-20"
-            style={{ backgroundColor: C.maroon }}
+            className="absolute -right-24 top-40 w-96 h-96 rounded-full opacity-10"
+            style={{ backgroundColor: C.ivory }}
           />
           <div
             className="absolute -left-16 bottom-32 w-64 h-64 rounded-full opacity-10"
-            style={{ backgroundColor: C.pink }}
+            style={{ backgroundColor: C.emeraldLight }}
           />
 
           <div className="relative px-[20mm] pt-[30mm] pb-[20mm] flex flex-col min-h-[297mm]">
-            <div className="text-[11px] font-bold tracking-[0.35em] uppercase" style={{ color: C.pink }}>
+            <div className="text-[11px] font-black tracking-[0.35em] uppercase text-emerald-300">
               Optik I See You · Marketing Department
             </div>
 
-            <div className="mt-[40mm]">
-              <div className="text-[12px] font-semibold tracking-[0.2em] uppercase" style={{ color: C.beige }}>
-                Proposal Pengajuan
+            <div className="mt-[36mm]">
+              <div className="text-[12px] font-bold tracking-[0.2em] uppercase text-emerald-200">
+                Proposal Pengajuan Kerjasama
               </div>
-              <h1 className="mt-2 text-[34px] font-black leading-[1.1] tracking-tight">
+              <h1 className="mt-2 text-[34px] font-black leading-[1.1] tracking-tight text-white">
                 SPONSORSHIP &amp;
                 <br />
                 KERJASAMA MITRA
                 <br />
                 STRATEGIS
               </h1>
-              <div className="mt-6 h-1 w-24" style={{ backgroundColor: C.maroon }} />
-              <div className="mt-6 text-[26px] font-extrabold" style={{ color: C.pink }}>
+              <div className="mt-6 h-1 w-24 bg-emerald-400" />
+              <div className="mt-6 text-[26px] font-black text-emerald-200">
                 &quot;Buka Class Konten&quot;
               </div>
-              <div className="mt-1 text-[13px] font-medium" style={{ color: C.beige }}>
+              <div className="mt-1 text-[13px] font-semibold text-emerald-100 leading-relaxed">
                 Kelas Konten &amp; Digital Creator Masterclass
                 <br />
                 Optik I See You Marketing Intelligence &amp; Creator Initiative
@@ -391,27 +400,27 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers, sourceUrl 
             </div>
 
             <div className="mt-auto space-y-6">
-              <div className="rounded-xl p-5 border" style={{ borderColor: "rgba(255,192,203,0.35)", backgroundColor: "rgba(128,0,32,0.25)" }}>
-                <div className="text-[10px] font-bold tracking-[0.25em] uppercase" style={{ color: C.pink }}>
+              <div className="rounded-xl p-5 border border-emerald-600/60 bg-emerald-950/70 backdrop-blur-sm">
+                <div className="text-[10px] font-black tracking-[0.25em] uppercase text-emerald-300">
                   Ditujukan kepada
                 </div>
-                <div className="mt-1 text-[16px] font-extrabold">{f.recipientCompany}</div>
-                <div className="text-[11px]" style={{ color: C.beige }}>u.p. {f.recipientName}</div>
+                <div className="mt-1 text-[18px] font-black text-white">{f.recipientCompany}</div>
+                <div className="text-[11.5px] text-emerald-200 font-medium mt-0.5">u.p. {f.recipientName}</div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4 text-[10.5px]" style={{ color: C.beige }}>
+              <div className="grid grid-cols-2 gap-4 text-[11px] text-emerald-200 font-medium">
                 <div>
-                  <div className="font-bold uppercase tracking-widest text-[9px]" style={{ color: C.pink }}>Jaringan Cabang</div>
+                  <div className="font-black uppercase tracking-widest text-[9px] text-emerald-300">Jaringan 4 Cabang Ritel</div>
                   Purwokerto (Pusat) · Purbalingga · Cilacap · Wonosobo
                 </div>
                 <div className="text-right">
-                  <div className="font-bold uppercase tracking-widest text-[9px]" style={{ color: C.pink }}>Website</div>
+                  <div className="font-black uppercase tracking-widest text-[9px] text-emerald-300">Website Resmi</div>
                   optikiseeyou.com
                 </div>
               </div>
             </div>
           </div>
-          <div className="absolute bottom-0 left-0 right-0 h-3" style={{ backgroundColor: C.maroon }} />
+          <div className="absolute bottom-0 left-0 right-0 h-3" style={{ backgroundColor: C.emerald }} />
         </Page>
 
         {/* ---------- 2. SURAT PENGANTAR ---------- */}
@@ -420,12 +429,12 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers, sourceUrl 
             <PageHeader no="I" title="Surat Pengantar Sponsorship" />
 
             <div className="space-y-4">
-              <p className="text-right">Purwokerto, {f.letterDate}</p>
+              <p className="text-right font-semibold" style={{ color: C.textTitle }}>Purwokerto, {f.letterDate}</p>
 
               <div>
                 <p>Kepada Yth.</p>
-                <p className="font-bold" style={{ color: C.navy }}>{f.recipientName}</p>
-                <p className="font-bold" style={{ color: C.navy }}>{f.recipientCompany}</p>
+                <p className="font-black text-[13px]" style={{ color: C.emeraldDark }}>{f.recipientName}</p>
+                <p className="font-black text-[13px]" style={{ color: C.emeraldDark }}>{f.recipientCompany}</p>
                 <p>di Tempat</p>
               </div>
 
@@ -448,13 +457,13 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers, sourceUrl 
                 menayangkan materi promosi mitra selama jam operasional toko. Di kanal digital, akun resmi
                 Optik I See You beserta second brand Lunar Eyewear memiliki total{" "}
                 <b>{fmt(totalAll)} pengikut</b> di Instagram dan TikTok
-                {latestAsOf ? ` (data per ${fmtDate(latestAsOf)})` : ""}.
+                {latestAsOf ? ` (data terverifikasi per ${fmtDate(latestAsOf)})` : ""}.
               </p>
 
               <p>
                 Melalui program ini, brand Anda dapat hadir langsung di hadapan peserta yang mayoritas merupakan
                 Gen-Z, mahasiswa, profesional muda, dan kreator konten lokal — sekaligus memperoleh paparan
-                lanjutan di jaringan toko dan media sosial Optik I See You.
+                lanjutan di jaringan toko ritel dan media sosial Optik I See You.
               </p>
 
               <p>
@@ -466,10 +475,10 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers, sourceUrl 
 
               <div className="pt-6">
                 <p>Hormat kami,</p>
-                <div className="h-16" />
-                <p className="font-extrabold" style={{ color: C.navy }}>Yoshput</p>
-                <p>Staff Marketing &amp; Partnership — Optik I See You</p>
-                <p>WhatsApp: 0877-7868-3766</p>
+                <div className="h-14" />
+                <p className="font-black text-[13px]" style={{ color: C.emeraldDark }}>Yoshput</p>
+                <p className="font-semibold text-gray-700">Staff Marketing &amp; Partnership — Optik I See You</p>
+                <p className="font-bold text-emerald-800">WhatsApp: 0877-7868-3766</p>
               </div>
             </div>
           </Body>
@@ -482,47 +491,47 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers, sourceUrl 
             <PageHeader no="II" title="Latar Belakang & Tujuan" />
 
             <SubTitle>A. Latar Belakang</SubTitle>
-            <p className="mb-3">
+            <p className="mb-3 leading-relaxed">
               Media sosial kini menjadi salah satu kanal utama konsumen muda dalam mencari referensi produk —
               mulai dari skincare, fashion, kacamata, hingga gaya hidup. Di sisi lain, banyak pelaku UMKM,
               mahasiswa, dan calon kreator di daerah yang membutuhkan keterampilan praktis untuk membuat konten
-              yang menarik dan konsisten.
+              yang menarik, otentik, dan konsisten.
             </p>
-            <p>
+            <p className="leading-relaxed">
               Sebagai brand eyewear yang aktif membangun komunitas melalui konten, Optik I See You melihat
               keterkaitan alami antara <b>kacamata, estetika visual, perawatan diri (skincare &amp; grooming),
               dan personal branding</b>. Kreator yang tampil percaya diri — dengan frame yang tepat, kulit yang
               terawat, dan gaya yang khas — adalah titik temu yang ideal bagi brand kecantikan, lifestyle, dan
-              bisnis lokal untuk menjangkau audiens yang tepat.
+              bisnis lokal untuk menjangkau audiens potensial secara organik.
             </p>
 
             <SubTitle>B. Tujuan Program</SubTitle>
             <Bullets
               items={[
                 <><b>Edukasi kreator lokal</b> — pelatihan praktis pembuatan konten Reels, TikTok, dan Story.</>,
-                <><b>Aktivasi brand mitra multi-channel</b> — di lokasi event, di layar TV 4 cabang, dan di media sosial.</>,
-                <><b>Membangun komunitas kreatif</b> yang terhubung dengan Optik I See You dan brand mitra untuk kolaborasi lanjutan.</>,
-                <><b>Interaksi langsung dengan audiens</b> — bukan sekadar logo, tetapi sesi demo, sampling, dan konten bersama.</>,
+                <><b>Aktivasi brand mitra multi-channel</b> — di lokasi event, di layar TV 4 cabang showroom, dan di media sosial resmi.</>,
+                <><b>Membangun komunitas kreatif</b> yang terhubung dengan Optik I See You dan brand mitra untuk kolaborasi berkelanjutan.</>,
+                <><b>Interaksi langsung dengan audiens</b> — bukan sekadar logo pasif, melainkan sesi demo produk, sampling, dan interaksi nyata.</>,
               ]}
             />
 
             <div className="mt-8">
               <PageHeader no="III" title="Detail Pelaksanaan Event" />
-              <table className="w-full border-collapse text-[11px]">
+              <table className="w-full border-collapse text-[11px] rounded-lg overflow-hidden border" style={{ borderColor: C.ivoryBorder }}>
                 <tbody>
                   {[
-                    ["Nama Acara", <span key="n" className="font-semibold">&quot;Buka Class Konten&quot; — Kelas Konten &amp; Digital Creator Masterclass</span>],
-                    ["Penyelenggara", <span key="p" className="font-semibold">Tim Marketing, Optik I See You</span>],
+                    ["Nama Acara", <span key="n" className="font-bold text-gray-950">&quot;Buka Class Konten&quot; — Kelas Konten &amp; Digital Creator Masterclass</span>],
+                    ["Penyelenggara", <span key="p" className="font-bold text-emerald-800">Tim Marketing, Optik I See You</span>],
                     ["Tanggal", <Val key="d" v={f.eventDate} />],
                     ["Waktu", <Val key="t" v={f.eventTime} />],
                     ["Lokasi", <Val key="l" v={f.venue} />],
                     ["Target Peserta", <Val key="j" v={f.participants} />],
-                    ["Profil Peserta", <span key="pp" className="font-semibold">Gen-Z, mahasiswa, profesional muda, pelaku UMKM, dan kreator konten lokal</span>],
-                    ["Format", <span key="f" className="font-semibold">Workshop / kelas konten, demo produk mitra, sesi praktik konten, networking</span>],
+                    ["Profil Peserta", <span key="pp" className="font-semibold text-gray-800">Gen-Z, mahasiswa, profesional muda, pelaku UMKM, dan kreator konten lokal</span>],
+                    ["Format Acara", <span key="f" className="font-semibold text-gray-800">Workshop konten, demo produk mitra, sesi praktik editing, dan networking</span>],
                   ].map(([k, v], i) => (
-                    <tr key={i} style={{ backgroundColor: i % 2 === 0 ? C.beige : "transparent" }}>
-                      <td className="py-2 px-3 w-[32%] font-bold align-top" style={{ color: C.navy }}>{k}</td>
-                      <td className="py-2 px-3">{v}</td>
+                    <tr key={i} style={{ backgroundColor: i % 2 === 0 ? C.ivoryMuted : C.ivoryLight }}>
+                      <td className="py-2.5 px-3.5 w-[32%] font-black align-top" style={{ color: C.emeraldDark }}>{k}</td>
+                      <td className="py-2.5 px-3.5 leading-relaxed">{v}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -537,65 +546,64 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers, sourceUrl 
           <Body>
             <PageHeader no="IV" title="Skema Keuntungan Mitra Sponsor" />
 
-            <p className="mb-4">
+            <p className="mb-4 leading-relaxed">
               Mitra sponsor mendapatkan paparan di <b>tiga kanal sekaligus</b> — tidak berhenti di hari acara,
-              tetapi berlanjut di jaringan toko dan media sosial Optik I See You.
+              tetapi berlanjut di jaringan showroom toko fisik dan media sosial resmi Optik I See You.
             </p>
 
             <div className="grid grid-cols-3 gap-3 mb-6">
               {[
-                { t: "On-Site Event", d: "Booth, demo produk, sampling, ad-lips MC, dan branding di backdrop & banner.", c: C.maroon },
-                { t: "4 Cabang Ritel", d: "Penayangan di layar TV showroom dan display di area kasir selama jam operasional toko.", c: C.navy },
-                { t: "Digital & Web", d: "Post, Story, dan tag di akun resmi, serta logo pada frame Photobooth di optikiseeyou.com.", c: C.rose },
+                { t: "On-Site Event", d: "Booth, demo produk, sampling, ad-lips MC, dan branding di backdrop & banner utama.", c: C.emeraldDark },
+                { t: "4 Cabang Ritel", d: "Penayangan video/poster di layar TV showroom dan display flyer di kasir 4 cabang.", c: C.emerald },
+                { t: "Digital & Web", d: "Post Feed/Reels, Story tag, dan logo pada frame Photobooth di optikiseeyou.com.", c: C.emeraldMid },
               ].map((x) => (
-                <div key={x.t} className="rounded-xl p-4" style={{ backgroundColor: C.beige, borderTop: `4px solid ${x.c}` }}>
-                  <div className="text-[12px] font-extrabold" style={{ color: x.c }}>{x.t}</div>
-                  <p className="text-[10.5px] mt-1 leading-snug">{x.d}</p>
+                <div key={x.t} className="rounded-xl p-4 border" style={{ backgroundColor: C.ivoryMuted, borderColor: C.ivoryBorder, borderTop: `4px solid ${x.c}` }}>
+                  <div className="text-[12.5px] font-black" style={{ color: x.c }}>{x.t}</div>
+                  <p className="text-[10.5px] mt-1 leading-snug text-gray-700">{x.d}</p>
                 </div>
               ))}
             </div>
 
             <SubTitle>Jangkauan Media Sosial Resmi</SubTitle>
-            <table className="w-full border-collapse text-[10.5px]">
+            <table className="w-full border-collapse text-[10.5px] rounded-lg overflow-hidden border" style={{ borderColor: C.ivoryBorder }}>
               <thead>
-                <tr style={{ backgroundColor: C.navy, color: C.cream }}>
-                  <th className="py-2 px-3 text-left">Akun</th>
-                  <th className="py-2 px-3 text-right">Instagram</th>
-                  <th className="py-2 px-3 text-right">TikTok</th>
-                  <th className="py-2 px-3 text-right">Data per</th>
+                <tr style={{ backgroundColor: C.emeraldDark, color: C.ivory }}>
+                  <th className="py-2.5 px-3 text-left font-black">Akun Resmi</th>
+                  <th className="py-2.5 px-3 text-right font-black">Instagram</th>
+                  <th className="py-2.5 px-3 text-right font-black">TikTok</th>
+                  <th className="py-2.5 px-3 text-right font-black">Data per</th>
                 </tr>
               </thead>
               <tbody>
                 {followers.map((r, i) => (
-                  <tr key={r.account} style={{ backgroundColor: i % 2 === 0 ? C.beige : "transparent" }}>
-                    <td className="py-1.5 px-3">
-                      <span className="font-bold" style={{ color: C.navy }}>{r.account}</span>
-                      <span className="text-neutral-600"> · {r.label}</span>
+                  <tr key={r.account} style={{ backgroundColor: i % 2 === 0 ? C.ivoryMuted : C.ivoryLight }}>
+                    <td className="py-2 px-3">
+                      <span className="font-black" style={{ color: C.emeraldDark }}>{r.account}</span>
+                      <span className="text-gray-600 font-medium"> · {r.label}</span>
                     </td>
-                    <td className="py-1.5 px-3 text-right tabular-nums font-semibold">{fmt(r.igFollowers)}</td>
-                    <td className="py-1.5 px-3 text-right tabular-nums font-semibold">{r.tiktokFollowers ? fmt(r.tiktokFollowers) : "-"}</td>
-                    <td className="py-1.5 px-3 text-right text-neutral-600">{fmtDate(r.asOf)}</td>
+                    <td className="py-2 px-3 text-right tabular-nums font-bold text-gray-950">{fmt(r.igFollowers)}</td>
+                    <td className="py-2 px-3 text-right tabular-nums font-bold text-gray-950">{r.tiktokFollowers ? fmt(r.tiktokFollowers) : "-"}</td>
+                    <td className="py-2 px-3 text-right text-gray-600 font-medium">{fmtDate(r.asOf)}</td>
                   </tr>
                 ))}
-                <tr style={{ backgroundColor: C.maroon, color: C.cream }}>
-                  <td className="py-2 px-3 font-extrabold">Total</td>
-                  <td className="py-2 px-3 text-right tabular-nums font-extrabold">{fmt(totalIg)}</td>
-                  <td className="py-2 px-3 text-right tabular-nums font-extrabold">{fmt(totalTt)}</td>
-                  <td className="py-2 px-3 text-right font-extrabold">{fmt(totalAll)}</td>
+                <tr style={{ backgroundColor: C.emerald, color: C.ivory }}>
+                  <td className="py-2.5 px-3 font-black text-white">Total Jangkauan Jaringan</td>
+                  <td className="py-2.5 px-3 text-right tabular-nums font-black text-white">{fmt(totalIg)}</td>
+                  <td className="py-2.5 px-3 text-right tabular-nums font-black text-white">{fmt(totalTt)}</td>
+                  <td className="py-2.5 px-3 text-right font-black text-white">{fmt(totalAll)}</td>
                 </tr>
               </tbody>
             </table>
-            <p className="mt-2 text-[9.5px] text-neutral-600 italic">
-              Sumber: rekap harian PIC media sosial tiap cabang (Spreadsheet Rekap Marketing Optik I See You).
-              Lunar Eyewear adalah second brand Optik I See You di Tegal.
+            <p className="mt-2 text-[9.5px] text-gray-600 italic">
+              Sumber: Rekapitulasi harian PIC media sosial 4 cabang resmi Optik I See You &amp; Lunar Eyewear.
             </p>
 
-            <SubTitle>Nilai Tambah untuk Brand Skincare &amp; Lifestyle</SubTitle>
+            <SubTitle>Nilai Tambah untuk Brand Skincare, Beauty &amp; Lifestyle</SubTitle>
             <Bullets
               items={[
-                "Audiens yang relevan: peserta kelas konten adalah calon pembuat konten yang berpotensi mengulas dan membagikan produk mitra.",
-                "Paparan berulang: materi mitra tayang di layar TV toko selama periode paket, dilihat oleh pengunjung yang sedang menunggu pemeriksaan mata atau memilih frame.",
-                "Konten bersama: momen demo dan sampling di acara dapat menjadi bahan konten untuk akun mitra maupun Optik I See You.",
+                "Audiens yang relevan: Peserta kelas konten adalah kreator aktif yang siap mengulas dan membagikan produk mitra ke pengikut mereka.",
+                "Paparan berulang: Materi mitra tayang di layar TV toko selama periode paket, dinikmati oleh pengunjung harian yang sedang fitting frame atau menunggu cek mata.",
+                "Kolaborasi konten: Dokumentasi momen demo dan sampling di acara dapat diangkat menjadi bahan konten bersama di feed & reels.",
               ]}
             />
           </Body>
@@ -607,14 +615,16 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers, sourceUrl 
           <Body>
             <PageHeader no="V" title="Pilihan Paket Sponsorship" />
 
-            <table className="w-full border-collapse text-[10px]">
+            <table className="w-full border-collapse text-[10px] border" style={{ borderColor: C.ivoryBorder }}>
               <thead>
                 <tr>
-                  <th className="py-2 px-2 text-left align-bottom" style={{ color: C.navy }}>Fasilitas</th>
+                  <th className="py-2.5 px-2.5 text-left align-bottom font-black" style={{ color: C.emeraldDark }}>
+                    Fasilitas &amp; Hak Sponsor
+                  </th>
                   {PACKAGES.map((p) => (
-                    <th key={p.name} className="py-2.5 px-1.5 text-center text-white w-[15%]" style={{ backgroundColor: p.color }}>
+                    <th key={p.name} className="py-2.5 px-1.5 text-center text-white w-[16%]" style={{ backgroundColor: p.color }}>
                       <div className="text-[11px] font-black tracking-wider">{p.name}</div>
-                      <div className="text-[9.5px] font-semibold opacity-90">{p.price}</div>
+                      <div className="text-[9.5px] font-bold opacity-95">{p.price}</div>
                     </th>
                   ))}
                 </tr>
@@ -624,13 +634,13 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers, sourceUrl 
                   <React.Fragment key={i}>
                     {row.group && (
                       <tr>
-                        <td colSpan={5} className="pt-3 pb-1 px-2 text-[9.5px] font-extrabold uppercase tracking-widest" style={{ color: C.maroon }}>
+                        <td colSpan={5} className="pt-3 pb-1 px-2.5 text-[9.5px] font-black uppercase tracking-widest bg-emerald-50 text-emerald-900 border-t border-b border-emerald-200">
                           {row.group}
                         </td>
                       </tr>
                     )}
-                    <tr style={{ backgroundColor: i % 2 === 0 ? C.beige : "transparent" }}>
-                      <td className="py-1.5 px-2">{row.label}</td>
+                    <tr style={{ backgroundColor: i % 2 === 0 ? C.ivoryMuted : C.ivoryLight }}>
+                      <td className="py-1.5 px-2.5 font-medium text-gray-900">{row.label}</td>
                       {row.cells.map((c, j) => (
                         <td key={j} className="py-1.5 px-1 text-center">{renderCell(c)}</td>
                       ))}
@@ -646,30 +656,30 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers, sourceUrl 
         {/* ---------- 6. DETAIL PAKET ---------- */}
         <Page>
           <Body>
-            <PageHeader no="V" title="Rincian Paket Sponsorship" />
+            <PageHeader no="V" title="Rincian Fasilitas Tiap Paket" />
             <div className="grid grid-cols-2 gap-4">
               {PACKAGES.map((p) => (
-                <div key={p.name} className="rounded-xl overflow-hidden border" style={{ borderColor: p.color, backgroundColor: "#FFFFFF" }}>
+                <div key={p.name} className="rounded-xl overflow-hidden border shadow-xs" style={{ borderColor: p.color, backgroundColor: C.ivoryLight }}>
                   <div className="px-4 py-3 text-white" style={{ backgroundColor: p.color }}>
                     <div className="flex items-baseline justify-between gap-2">
                       <span className="text-[15px] font-black tracking-wider">{p.name}</span>
-                      <span className="text-[13px] font-extrabold">{p.price}</span>
+                      <span className="text-[13px] font-black">{p.price}</span>
                     </div>
-                    <div className="text-[9.5px] font-semibold opacity-90 uppercase tracking-wider">{p.tag}</div>
+                    <div className="text-[9.5px] font-bold opacity-95 uppercase tracking-wider">{p.tag}</div>
                   </div>
                   <ul className="px-4 py-3 space-y-1.5 text-[10.5px] leading-snug">
                     {p.items.map((it, i) => (
-                      <li key={i} className="flex gap-2">
+                      <li key={i} className="flex gap-2 items-start">
                         <span className="mt-[5px] w-1.5 h-1.5 shrink-0 rounded-full" style={{ backgroundColor: p.color }} />
-                        <span>{it}</span>
+                        <span className="text-gray-900">{it}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
               ))}
             </div>
-            <p className="mt-5 text-[10.5px]">
-              Paket dapat disesuaikan dengan kebutuhan brand. Silakan hubungi tim kami untuk diskusi kustomisasi.
+            <p className="mt-5 text-[11px] text-gray-700 italic">
+              * Fasilitas paket dapat disesuaikan dengan kebutuhan objektif promosi brand Anda. Tim Marketing Optik I See You siap mendiskusikan opsi kustomisasi lanjutan.
             </p>
           </Body>
           <PageFooter page={6} />
@@ -681,75 +691,75 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers, sourceUrl 
             <PageHeader no="VI" title="Kontrak Kerjasama & Prosedur Pembayaran" />
 
             <SubTitle>A. Alur Kerjasama</SubTitle>
-            <ol className="space-y-1.5 list-decimal pl-5">
-              <li>Mitra memilih paket sponsorship yang sesuai.</li>
-              <li>Optik I See You menyiapkan Surat Perjanjian Kerjasama (MoU) berisi hak dan kewajiban kedua pihak.</li>
-              <li>Mitra menyerahkan materi (logo resolusi tinggi, video/poster iklan, voucher/flyer) paling lambat <b>H-7</b> sebelum acara.</li>
-              <li>Setelah acara, mitra menerima laporan berupa dokumentasi foto/video acara dan bukti penayangan materi di cabang.</li>
+            <ol className="space-y-1.5 list-decimal pl-5 text-[11.5px] leading-relaxed">
+              <li>Mitra memilih paket sponsorship yang sesuai dengan target promosi.</li>
+              <li>Optik I See You menyiapkan Surat Perjanjian Kerjasama (MoU) resmi berisi hak dan kewajiban kedua pihak.</li>
+              <li>Mitra menyerahkan materi (logo resolusi tinggi, video/poster iklan TV showroom, voucher/flyer) paling lambat <b>H-7</b> sebelum acara.</li>
+              <li>Setelah acara, mitra menerima laporan evaluasi dokumentasi foto/video acara dan bukti tayang iklan di cabang.</li>
             </ol>
 
-            <SubTitle>B. Prosedur Pembayaran</SubTitle>
-            <table className="w-full border-collapse text-[11px]">
+            <SubTitle>B. Skema Pembayaran</SubTitle>
+            <table className="w-full border-collapse text-[11px] rounded-lg overflow-hidden border" style={{ borderColor: C.ivoryBorder }}>
               <thead>
-                <tr style={{ backgroundColor: C.navy, color: C.cream }}>
-                  <th className="py-2 px-3 text-left">Tahap</th>
-                  <th className="py-2 px-3 text-left">Waktu</th>
-                  <th className="py-2 px-3 text-right">Nominal</th>
+                <tr style={{ backgroundColor: C.emeraldDark, color: C.ivory }}>
+                  <th className="py-2.5 px-3 text-left font-black">Tahap Pembayaran</th>
+                  <th className="py-2.5 px-3 text-left font-black">Waktu Pelaksanaan</th>
+                  <th className="py-2.5 px-3 text-right font-black">Nominal</th>
                 </tr>
               </thead>
               <tbody>
-                <tr style={{ backgroundColor: C.beige }}>
-                  <td className="py-2 px-3 font-bold" style={{ color: C.navy }}>Down Payment</td>
-                  <td className="py-2 px-3">Setelah penandatanganan MoU</td>
-                  <td className="py-2 px-3 text-right font-extrabold" style={{ color: C.maroon }}>50%</td>
+                <tr style={{ backgroundColor: C.ivoryMuted }}>
+                  <td className="py-2.5 px-3 font-bold" style={{ color: C.emeraldDark }}>Down Payment (DP)</td>
+                  <td className="py-2.5 px-3">Setelah penandatanganan MoU kerjasama</td>
+                  <td className="py-2.5 px-3 text-right font-black text-emerald-800">50%</td>
                 </tr>
-                <tr>
-                  <td className="py-2 px-3 font-bold" style={{ color: C.navy }}>Pelunasan</td>
-                  <td className="py-2 px-3">Paling lambat H-3 sebelum acara</td>
-                  <td className="py-2 px-3 text-right font-extrabold" style={{ color: C.maroon }}>50%</td>
+                <tr style={{ backgroundColor: C.ivoryLight }}>
+                  <td className="py-2.5 px-3 font-bold" style={{ color: C.emeraldDark }}>Pelunasan</td>
+                  <td className="py-2.5 px-3">Paling lambat H-3 sebelum pelaksanaan acara</td>
+                  <td className="py-2.5 px-3 text-right font-black text-emerald-800">50%</td>
                 </tr>
               </tbody>
             </table>
 
-            <SubTitle>C. Ketentuan</SubTitle>
+            <SubTitle>C. Ketentuan Kerjasama</SubTitle>
             <Bullets
               items={[
                 "Pembayaran melalui transfer ke rekening resmi Optik I See You yang tercantum di MoU.",
                 "Paket Silver (In-Kind) tidak memerlukan pembayaran tunai; jenis dan jumlah produk/voucher disepakati bersama dan dicantumkan dalam MoU.",
-                "Ketentuan perubahan jadwal dan pembatalan diatur dalam MoU.",
+                "Ketentuan perubahan jadwal dan pembatalan diatur secara formal dalam MoU.",
               ]}
             />
 
-            <SubTitle>D. Kontak Kerjasama</SubTitle>
-            <div className="rounded-xl p-5 grid grid-cols-2 gap-4" style={{ backgroundColor: C.navy, color: C.cream }}>
+            <SubTitle>D. Kontak Kerjasama Resmi</SubTitle>
+            <div className="rounded-xl p-5 grid grid-cols-2 gap-4 border" style={{ backgroundColor: C.emeraldDark, color: C.ivory, borderColor: C.emeraldBorder }}>
               <div>
-                <div className="text-[9px] font-bold uppercase tracking-widest" style={{ color: C.pink }}>Contact Person</div>
-                <div className="text-[15px] font-extrabold">Yoshput</div>
-                <div className="text-[10.5px]" style={{ color: C.beige }}>Staff Marketing &amp; Partnership</div>
+                <div className="text-[9px] font-black uppercase tracking-widest text-emerald-300">Contact Person (PIC)</div>
+                <div className="text-[16px] font-black text-white">Yoshput</div>
+                <div className="text-[11px] text-emerald-200">Staff Marketing &amp; Partnership</div>
               </div>
               <div>
-                <div className="text-[9px] font-bold uppercase tracking-widest" style={{ color: C.pink }}>WhatsApp</div>
-                <div className="text-[15px] font-extrabold">0877-7868-3766</div>
+                <div className="text-[9px] font-black uppercase tracking-widest text-emerald-300">Direct WhatsApp</div>
+                <div className="text-[16px] font-black text-white">0877-7868-3766</div>
               </div>
               <div>
-                <div className="text-[9px] font-bold uppercase tracking-widest" style={{ color: C.pink }}>Website</div>
-                <div className="text-[12px] font-bold">optikiseeyou.com</div>
+                <div className="text-[9px] font-black uppercase tracking-widest text-emerald-300">Website Resmi</div>
+                <div className="text-[13px] font-bold text-white">optikiseeyou.com</div>
               </div>
               <div>
-                <div className="text-[9px] font-bold uppercase tracking-widest" style={{ color: C.pink }}>Instagram</div>
-                <div className="text-[12px] font-bold">@iseeyou.glasses</div>
+                <div className="text-[9px] font-black uppercase tracking-widest text-emerald-300">Instagram Resmi</div>
+                <div className="text-[13px] font-bold text-white">@iseeyou.glasses</div>
               </div>
             </div>
 
-            <div className="mt-8 p-5 rounded-xl text-center" style={{ backgroundColor: C.beige, borderLeft: `5px solid ${C.maroon}` }}>
-              <p className="text-[12px] leading-relaxed">
-                Kami menantikan kesempatan berkolaborasi bersama <b>{f.recipientCompany}</b> dalam program
-                &quot;Buka Class Konten&quot; dan membangun ekosistem kreatif yang saling menguntungkan.
+            <div className="mt-7 p-4 rounded-xl text-center border" style={{ backgroundColor: C.ivoryMuted, borderColor: C.ivoryBorder, borderLeft: `5px solid ${C.emeraldDark}` }}>
+              <p className="text-[12px] leading-relaxed text-gray-900">
+                Kami sangat menantikan kesempatan berkolaborasi bersama <b>{f.recipientCompany}</b> dalam program
+                &quot;Buka Class Konten&quot; dan membangun sinergi ekosistem kreatif yang saling menguntungkan.
               </p>
             </div>
 
-            <p className="mt-4 text-[9px] text-neutral-500 italic text-center no-print">
-              Data jangkauan media sosial: <a href={sourceUrl} target="_blank" rel="noopener noreferrer" className="underline">Spreadsheet Rekap</a>
+            <p className="mt-4 text-[9px] text-gray-500 italic text-center no-print">
+              Data jangkauan media sosial terintegrasi langsung: <a href={sourceUrl} target="_blank" rel="noopener noreferrer" className="underline font-bold text-emerald-800">Spreadsheet Rekap Marketing</a>
             </p>
           </Body>
           <PageFooter page={7} />

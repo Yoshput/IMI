@@ -78,6 +78,10 @@ export const RankedContentTable: React.FC<RankedContentTableProps> = ({ items })
                           alt={item.title}
                           className="w-full h-full object-cover transition-transform duration-300 group-hover/thumb:scale-110"
                           loading="lazy"
+                          onError={(e) => {
+                            e.currentTarget.onerror = null;
+                            e.currentTarget.src = "/brand/imi-icon.png";
+                          }}
                         />
                         <div className="absolute inset-0 bg-black/30 opacity-0 group-hover/thumb:opacity-100 transition-opacity flex items-center justify-center text-white">
                           <ZoomIn className="w-4 h-4 text-white drop-shadow" />
