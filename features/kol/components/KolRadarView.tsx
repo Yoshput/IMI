@@ -543,7 +543,8 @@ Have a nicee dayy ya kaa! 🌸✨`;
               className="px-2.5 py-1.5 rounded-control bg-surface-secondary border border-border text-xs text-foreground-secondary focus:outline-none"
             >
               <option value="all">Semua Status</option>
-              <option value="Rekomendasi Utama">Rekomendasi Utama</option>
+              <option value="Rate Card Diterima">📋 Rate Card Diterima</option>
+              <option value="Rekomendasi Utama">⭐ Rekomendasi Utama</option>
               <option value="Opsi Alternatif">Opsi Alternatif</option>
               <option value="Telah Dihubungi">Telah Dihubungi</option>
               <option value="Deal">Deal</option>
@@ -641,6 +642,7 @@ Have a nicee dayy ya kaa! 🌸✨`;
                     onChange={(e) => handleStatusChange(kol.id, e.target.value)}
                     className="text-[10px] font-medium px-2 py-0.5 rounded bg-surface-secondary border border-border text-foreground cursor-pointer focus:outline-none"
                   >
+                    <option value="Rate Card Diterima">📋 Rate Card Diterima</option>
                     <option value="Rekomendasi Utama">⭐ Rekomendasi Utama</option>
                     <option value="Opsi Alternatif">Opsi Alternatif</option>
                     <option value="Telah Dihubungi">Telah Dihubungi</option>

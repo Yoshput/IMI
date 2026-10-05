@@ -105,58 +105,6 @@
     "rateCardNote": "Menunggu balasan chat rate card dari kreator."
   },
   {
-    "id": "kol-pwt-fawniea",
-    "branchId": "pwt",
-    "branchName": "Purwokerto",
-    "brand": "Optik I See You",
-    "name": "Fawnia Avrieal",
-    "handle": "fawniea",
-    "platform": "TikTok",
-    "profileImg": null,
-    "instagramUrl": "https://www.tiktok.com/@fawniea",
-    "tiktokUrl": "https://www.tiktok.com/@fawniea",
-    "socialBladeUrl": "https://socialblade.com/tiktok/user/fawniea",
-    "socialBladeGrade": "B+",
-    "followers": 54200,
-    "followersFormatted": "54.2K",
-    "engagementRate": 5.2,
-    "niche": "Fashion, Hijab & Daily Outfit",
-    "audienceFit": "Komunitas Hijabers & Mahasiswi Banyumas",
-    "rateCard": {
-      "story": "Menunggu Balesan",
-      "reels": "Menunggu Balesan",
-      "feeds": "Menunggu Balesan",
-      "visitStore": "Menunggu Balesan",
-      "bundled": "Menunggu Balesan"
-    },
-    "benefits": [
-      "Padu padan kacamata dengan hijab style kekinian",
-      "Eksposur store I See You Purwokerto ke audiens perempuan muslimah",
-      "Format video estetik minimalis"
-    ],
-    "owningRights": {
-      "canOwnRaw": true,
-      "terms": "Video mentahan 4K 60fps tanpa watermark untuk Ads",
-      "extraFeeEstimate": "Include paket visit / barter",
-      "adsUsageDays": 60,
-      "statusNote": "Bisa Owning. Siap diiklanin Ads."
-    },
-    "status": "Telah Dihubungi",
-    "notes": "⏳ Menunggu balasan informasi rate card resmi dari kreator untuk bahan evaluasi rapat.",
-    "contactWa": "-",
-    "pitchTemplate": "Hai kak Fawnia.. ✨👋\n\nPerkenalkan saya tim Marketing Optik I See You Glasses Purwokerto 👓\nKami sangat menyukai gaya fashion dan konten outfit kaka. Kami tertarik mengajak kolaborasi untuk sesi review frame kacamata estetik di cabang kami 🥰\n\nBoleh diinfokan untuk ratecard resminya kak?\n\nTerimakasih banyak ditunggu kabar baiknya ya kak! 🌸✨",
-    "barterStrategy": {
-      "standardFee": "Rp 250.000",
-      "barterOption": "Barter Full Produk Kacamata",
-      "followerVoucher": "Voucher Diskon Belanja Followers",
-      "recommendedApproach": "Tahap 1: Tanya ratecard dulu. Tahap 2: Tawar barter kacamata + voucher followers."
-    },
-    "contentFocus": "Video Aesthetic & Clean Girl",
-    "rateCardImage": null,
-    "rateCardPdf": null,
-    "rateCardNote": "Menunggu balasan chat rate card dari kreator."
-  },
-  {
     "id": "kol-pwt-yurikonaseu",
     "branchId": "pwt",
     "branchName": "Purwokerto",
@@ -176,11 +124,11 @@
     "niche": "Aesthetic Gen Z, Humor & Creative Daily",
     "audienceFit": "Gen Z & Anak Muda Kreatif Purwokerto",
     "rateCard": {
-      "story": "Menunggu Balesan",
-      "reels": "Menunggu Balesan",
-      "feeds": "Menunggu Balesan",
-      "visitStore": "Menunggu Balesan",
-      "bundled": "Menunggu Balesan"
+      "story": "Included: Location tag, Mention TikTok, Link comment",
+      "reels": "Rp 200.000 (Hard Selling) / Rp 250.000 (Narrative/Storytelling UGC)",
+      "feeds": "-",
+      "visitStore": "Bisa visit (Location tag included)",
+      "bundled": "Rp 200.000 (Hard Selling) - Rp 250.000 (Storytelling/UGC)"
     },
     "benefits": [
       "Konten berkarakter unik dengan gaya visual anti-mainstream",
@@ -194,72 +142,20 @@
       "adsUsageDays": 60,
       "statusNote": "Bisa Owning. Siap diiklanin Ads."
     },
-    "status": "Telah Dihubungi",
-    "notes": "⏳ Menunggu balasan informasi rate card resmi dari kreator untuk bahan evaluasi rapat.",
+    "status": "Rate Card Diterima",
+    "notes": "✅ RATE CARD RESMI: Rp 200K (Hard Selling), Rp 250K (Narrative/Storytelling UGC/Soft selling). Sudah include Location tag, Mention TikTok account, dan Link di comment section. Sangat cocok untuk campaign frame retro Gen Z Purwokerto.",
     "contactWa": "-",
     "pitchTemplate": "Hai kak Yuriko.. ✨👋\n\nPerkenalkan saya tim Marketing Optik I See You Glasses Purwokerto 👓\nKonten-konten kaka seru banget dan punya vibe yang beda! Kami tertarik banget nih ajak kolaborasi bareng Optik I See You 🥰\n\nKalo boleh tau, boleh share ratecard resminya kak?\n\nTerimakasih banyak, ditunggu kabarnya ya ka! 🌸✨",
     "barterStrategy": {
-      "standardFee": "Rp 250.000",
-      "barterOption": "Barter Full Produk Kacamata",
+      "standardFee": "Rp 200.000 - Rp 250.000",
+      "barterOption": "Barter Frame Kacamata + Parsial Fee / Full Fee",
       "followerVoucher": "Voucher Diskon Belanja Followers",
-      "recommendedApproach": "Tahap 1: Tanya ratecard dulu. Tahap 2: Tawar barter kacamata + voucher followers."
+      "recommendedApproach": "Pilih paket Narrative / Storytelling (Rp 250K) untuk hasil UGC yang lebih soft & viral, atau paket Hard Selling (Rp 200K) untuk push promo diskon."
     },
-    "contentFocus": "Video Relatable & Humor Mahasiswa",
-    "rateCardImage": null,
+    "contentFocus": "Narrative / Storytelling, UGC & Soft Selling, Hard Selling Video",
+    "rateCardImage": "/kol/freaaks-beans.png",
     "rateCardPdf": null,
-    "rateCardNote": "Menunggu balasan chat rate card dari kreator."
-  },
-  {
-    "id": "kol-pwt-naelin",
-    "branchId": "pwt",
-    "branchName": "Purwokerto",
-    "brand": "Optik I See You",
-    "name": "Naelin",
-    "handle": "naelin__",
-    "platform": "TikTok",
-    "profileImg": null,
-    "instagramUrl": "https://www.tiktok.com/@naelin__",
-    "tiktokUrl": "https://www.tiktok.com/@naelin__",
-    "socialBladeUrl": "https://socialblade.com/tiktok/user/naelin__",
-    "socialBladeGrade": "B",
-    "followers": 51000,
-    "followersFormatted": "51.0K",
-    "engagementRate": 4.8,
-    "niche": "Casual Lifestyle & Daily Purwokerto",
-    "audienceFit": "Audiens Lokal Purwokerto",
-    "rateCard": {
-      "story": "Menunggu Balesan",
-      "reels": "Menunggu Balesan",
-      "feeds": "Menunggu Balesan",
-      "visitStore": "Menunggu Balesan",
-      "bundled": "Menunggu Balesan"
-    },
-    "benefits": [
-      "Jangkauan audiens lokal Purwokerto",
-      "Biaya endorsement fleksibel",
-      "Bisa diarahkan untuk skema barter kacamata"
-    ],
-    "owningRights": {
-      "canOwnRaw": true,
-      "terms": "Video mentahan tanpa watermark",
-      "extraFeeEstimate": "Include barter",
-      "adsUsageDays": 60,
-      "statusNote": "Bisa Owning."
-    },
-    "status": "Telah Dihubungi",
-    "notes": "⏳ Menunggu balasan informasi rate card resmi dari kreator untuk bahan evaluasi rapat.",
-    "contactWa": "-",
-    "pitchTemplate": "Hai kak Naelin.. ✨👋\n\nPerkenalkan saya tim Marketing Optik I See You Glasses Purwokerto 👓\nSetelah melihat akun TikTok kaka yang aktif, kami bermaksud mengajak kerja sama kolaborasi dengan Optik I See You Purwokerto 🥰\n\nBoleh minta info ratecard resminya kak?\n\nTerimakasih banyak ya kak! 🌸✨",
-    "barterStrategy": {
-      "standardFee": "Rp 250.000",
-      "barterOption": "Barter Full Produk Kacamata",
-      "followerVoucher": "Voucher Diskon Belanja Followers",
-      "recommendedApproach": "Tahap 1: Tanya ratecard dulu. Tahap 2: Tawar barter kacamata + voucher followers."
-    },
-    "contentFocus": "Video Simple & Daily Fashion",
-    "rateCardImage": null,
-    "rateCardPdf": null,
-    "rateCardNote": "Menunggu balasan chat rate card dari kreator."
+    "rateCardNote": "Pricelist each post: Rp 200K (Hard Selling), Rp 250K (Narrative/Storytelling UGC/Soft selling). Included Features: Location tag, Mention ur tiktok acc, Link on comment sec."
   },
   {
     "id": "kol-clp-yensprastiw",
@@ -315,58 +211,6 @@
     "rateCardNote": "Paket Talent Visit: Rp 450.000 (Talent & tim visit ke toko, publish TikTok/IG/FB, riset/script, editing final HD, story support, masa tayang selamanya, bayar setelah visit). Paket Non-Visit: Rp 350.000."
   },
   {
-    "id": "kol-clp-ichadayo",
-    "branchId": "clp",
-    "branchName": "Cilacap",
-    "brand": "Optik I See You",
-    "name": "Icha Dayo",
-    "handle": "ichadayo",
-    "platform": "TikTok",
-    "profileImg": null,
-    "instagramUrl": "https://www.tiktok.com/@ichadayo",
-    "tiktokUrl": "https://www.tiktok.com/@ichadayo",
-    "socialBladeUrl": "https://socialblade.com/tiktok/user/ichadayo",
-    "socialBladeGrade": "B+",
-    "followers": 63500,
-    "followersFormatted": "63.5K",
-    "engagementRate": 5.6,
-    "niche": "Daily Vlog & Creator Cilacap",
-    "audienceFit": "Gen Z & Remaja Cilacap",
-    "rateCard": {
-      "story": "Menunggu Balesan",
-      "reels": "Menunggu Balesan",
-      "feeds": "Menunggu Balesan",
-      "visitStore": "Menunggu Balesan",
-      "bundled": "Menunggu Balesan"
-    },
-    "benefits": [
-      "Terdaftar di direktori KOL aktif Jawa Tengah",
-      "Format video kasual & dekat dengan keseharian anak muda",
-      "Siap untuk review store visit cabang Cilacap"
-    ],
-    "owningRights": {
-      "canOwnRaw": true,
-      "terms": "Video mentahan tanpa watermark",
-      "extraFeeEstimate": "Include barter",
-      "adsUsageDays": 60,
-      "statusNote": "Bisa Owning."
-    },
-    "status": "Telah Dihubungi",
-    "notes": "⏳ Menunggu balasan informasi rate card resmi dari kreator untuk bahan evaluasi rapat.",
-    "contactWa": "-",
-    "pitchTemplate": "Hai kak Icha.. ✨👋\n\nPerkenalkan saya tim Marketing Optik I See You Cilacap 👓\nSetelah melihat akun TikTok kaka yang aktif di Cilacap, kami tertarik mengajak kerja sama kolaborasi dengan store kami di Cilacap 🥰\n\nBoleh diinfokan untuk ratecard resminya kak?\n\nTerimakasih banyak ditunggu kabar baiknya ya kak! 🌸✨",
-    "barterStrategy": {
-      "standardFee": "Rp 250.000",
-      "barterOption": "Barter Full Produk Kacamata",
-      "followerVoucher": "Voucher Diskon Belanja Followers",
-      "recommendedApproach": "Tahap 1: Tanya ratecard dulu. Tahap 2: Tawar barter kacamata + voucher followers."
-    },
-    "contentFocus": "Video Aesthetic & Kuliner Cilacap",
-    "rateCardImage": null,
-    "rateCardPdf": null,
-    "rateCardNote": "Menunggu balasan chat rate card dari kreator."
-  },
-  {
     "id": "kol-clp-cimusaa",
     "branchId": "clp",
     "branchName": "Cilacap",
@@ -414,58 +258,6 @@
       "recommendedApproach": "Tahap 1: Tanya ratecard dulu. Tahap 2: Tawar barter kacamata + voucher followers."
     },
     "contentFocus": "Video Simple & Cut-to-Cut Ngapak",
-    "rateCardImage": null,
-    "rateCardPdf": null,
-    "rateCardNote": "Menunggu balasan chat rate card dari kreator."
-  },
-  {
-    "id": "kol-tegal-sherennanor",
-    "branchId": "tegal",
-    "branchName": "Lunar Tegal",
-    "brand": "Lunar Eyewear",
-    "name": "Sheren Nanor",
-    "handle": "sherennanor",
-    "platform": "TikTok & Instagram",
-    "profileImg": null,
-    "instagramUrl": "https://www.tiktok.com/@sherennanor",
-    "tiktokUrl": "https://www.tiktok.com/@sherennanor",
-    "socialBladeUrl": "https://socialblade.com/tiktok/user/sherennanor",
-    "socialBladeGrade": "A-",
-    "followers": 88000,
-    "followersFormatted": "88.0K",
-    "engagementRate": 7.5,
-    "niche": "Beauty, Hijab & Skincare Reviewer Tegal",
-    "audienceFit": "Wanita Muda, Hijabers & Mahasiswi Tegal-Slawi",
-    "rateCard": {
-      "story": "Menunggu Balesan",
-      "reels": "Menunggu Balesan",
-      "feeds": "Menunggu Balesan",
-      "visitStore": "Menunggu Balesan",
-      "bundled": "Menunggu Balesan"
-    },
-    "benefits": [
-      "Reviewer beauty terpercaya (Wardah dll) di wilayah Tegal",
-      "Audiens sangat cocok dengan positioning Lunar Eyewear yang fashionable & chic",
-      "Kemampuan presentasi di depan kamera sangat natural dan menarik"
-    ],
-    "owningRights": {
-      "canOwnRaw": true,
-      "terms": "Video mentahan 4K 60fps tanpa watermark untuk Meta Ads kawasan Pantura/Tegal",
-      "extraFeeEstimate": "Include paket visit / negotiable",
-      "adsUsageDays": 60,
-      "statusNote": "Bisa Owning. Siap diiklanin Ads."
-    },
-    "status": "Telah Dihubungi",
-    "notes": "⏳ Menunggu balasan informasi rate card resmi dari kreator untuk bahan evaluasi rapat.",
-    "contactWa": "-",
-    "pitchTemplate": "Hai kak Sheren.. ✨👋\n\nPerkenalkan saya tim Marketing Lunar Eyewear Tegal 👓\nSetelah melihat konten review kecantikan dan lifestyle kaka di Tegal yang seru dan cantik banget, kami tertarik banget untuk mengajak kolaborasi bareng Lunar Eyewear Tegal 🥰\n\nBoleh diinfokan untuk ratecard resminya kak sebagai bahan pertimbangan kami?\n\nTerimakasih banyak, have a wonderful day ya kak! 🌸✨",
-    "barterStrategy": {
-      "standardFee": "Rp 250.000",
-      "barterOption": "Barter Full Produk Kacamata",
-      "followerVoucher": "Voucher Diskon Belanja Followers",
-      "recommendedApproach": "Tahap 1: Tanya ratecard dulu. Tahap 2: Tawar barter kacamata + voucher followers."
-    },
-    "contentFocus": "Video Aesthetic Hijab & Fashion",
     "rateCardImage": null,
     "rateCardPdf": null,
     "rateCardNote": "Menunggu balasan chat rate card dari kreator."
@@ -626,110 +418,6 @@
     "rateCardImage": "/kol/tarisadina.jpg"
   },
   {
-    "id": "kol-pbg-njoppskuliner",
-    "branchId": "pbg",
-    "branchName": "Purbalingga",
-    "brand": "Optik I See You",
-    "name": "Njopps Kuliner",
-    "handle": "njoppskuliner",
-    "platform": "TikTok & Instagram",
-    "profileImg": null,
-    "instagramUrl": "https://www.tiktok.com/@njoppskuliner",
-    "tiktokUrl": "https://www.tiktok.com/@njoppskuliner",
-    "socialBladeUrl": "https://socialblade.com/tiktok/user/njoppskuliner",
-    "socialBladeGrade": "B+",
-    "followers": 69400,
-    "followersFormatted": "69.4K",
-    "engagementRate": 6.9,
-    "niche": "Reviewer Kuliner & Wisata Purbalingga",
-    "audienceFit": "Pecinta Kuliner & Warga Lokal Purbalingga",
-    "rateCard": {
-      "story": "Menunggu Balesan",
-      "reels": "Menunggu Balesan",
-      "feeds": "Menunggu Balesan",
-      "visitStore": "Menunggu Balesan",
-      "bundled": "Menunggu Balesan"
-    },
-    "benefits": [
-      "Penetrasi warga lokal Purbalingga luas lewat konten kuliner",
-      "Bisa dikonsep format: 'Habis kulineran pedes/panas, mampir cek mata & ganti kacamata faset 20 menit'",
-      "Interaksi penonton lokal sangat interaktif"
-    ],
-    "owningRights": {
-      "canOwnRaw": true,
-      "terms": "Video mentahan tanpa watermark untuk promosi toko",
-      "extraFeeEstimate": "Include barter / fee standar",
-      "adsUsageDays": 60,
-      "statusNote": "Bisa Owning."
-    },
-    "status": "Telah Dihubungi",
-    "notes": "⏳ Menunggu balasan informasi rate card resmi dari kreator untuk bahan evaluasi rapat.",
-    "contactWa": "-",
-    "pitchTemplate": "Halo kak Njopps.. ✨👋\n\nSalam kenal, saya tim Marketing Optik I See You Cabang Purbalingga 👓\nKonten review kuliner kaka di Purbalingga rame temen! Kami tertarik ngajak kolaborasi store visit yang seru bareng Optik I See You Purbalingga 🥰\n\nBoleh share ratecard endorsement videonya kak?\n\nTerimakasih banyak ditunggu kabar baiknya ya kak! 🌸✨",
-    "barterStrategy": {
-      "standardFee": "Rp 250.000",
-      "barterOption": "Barter Full Produk Kacamata",
-      "followerVoucher": "Voucher Diskon Belanja Followers",
-      "recommendedApproach": "Tahap 1: Tanya ratecard dulu. Tahap 2: Tawar barter kacamata + voucher followers."
-    },
-    "contentFocus": "Food & Lifestyle Mix",
-    "rateCardImage": null,
-    "rateCardPdf": null,
-    "rateCardNote": "Menunggu balasan chat rate card dari kreator."
-  },
-  {
-    "id": "kol-pbg-beautycontent",
-    "branchId": "pbg",
-    "branchName": "Purbalingga",
-    "brand": "Optik I See You",
-    "name": "Beauty Content Creator",
-    "handle": "beautycontentcreatorr",
-    "platform": "TikTok",
-    "profileImg": null,
-    "instagramUrl": "https://www.tiktok.com/@beautycontentcreatorr",
-    "tiktokUrl": "https://www.tiktok.com/@beautycontentcreatorr",
-    "socialBladeUrl": "https://socialblade.com/tiktok/user/beautycontentcreatorr",
-    "socialBladeGrade": "B",
-    "followers": 55600,
-    "followersFormatted": "55.6K",
-    "engagementRate": 5.9,
-    "niche": "Makeup & Beauty Look Purbalingga",
-    "audienceFit": "Perempuan Muda & Hijabers Purbalingga",
-    "rateCard": {
-      "story": "Menunggu Balesan",
-      "reels": "Menunggu Balesan",
-      "feeds": "Menunggu Balesan",
-      "visitStore": "Menunggu Balesan",
-      "bundled": "Menunggu Balesan"
-    },
-    "benefits": [
-      "Review kecocokan kacamata dengan makeup wajah",
-      "Menargetkan audiens wanita muda yang ingin tampil gaya dengan kacamata",
-      "Bisa diajak skema barter kacamata premium"
-    ],
-    "owningRights": {
-      "canOwnRaw": true,
-      "terms": "Video mentahan untuk Meta Ads",
-      "extraFeeEstimate": "Include barter",
-      "adsUsageDays": 60,
-      "statusNote": "Bisa Owning."
-    },
-    "status": "Telah Dihubungi",
-    "notes": "⏳ Menunggu balasan informasi rate card resmi dari kreator untuk bahan evaluasi rapat.",
-    "contactWa": "-",
-    "pitchTemplate": "Hai kak.. ✨👋\n\nPerkenalkan saya tim Marketing Optik I See You Glasses Purbalingga 👓\nKami tertarik untuk mengajak kolaborasi mencoba kacamata estetik yang cocok dipadukan dengan riasan makeup bareng Optik I See You Purbalingga 🥰\n\nBoleh minta info ratecard resminya kak?\n\nTerimakasih banyak ya kak! 🌸✨",
-    "barterStrategy": {
-      "standardFee": "Rp 250.000",
-      "barterOption": "Barter Full Produk Kacamata",
-      "followerVoucher": "Voucher Diskon Belanja Followers",
-      "recommendedApproach": "Tahap 1: Tanya ratecard dulu. Tahap 2: Tawar barter kacamata + voucher followers."
-    },
-    "contentFocus": "Beauty & Makeup Tutorial",
-    "rateCardImage": null,
-    "rateCardPdf": null,
-    "rateCardNote": "Menunggu balasan chat rate card dari kreator."
-  },
-  {
     "id": "kol-wsb-firdaauliyaa",
     "branchId": "wsb",
     "branchName": "Wonosobo",
@@ -748,11 +436,11 @@
     "niche": "Alam, Wisata Dieng, Outdoor & Hijab Positif",
     "audienceFit": "Wisatawan, Pecinta Alam & Warga Wonosobo",
     "rateCard": {
-      "story": "Menunggu Balesan",
-      "reels": "Menunggu Balesan",
-      "feeds": "Menunggu Balesan",
-      "visitStore": "Menunggu Balesan",
-      "bundled": "Menunggu Balesan"
+      "story": "Include dalam paket (1x Instagram Story)",
+      "reels": "Rp 400.000 (1x Reels upload Instagram mirroring TikTok)",
+      "feeds": "-",
+      "visitStore": "Bisa visit store (+ transport / barter)",
+      "bundled": "Rp 400.000 (1x Story + 1x Reels IG upload mirroring TikTok)"
     },
     "benefits": [
       "Citra sangat positif dengan latar keindahan alam Wonosobo/Dieng",
@@ -766,20 +454,20 @@
       "adsUsageDays": 60,
       "statusNote": "Bisa Owning. Siap diiklanin Ads."
     },
-    "status": "Telah Dihubungi",
-    "notes": "⏳ Menunggu balasan informasi rate card resmi dari kreator untuk bahan evaluasi rapat.",
+    "status": "Rate Card Diterima",
+    "notes": "✅ RATE CARD RESMI: Rp 400.000 all-in include 1x Story dan 1x Reels IG mirroring TikTok. Jangkauan 84.2K followers Wonosobo/Dieng dengan engagement 7.4%.",
     "contactWa": "-",
     "pitchTemplate": "Hai kak Firda.. ✨👋\n\nPerkenalkan saya tim Marketing Optik I See You Cabang Wonosobo 👓\nSetelah melihat konten alam dan liburan kaka di Wonosobo yang adem dan positif banget, kami tertarik banget untuk mengajak kolaborasi bareng Optik I See You Wonosobo 🥰\n\nKalo boleh tau, boleh diinfokan untuk ratecard resminya kak sebagai bahan pertimbangan kami?\n\nTerimakasih banyak ditunggu kabar baiknya ya kak! Have a wonderful day 🌸✨",
     "barterStrategy": {
-      "standardFee": "Rp 250.000",
-      "barterOption": "Barter Full Produk Kacamata",
-      "followerVoucher": "Voucher Diskon Belanja Followers",
-      "recommendedApproach": "Tahap 1: Tanya ratecard dulu. Tahap 2: Tawar barter kacamata + voucher followers."
+      "standardFee": "Rp 400.000",
+      "barterOption": "Barter Lensa Photochromic / Bluechromic Outdoor + Parsial Fee",
+      "followerVoucher": "Voucher Diskon Followers Wisata Wonosobo",
+      "recommendedApproach": "Ambil paket Rp 400.000 untuk 1x Reels + Mirroring TikTok + 1x Story, tawarkan barter kacamata outdoor untuk melengkapi kontennya."
     },
-    "contentFocus": "Video Aesthetic Wisata & Alam",
+    "contentFocus": "Video Aesthetic Wisata Dieng, Hijab OOTD, Reels & TikTok Mirroring",
     "rateCardImage": null,
     "rateCardPdf": null,
-    "rateCardNote": "Menunggu balasan chat rate card dari kreator."
+    "rateCardNote": "Rate card Rp 400.000 sudah include: 1x Instagram Story, 1x Reels upload Instagram, dan Mirroring TikTok."
   },
   {
     "id": "kol-wsb-heyikaa",
@@ -889,7 +577,7 @@
     "branchId": "tegal",
     "branchName": "Lunar Tegal",
     "brand": "Lunar Eyewear",
-    "name": "Nanal & Rere (Duo Talent)",
+    "name": "Rere dan Nannal",
     "handle": "nanalrere",
     "platform": "Instagram & TikTok",
     "profileImg": "/kol/nanal-rere-avatar.png",
@@ -900,7 +588,7 @@
     "followers": 95000,
     "followersFormatted": "95K",
     "engagementRate": 8.2,
-    "contentFocus": "Creative Duo / Lookbook Couple",
+    "contentFocus": "Creative Duo / Lookbook Couple, Retro Aesthetic Slawi-Tegal",
     "niche": "Retro Creative Couple, Fashion Editorial & Studio Vibe Tegal",
     "audienceFit": "Audiens Fashion-Forward & Pasangan Muda Tegal - Slawi",
     "rateCard": {
@@ -910,7 +598,7 @@
       "visitStore": "Rp 2.500.000 (Visit Store Tegal)",
       "bundled": "Rp 2.800.000 (2 Akun IG + TikTok + Feed Video + Story) / Rp 7.000.000 BA Bulanan"
     },
-    "rateCardNote": "Video 1 Akun: Rp 2.000.000 | Video 2 Akun IG + 1 TikTok: Rp 2.800.000 | BA Bulanan: Rp 7.000.000 (4 Video + 8 Story). Postingan stay 4 bulan, revisi 2x.",
+    "rateCardNote": "Pricelist PDF Resmi: Feed Video 1 Akun Rp 2.000.000 | 2 Akun IG + 1 TikTok Rp 2.800.000 | Story Rp 700.000 - Rp 800.000 | Brand Ambassador Rp 7.000.000/bln (4 Video + 8 Story). Postingan stay 4 bulan, revisi 2x, DP 50%.",
     "benefits": [
       "Format DUO 2 Talent (Cowok + Cewek) sekaligus, sangat pas untuk lookbook kacamata couple",
       "Distribusi lintas 2 akun Instagram sekaligus + TikTok",
@@ -923,8 +611,8 @@
       "adsUsageDays": 90,
       "statusNote": "Sangat cocok untuk kampanye Brand Ambassador Lunar Eyewear"
     },
-    "status": "Rekomendasi Utama",
-    "notes": "⭐ RATE CARD RESMI MASUK: Duo Creator Tegal (Couple Style). Feed Video Rp 2.000.000 (1 Akun) / Rp 2.800.000 (2 Akun IG + TikTok). Ada opsi Brand Ambassador Rp 7.000.000/bln (4 video + 8 story). PDF Rate Card lengkap tersedia.",
+    "status": "Rate Card Diterima",
+    "notes": "⭐ RATE CARD RESMI MASUK: Duo Creator Tegal (Rere & Nannal / Sheren Nanor). Feed Video Rp 2.000.000 (1 Akun) / Rp 2.800.000 (2 Akun IG + TikTok). Opsi Brand Ambassador Rp 7.000.000/bln. PDF Rate Card lengkap tersedia.",
     "contactWa": "Management Nanal & Rere",
     "pitchTemplate": "Hai Kak Nanal & Rere.. ✨👋\n\nPerkenalkan kami dari Lunar Eyewear Tegal 👓\nSetelah melihat visual editorial retro dan kacamata vintage kalian yang keren banget, kami tertarik banget untuk mengajak kolaborasi/partnership di cabang Lunar Eyewear Tegal 🥰\n\nBoleh kita bahas skema kolaborasinya kak? Terimakasih ditunggu kabar baiknya yaa!",
     "barterStrategy": {
