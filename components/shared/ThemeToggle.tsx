@@ -62,12 +62,12 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
         onClick={toggleTheme}
         aria-label={`Ubah ke mode ${theme === "dark" ? "terang (light)" : "gelap (dark)"}`}
         title={`Mode ${theme === "dark" ? "Gelap (Klik untuk Light)" : "Terang (Klik untuk Dark)"}`}
-        className={`p-2 rounded-xl bg-surface border border-border text-foreground hover:bg-surface-secondary transition-all active:scale-95 shadow-2xs ${className}`}
+        className={`w-8.5 h-8.5 lg:w-9 lg:h-9 flex items-center justify-center rounded-xl bg-surface border border-border text-foreground hover:bg-surface-secondary transition-all active:scale-95 shadow-2xs ${className}`}
       >
         {theme === "dark" ? (
-          <Sun className="w-4 h-4 text-amber-400" />
+          <Sun className="w-4 h-4 text-amber-400 transition-transform hover:rotate-45" />
         ) : (
-          <Moon className="w-4 h-4 text-slate-700" />
+          <Moon className="w-4 h-4 text-slate-700 transition-transform hover:-rotate-12" />
         )}
       </button>
     );

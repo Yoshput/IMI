@@ -8,35 +8,34 @@ import {
   Film,
   BarChart3,
   FileText,
-  Glasses,
   FileSpreadsheet,
   Compass,
   HeartHandshake,
   Handshake,
   Coins,
-  Lock,
   Users,
 } from "lucide-react";
 import { ThemeToggle } from "@/components/shared/ThemeToggle";
 
 interface NavItem {
   name: string;
+  shortName: string;
   href: string;
   icon: React.ElementType;
   isLocked?: boolean;
 }
 
 const navItems: NavItem[] = [
-  { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-  { name: "Aftersales CRM", href: "/aftersales", icon: HeartHandshake },
-  { name: "Pengajuan & Layanan", href: "/pengajuan", icon: Handshake },
-  { name: "Spreadsheet Rekap", href: "/spreadsheet", icon: FileSpreadsheet },
-  { name: "Competitor Radar", href: "/competitors", icon: Compass },
-  { name: "KOL Radar", href: "/kol", icon: Users },
-  { name: "Content", href: "/content", icon: Film },
-  { name: "Analytics", href: "/analytics", icon: BarChart3 },
-  { name: "Reports", href: "/reports", icon: FileText, isLocked: true },
-  { name: "Finance", href: "/finance", icon: Coins, isLocked: true },
+  { name: "Dashboard Utama", shortName: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+  { name: "Aftersales CRM", shortName: "CRM", href: "/aftersales", icon: HeartHandshake },
+  { name: "Pengajuan & Layanan", shortName: "Pengajuan", href: "/pengajuan", icon: Handshake },
+  { name: "Spreadsheet Rekap", shortName: "Sheet", href: "/spreadsheet", icon: FileSpreadsheet },
+  { name: "Competitor Radar", shortName: "Kompetitor", href: "/competitors", icon: Compass },
+  { name: "KOL & Endorsement", shortName: "KOL", href: "/kol", icon: Users },
+  { name: "Content Intelligence", shortName: "Content", href: "/content", icon: Film },
+  { name: "Analytics Meta", shortName: "Analytics", href: "/analytics", icon: BarChart3 },
+  { name: "Reports Direksi", shortName: "Reports", href: "/reports", icon: FileText, isLocked: true },
+  { name: "Finance & Budget", shortName: "Finance", href: "/finance", icon: Coins, isLocked: true },
 ];
 
 export const AppNav: React.FC = () => {
@@ -44,32 +43,32 @@ export const AppNav: React.FC = () => {
 
   return (
     <header className="sticky top-0 z-30 w-full bg-surface/90 backdrop-blur-md border-b border-border transition-colors">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+      <div className="max-w-[1600px] mx-auto px-3 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16 gap-2 sm:gap-4">
           {/* Brand Identity: Logo & Application Emblem */}
           <Link href="/dashboard" className="flex items-center gap-2.5 group shrink-0">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/brand/imi-icon.png"
               alt="IMI System Logo"
-              width={36}
-              height={36}
-              style={{ width: 36, height: 36, maxWidth: 36, maxHeight: 36 }}
-              className="w-9 h-9 min-w-9 min-h-9 max-w-9 max-h-9 rounded-xl object-contain ring-1 ring-border/80 shadow-2xs group-hover:scale-105 transition-transform shrink-0 bg-white"
+              width={34}
+              height={34}
+              style={{ width: 34, height: 34, maxWidth: 34, maxHeight: 34 }}
+              className="w-8.5 h-8.5 min-w-8.5 min-h-8.5 max-w-8.5 max-h-8.5 rounded-xl object-contain ring-1 ring-border/80 shadow-2xs group-hover:scale-105 transition-transform shrink-0 bg-white"
             />
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/brand/logo-isy-dark.png"
               alt="Optik I See You"
-              className="h-7 sm:h-8 w-auto object-contain transition-opacity group-hover:opacity-90 dark:hidden"
+              className="h-6 sm:h-7 w-auto object-contain transition-opacity group-hover:opacity-90 dark:hidden"
             />
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/brand/logo-isy-white.png"
               alt="Optik I See You"
-              className="h-7 sm:h-8 w-auto object-contain transition-opacity group-hover:opacity-90 hidden dark:block"
+              className="h-6 sm:h-7 w-auto object-contain transition-opacity group-hover:opacity-90 hidden dark:block"
             />
-            <div className="hidden sm:block border-l border-border pl-2.5">
+            <div className="hidden lg:block border-l border-border pl-2.5">
               <div className="flex items-center gap-1.5">
                 <span className="text-[11px] font-bold tracking-tight text-foreground">
                   Marketing Intelligence
@@ -79,116 +78,112 @@ export const AppNav: React.FC = () => {
                 </span>
               </div>
               <span className="text-[10px] text-foreground-muted block">
-                Optik I See You + Lunar Eyewear
+                Optik I See You + Lunar
               </span>
             </div>
           </Link>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden xl:flex items-center gap-1">
+          {/* Desktop & Laptop Icon Dock Navigation (Clean, Compact, No Overflow) */}
+          <nav
+            aria-label="Navigasi Utama"
+            className="hidden md:flex items-center gap-1 p-1 rounded-2xl bg-surface-secondary/70 dark:bg-surface-secondary/50 border border-border/70 shadow-2xs backdrop-blur-xs"
+          >
             {navItems.map((item) => {
-              const isActive = pathname.startsWith(item.href);
+              const isActive =
+                pathname === item.href ||
+                (item.href === "/dashboard" && pathname === "/") ||
+                (item.href !== "/dashboard" && pathname.startsWith(item.href));
               const Icon = item.icon;
+
               return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-control text-xs font-medium transition-all ${
-                    isActive
-                      ? "bg-foreground text-surface font-semibold shadow-subtle"
-                      : "text-foreground-secondary hover:text-foreground hover:bg-surface-secondary"
-                  }`}
-                >
-                  <Icon className="w-3.5 h-3.5" />
-                  <span>{item.name}</span>
-                  {item.isLocked && (
-                    <Lock className="w-2.5 h-2.5 opacity-60 text-amber-500 ml-0.5" />
-                  )}
-                </Link>
+                <div key={item.href} className="relative group">
+                  <Link
+                    href={item.href}
+                    aria-label={item.name}
+                    className={`relative flex items-center justify-center w-8.5 h-8.5 lg:w-9 lg:h-9 rounded-xl transition-all duration-150 active:scale-95 ${
+                      isActive
+                        ? "bg-foreground text-surface font-semibold shadow-subtle ring-1 ring-border"
+                        : "text-foreground-secondary hover:text-foreground hover:bg-surface"
+                    }`}
+                  >
+                    <Icon className="w-4 h-4 transition-transform group-hover:scale-110" />
+
+                    {/* Active dot indicator */}
+                    {isActive && (
+                      <span className="absolute -bottom-0.5 w-1 h-1 rounded-full bg-brand" />
+                    )}
+
+                    {/* Locked badge */}
+                    {item.isLocked && (
+                      <span
+                        title="Terkunci khusus otorisasi Direksi"
+                        className="absolute top-1 right-1 w-2 h-2 rounded-full bg-amber-500 ring-2 ring-surface shadow-2xs"
+                      />
+                    )}
+                  </Link>
+
+                  {/* Rich Floating Tooltip on Hover */}
+                  <div className="pointer-events-none absolute -bottom-10 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-lg bg-foreground px-2.5 py-1 text-[11px] font-medium text-surface shadow-lg opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-150 z-50 flex items-center gap-1.5">
+                    <span>{item.name}</span>
+                    {item.isLocked && (
+                      <span className="text-[9px] text-amber-300 font-semibold">(Terkunci)</span>
+                    )}
+                    <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-2 h-2 rotate-45 bg-foreground" />
+                  </div>
+                </div>
               );
             })}
           </nav>
 
-          {/* Semi-compact Navigation for medium screens */}
-          <nav className="hidden md:flex xl:hidden items-center gap-1">
-            {navItems.slice(0, 6).map((item) => {
-              const isActive = pathname.startsWith(item.href);
-              const Icon = item.icon;
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={`flex items-center gap-1 px-2 py-1.5 rounded-control text-xs font-medium transition-all ${
-                    isActive
-                      ? "bg-foreground text-surface font-semibold shadow-subtle"
-                      : "text-foreground-secondary hover:text-foreground hover:bg-surface-secondary"
-                  }`}
-                  title={item.name}
-                >
-                  <Icon className="w-3.5 h-3.5" />
-                  <span className="text-[11px]">{item.name.split(" ")[0]}</span>
-                </Link>
-              );
-            })}
-            <Link
-              href="/finance"
-              className={`flex items-center gap-1 px-2 py-1.5 rounded-control text-xs font-medium ${
-                pathname.startsWith("/finance")
-                  ? "bg-foreground text-surface font-semibold"
-                  : "text-foreground-secondary hover:bg-surface-secondary"
-              }`}
-            >
-              <Coins className="w-3.5 h-3.5" />
-              <Lock className="w-2.5 h-2.5 text-amber-500" />
-            </Link>
-          </nav>
+          {/* Right Header Area: Compact Theme Toggle & Status Info */}
+          <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
+            {/* Theme Toggle - Clean Compact Icon Button */}
+            <ThemeToggle variant="icon" />
 
-          {/* Right Header Area: Theme Toggle & Brand Tagline */}
-          <div className="flex items-center gap-2 sm:gap-3">
-            {/* Theme Toggle Pill on sm+ and Icon on mobile */}
-            <ThemeToggle variant="pill" className="hidden sm:inline-flex" />
-            <ThemeToggle variant="icon" className="sm:hidden" />
-
-            <div className="h-5 w-px bg-border hidden lg:block" />
-
-            <div className="hidden lg:block text-right">
-              <span className="text-xs font-semibold text-foreground block">
-                Week 37 · 2026
-              </span>
-              <span className="text-[10px] text-foreground-muted block">
-                Target: 2 Post/Hari
-              </span>
+            {/* Status Live Sync & Week Info (visible on xl+ laptop/desktop screens) */}
+            <div className="hidden xl:flex items-center gap-2 pl-2 border-l border-border">
+              <div className="text-right">
+                <span className="text-[11px] font-bold text-foreground block leading-tight">
+                  Week 40 · 2026
+                </span>
+                <span className="text-[10px] text-emerald-800 dark:text-emerald-400 font-medium flex items-center justify-end gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-700 animate-pulse" />
+                  Live Sync
+                </span>
+              </div>
             </div>
 
-            <div className="h-5 w-px bg-border hidden sm:block" />
-
-            <div className="flex items-center">
+            {/* Secondary Brand Tagline (visible on large 2xl screens) */}
+            <div className="hidden 2xl:flex items-center pl-2 border-l border-border">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="/brand/logo-for-every-you.png"
                 alt="for every you"
-                className="h-5 sm:h-5.5 w-auto object-contain opacity-85 hover:opacity-100 transition-opacity dark:hidden"
+                className="h-5 w-auto object-contain opacity-85 hover:opacity-100 transition-opacity dark:hidden"
               />
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="/brand/logo-for-every-you-white.png"
                 alt="for every you"
-                className="h-5 sm:h-5.5 w-auto object-contain opacity-85 hover:opacity-100 transition-opacity hidden dark:block"
+                className="h-5 w-auto object-contain opacity-85 hover:opacity-100 transition-opacity hidden dark:block"
               />
             </div>
           </div>
         </div>
 
-        {/* Mobile Navigation Bar (iOS Tab Bar Style) */}
+        {/* Mobile Navigation Bar (iOS Tab Bar Style for < md) */}
         <div className="flex md:hidden border-t border-border/60 py-2 items-center gap-1 overflow-x-auto px-2 scroll-smooth">
           {navItems.map((item) => {
-            const isActive = pathname.startsWith(item.href);
+            const isActive =
+              pathname === item.href ||
+              (item.href === "/dashboard" && pathname === "/") ||
+              (item.href !== "/dashboard" && pathname.startsWith(item.href));
             const Icon = item.icon;
             return (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex flex-col items-center justify-center min-w-[58px] min-h-[44px] py-1 px-2 rounded-control text-[10px] font-medium transition-all shrink-0 active:scale-95 ${
+                className={`flex flex-col items-center justify-center min-w-[56px] min-h-[44px] py-1 px-1.5 rounded-control text-[10px] font-medium transition-all shrink-0 active:scale-95 ${
                   isActive
                     ? "text-brand font-bold bg-brand-light"
                     : "text-foreground-secondary hover:text-foreground hover:bg-surface-secondary"
@@ -200,7 +195,7 @@ export const AppNav: React.FC = () => {
                     <span className="absolute -top-1 -right-1.5 w-1.5 h-1.5 rounded-full bg-amber-500" />
                   )}
                 </div>
-                <span className="truncate">{item.name.split(" ")[0]}</span>
+                <span className="truncate">{item.shortName}</span>
               </Link>
             );
           })}
