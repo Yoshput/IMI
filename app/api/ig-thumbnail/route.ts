@@ -77,6 +77,18 @@ export async function GET(request: NextRequest) {
   } else if (shortcode === "Warasnt5Penyebab" || shortcode === "Dd3pyGtibMB") {
     const filePath = path.join(process.cwd(), "public", "covers", "carousel-warasnt.png");
     if (fs.existsSync(filePath)) sourceBuffer = fs.readFileSync(filePath);
+  } else if (shortcode === "DeD1caAFTLt") {
+    const filePath = path.join(process.cwd(), "public", "covers", "carousel-gajian-sale.png");
+    if (fs.existsSync(filePath)) sourceBuffer = fs.readFileSync(filePath);
+  } else if (shortcode === "StopJanganLapLensa") {
+    const filePath = path.join(process.cwd(), "public", "covers", "carousel-stop-lap-lensa.png");
+    if (fs.existsSync(filePath)) sourceBuffer = fs.readFileSync(filePath);
+  } else if (shortcode === "BuiltForSundayCI5033") {
+    const filePath = path.join(process.cwd(), "public", "covers", "carousel-built-for-sunday.png");
+    if (fs.existsSync(filePath)) sourceBuffer = fs.readFileSync(filePath);
+  } else if (shortcode === "Kacamata15Menit") {
+    const filePath = path.join(process.cwd(), "public", "covers", "carousel-kacamata-15-menit.png");
+    if (fs.existsSync(filePath)) sourceBuffer = fs.readFileSync(filePath);
   }
 
   // 2. If not local, check liveCache for direct CDN image URL
