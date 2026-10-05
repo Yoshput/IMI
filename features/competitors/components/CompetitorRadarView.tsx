@@ -17,7 +17,6 @@ import {
   ArrowUpRight,
   ShoppingBag,
   Store,
-  Sparkles,
 } from "lucide-react";
 
 interface Competitor {
@@ -631,7 +630,7 @@ export const CompetitorRadarView: React.FC = () => {
                     {comp.catalogItems && comp.catalogItems.length > 0 && (
                       <div className="pt-2 border-t border-border/80 space-y-2">
                         <span className="text-[11px] font-bold text-foreground flex items-center gap-1">
-                          <Sparkles className="w-3 h-3 text-amber-500" />
+                          <Glasses className="w-3 h-3 text-brand" />
                           <span>Katalog Model Bestseller &amp; Frame Tren Terkini:</span>
                         </span>
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">

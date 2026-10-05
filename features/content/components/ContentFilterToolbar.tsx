@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Calendar, Clock, Filter, Sparkles, Building2 } from "lucide-react";
+import { Calendar, Clock, Filter, Building2 } from "lucide-react";
 
 interface ContentFilterToolbarProps {
   period: "weekly" | "monthly";

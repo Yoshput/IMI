@@ -12,7 +12,6 @@ import {
   AlertCircle,
   Check,
   RotateCcw,
-  Sparkles,
   ArrowUpRight,
 } from "lucide-react";
 
@@ -413,7 +412,7 @@ _Catatan: Uang kas digunakan untuk keperluan operasional tim kreatif, snack rapa
       {/* Footer Info */}
       <div className="p-3 rounded-lg border border-border/80 bg-surface-secondary/20 text-xs text-foreground-muted flex flex-col sm:flex-row sm:items-center justify-between gap-2">
         <div className="flex items-center gap-2">
-          <Sparkles className="w-4 h-4 text-amber-500 shrink-0" />
+          <CheckCircle2 className="w-4 h-4 text-emerald-800 dark:text-emerald-400 shrink-0" />
           <span>Status kas otomatis tersimpan di perangkat Anda. Data siap ditunjukkan saat evaluasi internal.</span>
         </div>
         <span className="text-[11px] font-mono text-foreground-muted shrink-0">

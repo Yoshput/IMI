@@ -13,7 +13,6 @@ import {
   Check,
   Search,
   Stethoscope,
-  Sparkles,
   ChevronRight,
   ShieldCheck,
   Tv,
@@ -295,7 +294,7 @@ export const PengajuanHubView: React.FC = () => {
                 Alat Kerja Staff Marketing (Mas Yoshput)
               </span>
               <h3 className="text-base font-black text-foreground mt-0.5 flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-emerald-600" />
+                <MessageSquare className="w-4 h-4 text-emerald-600" />
                 Generator Pesan WhatsApp Pitching ke Brand &amp; Calon Sponsor
               </h3>
               <p className="text-xs text-foreground-secondary mt-0.5">

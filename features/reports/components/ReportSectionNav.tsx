@@ -1,5 +1,5 @@
 import React from "react";
-import { Bookmark, CheckCircle, AlertTriangle, Lightbulb, Users, Bot, FileText, Building2 } from "lucide-react";
+import { Bookmark, CheckCircle, AlertTriangle, Lightbulb, Users, TrendingUp, FileText, Building2 } from "lucide-react";
 
 interface ReportSectionNavProps {
   activeSection: string;
@@ -18,7 +18,7 @@ export const ReportSectionNav: React.FC<ReportSectionNavProps> = ({
     { id: "sec-strategy", label: "Plan & Strategi", icon: Lightbulb },
     { id: "sec-team-input", label: "Masukan Tim & Divisi", icon: Users },
     { id: "sec-branch-evidence", label: "Kehadiran Fisik Cabang", icon: Building2 },
-    { id: "sec-ai-layer", label: "Analisis & Rekomendasi", icon: Bot },
+    { id: "sec-ai-layer", label: "Analisis & Rekomendasi", icon: TrendingUp },
   ];
 
   return (

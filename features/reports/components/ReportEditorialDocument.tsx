@@ -2,7 +2,7 @@ import React from "react";
 import { WeeklyReport } from "@/types";
 import { formatNumber, formatPercent } from "@/lib/utils";
 import { ProvenanceBadge } from "@/components/shared/ProvenanceBadge";
-import { CheckCircle2, AlertTriangle, Lightbulb, Users, Bot, FileText, Glasses } from "lucide-react";
+import { CheckCircle2, AlertTriangle, Lightbulb, Users, TrendingUp, FileText, Glasses } from "lucide-react";
 
 interface ReportEditorialDocumentProps {
   report: WeeklyReport;
@@ -328,7 +328,7 @@ export const ReportEditorialDocument: React.FC<ReportEditorialDocumentProps> = (
         <section id="sec-ai-layer" className="space-y-3 pt-4 border-t border-border">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Bot className="w-4 h-4 text-brand" />
+              <TrendingUp className="w-4 h-4 text-brand" />
               <h2 className="heading-section text-foreground">
                 7. Catatan Interpretasi & Rekomendasi
               </h2>

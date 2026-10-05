@@ -15,7 +15,10 @@ import {
   Building2,
   SlidersHorizontal,
   MessageSquare,
-  Sparkles,
+  UserCheck,
+  UserPlus,
+  Target,
+  ClipboardCheck,
   FileSpreadsheet,
   Layers,
   ChevronRight,
@@ -316,7 +319,7 @@ Have a nicee dayy ya kaa! 🌸✨`;
         <div>
           <div className="flex items-center gap-2 mb-1.5">
             <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-brand-light text-brand flex items-center gap-1">
-              <Sparkles className="w-3 h-3" />
+              <UserCheck className="w-3 h-3" />
               Strategic Talent Acquisition
             </span>
             <span className="text-xs text-foreground-muted">·</span>
@@ -607,7 +610,7 @@ Have a nicee dayy ya kaa! 🌸✨`;
               onClick={() => setIsAddModalOpen(true)}
               className="inline-flex items-center gap-1.5 px-4 py-2 rounded-control bg-emerald-600 text-white text-xs font-semibold hover:bg-emerald-700 transition-colors shadow-subtle active:scale-95"
             >
-              <Sparkles className="w-3.5 h-3.5" />
+              <UserPlus className="w-3.5 h-3.5" />
               <span>Input KOL Baru Sekarang</span>
             </button>
           </div>
@@ -716,7 +719,7 @@ Have a nicee dayy ya kaa! 🌸✨`;
                     {kol.contentFocus && (
                       <div className="mt-1">
                         <span className="inline-flex items-center gap-1 text-[10px] font-semibold px-2 py-0.5 rounded-full bg-violet-100 text-violet-800 border border-violet-200">
-                          <Sparkles className="w-2.5 h-2.5 text-violet-600" />
+                          <Target className="w-2.5 h-2.5 text-violet-600" />
                           <span>Fokus: {kol.contentFocus}</span>
                         </span>
                       </div>
@@ -1121,7 +1124,7 @@ Have a nicee dayy ya kaa! 🌸✨`;
                   {templateStyle === "step3_owning" && "Langkah 3: Konfirmasi Final (Hak Owning Video Mentahan Tanpa Watermark)"}
                 </span>
                 <span className="text-[11px] text-emerald-700 font-semibold flex items-center gap-1">
-                  <Sparkles className="w-3 h-3" /> Siap Kirim WA/DM
+                  <Send className="w-3 h-3" /> Siap Kirim WA/DM
                 </span>
               </div>
               <div className="p-3.5 bg-surface-secondary/70 rounded-control border border-border text-xs text-foreground leading-relaxed whitespace-pre-wrap select-all font-sans">
@@ -1181,8 +1184,8 @@ Have a nicee dayy ya kaa! 🌸✨`;
             <div className="flex items-center justify-between border-b border-border pb-3">
               <div>
                 <h3 className="font-bold text-base text-foreground flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-emerald-600" />
-                  Input & Verifikasi KOL Baru (&gt;50K Followers)
+                  <ShieldCheck className="w-4 h-4 text-emerald-600" />
+                  Input &amp; Verifikasi KOL Baru (&gt;50K Followers)
                 </h3>
                 <span className="text-xs text-foreground-muted">
                   Pastikan akun Instagram asli, reels ramai, dan bukan akun bodong.
@@ -1502,7 +1505,7 @@ Have a nicee dayy ya kaa! 🌸✨`;
               {/* Rekomendasi Tim untuk Rapat Selasa */}
               <div className="p-3 bg-violet-50/70 border border-violet-200 rounded-control text-xs space-y-1">
                 <span className="font-bold text-violet-950 flex items-center gap-1">
-                  <Sparkles className="w-3.5 h-3.5 text-violet-700" />
+                  <ClipboardCheck className="w-3.5 h-3.5 text-violet-700" />
                   Poin Analisis untuk Rapat Selasa:
                 </span>
                 <p className="text-violet-900 leading-relaxed">

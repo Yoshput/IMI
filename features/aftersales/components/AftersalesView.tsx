@@ -23,7 +23,6 @@ import {
   ArrowUpNarrowWide,
   RefreshCw,
   MessageSquare,
-  Sparkles,
 } from "lucide-react";
 import {
   CustomerAftersalesRecord,
@@ -237,7 +236,7 @@ export const AftersalesView: React.FC = () => {
       case "Review":
         return (
           <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30">
-            <Sparkles className="w-3 h-3" /> Review
+            <MessageSquare className="w-3 h-3" /> Review
           </span>
         );
       case "Pemeriksaan":

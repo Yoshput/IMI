@@ -14,7 +14,7 @@ import {
   Copy,
   Clock,
   ArrowUpRight,
-  Sparkles,
+  Glasses,
 } from "lucide-react";
 import { CombinedWebResume, getCombinedWebResume } from "@/lib/antrian-tracking";
 
@@ -218,7 +218,7 @@ Fitur Web Photobooth efektif menjadi corong (top of funnel) mengarahkan calon cu
           {/* Top Frame Dicoba */}
           <div className="space-y-2 pt-1">
             <span className="text-[11px] font-bold text-foreground flex items-center gap-1">
-              <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+              <Glasses className="w-3.5 h-3.5 text-brand" />
               <span>Top 3 Frame Kacamata Paling Sering Dicoba di Photobooth:</span>
             </span>
             <div className="space-y-1.5 text-xs">
