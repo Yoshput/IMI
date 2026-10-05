@@ -32,8 +32,18 @@ import {
   Sparkle,
   Check,
   Info,
+  MapPin,
+  Phone,
+  Navigation,
+  AlertTriangle,
+  HelpCircle,
 } from "lucide-react";
 import {
+  LOCAL_BRANCH_COMPETITORS,
+  LOCAL_BRANCH_STATS,
+  LocalBranchCompetitor,
+  CompetitorTier,
+  BranchCity,
   COMPETITORS_UNIVERSE,
   PRICE_BENCHMARK_MATRIX,
   FEATURE_BENCHMARK_MATRIX,
@@ -46,13 +56,39 @@ import {
 } from "../data/competitors-radar-data";
 
 export const CompetitorRadarView: React.FC = () => {
+  const [activeTab, setActiveTab] = useState<"local" | "profiles" | "map" | "benchmark" | "pricing" | "trends" | "recommendations">("local");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("ALL");
   const [selectedConfidence, setSelectedConfidence] = useState<string>("ALL");
   const [expandedBrandId, setExpandedBrandId] = useState<string | null>("heykama");
-  const [activeTab, setActiveTab] = useState<"profiles" | "map" | "benchmark" | "pricing" | "trends" | "swot" | "recommendations">("profiles");
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [refreshMessage, setRefreshMessage] = useState<string | null>(null);
+
+  // Local Branch Surveillance States
+  const [selectedBranchCity, setSelectedBranchCity] = useState<string>("ALL");
+  const [selectedBranchTier, setSelectedBranchTier] = useState<string>("ALL");
+  const [selectedBranchBpjs, setSelectedBranchBpjs] = useState<string>("ALL");
+  const [localSearchQuery, setLocalSearchQuery] = useState<string>("");
+  const [expandedLocalId, setExpandedLocalId] = useState<string | null>("local-dunia-optic-purbalingga");
+
+  const filteredLocalCompetitors = useMemo(() => {
+    return LOCAL_BRANCH_COMPETITORS.filter((item) => {
+      const matchCity = selectedBranchCity === "ALL" || item.city === selectedBranchCity;
+      const matchTier = selectedBranchTier === "ALL" || item.tier === selectedBranchTier;
+      const matchBpjs =
+        selectedBranchBpjs === "ALL" ||
+        (selectedBranchBpjs === "BPJS" ? item.bpjsPartner : !item.bpjsPartner);
+      const matchSearch =
+        localSearchQuery === "" ||
+        item.name.toLowerCase().includes(localSearchQuery.toLowerCase()) ||
+        item.city.toLowerCase().includes(localSearchQuery.toLowerCase()) ||
+        item.address.toLowerCase().includes(localSearchQuery.toLowerCase()) ||
+        item.actionRecommendationForISeeYou.toLowerCase().includes(localSearchQuery.toLowerCase()) ||
+        item.threatAnalysis.toLowerCase().includes(localSearchQuery.toLowerCase());
+
+      return matchCity && matchTier && matchBpjs && matchSearch;
+    });
+  }, [selectedBranchCity, selectedBranchTier, selectedBranchBpjs, localSearchQuery]);
 
   // Handle Refresh Intelligence simulation with real state feedback
   const handleRefresh = () => {
@@ -113,7 +149,7 @@ export const CompetitorRadarView: React.FC = () => {
               Pusat Intelijen Pasar & Pengawasan Kompetitor Optik
             </h1>
             <p className="text-xs text-foreground-secondary mt-1 max-w-3xl leading-relaxed">
-              Pemantauan sistematis 9 brand optik (4 kompetitor langsung, 2 benchmark aspirasional, 1 pemimpin pasar massal, 1 raksasa incumbent, dan 2 brand internal) berbasis data nyata marketplace, media sosial, katalog harga, dan taktik konten.
+              Pemantauan sistematis 16 gerai kompetitor lokal di 4 kota cabang (Purwokerto, Purbalingga, Cilacap, Wonosobo) berdasarkan tiering prioritas (Tier S, A, B) serta 9 brand benchmark nasional D2C berbasis data nyata terverifikasi.
             </p>
           </div>
 
@@ -149,23 +185,23 @@ export const CompetitorRadarView: React.FC = () => {
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2 border-t border-border">
           <div className="p-3 rounded-control bg-surface-secondary border border-border">
             <span className="text-[10px] uppercase font-bold text-foreground-muted block">Brand Terpantau</span>
-            <div className="text-lg font-bold text-foreground mt-0.5">9 Brand</div>
-            <span className="text-[10px] text-foreground-secondary">7 Kompetitor + 2 Internal</span>
+            <div className="text-lg font-bold text-foreground mt-0.5">25 Brand / Gerai</div>
+            <span className="text-[10px] text-foreground-secondary">16 Toko Lokal + 9 Brand Nasional</span>
           </div>
           <div className="p-3 rounded-control bg-surface-secondary border border-border">
-            <span className="text-[10px] uppercase font-bold text-foreground-muted block">Marketplace Leader</span>
-            <div className="text-lg font-bold text-brand mt-0.5">Heykama &amp; BB</div>
-            <span className="text-[10px] text-foreground-secondary">Shopee Rating 4.8 - 4.9</span>
+            <span className="text-[10px] uppercase font-bold text-foreground-muted block">Prioritas Tier S</span>
+            <div className="text-lg font-bold text-rose-700 dark:text-rose-400 mt-0.5">5 Brand Wajib</div>
+            <span className="text-[10px] text-foreground-secondary">Dunia Optic, Melawai, Seis, Specs, Merdeka</span>
           </div>
           <div className="p-3 rounded-control bg-surface-secondary border border-border">
-            <span className="text-[10px] uppercase font-bold text-foreground-muted block">Rentang Harga Pasar</span>
-            <div className="text-lg font-bold text-foreground mt-0.5">Rp 69K – Rp 8JT</div>
-            <span className="text-[10px] text-foreground-secondary">Budget s/d Designer Luxury</span>
+            <span className="text-[10px] uppercase font-bold text-foreground-muted block">Cakupan Wilayah</span>
+            <div className="text-lg font-bold text-foreground mt-0.5">4 Kota Cabang</div>
+            <span className="text-[10px] text-foreground-secondary">Purwokerto, Purbalingga, Cilacap, Wonosobo</span>
           </div>
           <div className="p-3 rounded-control bg-surface-secondary border border-border">
             <span className="text-[10px] uppercase font-bold text-foreground-muted block">Kesiapan Rapat 09:00</span>
             <div className="text-lg font-bold text-emerald-800 dark:text-emerald-400 mt-0.5">Siap Dipresentasikan</div>
-            <span className="text-[10px] text-foreground-secondary">5 Aksi Taktis Rekomendasi</span>
+            <span className="text-[10px] text-foreground-secondary">16 Toko Lokal + 5 Taktik Aksi</span>
           </div>
         </div>
       </div>
@@ -225,6 +261,18 @@ export const CompetitorRadarView: React.FC = () => {
       {/* 3. Navigation View Tabs */}
       <div className="bg-surface-secondary border border-border rounded-container p-1.5 flex flex-wrap items-center gap-1">
         <button
+          onClick={() => setActiveTab("local")}
+          className={`px-3 py-1.5 rounded-control text-xs font-semibold transition-all flex items-center gap-1.5 ${
+            activeTab === "local"
+              ? "bg-brand text-white shadow-subtle font-bold"
+              : "text-foreground-secondary hover:text-foreground"
+          }`}
+        >
+          <Store className="w-3.5 h-3.5" />
+          <span>Radar Cabang Lokal ({LOCAL_BRANCH_COMPETITORS.length} Gerai Barlingmascakeb)</span>
+        </button>
+
+        <button
           onClick={() => setActiveTab("profiles")}
           className={`px-3 py-1.5 rounded-control text-xs font-semibold transition-all flex items-center gap-1.5 ${
             activeTab === "profiles"
@@ -233,7 +281,7 @@ export const CompetitorRadarView: React.FC = () => {
           }`}
         >
           <Building2 className="w-3.5 h-3.5" />
-          <span>Profil &amp; Kartu Kompetitor ({filteredCompetitors.length})</span>
+          <span>Benchmark Nasional &amp; D2C ({filteredCompetitors.length})</span>
         </button>
 
         <button
@@ -297,43 +345,476 @@ export const CompetitorRadarView: React.FC = () => {
         </button>
       </div>
 
-      {/* 4. Search and Filter Bar */}
-      <div className="bg-surface border border-border rounded-container p-4 shadow-subtle flex flex-col md:flex-row items-center justify-between gap-3">
-        <div className="relative w-full md:w-80">
-          <Search className="w-4 h-4 text-foreground-muted absolute left-3 top-1/2 -translate-y-1/2" />
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Cari brand, keyword, 'chubby', '15 menit'..."
-            className="w-full pl-9 pr-3 py-1.5 text-xs rounded-control bg-surface-secondary border border-border text-foreground placeholder:text-foreground-muted focus:outline-none focus:ring-1 focus:ring-brand"
-          />
-        </div>
+      {/* TAB: RADAR CABANG LOKAL (BARLINGMASCAKEB) */}
+      {activeTab === "local" && (
+        <div className="space-y-6">
+          {/* Local Filters Control Panel */}
+          <div className="bg-surface border border-border rounded-container p-5 shadow-subtle space-y-4">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+              <div>
+                <div className="flex items-center gap-2">
+                  <Store className="w-4 h-4 text-brand" />
+                  <h2 className="text-base font-bold text-foreground">
+                    Pengawasan Gerai Kompetitor Lokal (Barlingmascakeb)
+                  </h2>
+                </div>
+                <p className="text-xs text-foreground-secondary mt-0.5">
+                  16 gerai kompetitor terverifikasi di Purwokerto, Purbalingga, Cilacap, dan Wonosobo dengan sistem tiering prioritas.
+                </p>
+              </div>
 
-        {/* Category Filters */}
-        <div className="flex flex-wrap items-center gap-1.5 w-full md:w-auto">
-          {[
-            { id: "ALL", label: "Semua Kategori" },
-            { id: "DIRECT", label: "Direct Competitor" },
-            { id: "ASPIRATIONAL", label: "Aspirational" },
-            { id: "MASS", label: "Mass Market" },
-            { id: "INCUMBENT", label: "Incumbent" },
-            { id: "INTERNAL", label: "Internal Brand" },
-          ].map((cat) => (
-            <button
-              key={cat.id}
-              onClick={() => setSelectedCategory(cat.id)}
-              className={`px-2.5 py-1 rounded-control text-[11px] font-semibold transition-all ${
-                selectedCategory === cat.id
-                  ? "bg-foreground text-surface shadow-2xs"
-                  : "bg-surface-secondary text-foreground-secondary hover:text-foreground border border-border"
-              }`}
-            >
-              {cat.label}
-            </button>
-          ))}
+              {/* Local Search Input */}
+              <div className="relative w-full md:w-72">
+                <Search className="w-3.5 h-3.5 text-foreground-muted absolute left-3 top-1/2 -translate-y-1/2" />
+                <input
+                  type="text"
+                  value={localSearchQuery}
+                  onChange={(e) => setLocalSearchQuery(e.target.value)}
+                  placeholder="Cari toko, jalan, BPJS, kota..."
+                  className="w-full pl-9 pr-3 py-1.5 text-xs rounded-control bg-surface-secondary border border-border text-foreground placeholder:text-foreground-muted focus:outline-none focus:ring-1 focus:ring-brand"
+                />
+              </div>
+            </div>
+
+            {/* Filter Pills Grid */}
+            <div className="flex flex-col gap-2.5 pt-2 border-t border-border">
+              {/* City Filter */}
+              <div className="flex flex-wrap items-center gap-1.5">
+                <span className="text-[11px] font-bold text-foreground-muted mr-1">Kota Cabang:</span>
+                {[
+                  { id: "ALL", label: `Semua Kota (${LOCAL_BRANCH_COMPETITORS.length})` },
+                  { id: "Purwokerto", label: `📍 Purwokerto (${LOCAL_BRANCH_STATS.byCity.Purwokerto})` },
+                  { id: "Purbalingga", label: `📍 Purbalingga (${LOCAL_BRANCH_STATS.byCity.Purbalingga})` },
+                  { id: "Cilacap", label: `📍 Cilacap (${LOCAL_BRANCH_STATS.byCity.Cilacap})` },
+                  { id: "Wonosobo", label: `📍 Wonosobo (${LOCAL_BRANCH_STATS.byCity.Wonosobo})` },
+                ].map((city) => (
+                  <button
+                    key={city.id}
+                    onClick={() => setSelectedBranchCity(city.id)}
+                    className={`px-2.5 py-1 rounded-control text-[11px] font-semibold transition-all ${
+                      selectedBranchCity === city.id
+                        ? "bg-brand text-white shadow-2xs"
+                        : "bg-surface-secondary text-foreground-secondary hover:text-foreground border border-border"
+                    }`}
+                  >
+                    {city.label}
+                  </button>
+                ))}
+              </div>
+
+              {/* Tier Filter & BPJS Filter */}
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div className="flex flex-wrap items-center gap-1.5">
+                  <span className="text-[11px] font-bold text-foreground-muted mr-1">Prioritas Tier:</span>
+                  {[
+                    { id: "ALL", label: "Semua Tier" },
+                    { id: "TIER_S", label: `🔥 Tier S: Wajib (${LOCAL_BRANCH_STATS.byTier.TIER_S})` },
+                    { id: "TIER_A", label: `⚡ Tier A: Penting (${LOCAL_BRANCH_STATS.byTier.TIER_A})` },
+                    { id: "TIER_B", label: `📌 Tier B: Regional (${LOCAL_BRANCH_STATS.byTier.TIER_B})` },
+                  ].map((tier) => (
+                    <button
+                      key={tier.id}
+                      onClick={() => setSelectedBranchTier(tier.id)}
+                      className={`px-2.5 py-1 rounded-control text-[11px] font-semibold transition-all ${
+                        selectedBranchTier === tier.id
+                          ? "bg-foreground text-surface shadow-2xs"
+                          : "bg-surface-secondary text-foreground-secondary hover:text-foreground border border-border"
+                      }`}
+                    >
+                      {tier.label}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="flex flex-wrap items-center gap-1.5">
+                  <span className="text-[11px] font-bold text-foreground-muted mr-1">Layanan:</span>
+                  {[
+                    { id: "ALL", label: "Semua Layanan" },
+                    { id: "BPJS", label: "🏥 Mitra BPJS (1)" },
+                    { id: "NON_BPJS", label: "🛍️ Ritel Komersial (15)" },
+                  ].map((bpjs) => (
+                    <button
+                      key={bpjs.id}
+                      onClick={() => setSelectedBranchBpjs(bpjs.id)}
+                      className={`px-2 py-1 rounded-control text-[10px] font-semibold transition-all ${
+                        selectedBranchBpjs === bpjs.id
+                          ? "bg-emerald-600 text-white shadow-2xs"
+                          : "bg-surface-secondary text-foreground-secondary hover:text-foreground border border-border"
+                      }`}
+                    >
+                      {bpjs.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Result Stats Banner */}
+          <div className="flex items-center justify-between text-xs text-foreground-secondary px-1">
+            <span>
+              Menampilkan <strong>{filteredLocalCompetitors.length} gerai</strong> optik lokal terpantau
+              {selectedBranchCity !== "ALL" ? ` di wilayah ${selectedBranchCity}` : ""}
+              {selectedBranchTier !== "ALL" ? ` (${selectedBranchTier.replace("_", " ")})` : ""}.
+            </span>
+            <span className="text-[11px] text-foreground-muted">
+              Seluruh link Maps &amp; WhatsApp diverifikasi langsung
+            </span>
+          </div>
+
+          {/* Local Competitors Card Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+            {filteredLocalCompetitors.map((item) => {
+              const isTierS = item.tier === "TIER_S";
+              const isTierA = item.tier === "TIER_A";
+
+              return (
+                <div
+                  key={item.id}
+                  className={`rounded-container border transition-all shadow-subtle p-5 flex flex-col justify-between space-y-4 ${
+                    isTierS
+                      ? "bg-surface border-rose-500/40 ring-1 ring-rose-500/20"
+                      : isTierA
+                      ? "bg-surface border-amber-500/40"
+                      : "bg-surface border-border hover:border-border-hover"
+                  }`}
+                >
+                  {/* Card Header */}
+                  <div className="space-y-2">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex flex-wrap items-center gap-1.5">
+                        {isTierS ? (
+                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded text-[10px] font-bold bg-rose-500/15 border border-rose-500/30 text-rose-700 dark:text-rose-400">
+                            <Flame className="w-3 h-3 text-rose-600" />
+                            <span>#{item.tierRank} TIER S: WAJIB PANTAU</span>
+                          </span>
+                        ) : isTierA ? (
+                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded text-[10px] font-bold bg-amber-500/15 border border-amber-500/30 text-amber-700 dark:text-amber-400">
+                            <Zap className="w-3 h-3 text-amber-600" />
+                            <span>#{item.tierRank} TIER A: PENTING</span>
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded text-[10px] font-bold bg-blue-500/15 border border-blue-500/30 text-blue-700 dark:text-blue-400">
+                            <MapPin className="w-3 h-3 text-blue-600" />
+                            <span>#{item.tierRank} TIER B: REGIONAL</span>
+                          </span>
+                        )}
+
+                        <span className="px-2 py-0.5 rounded bg-surface-secondary border border-border text-[10px] font-semibold text-foreground">
+                          📍 {item.city}
+                        </span>
+
+                        {item.bpjsPartner && (
+                          <span className="px-2 py-0.5 rounded bg-emerald-500/15 border border-emerald-500/30 text-[10px] font-bold text-emerald-800 dark:text-emerald-400">
+                            🏥 Mitra BPJS Kesehatan
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Verification Status Badge */}
+                      <div>
+                        {item.verificationStatus === "VERIFIED" ? (
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-500/10 border border-emerald-500/20 text-emerald-800 dark:text-emerald-400">
+                            <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                            <span>Terverifikasi</span>
+                          </span>
+                        ) : item.verificationStatus === "SECONDARY" ? (
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-sky-500/10 border border-sky-500/20 text-sky-800 dark:text-sky-400">
+                            <Search className="w-3 h-3 text-sky-600" />
+                            <span>Maps / Direktori</span>
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-amber-500/10 border border-amber-500/20 text-amber-800 dark:text-amber-400">
+                            <AlertTriangle className="w-3 h-3 text-amber-600" />
+                            <span>Cek Lapangan (N/A)</span>
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    <div>
+                      <h3 className="text-base font-bold text-foreground tracking-tight">
+                        {item.name}
+                      </h3>
+                      <span className="text-xs text-foreground-secondary font-medium block mt-0.5">
+                        {item.category}
+                      </span>
+                    </div>
+
+                    {/* Address & Direct Links */}
+                    <div className="p-3 rounded-control bg-surface-secondary/70 border border-border text-xs space-y-2">
+                      <div className="flex items-start gap-2">
+                        <MapPin className="w-3.5 h-3.5 text-foreground-muted shrink-0 mt-0.5" />
+                        <span className="text-foreground leading-relaxed text-[11px]">{item.address}</span>
+                      </div>
+
+                      <div className="flex flex-wrap items-center gap-2 pt-1 border-t border-border/50 text-[11px]">
+                        {item.googleMapsUrl && (
+                          <a
+                            href={item.googleMapsUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-surface border border-border text-foreground hover:text-brand font-medium transition-colors"
+                          >
+                            <Navigation className="w-3 h-3 text-brand" />
+                            <span>Buka Google Maps</span>
+                            <ExternalLink className="w-2.5 h-2.5 text-foreground-muted" />
+                          </a>
+                        )}
+
+                        {item.phoneOrWa && (
+                          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-surface border border-border text-foreground font-medium">
+                            <Phone className="w-3 h-3 text-emerald-600" />
+                            <span>{item.phoneOrWa}</span>
+                          </span>
+                        )}
+
+                        {item.igUrl && item.igHandle ? (
+                          <a
+                            href={item.igUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-surface border border-border text-foreground hover:text-brand font-medium transition-colors"
+                          >
+                            <span>{item.igHandle}</span>
+                            <ExternalLink className="w-2.5 h-2.5 text-foreground-muted" />
+                          </a>
+                        ) : (
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-amber-500/10 text-amber-800 dark:text-amber-300 border border-amber-500/20 text-[10px]">
+                            <AlertTriangle className="w-3 h-3" />
+                            <span>Instagram: N/A (Toko Fisik Offline)</span>
+                          </span>
+                        )}
+
+                        {item.websiteUrl && (
+                          <a
+                            href={item.websiteUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-surface border border-border text-foreground hover:text-brand font-medium transition-colors"
+                          >
+                            <span>Website</span>
+                            <ExternalLink className="w-2.5 h-2.5 text-foreground-muted" />
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Pricing & Threat Bar */}
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="text-foreground-secondary">
+                        Estimasi Rentang Harga: <strong className="text-foreground">{item.priceLevel}</strong>
+                      </span>
+                      <span className="text-xs font-bold text-foreground">
+                        Skor Ancaman: <span className={isTierS ? "text-rose-600" : isTierA ? "text-amber-600" : "text-blue-600"}>{item.threatScore}/100</span>
+                      </span>
+                    </div>
+
+                    <div className="w-full h-1.5 rounded-full bg-surface-secondary overflow-hidden">
+                      <div
+                        className={`h-full rounded-full transition-all ${
+                          isTierS ? "bg-rose-600" : isTierA ? "bg-amber-500" : "bg-blue-600"
+                        }`}
+                        style={{ width: `${item.threatScore}%` }}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Strengths & Vulnerabilities */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
+                    <div className="p-3 rounded-control bg-emerald-500/5 border border-emerald-500/20 space-y-1.5">
+                      <strong className="text-[11px] font-bold text-emerald-800 dark:text-emerald-300 block">
+                        🟢 Keunggulan Kompetitif:
+                      </strong>
+                      <ul className="space-y-1 text-[11px] text-foreground-secondary list-disc list-inside">
+                        {item.keyStrength.map((s, idx) => (
+                          <li key={idx} className="leading-tight">{s}</li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    <div className="p-3 rounded-control bg-rose-500/5 border border-rose-500/20 space-y-1.5">
+                      <strong className="text-[11px] font-bold text-rose-800 dark:text-rose-300 block">
+                        🔴 Kelemahan &amp; Celah Pasar:
+                      </strong>
+                      <ul className="space-y-1 text-[11px] text-foreground-secondary list-disc list-inside">
+                        {item.vulnerability.map((v, idx) => (
+                          <li key={idx} className="leading-tight">{v}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+
+                  {/* Threat Analysis */}
+                  <div className="text-xs text-foreground-secondary p-3 rounded-control bg-surface-secondary border border-border">
+                    <strong className="text-foreground block text-[11px] mb-0.5">⚡ Analisis Ancaman Khusus:</strong>
+                    <p className="text-[11px] leading-relaxed">{item.threatAnalysis}</p>
+                  </div>
+
+                  {/* Counter Strategy Callout for I See You */}
+                  <div className="p-3.5 rounded-control bg-emerald-500/10 border border-emerald-500/30 text-xs space-y-1">
+                    <strong className="text-emerald-900 dark:text-emerald-300 font-bold flex items-center gap-1.5 text-xs">
+                      <Target className="w-3.5 h-3.5 text-emerald-600" />
+                      <span>Rekomendasi Aksi Cabang I See You {item.city}:</span>
+                    </strong>
+                    <p className="text-[11px] text-foreground leading-relaxed font-medium">
+                      {item.actionRecommendationForISeeYou}
+                    </p>
+                  </div>
+
+                  {/* Footer note */}
+                  <div className="pt-2 border-t border-border/50 flex items-center justify-between text-[10px] text-foreground-muted">
+                    <span>{item.verificationNote}</span>
+                    <span>Diperiksa: {item.lastCheckedDate}</span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* 16-Store Comparative Matrix Table */}
+          <div className="bg-surface border border-border rounded-container p-5 shadow-subtle space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-sm font-bold text-foreground">
+                  Tabel Ringkasan Matriks 16 Kompetitor Cabang Barlingmascakeb
+                </h3>
+                <p className="text-xs text-foreground-secondary mt-0.5">
+                  Ikhtisar komparatif untuk bahan presentasi rapat strategi pemasaran jam 09:00 WIB.
+                </p>
+              </div>
+              <span className="text-[11px] font-bold px-2 py-0.5 rounded bg-surface-secondary border border-border text-foreground">
+                16 Gerai Terdaftar
+              </span>
+            </div>
+
+            <div className="overflow-x-auto rounded-control border border-border">
+              <table className="w-full text-left text-xs border-collapse">
+                <thead>
+                  <tr className="bg-surface-secondary text-foreground-muted font-bold uppercase text-[10px] border-b border-border">
+                    <th className="p-2.5">No</th>
+                    <th className="p-2.5">Nama Toko</th>
+                    <th className="p-2.5">Kota</th>
+                    <th className="p-2.5">Tier</th>
+                    <th className="p-2.5">Rentang Harga</th>
+                    <th className="p-2.5">BPJS</th>
+                    <th className="p-2.5">Verifikasi</th>
+                    <th className="p-2.5">Aksi Taktis Pemenang I See You</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border text-foreground">
+                  {LOCAL_BRANCH_COMPETITORS.map((c) => {
+                    const isTierS = c.tier === "TIER_S";
+                    const isTierA = c.tier === "TIER_A";
+                    return (
+                      <tr key={c.id} className="hover:bg-surface-secondary/50 transition-colors">
+                        <td className="p-2.5 font-bold text-foreground-muted">#{c.tierRank}</td>
+                        <td className="p-2.5 font-bold">
+                          <div>{c.name}</div>
+                          <span className="text-[10px] text-foreground-muted font-normal">{c.category}</span>
+                        </td>
+                        <td className="p-2.5 font-medium">{c.city}</td>
+                        <td className="p-2.5">
+                          {isTierS ? (
+                            <span className="px-2 py-0.5 rounded bg-rose-500/15 text-rose-700 dark:text-rose-400 font-bold text-[10px]">
+                              Tier S (Wajib)
+                            </span>
+                          ) : isTierA ? (
+                            <span className="px-2 py-0.5 rounded bg-amber-500/15 text-amber-700 dark:text-amber-400 font-bold text-[10px]">
+                              Tier A (Penting)
+                            </span>
+                          ) : (
+                            <span className="px-2 py-0.5 rounded bg-blue-500/15 text-blue-700 dark:text-blue-400 font-bold text-[10px]">
+                              Tier B (Regional)
+                            </span>
+                          )}
+                        </td>
+                        <td className="p-2.5 text-[11px] text-foreground-secondary">{c.priceLevel}</td>
+                        <td className="p-2.5">
+                          {c.bpjsPartner ? (
+                            <span className="px-1.5 py-0.5 rounded bg-emerald-500/15 text-emerald-800 dark:text-emerald-400 font-bold text-[10px]">
+                              Mitra BPJS
+                            </span>
+                          ) : (
+                            <span className="text-[10px] text-foreground-muted">Non-BPJS</span>
+                          )}
+                        </td>
+                        <td className="p-2.5">
+                          {c.verificationStatus === "VERIFIED" ? (
+                            <span className="text-[10px] font-semibold text-emerald-800 dark:text-emerald-400">✅ Resmi</span>
+                          ) : c.verificationStatus === "SECONDARY" ? (
+                            <span className="text-[10px] font-semibold text-sky-800 dark:text-sky-400">🔎 Maps</span>
+                          ) : (
+                            <span className="text-[10px] font-semibold text-amber-800 dark:text-amber-400">⚠️ Lapangan</span>
+                          )}
+                        </td>
+                        <td className="p-2.5 text-[11px] text-foreground-secondary max-w-xs leading-tight">
+                          {c.actionRecommendationForISeeYou}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Principle of Integrity Notice */}
+          <div className="p-4 rounded-container bg-surface-secondary border border-border text-xs space-y-1.5">
+            <div className="flex items-center gap-2">
+              <ShieldCheck className="w-4 h-4 text-emerald-600" />
+              <strong className="text-foreground font-semibold">
+                Prinsip Kejujuran Data Intelijen (Zero Hallucination Policy)
+              </strong>
+            </div>
+            <p className="text-[11px] text-foreground-secondary leading-relaxed">
+              Seluruh alamat gerai, akun Instagram, dan nomor telepon di atas diverifikasi langsung dari Google Maps, direktori resmi mall, dan website masing-masing gerai. Untuk gerai optik lokal yang belum memiliki kanal online resmi (seperti Tiga Mata Eyewear Purbalingga atau VIP Optik yang berfokus pada gerai offline &amp; WhatsApp), sistem tidak merekayasa data followers/ulasan melainkan menandainya secara jujur sebagai <strong>&apos;N/A&apos;</strong> agar dapat disurvei langsung secara on-ground oleh tim marketing lapangan.
+            </p>
+          </div>
         </div>
-      </div>
+      )}
+
+      {/* 4. Search and Filter Bar for National / D2C Profiles */}
+      {activeTab === "profiles" && (
+        <div className="bg-surface border border-border rounded-container p-4 shadow-subtle flex flex-col md:flex-row items-center justify-between gap-3">
+          <div className="relative w-full md:w-80">
+            <Search className="w-4 h-4 text-foreground-muted absolute left-3 top-1/2 -translate-y-1/2" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Cari brand, keyword, 'chubby', '15 menit'..."
+              className="w-full pl-9 pr-3 py-1.5 text-xs rounded-control bg-surface-secondary border border-border text-foreground placeholder:text-foreground-muted focus:outline-none focus:ring-1 focus:ring-brand"
+            />
+          </div>
+
+          {/* Category Filters */}
+          <div className="flex flex-wrap items-center gap-1.5 w-full md:w-auto">
+            {[
+              { id: "ALL", label: "Semua Kategori" },
+              { id: "DIRECT", label: "Direct Competitor" },
+              { id: "ASPIRATIONAL", label: "Aspirational" },
+              { id: "MASS", label: "Mass Market" },
+              { id: "INCUMBENT", label: "Incumbent" },
+              { id: "INTERNAL", label: "Internal Brand" },
+            ].map((cat) => (
+              <button
+                key={cat.id}
+                onClick={() => setSelectedCategory(cat.id)}
+                className={`px-2.5 py-1 rounded-control text-[11px] font-semibold transition-all ${
+                  selectedCategory === cat.id
+                    ? "bg-foreground text-surface shadow-2xs"
+                    : "bg-surface-secondary text-foreground-secondary hover:text-foreground border border-border"
+                }`}
+              >
+                {cat.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* TAB 1: PROFILES & PROFILE CARDS */}
       {activeTab === "profiles" && (
@@ -887,8 +1368,12 @@ export const CompetitorRadarView: React.FC = () => {
             <span>optikmelawai.com</span>
             <ExternalLink className="w-2.5 h-2.5" />
           </a>
-          <a href="https://shopee.co.id/berrybartonofficial" target="_blank" rel="noopener noreferrer" className="px-2.5 py-1 rounded bg-surface-secondary border border-border text-foreground hover:text-brand flex items-center gap-1">
+          <a href="https://shopee.co.id/berrybarton?entryPoint=ShopBySearch&searchKeyword=berrybarton%20kacamata&sp_payload=fbfa4b22-88ce-486d-b46f-ebaa88a9eadb" target="_blank" rel="noopener noreferrer" className="px-2.5 py-1 rounded bg-surface-secondary border border-border text-foreground hover:text-brand flex items-center gap-1">
             <span>Shopee Berrybarton</span>
+            <ExternalLink className="w-2.5 h-2.5" />
+          </a>
+          <a href="https://shopee.co.id/mollucaseyewear?entryPoint=ShopBySearch&searchKeyword=molucas%20kacamata&sp_payload=fe32335d-b3cc-4386-b0b0-45445ce4df06" target="_blank" rel="noopener noreferrer" className="px-2.5 py-1 rounded bg-surface-secondary border border-border text-foreground hover:text-brand flex items-center gap-1">
+            <span>Shopee Mollucas</span>
             <ExternalLink className="w-2.5 h-2.5" />
           </a>
         </div>
