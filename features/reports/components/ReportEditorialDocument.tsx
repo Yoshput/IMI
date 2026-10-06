@@ -363,6 +363,11 @@ export const ReportEditorialDocument: React.FC<ReportEditorialDocumentProps> = (
                       {frame.rank}
                     </span>
                     {frame.frameName}
+                    {frame.shopeeSearchQuery && (
+                      <span className="block text-[10px] font-mono text-brand font-normal mt-0.5">
+                        Kata Kunci: "{frame.shopeeSearchQuery}"
+                      </span>
+                    )}
                   </td>
                   <td className="py-2.5 px-3 whitespace-nowrap">
                     <a

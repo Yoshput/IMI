@@ -845,11 +845,10 @@ export const CompetitorRadarView: React.FC = () => {
               <span className="text-[11px] font-bold text-foreground-muted mr-1">Bentuk &amp; Gaya:</span>
               {[
                 { id: "ALL", label: `Semua Bentuk (${TRENDING_FRAME_RECOMMENDATIONS.length})` },
-                { id: "Slim Square", label: "Kotak Ramping (Titanium)" },
-                { id: "Korean Round / Oval", label: "Bulat / Oval Korea (TR-90)" },
-                { id: "Vintage Retro Acetate", label: "Acetate Vintage 90s" },
-                { id: "Bold Cat-Eye", label: "Cat-Eye Modern" },
-                { id: "Classic Wellington", label: "Classic Wellington" },
+                { id: "Slim Square", label: "Kotak Ramping (Hajime & Sunglasses)" },
+                { id: "Korean Round / Oval", label: "Bulat / Oval (TR90 Unisex)" },
+                { id: "Vintage Retro Acetate", label: "Designer Acetate (Manawa)" },
+                { id: "Bold Cat-Eye", label: "Cat-Eye Modern (Sora & I See You)" },
               ].map((cat) => (
                 <button
                   key={cat.id}
@@ -924,6 +923,17 @@ export const CompetitorRadarView: React.FC = () => {
                     <span className="text-xs text-foreground-secondary font-medium block mt-0.5">
                       Material: <strong className="text-foreground">{item.material}</strong>
                     </span>
+                    {item.exactShopeeTitle && (
+                      <span className="text-[11px] text-foreground-muted block mt-1">
+                        Nama Resmi Listing: <strong className="text-foreground font-medium">{item.exactShopeeTitle}</strong>
+                      </span>
+                    )}
+                    {item.shopeeSearchQuery && (
+                      <div className="mt-1.5 inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] bg-brand/10 text-brand border border-brand/20">
+                        <span className="font-semibold">Kata Kunci Shopee:</span>
+                        <code className="font-mono font-bold">"{item.shopeeSearchQuery}"</code>
+                      </div>
+                    )}
                   </div>
 
                   {/* Target Bentuk Wajah Callout */}
@@ -990,7 +1000,7 @@ export const CompetitorRadarView: React.FC = () => {
                       rel="noopener noreferrer"
                       className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-control text-xs font-semibold bg-brand text-white hover:bg-brand/90 transition-all shadow-subtle"
                     >
-                      <span>Lihat Produk di {item.sourceStore}</span>
+                      <span>Cari Produk di {item.sourceStore}</span>
                       <ExternalLink className="w-3.5 h-3.5" />
                     </a>
 
@@ -1039,7 +1049,14 @@ export const CompetitorRadarView: React.FC = () => {
                       <td className="p-2.5 font-bold text-foreground-muted">#{f.rank}</td>
                       <td className="p-2.5 font-bold">
                         <div>{f.frameName}</div>
-                        <span className="text-[10px] text-brand font-medium">{f.brand}</span>
+                        <div className="flex items-center gap-1.5 mt-0.5">
+                          <span className="text-[10px] text-brand font-medium">{f.brand}</span>
+                          {f.shopeeSearchQuery && (
+                            <span className="text-[9px] bg-brand/10 text-brand px-1 py-0.5 rounded font-mono">
+                              Cari: "{f.shopeeSearchQuery}"
+                            </span>
+                          )}
+                        </div>
                       </td>
                       <td className="p-2.5 text-[11px]">
                         <div>{f.shapeStyle}</div>
