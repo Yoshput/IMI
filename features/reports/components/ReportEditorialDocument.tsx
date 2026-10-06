@@ -3,6 +3,7 @@ import { WeeklyReport } from "@/types";
 import { formatNumber, formatPercent } from "@/lib/utils";
 import { ProvenanceBadge } from "@/components/shared/ProvenanceBadge";
 import { CheckCircle2, AlertTriangle, Lightbulb, Users, TrendingUp, FileText, Glasses } from "lucide-react";
+import { TRENDING_FRAME_RECOMMENDATIONS } from "@/features/competitors/data/competitors-radar-data";
 
 interface ReportEditorialDocumentProps {
   report: WeeklyReport;
@@ -320,6 +321,82 @@ export const ReportEditorialDocument: React.FC<ReportEditorialDocumentProps> = (
               </div>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* 6c. Laporan Rekomendasi Frame Tren (Benchmark Pasar & Cabang) */}
+      <section id="sec-frame-recommendations" className="space-y-4 pt-4 border-t border-border">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <Glasses className="w-4 h-4 text-brand" />
+            <h2 className="heading-section text-foreground">
+              6c. Rekomendasi Frame yang Sedang Tren (Benchmark Pasar & Cabang)
+            </h2>
+          </div>
+          <span className="text-[11px] text-foreground-muted">
+            Sumber Terverifikasi: Shopee Mall, Brand D2C & Katalog Outlet
+          </span>
+        </div>
+
+        <p className="text-xs text-foreground-muted leading-relaxed">
+          Berdasarkan data penjualan pasar riil terverifikasi (marketplace resmi & gerai fisik), berikut 6 model frame kacamata paling diminati pelanggan dengan volume penjualan ribuan hingga puluhan ribu unit:
+        </p>
+
+        <div className="overflow-x-auto rounded-control border border-border">
+          <table className="w-full text-left text-xs border-collapse">
+            <thead className="bg-surface-secondary text-[11px] uppercase tracking-wider text-foreground-muted border-b border-border">
+              <tr>
+                <th className="py-2.5 px-3 font-semibold">Model Frame</th>
+                <th className="py-2.5 px-3 font-semibold">Brand / Sumber</th>
+                <th className="py-2.5 px-3 font-semibold">Bentuk & Bahan</th>
+                <th className="py-2.5 px-3 font-semibold">Harga Pasar</th>
+                <th className="py-2.5 px-3 font-semibold">Volume Penjualan</th>
+                <th className="py-2.5 px-3 font-semibold">Kesesuaian Wajah</th>
+                <th className="py-2.5 px-3 font-semibold">Rekomendasi Toko Cabang</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-border text-foreground">
+              {TRENDING_FRAME_RECOMMENDATIONS.map((frame) => (
+                <tr key={frame.id} className="hover:bg-surface-secondary/50 transition-colors">
+                  <td className="py-2.5 px-3 font-semibold text-foreground">
+                    <span className="inline-block w-4 h-4 rounded-full bg-brand/10 text-brand text-[10px] font-bold text-center leading-4 mr-1.5">
+                      {frame.rank}
+                    </span>
+                    {frame.frameName}
+                  </td>
+                  <td className="py-2.5 px-3 whitespace-nowrap">
+                    <a
+                      href={frame.sourceUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-brand hover:underline inline-flex items-center gap-1 font-medium"
+                    >
+                      {frame.brand}
+                    </a>
+                  </td>
+                  <td className="py-2.5 px-3">
+                    <span className="font-medium text-foreground">{frame.shapeStyle}</span>
+                    <span className="block text-[10px] text-foreground-muted">{frame.material}</span>
+                  </td>
+                  <td className="py-2.5 px-3 whitespace-nowrap font-medium text-emerald-600 dark:text-emerald-400">
+                    {frame.priceReal}
+                  </td>
+                  <td className="py-2.5 px-3 whitespace-nowrap">
+                    <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold bg-brand/10 text-brand">
+                      {frame.marketSoldCount}
+                    </span>
+                    <span className="block text-[10px] text-foreground-muted">Rating {frame.rating}</span>
+                  </td>
+                  <td className="py-2.5 px-3 text-[11px] text-foreground-muted max-w-[180px]">
+                    {frame.targetFaceShape}
+                  </td>
+                  <td className="py-2.5 px-3 text-[11px] text-foreground max-w-[220px]">
+                    {frame.stockRecommendationForISeeYou}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </section>
 

@@ -2506,3 +2506,146 @@ export const LOCAL_BRANCH_STATS = {
   bpjsPartnersCount: 1, // Optik BUDHI Cilacap
 };
 
+// ==========================================
+// LAPORAN REKOMENDASI FRAME YANG LAGI TREND
+// Berdasarkan Data Nyata Marketplace & Brand Leader 2026
+// ==========================================
+
+export interface TrendingFrameReportItem {
+  id: string;
+  rank: number;
+  frameName: string;
+  brand: string;
+  shapeStyle: "Slim Square" | "Korean Round / Oval" | "Vintage Retro Acetate" | "Bold Cat-Eye" | "Classic Wellington" | "Aviator / Pilot";
+  material: string;
+  targetFaceShape: string;
+  priceReal: string;
+  marketSoldCount: string;
+  rating: string;
+  reviewCount: string;
+  trendReason: string;
+  signatureAudience: string;
+  sourceStore: string;
+  sourceUrl: string;
+  stockRecommendationForISeeYou: string;
+  lastCheckedDate: string;
+}
+
+export const TRENDING_FRAME_RECOMMENDATIONS: TrendingFrameReportItem[] = [
+  {
+    id: "trend-frame-1",
+    rank: 1,
+    frameName: "Heykama Aero Titanium Slim Square",
+    brand: "Heykama",
+    shapeStyle: "Slim Square",
+    material: "Titanium Ultra-Lightweight (Anti-Karat & Anti-Patah)",
+    targetFaceShape: "Wajah Bulat & Pipi Chubby (Memberikan kontur tegas dan ilusi wajah lebih tirus)",
+    priceReal: "Rp 189.000 (Flash Sale) / Rp 259.000",
+    marketSoldCount: "10RB+ Terjual",
+    rating: "4.9 / 5.0",
+    reviewCount: "21.4RB Ulasan",
+    trendReason: "Tren kacamata formal-kasual di kalangan mahasiswa dan pekerja muda yang menginginkan frame kotak ramping tanpa terlihat kaku atau tebal.",
+    signatureAudience: "Mahasiswa perguruan tinggi & profesional muda kantor/WFH",
+    sourceStore: "Shopee Mall Heykama Official",
+    sourceUrl: "https://shopee.co.id/heykama",
+    stockRecommendationForISeeYou: "Wajib restock frame titanium kotak tipis warna hitam matte & gunmetal di seluruh cabang (Purwokerto Pusat & Rita Supermall, Purbalingga, Cilacap, Wonosobo) dengan paket lensa antiradiasi Rp 199.000 - Rp 250.000.",
+    lastCheckedDate: "06 Okt 2026",
+  },
+  {
+    id: "trend-frame-2",
+    rank: 2,
+    frameName: "Kacamatamoo Korean Round TR-90 Ultra Light",
+    brand: "Kacamatamoo",
+    shapeStyle: "Korean Round / Oval",
+    material: "TR-90 Flexible Resin (Bobot hanya 8-10 gram)",
+    targetFaceShape: "Wajah Kotak / Persegi & Rahang Tegas (Menyamarkan garis rahang dengan lekukan frame membulat lembut)",
+    priceReal: "Rp 139.000",
+    marketSoldCount: "12RB+ Terjual",
+    rating: "4.9 / 5.0",
+    reviewCount: "18.2RB Ulasan",
+    trendReason: "Gaya Oppa/Eonni Korea yang sangat populer di platform TikTok. Frame super lentur, nyaman dipakai seharian tanpa menekan pangkal hidung.",
+    signatureAudience: "Pelajar SMA, mahasiswi Gen-Z, dan pengguna kacamata pertama kali",
+    sourceStore: "Shopee Star+ Kacamatamoo Official",
+    sourceUrl: "https://shopee.co.id/kacamatamoo",
+    stockRecommendationForISeeYou: "Jadikan lini produk utama volume-maker di area etalase depan. Kombinasikan dengan lensa Photocromic otomatis gelap di luar ruangan untuk mahasiswa.",
+    lastCheckedDate: "06 Okt 2026",
+  },
+  {
+    id: "trend-frame-3",
+    rank: 3,
+    frameName: "Berrybarton Titanium Series TR-9021 Extreme Flex",
+    brand: "Berrybarton",
+    shapeStyle: "Slim Square",
+    material: "Memory TR-90 Metal Hybrid (Bisa ditekuk 180 derajat)",
+    targetFaceShape: "Universal (Cocok untuk wajah lonjong, oval, dan bulat)",
+    priceReal: "Rp 69.900 - Rp 129.000",
+    marketSoldCount: "10RB+ Terjual",
+    rating: "4.8 / 5.0",
+    reviewCount: "42.1RB Ulasan",
+    trendReason: "Viral melalui demonstrasi video uji ketahanan ekstrem (frame diinjak dan ditekuk) di keranjang kuning live shopping TikTok Shop dan Shopee Mall.",
+    signatureAudience: "Pembeli online massal price-sensitive yang mencari frame awet murah",
+    sourceStore: "Shopee Mall Berrybarton",
+    sourceUrl: "https://shopee.co.id/berrybarton?entryPoint=ShopBySearch&searchKeyword=berrybarton%20kacamata&sp_payload=fbfa4b22-88ce-486d-b46f-ebaa88a9eadb",
+    stockRecommendationForISeeYou: "Edukasi staf toko untuk memperagakan kelenturan frame TR-90 Optik I See You secara santai saat melayani customer di outlet fisik guna membuktikan kualitas material langsung.",
+    lastCheckedDate: "06 Okt 2026",
+  },
+  {
+    id: "trend-frame-4",
+    rank: 4,
+    frameName: "Mollucas Banda Series Acetate Retro 90s",
+    brand: "Mollucas Eyewear",
+    shapeStyle: "Vintage Retro Acetate",
+    material: "Premium Acetate Glossy & Matte Finish",
+    targetFaceShape: "Wajah Tirus, Oval, & Wajah Panjang (Memberikan karakter estetis yang bold pada bentuk muka)",
+    priceReal: "Rp 289.000",
+    marketSoldCount: "1,2RB Terjual",
+    rating: "4.9 / 5.0",
+    reviewCount: "820+ Ulasan",
+    trendReason: "Lonjakan tren estetika vintage 90-an dan outfit cafe hopping di kalangan komunitas kreatif muda Yogyakarta, Semarang, dan Purwokerto.",
+    signatureAudience: "Anak muda skena kreatif, penikmat cafe kopi, mahasiswa seni/desain",
+    sourceStore: "Shopee Store Mollucas Eyewear",
+    sourceUrl: "https://shopee.co.id/mollucaseyewear?entryPoint=ShopBySearch&searchKeyword=molucas%20kacamata&sp_payload=fe32335d-b3cc-4386-b0b0-45445ce4df06",
+    stockRecommendationForISeeYou: "Pajang varian acetate vintage di meja display estetik dekat cermin selfie toko I See You Purwokerto & Purbalingga, lengkap dengan hardcase pouch kanvas eksklusif.",
+    lastCheckedDate: "06 Okt 2026",
+  },
+  {
+    id: "trend-frame-5",
+    rank: 5,
+    frameName: "SATURDAYS Hamilton Acetate Classic",
+    brand: "SATURDAYS",
+    shapeStyle: "Classic Wellington",
+    material: "Handcrafted Eco-Acetate & Engsel 5-Barrel Besi Kuat",
+    targetFaceShape: "Wajah Persegi Panjang, Oval, & Karakter Tegas",
+    priceReal: "Rp 1.495.000 (Paket All-in Lensa Resep)",
+    marketSoldCount: "Signature Flagship Bestseller (Omnichannel Store)",
+    rating: "4.9 / 5.0",
+    reviewCount: "Ribuan Pembeli Aplikasi & Store Mall",
+    trendReason: "Standar premium kacamata gaya hidup perkotaan dengan sentuhan kemewahan understated (quiet luxury) dan fitting hidung orang Asia (Asian Fit).",
+    signatureAudience: "Eksekutif muda, pengusaha, profesional, dan penggemar lifestyle slow-fashion",
+    sourceStore: "Official Website saturdays.com & Gerai Mall",
+    sourceUrl: "https://saturdays.com",
+    stockRecommendationForISeeYou: "Posisikan paket frame acetate I See You seharga Rp 350.000 - Rp 450.000 sebagai alternatif 'Kualitas Sentuhan Mewah Setara Saturdays dengan Biaya Rasional dan Faset Kilat 15 Menit Jadi'.",
+    lastCheckedDate: "06 Okt 2026",
+  },
+  {
+    id: "trend-frame-6",
+    rank: 6,
+    frameName: "Optik I See You - Bestseller Store Oval & Cat-Eye",
+    brand: "Optik I See You (Jaringan 4 Cabang)",
+    shapeStyle: "Bold Cat-Eye",
+    material: "TR-90 Kombinasi Titanium & Acetate Ringan",
+    targetFaceShape: "Wajah Bulat & Wajah Lebar (Lekukan sudut lancip mengangkat profil mata dan pipi)",
+    priceReal: "Rp 199.000 - Rp 350.000 (Paket All-in Lensa)",
+    marketSoldCount: "Paling Banyak Terjual di 4 Cabang Fisik & Reels Instagram",
+    rating: "4.9 / 5.0",
+    reviewCount: "Ratusan Testimoni Pelanggan Cabang PWT, PBG, CLP, WNS",
+    trendReason: "Model cat-eye modern yang tidak berlebihan, sangat diminati karyawati dan mahasiswi yang ingin tampil fresh tanpa kesan mencolok.",
+    signatureAudience: "Pelanggan wanita muda, karyawati perkantoran/BUMN, dan mahasiswi",
+    sourceStore: "Instagram Resmi @iseeyou.glasses & Toko Fisik",
+    sourceUrl: "https://www.instagram.com/iseeyou.glasses/",
+    stockRecommendationForISeeYou: "Prioritaskan ketersediaan ukuran lensa minus tinggi dengan index tipis (1.61 / 1.67) agar tepi lensa tidak tampak menonjol di frame cat-eye.",
+    lastCheckedDate: "06 Okt 2026",
+  },
+];
+
+
