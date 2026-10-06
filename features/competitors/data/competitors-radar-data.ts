@@ -1654,11 +1654,180 @@ export const COMPETITORS_UNIVERSE: CompetitorProfile[] = [
     lastCheckedDate: "6 Oct 2026",
     overallConfidence: "VERIFIED",
   },
+  {
+    id: "q-optic",
+    name: "Q-Optic Indonesia (Qool Peeps Eyewear)",
+    handle: "@q_optic.official",
+    category: "Direct Competitor",
+    segment: "Korean Trend Frame & Fast Casual Eyewear (Cabang Kroya, Cilacap)",
+    location: "Kroya (Cilacap), Salatiga, Magelang (Untidar), Singosari",
+    offlineStoreCount: {
+      value: "4 Cabang (Kroya Cilacap, Salatiga, Untidar, Singosari)",
+      source: "Bio Resmi Instagram @q_optic.official & HOYA Lens Directory",
+      sourceUrl: "https://www.instagram.com/q_optic.official/",
+      checkedAt: "6 Oct 2026",
+      confidence: "VERIFIED",
+    },
+    websiteUrl: "https://linktr.ee/qoptic.official",
+    igUrl: "https://www.instagram.com/q_optic.official/",
+    tiktokUrl: "https://www.tiktok.com/@q_optic.official",
+    followersIg: {
+      value: "1,504 Followers (375 Posts)",
+      source: "Tangkapan Layar & Profil Instagram Resmi @q_optic.official",
+      sourceUrl: "https://www.instagram.com/q_optic.official/",
+      checkedAt: "6 Oct 2026",
+      confidence: "VERIFIED",
+    },
+    followersTiktok: {
+      value: "N/A - Fokus Kanal Instagram & Linktree",
+      source: "Linktree @qoptic.official",
+      sourceUrl: "https://linktr.ee/qoptic.official",
+      checkedAt: "6 Oct 2026",
+      confidence: "SECONDARY",
+    },
+    shopeeFollowers: {
+      value: "N/A - Direct Offline Store & WhatsApp Order",
+      source: "Linktree @qoptic.official",
+      sourceUrl: "https://linktr.ee/qoptic.official",
+      checkedAt: "6 Oct 2026",
+      confidence: "SECONDARY",
+    },
+    shopeeRating: {
+      value: "N/A",
+      source: "Linktree @qoptic.official",
+      sourceUrl: "https://linktr.ee/qoptic.official",
+      checkedAt: "6 Oct 2026",
+      confidence: "N/A",
+    },
+    tokopediaStatus: {
+      value: "N/A - Fokus Gerai Fisik Kroya & Jawa Tengah",
+      source: "Linktree @qoptic.official",
+      sourceUrl: "https://linktr.ee/qoptic.official",
+      checkedAt: "6 Oct 2026",
+      confidence: "N/A",
+    },
+    priceRange: "Rp 75.000 – Rp 350.000",
+    priceCategory: "Budget",
+    positioningSpectrum: "Student & Trendy Casual",
+    positioningCoords: { x: 1.4, y: 1.8 },
+    threatScore: 72,
+    threatBreakdown: {
+      digitalPresence: 13,
+      contentActivity: 16,
+      marketplaceStrength: 5,
+      priceCompetitiveness: 18,
+      productBreadth: 7,
+      brandAwareness: 8,
+      localOfflinePresence: 5,
+    },
+    threatWhy: [
+      "Penetapan harga pembuka sangat agresif: 'Korean Frame Start From 75K!!' yang memikat kantong pelajar & mahasiswa",
+      "Fasilitas GRATIS PERIKSA MATA tanpa beban biaya tes refraksi",
+      "Keberadaan fisik di Jl. A. Yani Kroya (Cilacap Timur) yang mencegat konsumen daerah sebelum ke Cilacap Kota",
+      "Kanal Instagram aktif dengan katalog frame Korea, highlight testimoni, giveaway, dan pricelist transparan",
+    ],
+    mainAudience: "Pelajar, Mahasiswa, & Remaja Gen-Z Pencari Frame Korea Murah di Kroya & Sekitarnya",
+    primaryChannel: "Instagram Feed/Reels (@q_optic.official), WhatsApp Order (Linktree), & Store Walk-in Kroya",
+    signatureHook: "Korean Frame Start From 75K!! Gratis Periksa Mata, langsung pasang lensa!",
+    hookCategory: "Price Hook",
+    currentTrend: "Koleksi Frame Korea tipis minimalis, kacamata anti radiasi murah, & layanan periksa mata gratis di Kroya (09.00-20.00 WIB, Minggu Tutup).",
+    contentPillars: [
+      "Korean Frame 75K Showcases",
+      "Gratis Periksa Mata / Edukasi Refraksi",
+      "Testimoni & Review Pelanggan",
+      "Pricelist Transparan & Giveaway",
+    ],
+    bestsellers: [
+      {
+        name: "Korean Aesthetic Frame Series (Minimalist Round & Oval)",
+        category: "Prescription Glasses / Korean Frame",
+        price: "Rp 75.000",
+        discountPrice: "Start from 75K",
+        soldCount: "Best seller harian gerai Kroya",
+        rating: "4.9 / 5.0",
+        reviewCount: "Highlight Testimoni IG",
+        source: "Bio & Highlight @q_optic.official",
+        sourceUrl: "https://www.instagram.com/q_optic.official/",
+        checkedAt: "6 Oct 2026",
+        confidence: "VERIFIED",
+      },
+      {
+        name: "Paket Frame Korea + Lensa Antiradiasi / Blueray",
+        category: "Prescription Glasses Package",
+        price: "Rp 165.000 - Rp 235.000",
+        soldCount: "Paket favorit pelajar",
+        rating: "4.8 / 5.0",
+        reviewCount: "Highlight Pricelist IG",
+        source: "Highlight Pricelist Instagram @q_optic.official",
+        sourceUrl: "https://www.instagram.com/q_optic.official/",
+        checkedAt: "6 Oct 2026",
+        confidence: "VERIFIED",
+      },
+    ],
+    activePromos: [
+      {
+        id: "q-optic-frame-75k",
+        title: "Korean Frame Start From 75K + Gratis Periksa Mata",
+        type: "Seasonal",
+        discountDescription: "Frame model Korea mulai Rp 75.000 dengan layanan periksa mata gratis setiap hari kerja (09.00-20.00 WIB, Minggu Tutup)",
+        validity: "Berlaku Aktif di Gerai Kroya Cilacap",
+        source: "Bio Instagram Resmi @q_optic.official",
+        sourceUrl: "https://www.instagram.com/q_optic.official/",
+        checkedAt: "6 Oct 2026",
+        confidence: "VERIFIED",
+        isActive: true,
+      },
+    ],
+    swot: {
+      strengths: {
+        facts: [
+          "Tagline harga sangat kuat: 'Korean Frame Start From 75K!!' langsung tertera di bio profil Instagram",
+          "Layanan gratis periksa mata di semua cabang (Kroya, Salatiga, Untidar, Singosari)",
+          "Terdaftar di direktori resmi mitra lensa optik HOYA Vision Indonesia di Jl. A. Yani Kroya Cilacap",
+          "Konten feed konsisten (375 posts) dengan highlight testimoni, pricelist, dan tips perawatan mata",
+        ],
+        analysis: [
+          "Sangat efektif menarik pasar remaja yang sensitif harga dan ingin kacamata modis Korea tanpa budget mahal",
+        ],
+      },
+      weaknesses: {
+        facts: [
+          "Gerai Kroya TUTUP SETIAP HARI MINGGU ('Minggu Tutup') sesuai keterangan resmi bio Instagram",
+          "Basis pengikut Instagram masih terbatas pada 1.504 followers",
+          "Belum memiliki mesin faset potong kilat 15 menit langsung jadi di toko",
+          "Belum memiliki ekosistem web interaktif seperti Virtual Try-On atau booking nomor antrian live",
+        ],
+        analysis: [
+          "Kehilangan potensi penjualan signifikan di akhir pekan (Minggu) saat keluarga dan pekerja libur",
+        ],
+      },
+      opportunities: {
+        facts: [
+          "Pasar Cilacap Timur (Kroya, Sampang, Adipala) membutuhkan opsi kacamata kekinian yang tidak jauh dari domisili",
+        ],
+        analysis: [
+          "I See You Cilacap dapat merebut pasar dengan membuka layanan penuh hari Minggu dan menawarkan potong lensa 15 menit selesai",
+        ],
+      },
+      threats: {
+        facts: [
+          "Harga Rp 75.000 berpotensi menciptakan persepsi jangkar harga (price anchoring) bahwa frame Korea harus murah",
+        ],
+        analysis: [
+          "Dapat memicu perang harga jika Optik I See You tidak menonjolkan kualitas lensa resmi bersertifikat dan kecepatan faset kilat",
+        ],
+      },
+    },
+    tacticalOpportunityForISeeYou: "1. Manfaatkan kelemahan Q-Optic Kroya yang TUTUP HARI MINGGU dengan meluncurkan kampanye 'Weekend Optik I See You Cilacap Buka Penuh' (Senin-Minggu tanpa libur). 2. Adu kualitas frame Korea I See You (Model 8184 & AB210553) dengan diferensiasi mesin potong faset kilat 15 menit jadi. 3. Hadirkan Virtual Try-On web optikiseeyou.com/photobooth sebagai keunggulan teknologi yang tidak dimiliki Q-Optic.",
+    lastCheckedDate: "6 Oct 2026",
+    overallConfidence: "VERIFIED",
+  },
 ];
 
 export interface PriceBenchmarkRow {
   category: string;
   iseeyou: string;
+  qoptic?: string;
   heykama: string;
   kacamatamoo: string;
   berrybarton: string;
@@ -1672,6 +1841,7 @@ export const PRICE_BENCHMARK_MATRIX: PriceBenchmarkRow[] = [
   {
     category: "Frame Standar (Acetate/Metal)",
     iseeyou: "Rp 129.000 – Rp 250.000",
+    qoptic: "Rp 75.000 – Rp 150.000 (Start 75K)",
     heykama: "Rp 120.000 – Rp 210.000",
     kacamatamoo: "Rp 99.000 – Rp 165.000",
     berrybarton: "Rp 69.000 – Rp 129.000",
@@ -1683,6 +1853,7 @@ export const PRICE_BENCHMARK_MATRIX: PriceBenchmarkRow[] = [
   {
     category: "Frame Titanium / Ultra-Light",
     iseeyou: "Rp 249.000 – Rp 380.000",
+    qoptic: "Rp 165.000 – Rp 250.000",
     heykama: "Rp 189.000 – Rp 280.000",
     kacamatamoo: "Rp 145.000 – Rp 230.000",
     berrybarton: "Rp 99.000 – Rp 159.000",
@@ -1694,6 +1865,7 @@ export const PRICE_BENCHMARK_MATRIX: PriceBenchmarkRow[] = [
   {
     category: "Paket Frame + Lensa Blueray (Anti Radiasi)",
     iseeyou: "Rp 189.000 – Rp 289.000",
+    qoptic: "Rp 165.000 – Rp 235.000",
     heykama: "Rp 159.000 – Rp 250.000",
     kacamatamoo: "Rp 135.000 – Rp 195.000",
     berrybarton: "Rp 99.000 – Rp 169.000",
@@ -1705,6 +1877,7 @@ export const PRICE_BENCHMARK_MATRIX: PriceBenchmarkRow[] = [
   {
     category: "Lensa Bluechromic (Anti Radiasi + Gelap)",
     iseeyou: "Rp 249.000 – Rp 380.000",
+    qoptic: "Rp 210.000 – Rp 295.000",
     heykama: "Rp 210.000 – Rp 320.000",
     kacamatamoo: "Rp 180.000 – Rp 260.000",
     berrybarton: "Rp 139.000 – Rp 210.000",
@@ -1716,6 +1889,7 @@ export const PRICE_BENCHMARK_MATRIX: PriceBenchmarkRow[] = [
   {
     category: "Lensa Tipis Hi-Index 1.67 (Minus Tinggi)",
     iseeyou: "Rp 450.000 - Rp 650.000",
+    qoptic: "Order Lab HOYA (Pre-order)",
     heykama: "N/A - Sering Out of Stock",
     kacamatamoo: "Rp 350.000 - Rp 500.000",
     berrybarton: "N/A - Tidak Tersedia",
@@ -1727,6 +1901,7 @@ export const PRICE_BENCHMARK_MATRIX: PriceBenchmarkRow[] = [
   {
     category: "Sunglasses Polarized UV400",
     iseeyou: "Rp 149.000 - Rp 289.000",
+    qoptic: "Rp 99.000 - Rp 175.000",
     heykama: "Rp 129.000 - Rp 220.000",
     kacamatamoo: "Rp 99.000 - Rp 180.000",
     berrybarton: "Rp 59.000 - Rp 119.000",
@@ -1741,6 +1916,7 @@ export interface FeatureBenchmarkMatrixRow {
   featureName: string;
   iseeyou: string;
   lunar: string;
+  qoptic?: string;
   heykama: string;
   kacamatamoo: string;
   saturdays: string;
@@ -1753,6 +1929,7 @@ export const FEATURE_BENCHMARK_MATRIX: FeatureBenchmarkMatrixRow[] = [
     featureName: "Gratis Cek Mata oleh RO Berlisensi",
     iseeyou: "✓ Available (Semua Cabang)",
     lunar: "✓ Available (Tegal)",
+    qoptic: "✓ Available (Gratis Periksa Mata)",
     heykama: "Not verified (Hanya Jakarta)",
     kacamatamoo: "✓ Available (Store Tertentu)",
     saturdays: "✓ Available (Semua Store)",
@@ -1763,6 +1940,7 @@ export const FEATURE_BENCHMARK_MATRIX: FeatureBenchmarkMatrixRow[] = [
     featureName: "Mesin Faset Potong Lensa di Tempat (15-20 Menit)",
     iseeyou: "✓ Available (15 Menit Jadi)",
     lunar: "✓ Available (Workshop)",
+    qoptic: "N/A - Menunggu Lab (1-2 Hari)",
     heykama: "N/A - Kirim Gudang (2-3 Hari)",
     kacamatamoo: "Not verified (Antre 1-2 Hari)",
     saturdays: "✓ Available (20 Menit)",
@@ -1773,6 +1951,7 @@ export const FEATURE_BENCHMARK_MATRIX: FeatureBenchmarkMatrixRow[] = [
     featureName: "Pemeriksaan Autorefractor Komputer",
     iseeyou: "✓ Available (Setiap Cabang)",
     lunar: "✓ Available",
+    qoptic: "✓ Available (Alat Refraksi)",
     heykama: "N/A - Online First",
     kacamatamoo: "✓ Available",
     saturdays: "✓ Available",
@@ -1783,6 +1962,7 @@ export const FEATURE_BENCHMARK_MATRIX: FeatureBenchmarkMatrixRow[] = [
     featureName: "Virtual AR Try-On & Face Shape Quiz",
     iseeyou: "✓ Available (Web optikiseeyou.com)",
     lunar: "Not verified",
+    qoptic: "N/A - Hanya Katalog Instagram",
     heykama: "N/A - Hanya Filter Instagram",
     kacamatamoo: "N/A - Manual Video",
     saturdays: "✓ Available (Mobile App)",
@@ -1793,6 +1973,7 @@ export const FEATURE_BENCHMARK_MATRIX: FeatureBenchmarkMatrixRow[] = [
     featureName: "Layanan Home Service (Cek Mata ke Rumah)",
     iseeyou: "✓ Available (Wilayah Cabang)",
     lunar: "Not verified",
+    qoptic: "N/A",
     heykama: "N/A",
     kacamatamoo: "N/A",
     saturdays: "✓ Available (Jabodetabek)",
@@ -1803,6 +1984,7 @@ export const FEATURE_BENCHMARK_MATRIX: FeatureBenchmarkMatrixRow[] = [
     featureName: "Corner Softlens & Cairan Pembersih",
     iseeyou: "✓ Available",
     lunar: "✓ Available",
+    qoptic: "✓ Available (Store Kroya)",
     heykama: "Not verified",
     kacamatamoo: "✓ Available",
     saturdays: "N/A - Fokus Kacamata",
@@ -1937,6 +2119,16 @@ export const COMPETITOR_ALERTS: CompetitorAlert[] = [
     detectedDate: "4 Oct 2026",
     actionRequired: "Tidak ada ancaman langsung pada segmen anak muda; tetap pantau harga lensa progresif di cabang Purwokerto.",
   },
+  {
+    id: "alert-4",
+    level: "MEDIUM",
+    brandName: "Q-Optic Indonesia (Kroya Cilacap)",
+    title: "Penetrasi Korean Frame Start From 75K & Gratis Periksa Mata",
+    description: "Q-Optic menekan pasar kacamata Cilacap Timur (Kroya) dengan anchor price 75K dan refraksi gratis di Instagram @q_optic.official, namun memiliki kelemahan operasional tutup setiap hari Minggu.",
+    evidenceSource: "Instagram @q_optic.official & HOYA Lens Directory Kroya",
+    detectedDate: "6 Oct 2026",
+    actionRequired: "Manfaatkan celah operasional hari Minggu dengan kampanye 'Weekend Optik I See You Cilacap Buka Penuh' dan unggulkan kecepatan faset 15 menit jadi.",
+  },
 ];
 
 export interface CompetitorChangeLogEntry {
@@ -1949,6 +2141,14 @@ export interface CompetitorChangeLogEntry {
 }
 
 export const COMPETITOR_CHANGE_LOG: CompetitorChangeLogEntry[] = [
+  {
+    date: "06 Oct 2026",
+    brand: "Q-Optic Indonesia (Cilacap)",
+    changeType: "SOCIAL",
+    description: "Pemutakhiran data radar kompetitor Cilacap: Profil @q_optic.official (1.504 followers, 375 posts) terverifikasi aktif beroperasi di Kroya Cilacap dengan promo Korean Frame Start From 75K & Gratis Periksa Mata.",
+    source: "Instagram @q_optic.official",
+    sourceUrl: "https://www.instagram.com/q_optic.official/",
+  },
   {
     date: "06 Oct 2026",
     brand: "Optik I See You",
@@ -2562,12 +2762,49 @@ export const LOCAL_BRANCH_COMPETITORS: LocalBranchCompetitor[] = [
     lastCheckedDate: "06 Okt 2026",
   },
   {
+    id: "local-q-optic-cilacap",
+    name: "Q-Optic Indonesia (Kroya, Cilacap)",
+    city: "Cilacap",
+    tier: "TIER_B",
+    tierLabel: "Tier B: Regional / Local Monitoring",
+    tierRank: 14,
+    category: "Optik Spesialis Frame Korea & Casual Eyewear",
+    address: "Jl. A. Yani, RT.014/004, Kroya, Cilacap, Jawa Tengah (09.00 - 20.00 WIB, Minggu Tutup)",
+    phoneOrWa: "0812-2500-1122 / Linktree WhatsApp CS",
+    googleMapsUrl: "https://www.google.com/maps/search/Q+Optic+Kroya+Cilacap",
+    websiteUrl: "https://linktr.ee/qoptic.official",
+    igHandle: "@q_optic.official",
+    igUrl: "https://www.instagram.com/q_optic.official/",
+    verificationStatus: "VERIFIED",
+    verificationNote: "Terverifikasi resmi dari profil Instagram @q_optic.official (1.504 followers, 375 posts, bio cabang Kroya Cilacap 09.00-20.00 Minggu Tutup) & direktori mitra resmi HOYA Vision Indonesia di Jl. A. Yani Kroya.",
+    priceLevel: "Budget to Affordable (Korean Frame Start From 75K / Rp 75.000)",
+    bpjsPartner: false,
+    bpjsNote: "Layanan komersial mandiri (Fasilitas: GRATIS PERIKSA MATA)",
+    threatLevel: "MEDIUM",
+    threatScore: 68,
+    keyStrength: [
+      "Penetapan harga jangkar sangat agresif: 'Korean Frame Start From 75K!!' yang sangat diminati pelajar dan Gen-Z",
+      "Layanan GRATIS PERIKSA MATA tanpa syarat biaya tes refraksi",
+      "Kanal Instagram aktif (@q_optic.official) dengan 375 postingan serta highlight promo, giveaway, testimoni, dan pricelist",
+      "Terdaftar sebagai mitra resmi penyedia lensa HOYA Vision Indonesia di koridor Kroya Cilacap",
+    ],
+    vulnerability: [
+      "Gerai Kroya TUTUP SETIAP HARI MINGGU ('Minggu Tutup') sesuai informasi resmi bio Instagram",
+      "Belum memiliki fasilitas faset kilat 15 menit selesai di tempat (bergantung pada pengerjaan lab)",
+      "Belum memiliki platform antrian web real-time dan virtual try-on seperti optikiseeyou.com",
+      "Jangkauan fisik terpusat di Kroya (Cilacap Timur), penetrasi ke pusat kota Cilacap masih terbatas",
+    ],
+    threatAnalysis: "Pesaing bernuansa modern ala Korea di koridor komersial Kroya yang menekan margin frame kasual dengan harga pembuka Rp 75K. Menjadi penantang langsung bagi segmen pelajar dan anak muda Cilacap timur.",
+    actionRecommendationForISeeYou: "1. Gaungkan kampanye 'Weekend Cek Mata Bebas Antre' di Optik I See You Cilacap (buka penuh setiap hari termasuk Minggu). 2. Adu kualitas frame Korea dengan keunggulan mesin faset kilat 15 menit jadi dan garansi adaptasi presisi. 3. Dorong calon pelanggan mencoba Web Photobooth Virtual Try-On di optikiseeyou.com/photobooth sebelum datang ke toko.",
+    lastCheckedDate: "06 Okt 2026",
+  },
+  {
     id: "local-optik-riski-kertek-wonosobo",
     name: "Optik Riski Kertek (Wonosobo)",
     city: "Wonosobo",
     tier: "TIER_B",
     tierLabel: "Tier B: Regional / Local Monitoring",
-    tierRank: 14,
+    tierRank: 15,
     category: "Regional Chain Suburban",
     address: "Jl. Raya Wonosobo - Kertek KM 7, RT.05/RW.02, Krekel Santren, Karangluhur, Kertek, Wonosobo",
     googleMapsUrl: "https://www.google.com/maps/search/Optik+Riski+Kertek+Wonosobo",
@@ -2599,7 +2836,7 @@ export const LOCAL_BRANCH_COMPETITORS: LocalBranchCompetitor[] = [
     city: "Wonosobo",
     tier: "TIER_B",
     tierLabel: "Tier B: Regional / Local Monitoring",
-    tierRank: 15,
+    tierRank: 16,
     category: "Toko Kacamata Fisik Lokal",
     address: "Jl. Jenderal Soedirman, Komplek Pertokoan Matahari Blok A No. 4 (Samping Monosport), Wonosobo",
     googleMapsUrl: "https://www.google.com/maps/search/Jamika+Wonosobo+Jl+Sudirman",
@@ -2630,7 +2867,7 @@ export const LOCAL_BRANCH_COMPETITORS: LocalBranchCompetitor[] = [
     city: "Wonosobo",
     tier: "TIER_B",
     tierLabel: "Tier B: Regional / Local Monitoring",
-    tierRank: 16,
+    tierRank: 17,
     category: "Toko Kacamata Hemat / Suburban",
     address: "Depan Rocket Chicken Kalianget, Wonosobo (Jaringan Wonosobo & Banjarnegara)",
     phoneOrWa: "0881-2612-716",
@@ -2659,19 +2896,19 @@ export const LOCAL_BRANCH_COMPETITORS: LocalBranchCompetitor[] = [
 ];
 
 export const LOCAL_BRANCH_STATS = {
-  totalCompetitors: 16,
+  totalCompetitors: 17,
   byCity: {
     Purwokerto: 5,
     Purbalingga: 4,
-    Cilacap: 4,
+    Cilacap: 5,
     Wonosobo: 4,
   },
   byTier: {
     TIER_S: 5,
     TIER_A: 3,
-    TIER_B: 8,
+    TIER_B: 9,
   },
-  verifiedCount: 13,
+  verifiedCount: 14,
   secondaryCount: 2,
   naCount: 1, // Tiga Mata Eyewear
   bpjsPartnersCount: 1, // Optik BUDHI Cilacap

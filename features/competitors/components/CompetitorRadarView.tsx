@@ -505,8 +505,8 @@ export const CompetitorRadarView: React.FC = () => {
                   <span className="text-[11px] font-bold text-foreground-muted mr-1">Layanan:</span>
                   {[
                     { id: "ALL", label: "Semua Layanan" },
-                    { id: "BPJS", label: "🏥 Mitra BPJS (1)" },
-                    { id: "NON_BPJS", label: "🛍️ Ritel Komersial (15)" },
+                    { id: "BPJS", label: `🏥 Mitra BPJS (${LOCAL_BRANCH_STATS.bpjsPartnersCount})` },
+                    { id: "NON_BPJS", label: `🛍️ Ritel Komersial (${LOCAL_BRANCH_STATS.totalCompetitors - LOCAL_BRANCH_STATS.bpjsPartnersCount})` },
                   ].map((bpjs) => (
                     <button
                       key={bpjs.id}
@@ -1814,6 +1814,7 @@ export const CompetitorRadarView: React.FC = () => {
                   <th className="p-3 border border-border min-w-[220px]">Parameter Layanan &amp; Teknologi</th>
                   <th className="p-3 border border-border text-brand min-w-[170px] bg-brand-light/30">Optik I See You</th>
                   <th className="p-3 border border-border min-w-[150px]">Lunar Eyewear</th>
+                  <th className="p-3 border border-border text-teal-700 dark:text-teal-300 min-w-[150px]">Q-Optic (Kroya)</th>
                   <th className="p-3 border border-border min-w-[150px]">Heykama</th>
                   <th className="p-3 border border-border min-w-[150px]">Kacamatamoo</th>
                   <th className="p-3 border border-border min-w-[150px]">SATURDAYS</th>
@@ -1835,6 +1836,7 @@ export const CompetitorRadarView: React.FC = () => {
                       {row.iseeyou}
                     </td>
                     <td className="p-3 border border-border">{row.lunar}</td>
+                    <td className="p-3 border border-border text-teal-700 dark:text-teal-300 font-medium">{row.qoptic || "-"}</td>
                     <td className="p-3 border border-border">{row.heykama}</td>
                     <td className="p-3 border border-border">{row.kacamatamoo}</td>
                     <td className="p-3 border border-border">{row.saturdays}</td>
@@ -1869,6 +1871,7 @@ export const CompetitorRadarView: React.FC = () => {
                 <tr className="bg-surface-secondary text-foreground font-bold">
                   <th className="p-3 border border-border min-w-[200px]">Kategori Produk</th>
                   <th className="p-3 border border-border text-brand min-w-[160px] bg-brand-light/30">Optik I See You</th>
+                  <th className="p-3 border border-border text-teal-700 dark:text-teal-300 min-w-[150px]">Q-Optic (Kroya)</th>
                   <th className="p-3 border border-border min-w-[140px]">Heykama</th>
                   <th className="p-3 border border-border min-w-[140px]">Kacamatamoo</th>
                   <th className="p-3 border border-border min-w-[140px]">Berrybarton</th>
@@ -1881,6 +1884,7 @@ export const CompetitorRadarView: React.FC = () => {
                   <tr key={idx} className="hover:bg-surface-secondary/40 transition-colors">
                     <td className="p-3 border border-border font-medium text-foreground">{row.category}</td>
                     <td className="p-3 border border-border font-bold text-foreground bg-brand-light/20">{row.iseeyou}</td>
+                    <td className="p-3 border border-border text-teal-700 dark:text-teal-300 font-semibold">{row.qoptic || "-"}</td>
                     <td className="p-3 border border-border">{row.heykama}</td>
                     <td className="p-3 border border-border">{row.kacamatamoo}</td>
                     <td className="p-3 border border-border text-rose-700 dark:text-rose-400 font-semibold">{row.berrybarton}</td>
