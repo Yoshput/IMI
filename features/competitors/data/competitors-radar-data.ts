@@ -2833,4 +2833,327 @@ export const TRENDING_FRAME_RECOMMENDATIONS: TrendingFrameReportItem[] = [
   },
 ];
 
+// ==========================================
+// RADAR WISUDA KAMPUS PURWOKERTO 2026
+// Intelijen Kalender Wisuda & Momentum Penjualan Optik
+// ==========================================
+
+export interface CampusGraduationPeriod {
+  periodName: string;
+  registrationWindow?: string;
+  yudisiumDate?: string;
+  ceremonyDate: string;
+  status: "SELESAI" | "BERJALAN" | "MENDATANG";
+  notes: string;
+}
+
+export interface CampusGraduationTactic {
+  targetAudience: string;
+  recommendedProduct: string;
+  promoHook: string;
+  executionTimeline: string;
+}
+
+export interface CampusGraduationInfo {
+  id: string;
+  campusName: string;
+  abbreviation: string;
+  campusType: "PTN" | "PTS" | "PTKIN";
+  campusAddress: string;
+  graduationVenue: string;
+  officialPortalUrl: string;
+  socialMediaUrl?: string;
+  verifiedSourceTitle: string;
+  lastCheckedDate: string;
+  confidence: "VERIFIED" | "SECONDARY";
+  estimatedGraduatesPerCycle: string;
+  annualGraduatesEstimate: string;
+  periods2026: CampusGraduationPeriod[];
+  marketingTactics: CampusGraduationTactic;
+}
+
+export const PURWOKERTO_GRADUATION_RADAR: CampusGraduationInfo[] = [
+  {
+    id: "grad-unsoed",
+    campusName: "Universitas Jenderal Soedirman",
+    abbreviation: "UNSOED",
+    campusType: "PTN",
+    campusAddress: "Jl. Prof. DR. HR Boejamin 708, Grendeng, Purwokerto Utara",
+    graduationVenue: "Auditorium Graha Widyatama Prof. Rubijanto Misman (Grendeng)",
+    officialPortalUrl: "https://sia.akademik.unsoed.ac.id/",
+    socialMediaUrl: "https://www.instagram.com/unsoed_official_1963/",
+    verifiedSourceTitle: "SIA Akademik Unsoed (sia.akademik.unsoed.ac.id) & Portal Resmi unsoed.ac.id",
+    lastCheckedDate: "06 Okt 2026",
+    confidence: "VERIFIED",
+    estimatedGraduatesPerCycle: "1.200 - 1.500 Wisudawan / Periode",
+    annualGraduatesEstimate: "5.500+ Wisudawan / Tahun (4 Siklus Reguler)",
+    periods2026: [
+      {
+        periodName: "Wisuda Ke-160 (Periode Maret)",
+        ceremonyDate: "18 - 19 Maret 2026",
+        status: "SELESAI",
+        notes: "Wisuda reguler awal tahun di Graha Widyatama.",
+      },
+      {
+        periodName: "Wisuda Ke-161 (Periode Juni)",
+        ceremonyDate: "17 - 18 Juni 2026",
+        status: "SELESAI",
+        notes: "Wisuda kelulusan semester genap dengan kuota peserta terbesar tahunan.",
+      },
+      {
+        periodName: "Wisuda Ke-162 & 163 (Periode September)",
+        ceremonyDate: "8 - 9 September 2026",
+        status: "SELESAI",
+        notes: "Pelaksanaan wisuda gabungan 2 hari berturut-turut di Graha Widyatama.",
+      },
+      {
+        periodName: "Wisuda Ke-164 (Periode Desember 2026)",
+        registrationWindow: "September - November 2026",
+        yudisiumDate: "30 Oktober 2026 & 30 November 2026",
+        ceremonyDate: "Pertengahan Desember 2026",
+        status: "MENDATANG",
+        notes: "Proses pendaftaran yudisium aktif. Pendaftaran ditutup otomatis saat kuota kapasitas auditorium (1.200 orang) terpenuhi.",
+      },
+    ],
+    marketingTactics: {
+      targetAudience: "Calon wisudawan/wisudawati S1, Profesi Ners/Dokter, dan Pascasarjana Unsoed",
+      recommendedProduct: "Softlens Natural Korea + Lensa Anti-Reflective Studio Foto + Frame Titanium Ramping",
+      promoHook: "Wisuda Unsoed Flawless: Tampil Tanpa Silau Pantulan Blitz di Foto Studio & Bebas Pusing Seharian!",
+      executionTimeline: "H-21 sampai H-3 sebelum tanggal wisuda Desember 2026 (Masa booking foto studio & fitting toga).",
+    },
+  },
+  {
+    id: "grad-ump",
+    campusName: "Universitas Muhammadiyah Purwokerto",
+    abbreviation: "UMP",
+    campusType: "PTS",
+    campusAddress: "Jl. KH. Ahmad Dahlan, Dukuhwaluh, Kembaran, Purwokerto",
+    graduationVenue: "Auditorium Ukhuwah Islamiyah UMP (Dukuhwaluh)",
+    officialPortalUrl: "http://wisuda.ump.ac.id",
+    socialMediaUrl: "https://www.instagram.com/ump.ac.id/",
+    verifiedSourceTitle: "Biro Akademik UMP (baa.ump.ac.id) & Portal wisuda.ump.ac.id",
+    lastCheckedDate: "06 Okt 2026",
+    confidence: "VERIFIED",
+    estimatedGraduatesPerCycle: "1.000 - 1.800 Wisudawan / Periode",
+    annualGraduatesEstimate: "3.200+ Wisudawan / Tahun (2 Siklus Utama: Feb & Sep/Okt)",
+    periods2026: [
+      {
+        periodName: "Wisuda Ke-78 (Periode Februari)",
+        ceremonyDate: "14 Februari 2026",
+        status: "SELESAI",
+        notes: "Wisuda semester gasal di Auditorium Ukhuwah Islamiyah.",
+      },
+      {
+        periodName: "Wisuda Ke-79 (Periode Oktober 2026)",
+        ceremonyDate: "3 - 4 Oktober 2026",
+        status: "SELESAI",
+        notes: "Baru saja selesai 2 hari lalu. Hari 1 (3 Okt): Pascasarjana, FKIP, FIBK, FH, Fikes, FK. Hari 2 (4 Okt): FAI, FEB, FTS, FPP, Psikologi, Farmasi.",
+      },
+      {
+        periodName: "Wisuda Ke-80 (Periode Februari 2027)",
+        registrationWindow: "Desember 2026 - Januari 2027",
+        yudisiumDate: "Desember 2026",
+        ceremonyDate: "Pertengahan Februari 2027",
+        status: "MENDATANG",
+        notes: "Target yudisium akhir tahun 2026. Sosialisasi pendaftaran wisuda dimulai November 2026.",
+      },
+    ],
+    marketingTactics: {
+      targetAudience: "Mahasiswi rumpun Farmasi, Kesehatan, FKIP, dan FEB UMP (Dominan mahasiswi berhijab)",
+      recommendedProduct: "Softlens Warna Earth Tone Natural + Frame Cat-Eye Hijab Friendly (Tangkai Tipis Nyaman)",
+      promoHook: "Spesial Wisudawati UMP: Kacamata Cat-Eye Nyaman di Balik Hijab Toga & Softlens Bebas Kering!",
+      executionTimeline: "Evaluasi pasca Wisuda Ke-79 (retensi customer) dan siapkan prapromosi Wisuda Ke-80 mulai Desember 2026.",
+    },
+  },
+  {
+    id: "grad-uinsaizu",
+    campusName: "UIN Prof. K.H. Saifuddin Zuhri Purwokerto",
+    abbreviation: "UIN SAIZU",
+    campusType: "PTKIN",
+    campusAddress: "Jl. Jend. A. Yani No. 40A, Purwokerto",
+    graduationVenue: "Auditorium Utama Kampus UIN Saizu Purwokerto",
+    officialPortalUrl: "https://uinsaizu.ac.id",
+    socialMediaUrl: "https://www.instagram.com/uinsaizu.purwokerto/",
+    verifiedSourceTitle: "Portal Resmi uinsaizu.ac.id & Platform SaizuLink",
+    lastCheckedDate: "06 Okt 2026",
+    confidence: "VERIFIED",
+    estimatedGraduatesPerCycle: "600 - 900 Wisudawan / Periode",
+    annualGraduatesEstimate: "2.800+ Wisudawan / Tahun (4 Siklus)",
+    periods2026: [
+      {
+        periodName: "Wisuda Ke-70 (Periode Maret)",
+        registrationWindow: "2 - 23 Februari 2026",
+        ceremonyDate: "31 Maret 2026",
+        status: "SELESAI",
+        notes: "Wisuda pembuka tahun akademik 2026 via SaizuLink.",
+      },
+      {
+        periodName: "Wisuda Ke-71 (Periode Juni)",
+        registrationWindow: "1 - 28 April 2026",
+        ceremonyDate: "23 - 24 Juni 2026",
+        status: "SELESAI",
+        notes: "Wisuda semester genap.",
+      },
+      {
+        periodName: "Wisuda Ke-72 (Periode September)",
+        registrationWindow: "1 - 31 Juli 2026",
+        ceremonyDate: "22 September 2026",
+        status: "SELESAI",
+        notes: "Wisuda gelombang 3 UIN Saizu.",
+      },
+      {
+        periodName: "Wisuda Ke-73 (Periode November/Desember 2026)",
+        registrationWindow: "Oktober 2026",
+        yudisiumDate: "Akhir Oktober 2026",
+        ceremonyDate: "Akhir November / Awal Desember 2026",
+        status: "MENDATANG",
+        notes: "Pendaftaran daring via SaizuLink sedang berlangsung sepanjang Oktober 2026.",
+      },
+    ],
+    marketingTactics: {
+      targetAudience: "Mahasiswa Fakultas Tarbiyah, Dakwah, Syariah, FEBI, dan Ushuluddin UIN Saizu",
+      recommendedProduct: "Paket Mahasiswa Hemat Frame TR90 + Lensa Anti-Radiasi Bluechromic Rp 199.000",
+      promoHook: "Tunjukkan KTM/Bukti Pendaftaran Wisuda SaizuLink: Gratis Refraksi Mata + Diskon Kacamata Baru!",
+      executionTimeline: "Bulan Oktober sampai pertengahan November 2026 (fase aktif pendaftaran wisuda).",
+    },
+  },
+  {
+    id: "grad-telkom",
+    campusName: "Universitas Telkom Purwokerto (d/h IT Telkom Purwokerto)",
+    abbreviation: "TELKOM PURWOKERTO",
+    campusType: "PTS",
+    campusAddress: "Jl. D.I. Panjaitan No. 128, Karangreja, Purwokerto Kidul",
+    graduationVenue: "GOR D.I. Panjaitan Kawasan Pendidikan Telkom Purwokerto",
+    officialPortalUrl: "https://purwokerto.telkomuniversity.ac.id/",
+    socialMediaUrl: "https://www.instagram.com/telkomuniversity_purwokerto/",
+    verifiedSourceTitle: "Portal Akademik purwokerto.telkomuniversity.ac.id",
+    lastCheckedDate: "06 Okt 2026",
+    confidence: "VERIFIED",
+    estimatedGraduatesPerCycle: "400 - 700 Wisudawan / Periode",
+    annualGraduatesEstimate: "1.200+ Wisudawan / Tahun (2 Periode)",
+    periods2026: [
+      {
+        periodName: "Wisuda Periode Genap 2025/2026",
+        ceremonyDate: "4 Juli 2026",
+        status: "SELESAI",
+        notes: "Sidang Terbuka Senat Wisuda di GOR D.I. Panjaitan.",
+      },
+      {
+        periodName: "Wisuda Periode Ganjil 2026/2027",
+        registrationWindow: "Oktober - November 2026",
+        yudisiumDate: "November 2026",
+        ceremonyDate: "12 - 13 Desember 2026",
+        status: "MENDATANG",
+        notes: "Wisuda akhir tahun untuk lulusan Fakultas Teknik Telekomunikasi, Elektro, dan Informatika.",
+      },
+    ],
+    marketingTactics: {
+      targetAudience: "Mahasiswa IT/Teknik Telkom (Pengguna aktif laptop layar digital & screen time tinggi)",
+      recommendedProduct: "Lensa Blueray Filter + Anti-Reflective Studio Photo + Frame Titanium Minimalis",
+      promoHook: "Kacamata Fresh untuk Portofolio Karier & Foto Ijazah Wisuda Telkom University Purwokerto!",
+      executionTimeline: "Pertengahan November hingga minggu pertama Desember 2026.",
+    },
+  },
+  {
+    id: "grad-amikom",
+    campusName: "Universitas Amikom Purwokerto",
+    abbreviation: "AMIKOM PURWOKERTO",
+    campusType: "PTS",
+    campusAddress: "Jl. Letjen Pol. Sumarto No. 127, Karangjambu, Purwokerto Utara",
+    graduationVenue: "Hastinapura Convention Center, Java Heritage Hotel Purwokerto (Jl. Dr. Angka)",
+    officialPortalUrl: "http://www.amikompurwokerto.ac.id",
+    socialMediaUrl: "https://www.instagram.com/amikom_purwokerto/",
+    verifiedSourceTitle: "Portal Resmi amikompurwokerto.ac.id & Dashboard Mahasiswa mhs.amikom.ac.id",
+    lastCheckedDate: "06 Okt 2026",
+    confidence: "VERIFIED",
+    estimatedGraduatesPerCycle: "400 - 600 Wisudawan / Periode",
+    annualGraduatesEstimate: "1.100+ Wisudawan / Tahun",
+    periods2026: [
+      {
+        periodName: "Wisuda Ke-33 (Periode April)",
+        ceremonyDate: "15 April 2026",
+        status: "SELESAI",
+        notes: "Dilaksanakan di Java Heritage Hotel Purwokerto.",
+      },
+      {
+        periodName: "Wisuda Ke-34 (Periode Ganjil 2026)",
+        registrationWindow: "September - Oktober 2026",
+        yudisiumDate: "Oktober 2026",
+        ceremonyDate: "November 2026",
+        status: "MENDATANG",
+        notes: "Persiapan gelombang wisuda ke-34 di Convention Hall Java Heritage.",
+      },
+    ],
+    marketingTactics: {
+      targetAudience: "Mahasiswa Desain Komunikasi Visual, Ilmu Komputer, Sistem Informasi, dan Bisnis Digital",
+      recommendedProduct: "Frame Vintage Acetate Bold + Kado Voucher Hadiah Wisuda Teman",
+      promoHook: "Tampil Estetik ala Kreator Digital saat Wisuda di Java Heritage bareng Optik I See You!",
+      executionTimeline: "Akhir Oktober sampai pertengahan November 2026.",
+    },
+  },
+  {
+    id: "grad-uhb",
+    campusName: "Universitas Harapan Bangsa Purwokerto",
+    abbreviation: "UHB",
+    campusType: "PTS",
+    campusAddress: "Jl. Raden Patah No. 100, Ledug, Kembaran, Purwokerto",
+    graduationVenue: "Hastinapura Convention Center, Java Heritage Hotel Purwokerto",
+    officialPortalUrl: "https://www.uhb.ac.id/",
+    socialMediaUrl: "https://www.instagram.com/universitasharapanbangsa/",
+    verifiedSourceTitle: "Portal Akademik SCALSA (scalsa.uhb.ac.id) & Portal Resmi uhb.ac.id",
+    lastCheckedDate: "06 Okt 2026",
+    confidence: "VERIFIED",
+    estimatedGraduatesPerCycle: "350 - 500 Wisudawan / Periode",
+    annualGraduatesEstimate: "900+ Wisudawan / Tahun (Fokus Keperawatan, Ners, Kebidanan, Farmasi)",
+    periods2026: [
+      {
+        periodName: "Wisuda Ke-30 Gelombang 1",
+        ceremonyDate: "16 April 2026",
+        status: "SELESAI",
+        notes: "Di Hastinapura Convention Center.",
+      },
+      {
+        periodName: "Wisuda Ke-30 Gelombang 2",
+        ceremonyDate: "11 Juni 2026",
+        status: "SELESAI",
+        notes: "Pelantikan wisuda ners dan tenaga kesehatan.",
+      },
+      {
+        periodName: "Wisuda Ke-31 (Periode Ganjil 2026)",
+        registrationWindow: "September 2026",
+        yudisiumDate: "Oktober 2026",
+        ceremonyDate: "Akhir Oktober / Awal November 2026",
+        status: "MENDATANG",
+        notes: "Gladi bersih dan wisuda ners/kesehatan di Java Heritage Hotel.",
+      },
+    ],
+    marketingTactics: {
+      targetAudience: "Wisudawati Tenaga Kesehatan (Ners, Bidan, Farmasi) yang butuh kenyamanan mata prima",
+      recommendedProduct: "Softlens Bening Kadar Air Tinggi (Hydration Comfort) + Frame Ramping",
+      promoHook: "Paket Wisuda Sehat: Softlens Nyaman Seharian Sumpah Ners & Wisuda UHB Tanpa Mata Merah!",
+      executionTimeline: "Oktober 2026 menjelang tanggal wisuda di Java Heritage.",
+    },
+  },
+];
+
+export const PURWOKERTO_GRADUATION_STATS = {
+  totalMonitoredCampuses: 6,
+  totalGraduatesPerYear: "14.500+ Lulusan / Tahun",
+  upcomingGraduationWindows: [
+    { campus: "UHB Purwokerto", date: "Akhir Oktober / Awal November 2026", venue: "Java Heritage Hotel", status: "MENDATANG" },
+    { campus: "Amikom Purwokerto", date: "November 2026", venue: "Java Heritage Hotel", status: "MENDATANG" },
+    { campus: "UIN Saizu Purwokerto", date: "Akhir November / Awal Desember 2026", venue: "Auditorium UIN Saizu", status: "MENDATANG" },
+    { campus: "UNSOED Purwokerto", date: "Pertengahan Desember 2026", venue: "Graha Widyatama Unsoed", status: "MENDATANG" },
+    { campus: "Telkom University Purwokerto", date: "12 - 13 Desember 2026", venue: "GOR D.I. Panjaitan", status: "MENDATANG" },
+    { campus: "UMP Purwokerto", date: "Februari 2027 (Pendaftaran Des 2026)", venue: "Auditorium Ukhuwah UMP", status: "MENDATANG" },
+  ],
+  keyOpportunitiesForISeeYou: [
+    "Softlens Wisuda Bebas Kering & Bebas Silau Makeup (Paling dicari mahasiswi wisuda)",
+    "Lensa Anti-Pantul Blitz Studio Foto (Mencegah pantulan hijau/putih saat foto ijazah & toga)",
+    "Faset Cepat 15 Menit Jadi di Toko (Penyelamat darurat kacamata patah H-2 wisuda)",
+    "Kado Wisuda Voucher Belanja Kacamata (Gift kado wisuda dari sahabat/keluarga)",
+    "Paket Cek Mata Gratis Keluarga / Orang Tua Wisudawan yang Menginap di Purwokerto",
+  ],
+};
+
 

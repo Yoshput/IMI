@@ -37,6 +37,9 @@ import {
   Navigation,
   AlertTriangle,
   HelpCircle,
+  GraduationCap,
+  Calendar,
+  Users,
 } from "lucide-react";
 import {
   LOCAL_BRANCH_COMPETITORS,
@@ -55,14 +58,21 @@ import {
   TrendingFrameReportItem,
   CompetitorProfile,
   ConfidenceLevel,
+  PURWOKERTO_GRADUATION_RADAR,
+  PURWOKERTO_GRADUATION_STATS,
+  CampusGraduationInfo,
 } from "../data/competitors-radar-data";
 
 export const CompetitorRadarView: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<"local" | "frames" | "profiles" | "map" | "benchmark" | "pricing" | "trends" | "recommendations">("frames");
+  const [activeTab, setActiveTab] = useState<
+    "local" | "frames" | "graduations" | "profiles" | "map" | "benchmark" | "pricing" | "trends" | "recommendations"
+  >("frames");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("ALL");
   const [selectedConfidence, setSelectedConfidence] = useState<string>("ALL");
   const [expandedBrandId, setExpandedBrandId] = useState<string | null>("heykama");
+  const [selectedCampusType, setSelectedCampusType] = useState<string>("ALL");
+  const [campusSearchQuery, setCampusSearchQuery] = useState<string>("");
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [refreshMessage, setRefreshMessage] = useState<string | null>(null);
 
@@ -84,6 +94,26 @@ export const CompetitorRadarView: React.FC = () => {
       return matchShape && matchSearch;
     });
   }, [selectedFrameShape, frameSearchQuery]);
+
+  // Purwokerto Campus Graduation Filter Memo
+  const filteredGraduations = useMemo(() => {
+    return PURWOKERTO_GRADUATION_RADAR.filter((c) => {
+      const matchType = selectedCampusType === "ALL" || c.campusType === selectedCampusType;
+      const q = campusSearchQuery.toLowerCase();
+      const matchQuery =
+        !q ||
+        c.campusName.toLowerCase().includes(q) ||
+        c.abbreviation.toLowerCase().includes(q) ||
+        c.graduationVenue.toLowerCase().includes(q) ||
+        c.periods2026.some(
+          (p) =>
+            p.periodName.toLowerCase().includes(q) ||
+            p.ceremonyDate.toLowerCase().includes(q) ||
+            p.notes.toLowerCase().includes(q)
+        );
+      return matchType && matchQuery;
+    });
+  }, [selectedCampusType, campusSearchQuery]);
 
   // Local Branch Surveillance States
   const [selectedBranchCity, setSelectedBranchCity] = useState<string>("ALL");
@@ -303,6 +333,18 @@ export const CompetitorRadarView: React.FC = () => {
         >
           <Glasses className="w-3.5 h-3.5" />
           <span>Laporan Rekomendasi Frame Tren ({TRENDING_FRAME_RECOMMENDATIONS.length} Bestseller Pasar)</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab("graduations")}
+          className={`px-3 py-1.5 rounded-control text-xs font-semibold transition-all flex items-center gap-1.5 ${
+            activeTab === "graduations"
+              ? "bg-brand text-white shadow-subtle font-bold"
+              : "text-foreground-secondary hover:text-foreground"
+          }`}
+        >
+          <GraduationCap className="w-3.5 h-3.5" />
+          <span>Radar Wisuda Kampus Purwokerto ({PURWOKERTO_GRADUATION_RADAR.length} Kampus)</span>
         </button>
 
         <button
@@ -1100,6 +1142,339 @@ export const CompetitorRadarView: React.FC = () => {
             <p className="text-[11px] text-foreground-secondary leading-relaxed">
               Seluruh metrik penjualan (10RB+, 12RB+ unit terjual) dan rating pembeli di atas bersumber langsung dari etalase official store Shopee Mall dan website brand terkait per 6 Oktober 2026. Anda dapat langsung mengklik tautan toko sumber asli pada setiap kartu untuk memverifikasi harga, jumlah terjual, dan ribuan ulasan pembeli nyata. Tidak ada data yang digenerate atau direkayasa.
             </p>
+          </div>
+        </div>
+      )}
+
+      {/* Tab: Radar Wisuda Kampus Purwokerto */}
+      {activeTab === "graduations" && (
+        <div className="space-y-6 animate-fade-in">
+          {/* Header Banner */}
+          <div className="bg-surface border border-border rounded-container p-5 shadow-subtle flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div className="space-y-1">
+              <div className="flex flex-wrap items-center gap-2">
+                <div className="p-1.5 rounded-control bg-brand-light/30 text-brand">
+                  <GraduationCap className="w-4 h-4" />
+                </div>
+                <h2 className="text-base font-bold text-foreground">
+                  Radar Wisuda Kampus Purwokerto 2026
+                </h2>
+                <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20">
+                  Data Terverifikasi SIA &amp; Portal Resmi
+                </span>
+              </div>
+              <p className="text-xs text-foreground-secondary leading-relaxed">
+                Pemantauan kalender wisuda resmi seluruh perguruan tinggi di kawasan Purwokerto (UNSOED, UMP, UIN Saizu, Telkom University, Amikom, UHB). Mengidentifikasi lonjakan permintaan softlens wisuda, kacamata anti-pantul blitz studio foto, kado wisuda, dan paket periksa mata keluarga wisudawan.
+              </p>
+            </div>
+
+            <div className="flex items-center gap-2 shrink-0">
+              <span className="text-xs text-foreground-muted">Update: 06 Okt 2026</span>
+            </div>
+          </div>
+
+          {/* Quick Stats Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <div className="p-3 rounded-container bg-surface border border-border shadow-2xs">
+              <span className="text-[10px] uppercase font-bold tracking-wider text-foreground-muted block">
+                Total Kampus Dipantau
+              </span>
+              <span className="text-lg font-bold text-foreground block mt-0.5">
+                {PURWOKERTO_GRADUATION_STATS.totalMonitoredCampuses} Kampus Utama
+              </span>
+              <span className="text-[10px] text-foreground-secondary block mt-0.5">
+                Area Kota &amp; Banyumas Raya
+              </span>
+            </div>
+
+            <div className="p-3 rounded-container bg-surface border border-border shadow-2xs">
+              <span className="text-[10px] uppercase font-bold tracking-wider text-foreground-muted block">
+                Estimasi Wisudawan / Tahun
+              </span>
+              <span className="text-lg font-bold text-brand block mt-0.5">
+                {PURWOKERTO_GRADUATION_STATS.totalGraduatesPerYear}
+              </span>
+              <span className="text-[10px] text-foreground-secondary block mt-0.5">
+                Target Calon Konsumen Optik
+              </span>
+            </div>
+
+            <div className="p-3 rounded-container bg-surface border border-border shadow-2xs">
+              <span className="text-[10px] uppercase font-bold tracking-wider text-foreground-muted block">
+                Gelombang Terdekat
+              </span>
+              <span className="text-lg font-bold text-amber-700 dark:text-amber-400 block mt-0.5">
+                Okt - Des 2026
+              </span>
+              <span className="text-[10px] text-foreground-secondary block mt-0.5">
+                UHB, Amikom, Saizu, Unsoed, Tel-U
+              </span>
+            </div>
+
+            <div className="p-3 rounded-container bg-surface border border-border shadow-2xs">
+              <span className="text-[10px] uppercase font-bold tracking-wider text-foreground-muted block">
+                Peluang Penjualan Optik
+              </span>
+              <span className="text-lg font-bold text-emerald-700 dark:text-emerald-400 block mt-0.5">
+                5 Kategori Produk
+              </span>
+              <span className="text-[10px] text-foreground-secondary block mt-0.5">
+                Softlens, Foto Blitz, Faset Kilat
+              </span>
+            </div>
+          </div>
+
+          {/* Kotak Kenapa Wisuda Purwokerto Penting bagi Optik I See You */}
+          <div className="bg-brand-light/10 border border-brand/20 rounded-container p-4 space-y-2 text-xs">
+            <div className="flex items-center gap-2">
+              <Lightbulb className="w-4 h-4 text-brand" />
+              <strong className="text-foreground font-semibold">
+                Mengapa Kalender Wisuda Menjadi Peluang Omset Utama Optik I See You?
+              </strong>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5 pt-1 text-[11px] text-foreground-secondary">
+              <div className="p-2.5 rounded-control bg-surface border border-border space-y-1">
+                <span className="font-bold text-foreground block">Kedekatan Lokasi Fisik:</span>
+                <p>Gerai I See You Purwokerto (Pusat &amp; Rita Supermall) berjarak sangat dekat dari kampus Unsoed Grendeng, UIN Saizu, dan hotel wisuda (Java Heritage).</p>
+              </div>
+              <div className="p-2.5 rounded-control bg-surface border border-border space-y-1">
+                <span className="font-bold text-foreground block">Solusi Darurat Faset 15 Menit:</span>
+                <p>Kompetitor online (Heykama/Berrybarton) butuh 3-5 hari kirim. Jika kacamata calon wisudawan patah H-2 wisuda, I See You menjadi solusi kilat selesai di tempat.</p>
+              </div>
+              <div className="p-2.5 rounded-control bg-surface border border-border space-y-1">
+                <span className="font-bold text-foreground block">Lensa Anti-Pantul Studio &amp; Softlens:</span>
+                <p>Mencegah pantulan lampu blitz saat foto toga wisuda di studio, serta fitting softlens natural aman dibimbing refraksionis optik berlisensi.</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Search & Filter Bar */}
+          <div className="bg-surface border border-border rounded-container p-4 shadow-subtle flex flex-col md:flex-row items-center justify-between gap-3">
+            <div className="relative w-full md:w-80">
+              <Search className="w-4 h-4 text-foreground-muted absolute left-3 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                value={campusSearchQuery}
+                onChange={(e) => setCampusSearchQuery(e.target.value)}
+                placeholder="Cari kampus, Graha Widyatama, Java Heritage..."
+                className="w-full pl-9 pr-3 py-1.5 text-xs rounded-control bg-surface-secondary border border-border text-foreground placeholder:text-foreground-muted focus:outline-none focus:ring-1 focus:ring-brand"
+              />
+            </div>
+
+            <div className="flex flex-wrap items-center gap-1.5 w-full md:w-auto">
+              {[
+                { id: "ALL", label: `Semua Kampus (${PURWOKERTO_GRADUATION_RADAR.length})` },
+                { id: "PTN", label: "PTN (UNSOED)" },
+                { id: "PTS", label: "PTS (UMP, Telkom, Amikom, UHB)" },
+                { id: "PTKIN", label: "PTKIN (UIN Saizu)" },
+              ].map((pill) => (
+                <button
+                  key={pill.id}
+                  onClick={() => setSelectedCampusType(pill.id)}
+                  className={`px-2.5 py-1 rounded-control text-[11px] font-semibold transition-all ${
+                    selectedCampusType === pill.id
+                      ? "bg-brand text-white shadow-2xs"
+                      : "bg-surface-secondary text-foreground-secondary hover:text-foreground border border-border"
+                  }`}
+                >
+                  {pill.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Cards Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {filteredGraduations.map((campus) => (
+              <div
+                key={campus.id}
+                className="bg-surface border border-border rounded-container p-5 shadow-subtle hover:border-brand/40 transition-all flex flex-col justify-between space-y-4"
+              >
+                <div className="space-y-3">
+                  {/* Card Header */}
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-brand text-white">
+                          {campus.abbreviation}
+                        </span>
+                        <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-surface-secondary border border-border text-foreground">
+                          {campus.campusType}
+                        </span>
+                        <span className="text-[10px] font-medium text-emerald-700 dark:text-emerald-400">
+                          {campus.confidence}
+                        </span>
+                      </div>
+                      <h3 className="text-base font-bold text-foreground mt-1.5">
+                        {campus.campusName}
+                      </h3>
+                      <div className="flex items-center gap-1 text-[11px] text-foreground-secondary mt-0.5">
+                        <MapPin className="w-3 h-3 text-foreground-muted shrink-0" />
+                        <span className="truncate">{campus.campusAddress}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Lokasi Gedung & Kapasitas Wisudawan */}
+                  <div className="grid grid-cols-2 gap-2 p-2.5 rounded-control bg-surface-secondary border border-border text-xs">
+                    <div>
+                      <span className="text-[10px] text-foreground-muted block">Gedung Wisuda:</span>
+                      <strong className="text-[11px] text-foreground font-semibold block mt-0.5">
+                        {campus.graduationVenue}
+                      </strong>
+                    </div>
+                    <div>
+                      <span className="text-[10px] text-foreground-muted block">Kapasitas Wisudawan:</span>
+                      <strong className="text-[11px] text-brand font-semibold block mt-0.5">
+                        {campus.estimatedGraduatesPerCycle}
+                      </strong>
+                    </div>
+                  </div>
+
+                  {/* Siklus Periode Wisuda 2026 */}
+                  <div className="space-y-1.5">
+                    <span className="text-[11px] font-bold uppercase tracking-wider text-foreground-muted block">
+                      Kalender Siklus Wisuda 2026:
+                    </span>
+                    <div className="space-y-1.5">
+                      {campus.periods2026.map((period, idx) => (
+                        <div
+                          key={idx}
+                          className={`p-2 rounded-control border text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 ${
+                            period.status === "MENDATANG"
+                              ? "bg-amber-500/10 border-amber-500/30 text-amber-900 dark:text-amber-200"
+                              : "bg-surface-secondary/70 border-border text-foreground"
+                          }`}
+                        >
+                          <div>
+                            <div className="flex items-center gap-1.5">
+                              <span className="font-semibold text-[11px]">{period.periodName}</span>
+                              <span
+                                className={`text-[9px] px-1.5 py-0.2 rounded font-bold uppercase ${
+                                  period.status === "MENDATANG"
+                                    ? "bg-amber-500 text-white"
+                                    : "bg-surface-secondary text-foreground-muted border border-border"
+                                }`}
+                              >
+                                {period.status}
+                              </span>
+                            </div>
+                            <p className="text-[10px] text-foreground-secondary mt-0.5">{period.notes}</p>
+                          </div>
+                          <div className="text-right shrink-0">
+                            <span className="font-mono font-bold text-[11px] block">{period.ceremonyDate}</span>
+                            {period.yudisiumDate && (
+                              <span className="text-[9px] text-foreground-muted block">
+                                Yudisium: {period.yudisiumDate}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Kotak Taktik Marketing I See You */}
+                  <div className="p-3 rounded-control bg-emerald-500/10 border border-emerald-500/30 space-y-1.5 text-xs">
+                    <div className="flex items-center gap-1 text-emerald-800 dark:text-emerald-300 font-bold text-[11px]">
+                      <Target className="w-3.5 h-3.5 text-emerald-600" />
+                      <span>Peluang Taktis Optik I See You:</span>
+                    </div>
+                    <div className="text-[11px] space-y-1 text-foreground">
+                      <div>
+                        <span className="text-foreground-secondary font-medium">Target Audiens: </span>
+                        <span>{campus.marketingTactics.targetAudience}</span>
+                      </div>
+                      <div>
+                        <span className="text-foreground-secondary font-medium">Produk Prioritas: </span>
+                        <strong className="text-brand">{campus.marketingTactics.recommendedProduct}</strong>
+                      </div>
+                      <div>
+                        <span className="text-foreground-secondary font-medium">Ide Hook Konten: </span>
+                        <span className="italic">"{campus.marketingTactics.promoHook}"</span>
+                      </div>
+                      <div>
+                        <span className="text-foreground-secondary font-medium">Timeline Kampanye: </span>
+                        <span className="font-medium text-foreground">{campus.marketingTactics.executionTimeline}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Footer Buttons */}
+                <div className="pt-2 border-t border-border flex items-center justify-between gap-2">
+                  <a
+                    href={campus.officialPortalUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-control text-[11px] font-semibold bg-brand text-white hover:bg-brand/90 transition-all shadow-subtle"
+                  >
+                    <span>Buka Portal Resmi Kampus</span>
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+
+                  {campus.socialMediaUrl && (
+                    <a
+                      href={campus.socialMediaUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-control text-[11px] font-medium text-foreground-secondary hover:text-foreground border border-border"
+                    >
+                      <span>Media Sosial</span>
+                      <ExternalLink className="w-2.5 h-2.5" />
+                    </a>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Kalender Rekapitulasi Gelombang Mendatang */}
+          <div className="bg-surface border border-border rounded-container p-5 shadow-subtle space-y-3">
+            <div>
+              <h3 className="text-sm font-bold text-foreground">
+                Kalender Rekapitulasi Wisuda Mendatang (Q4 2026 - Q1 2027)
+              </h3>
+              <p className="text-xs text-foreground-secondary mt-0.5">
+                Jadwal acuan tim merchandising dan tim konten Optik I See You untuk mempersiapkan stok softlens, cairan pembersih, dan voucher hadiah wisuda.
+              </p>
+            </div>
+
+            <div className="overflow-x-auto rounded-control border border-border">
+              <table className="w-full text-left text-xs border-collapse">
+                <thead>
+                  <tr className="bg-surface-secondary text-foreground-muted font-bold uppercase text-[10px] border-b border-border">
+                    <th className="p-2.5">Perguruan Tinggi</th>
+                    <th className="p-2.5">Gedung Pelaksanaan</th>
+                    <th className="p-2.5">Tanggal Acara</th>
+                    <th className="p-2.5">Status</th>
+                    <th className="p-2.5">Aksi Rekomendasi Tim I See You</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border text-foreground">
+                  {PURWOKERTO_GRADUATION_STATS.upcomingGraduationWindows.map((item, idx) => (
+                    <tr key={idx} className="hover:bg-surface-secondary/50 transition-colors">
+                      <td className="p-2.5 font-bold">{item.campus}</td>
+                      <td className="p-2.5 text-[11px] text-foreground-secondary">{item.venue}</td>
+                      <td className="p-2.5 font-mono font-semibold text-brand text-[11px]">{item.date}</td>
+                      <td className="p-2.5">
+                        <span className="text-[9px] px-2 py-0.5 rounded font-bold bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20">
+                          {item.status}
+                        </span>
+                      </td>
+                      <td className="p-2.5 text-[11px] text-foreground-secondary">
+                        {idx === 0 && "Siapkan paket softlens sumpah ners & kado wisuda di Java Heritage."}
+                        {idx === 1 && "Target konten kreator DKV/Informatika Amikom di Reels & TikTok."}
+                        {idx === 2 && "Aktivasi promo KTM SaizuLink di gerai cabang Jl. HR Boejamin / Pusat."}
+                        {idx === 3 && "Event terbesar: Pastikan stok softlens dan lensa foto blitz studio penuh H-21."}
+                        {idx === 4 && "Highlight kacamata anti radiasi blueray untuk lulusan IT Telkom."}
+                        {idx === 5 && "Buka prapendaftaran promo wisudawati UMP mulai akhir Desember 2026."}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       )}
