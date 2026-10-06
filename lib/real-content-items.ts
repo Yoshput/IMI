@@ -87,10 +87,10 @@ export function getRealContentItems(
   const isEligibleDate = (dateStr: string) => {
     if (!dateStr) return false;
     if (period === "weekly") {
-      return dateStr >= "2026-09-29" && dateStr <= "2026-10-05";
+      return dateStr >= "2026-09-29" && dateStr <= "2026-10-06";
     }
     return (
-      (dateStr >= "2026-09-01" && dateStr <= "2026-10-05") ||
+      (dateStr >= "2026-09-01" && dateStr <= "2026-10-06") ||
       dateStr.startsWith("2026-09") ||
       dateStr.startsWith("2026-10")
     );

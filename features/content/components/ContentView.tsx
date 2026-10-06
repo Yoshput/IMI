@@ -152,15 +152,47 @@ export const ContentView: React.FC = () => {
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-control bg-brand text-white text-xs font-semibold hover:bg-brand-hover transition-colors shadow-subtle"
+            title="Instagram Pusat @iseeyou.glasses (Purwokerto)"
           >
             <ExternalLink className="w-3.5 h-3.5" />
             <span>@iseeyou.glasses</span>
           </a>
           <a
+            href="https://www.instagram.com/iseeyou.purbalingga/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-control bg-surface border border-border text-foreground text-xs font-medium hover:bg-surface-secondary transition-colors shadow-subtle"
+            title="Instagram Cabang Purbalingga"
+          >
+            <ExternalLink className="w-3.5 h-3.5" />
+            <span>@iseeyou.purbalingga</span>
+          </a>
+          <a
+            href="https://www.instagram.com/iseeyou.cilacap/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-control bg-surface border border-border text-foreground text-xs font-medium hover:bg-surface-secondary transition-colors shadow-subtle"
+            title="Instagram Cabang Cilacap"
+          >
+            <ExternalLink className="w-3.5 h-3.5" />
+            <span>@iseeyou.cilacap</span>
+          </a>
+          <a
+            href="https://www.instagram.com/iseeyou.wonosobo/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-control bg-surface border border-border text-foreground text-xs font-medium hover:bg-surface-secondary transition-colors shadow-subtle"
+            title="Instagram Cabang Wonosobo"
+          >
+            <ExternalLink className="w-3.5 h-3.5" />
+            <span>@iseeyou.wonosobo</span>
+          </a>
+          <a
             href="https://www.instagram.com/lunareyewear.co"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-control bg-surface border border-border text-foreground text-xs font-semibold hover:bg-surface-secondary transition-colors shadow-subtle"
+            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-control bg-surface border border-border text-foreground text-xs font-medium hover:bg-surface-secondary transition-colors shadow-subtle"
+            title="Instagram Lunar Eyewear Tegal (Second Brand)"
           >
             <ExternalLink className="w-3.5 h-3.5" />
             <span>@lunareyewear.co</span>
