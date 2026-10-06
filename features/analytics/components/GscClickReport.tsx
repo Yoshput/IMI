@@ -17,28 +17,43 @@ import {
   Calendar,
 } from "lucide-react";
 import { GscReportData } from "@/lib/gsc";
+import { RefreshCw } from "lucide-react";
 
 export const GscClickReport: React.FC = () => {
   const [timeframe, setTimeframe] = useState<"weekly" | "monthly">("weekly");
   const [report, setReport] = useState<GscReportData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const loadGsc = async (isBackground = false) => {
+    if (!isBackground) {
+      if (!report) setLoading(true);
+      else setIsRefreshing(true);
+    }
+    try {
+      const res = await fetch(`/api/gsc?timeframe=${timeframe}`, {
+        cache: "no-store",
+        headers: { "Cache-Control": "no-cache" },
+      });
+      const json = await res.json();
+      if (json.success && json.data) {
+        setReport(json.data);
+      }
+    } catch (e) {
+      console.error("Gagal load data GSC:", e);
+    } finally {
+      setLoading(false);
+      setIsRefreshing(false);
+    }
+  };
 
   useEffect(() => {
-    const loadGsc = async () => {
-      setLoading(true);
-      try {
-        const res = await fetch(`/api/gsc?timeframe=${timeframe}`);
-        const json = await res.json();
-        if (json.success && json.data) {
-          setReport(json.data);
-        }
-      } catch (e) {
-        console.error("Gagal load data GSC:", e);
-      } finally {
-        setLoading(false);
-      }
-    };
     loadGsc();
+    // Auto-polling setiap 30 detik untuk update trafik organik GSC secara live
+    const timer = setInterval(() => {
+      loadGsc(true);
+    }, 30000);
+    return () => clearInterval(timer);
   }, [timeframe]);
 
   return (
@@ -46,46 +61,69 @@ export const GscClickReport: React.FC = () => {
       {/* Header with Title & Timeframe Toggle */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border pb-4">
         <div>
-          <div className="flex items-center gap-2 mb-1">
+          <div className="flex items-center gap-2 mb-1 flex-wrap">
             <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 flex items-center gap-1">
               <Globe className="w-3 h-3" /> GOOGLE SEARCH CONSOLE
             </span>
             <span className="text-xs font-semibold text-foreground">
               optikiseeyou.com
             </span>
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              LIVE AUTO-SYNC
+            </span>
           </div>
           <h2 className="text-base font-bold text-foreground">
-            Laporan Kunjungan & Klik Mesin Pencari Google
+            Laporan Kunjungan &amp; Klik Mesin Pencari Google
           </h2>
-          <p className="text-xs text-foreground-muted">
-            Analisis klik organik dari calon customer yang mencari kacamata & cek mata di Google Search.
+          <p className="text-xs text-foreground-muted flex items-center gap-1.5 mt-0.5">
+            <span>Analisis klik organik dari calon customer yang mencari kacamata &amp; cek mata di Google Search.</span>
+            {report?.lastSyncTimestamp && (
+              <span className="text-[10px] text-foreground-secondary font-mono">
+                · Update: {report.lastSyncTimestamp}
+              </span>
+            )}
           </p>
         </div>
 
-        {/* Toggle Mingguan / Bulanan */}
-        <div className="flex items-center p-1 bg-surface-secondary rounded-xl border border-border shrink-0 self-start sm:self-auto">
+        {/* Action Controls & Toggle */}
+        <div className="flex items-center gap-2 self-start sm:self-auto flex-wrap">
+          {/* Manual Refresh Button */}
           <button
-            onClick={() => setTimeframe("weekly")}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-              timeframe === "weekly"
-                ? "bg-foreground text-surface shadow-subtle"
-                : "text-foreground-secondary hover:text-foreground"
-            }`}
+            onClick={() => loadGsc()}
+            disabled={isRefreshing || loading}
+            title="Sinkronkan data Search Console sekarang"
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-border bg-surface-secondary text-xs font-semibold text-foreground-secondary hover:text-foreground transition-all disabled:opacity-50"
           >
-            <Calendar className="w-3.5 h-3.5" />
-            <span>Mingguan (7 Hari)</span>
+            <RefreshCw className={`w-3.5 h-3.5 ${isRefreshing ? "animate-spin text-brand" : ""}`} />
+            <span>{isRefreshing ? "Sync..." : "Sinkronkan"}</span>
           </button>
-          <button
-            onClick={() => setTimeframe("monthly")}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-              timeframe === "monthly"
-                ? "bg-foreground text-surface shadow-subtle"
-                : "text-foreground-secondary hover:text-foreground"
-            }`}
-          >
-            <Calendar className="w-3.5 h-3.5" />
-            <span>Bulanan (30 Hari)</span>
-          </button>
+
+          {/* Toggle Mingguan / Bulanan */}
+          <div className="flex items-center p-1 bg-surface-secondary rounded-xl border border-border shrink-0">
+            <button
+              onClick={() => setTimeframe("weekly")}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                timeframe === "weekly"
+                  ? "bg-foreground text-surface shadow-subtle"
+                  : "text-foreground-secondary hover:text-foreground"
+              }`}
+            >
+              <Calendar className="w-3.5 h-3.5" />
+              <span>Mingguan (7 Hari)</span>
+            </button>
+            <button
+              onClick={() => setTimeframe("monthly")}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                timeframe === "monthly"
+                  ? "bg-foreground text-surface shadow-subtle"
+                  : "text-foreground-secondary hover:text-foreground"
+              }`}
+            >
+              <Calendar className="w-3.5 h-3.5" />
+              <span>Bulanan (30 Hari)</span>
+            </button>
+          </div>
         </div>
       </div>
 

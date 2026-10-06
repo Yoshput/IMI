@@ -102,6 +102,10 @@ export const BranchResumeCard: React.FC<BranchResumeCardProps> = ({
     };
 
     syncLiveSources();
+    const timer = setInterval(() => {
+      syncLiveSources();
+    }, 30000);
+    return () => clearInterval(timer);
   }, []);
 
   return (

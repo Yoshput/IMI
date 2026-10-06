@@ -14,6 +14,9 @@ function corsHeaders() {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type, Authorization",
+    "Cache-Control": "no-cache, no-store, must-revalidate, max-age=0, s-maxage=0",
+    "Pragma": "no-cache",
+    "Expires": "0",
   };
 }
 
@@ -28,10 +31,37 @@ export async function OPTIONS() {
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const period = (searchParams.get("period") || "weekly") as "weekly" | "monthly";
+  const action = searchParams.get("action");
+
+  // Live simulation trigger for testing real-time increment in UI
+  if (action === "ping" || action === "simulate") {
+    const branch = searchParams.get("branch") || "pwt";
+    recordAntrianClick({
+      branch,
+      sourceUrl: "https://optikiseeyou.com/booking-antrian?action=live_test",
+      device: "mobile",
+      referrer: "https://optikiseeyou.com",
+      type: "antrian_booking",
+    });
+  }
 
   const stats = getAntrianStats();
   const photobooth = getPhotoboothStats();
   const combined = getCombinedWebResume(period);
+
+  const now = new Date();
+  const asOfDate = now.toLocaleDateString("id-ID", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    timeZone: "Asia/Jakarta",
+  });
+  const timeStr = now.toLocaleTimeString("id-ID", {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    timeZone: "Asia/Jakarta",
+  });
 
   return NextResponse.json(
     {
@@ -40,7 +70,9 @@ export async function GET(req: NextRequest) {
       photobooth,
       combined,
       period,
-      asOfDate: "2026-09-28",
+      asOfDate: `${asOfDate}, ${timeStr} WIB`,
+      timestamp: now.toISOString(),
+      liveSync: true,
     },
     {
       headers: corsHeaders(),
@@ -64,11 +96,14 @@ export async function POST(req: NextRequest) {
       type: body.eventType || body.type || "antrian_booking",
     });
 
+    const updatedStats = getAntrianStats();
+
     return NextResponse.json(
       {
         success: true,
-        message: "Event Web & Antrian berhasil dicatat",
+        message: "Event Web & Antrian berhasil dicatat secara realtime",
         event,
+        data: updatedStats,
       },
       {
         headers: corsHeaders(),

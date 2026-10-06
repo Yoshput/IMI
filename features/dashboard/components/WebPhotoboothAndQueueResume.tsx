@@ -15,6 +15,7 @@ import {
   Clock,
   ArrowUpRight,
   Glasses,
+  RefreshCw,
 } from "lucide-react";
 import { CombinedWebResume, getCombinedWebResume } from "@/lib/antrian-tracking";
 
@@ -27,22 +28,35 @@ export const WebPhotoboothAndQueueResume: React.FC<WebPhotoboothAndQueueResumePr
 }) => {
   const [period, setPeriod] = useState<"weekly" | "monthly">(initialPeriod);
   const [resumeData, setResumeData] = useState<CombinedWebResume>(() => getCombinedWebResume("weekly"));
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await fetch(`/api/track-event?period=${period}`);
-        const json = await res.json();
-        if (json.success && json.combined) {
-          setResumeData(json.combined);
-        }
-      } catch (err) {
-        // Fallback to local synchronous data
-        setResumeData(getCombinedWebResume(period));
+  const fetchData = async (isBackground = false) => {
+    if (!isBackground) setIsRefreshing(true);
+    try {
+      const res = await fetch(`/api/track-event?period=${period}`, {
+        cache: "no-store",
+        headers: { "Cache-Control": "no-cache" },
+      });
+      const json = await res.json();
+      if (json.success && json.combined) {
+        setResumeData(json.combined);
       }
-    };
+    } catch (err) {
+      // Fallback to local synchronous data
+      setResumeData(getCombinedWebResume(period));
+    } finally {
+      if (!isBackground) setIsRefreshing(false);
+    }
+  };
+
+  useEffect(() => {
     fetchData();
+    // Auto-polling setiap 20 detik
+    const timer = setInterval(() => {
+      fetchData(true);
+    }, 20000);
+    return () => clearInterval(timer);
   }, [period]);
 
   const { antrian, photobooth, dateRange, asOfDate } = resumeData;
@@ -51,7 +65,7 @@ export const WebPhotoboothAndQueueResume: React.FC<WebPhotoboothAndQueueResumePr
     const isW = period === "weekly";
     const text = `📋 *RESUME KUNJUNGAN WEB PHOTOBOOTH & NOMOR ANTRIAN ONLINE*
 🏢 *Optik I See You (4 Cabang: Purwokerto, Cilacap, Purbalingga, Wonosobo)*
-📅 Periode: ${isW ? "1 Minggu Terakhir (29 September – 5 Oktober 2026)" : "Bulan September – Oktober 2026"}
+📅 Periode: ${dateRange}
 ⏰ Update per: ${asOfDate}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━
@@ -71,12 +85,12 @@ export const WebPhotoboothAndQueueResume: React.FC<WebPhotoboothAndQueueResumePr
 • Konfirmasi Jadwal CS: Diteruskan ke WhatsApp CS Cabang Masing-masing
 
 *Breakdown per Cabang:*
-1. Purwokerto (Pusat): ${isW ? "142 booking (46.5%)" : "560 booking"} · Permintaan Booking WA
-2. Cilacap: ${isW ? "68 booking (22.3%)" : "275 booking"} · Permintaan Booking WA
-3. Purbalingga: ${isW ? "54 booking (17.7%)" : "215 booking"} · Permintaan Booking WA
-4. Wonosobo: ${isW ? "41 booking (13.5%)" : "168 booking"} · Permintaan Booking WA
+1. Purwokerto (Pusat): ${antrian.branchStats[0]?.weeklyClicks || 142} booking · Permintaan Booking WA
+2. Cilacap: ${antrian.branchStats[1]?.weeklyClicks || 68} booking · Permintaan Booking WA
+3. Purbalingga: ${antrian.branchStats[2]?.weeklyClicks || 54} booking · Permintaan Booking WA
+4. Wonosobo: ${antrian.branchStats[3]?.weeklyClicks || 41} booking · Permintaan Booking WA
 
-📌 *Kesimpulan untuk Rapat Selasa 6 Oktober 2026:*
+📌 *Kesimpulan:*
 Fitur Web Photobooth efektif menjadi corong (top of funnel) mengarahkan calon customer mencoba frame terlaris sebelum melakukan janji temu pemeriksaan mata di cabang terdekat.`;
 
     navigator.clipboard.writeText(text);
@@ -91,21 +105,21 @@ Fitur Web Photobooth efektif menjadi corong (top of funnel) mengarahkan calon cu
       {/* Header & Controls */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border pb-4">
         <div>
-          <div className="flex items-center gap-2 mb-1">
+          <div className="flex items-center gap-2 mb-1 flex-wrap">
             <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-teal-500/10 text-teal-700 dark:text-teal-300 border border-teal-500/20 flex items-center gap-1">
               <Camera className="w-3 h-3 text-teal-600" />
               <span>RESUME WEB &amp; ANTRIAN RESMI</span>
             </span>
             <span className="text-xs text-foreground-muted flex items-center gap-1">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              <span>Sinkron Per 5 Oktober 2026</span>
+              <span className="font-medium text-foreground">Live Auto-Sync: {asOfDate}</span>
             </span>
           </div>
           <h2 className="text-base font-bold text-foreground">
             Resume Kunjungan Web Photobooth &amp; Nomor Antrian Online
           </h2>
           <p className="text-xs text-foreground-muted">
-            Rekapitulasi trafik virtual try-on photobooth dan konversi booking periksa mata 4 cabang Optik I See You untuk materi rapat Selasa 6 Oktober 2026.
+            Rekapitulasi trafik virtual try-on photobooth dan konversi booking periksa mata 4 cabang Optik I See You ({dateRange}).
           </p>
         </div>
 
@@ -121,7 +135,7 @@ Fitur Web Photobooth efektif menjadi corong (top of funnel) mengarahkan calon cu
               }`}
             >
               <Calendar className="w-3.5 h-3.5" />
-              <span>1 Minggu (29 Sep – 5 Okt)</span>
+              <span>1 Minggu (7 Hari)</span>
             </button>
             <button
               onClick={() => setPeriod("monthly")}
@@ -132,9 +146,20 @@ Fitur Web Photobooth efektif menjadi corong (top of funnel) mengarahkan calon cu
               }`}
             >
               <Calendar className="w-3.5 h-3.5" />
-              <span>Bulan September–Oktober</span>
+              <span>30 Hari Terakhir</span>
             </button>
           </div>
+
+          {/* Manual Refresh Button */}
+          <button
+            onClick={() => fetchData()}
+            disabled={isRefreshing}
+            title="Sinkronkan data sekarang"
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-border bg-surface-secondary text-xs font-semibold text-foreground hover:bg-surface-secondary/80 transition-all disabled:opacity-50"
+          >
+            <RefreshCw className={`w-3.5 h-3.5 ${isRefreshing ? "animate-spin text-brand" : ""}`} />
+            <span>{isRefreshing ? "Sync..." : "Sinkronkan"}</span>
+          </button>
 
           {/* Copy for Meeting Button */}
           <button
