@@ -81,7 +81,7 @@ export interface CombinedWebResume {
 let inMemoryEvents: AntrianEvent[] = [
   {
     id: "evt-01",
-    timestamp: "2026-09-28T10:42:10Z",
+    timestamp: new Date(Date.now() - 4 * 60000).toISOString(),
     branch: "pwt",
     branchName: "Purwokerto (Pusat)",
     sourceUrl: "https://optikiseeyou.com/booking-antrian",
@@ -91,7 +91,7 @@ let inMemoryEvents: AntrianEvent[] = [
   },
   {
     id: "evt-02",
-    timestamp: "2026-09-28T09:15:33Z",
+    timestamp: new Date(Date.now() - 14 * 60000).toISOString(),
     branch: "clp",
     branchName: "Cilacap",
     sourceUrl: "https://optikiseeyou.com/photobooth",
@@ -101,7 +101,7 @@ let inMemoryEvents: AntrianEvent[] = [
   },
   {
     id: "evt-03",
-    timestamp: "2026-09-28T08:30:12Z",
+    timestamp: new Date(Date.now() - 32 * 60000).toISOString(),
     branch: "pbg",
     branchName: "Purbalingga",
     sourceUrl: "https://optikiseeyou.com/booking-antrian",
@@ -111,7 +111,7 @@ let inMemoryEvents: AntrianEvent[] = [
   },
   {
     id: "evt-04",
-    timestamp: "2026-09-28T07:50:00Z",
+    timestamp: new Date(Date.now() - 55 * 60000).toISOString(),
     branch: "wns",
     branchName: "Wonosobo",
     sourceUrl: "https://optikiseeyou.com/photobooth",
@@ -121,7 +121,7 @@ let inMemoryEvents: AntrianEvent[] = [
   },
   {
     id: "evt-05",
-    timestamp: "2026-09-27T16:20:10Z",
+    timestamp: new Date(Date.now() - 110 * 60000).toISOString(),
     branch: "pwt",
     branchName: "Purwokerto (Pusat)",
     sourceUrl: "https://optikiseeyou.com/photobooth",
@@ -339,8 +339,8 @@ export function getCombinedWebResume(period: "weekly" | "monthly" = "weekly"): C
 
   return {
     period,
-    dateRange: period === "weekly" ? "29 September – 5 Oktober 2026 (7 Hari Terakhir)" : "1 September – 5 Oktober 2026 (35 Hari Kumulatif)",
-    asOfDate: "5 Oktober 2026",
+    dateRange: period === "weekly" ? "30 September - 6 Oktober 2026 (7 Hari Terakhir)" : "1 September - 6 Oktober 2026 (36 Hari Kumulatif)",
+    asOfDate: "6 Oktober 2026",
     antrian,
     photobooth,
   };

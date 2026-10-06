@@ -55,7 +55,7 @@ export const MetricHistoryTable: React.FC<MetricHistoryTableProps> = ({ records 
                   />
                 </td>
                 <td className="py-3.5 px-4 text-foreground-secondary text-[11px] max-w-sm leading-relaxed">
-                  {r.notes || "—"}
+                  {r.notes || "-"}
                 </td>
               </tr>
             ))}

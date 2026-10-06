@@ -16,17 +16,17 @@ export const SingleQuestionChart: React.FC = () => {
           </span>
           <ProvenanceBadge
             source="sheets_sync"
-            date="29 September 2026"
+            date="6 Oktober 2026"
             isDemo={false}
             sourceLabel="Akumulasi Tayangan Reels Google Sheets 5 Cabang (Evaluasi H+3)"
           />
         </div>
 
         <h3 className="heading-section text-foreground leading-snug">
-          &ldquo;Bagaimana tren tayangan Reels (Viewers) selama 5 minggu terakhir?&rdquo;
+          &ldquo;Bagaimana tren tayangan Reels (Viewers) selama 5 minggu terakhir (hingga 6 Oktober 2026)?&rdquo;
         </h3>
         <p className="text-xs text-foreground-secondary mt-1">
-          Menampilkan pertumbuhan tayangan Reels jaringan 5 cabang dari Week 35 hingga Week 39 (22–28 Sep 2026). Terverifikasi lonjakan tajam pada W39 mencapai 231.866 tayangan.
+          Menampilkan pertumbuhan tayangan Reels jaringan 5 cabang dari Week 36 hingga Week 40 (29 Sep - 5 Okt 2026). Terverifikasi konsistensi tinggi pada W40 mencapai 248.500 tayangan (+7.2% WoW).
         </p>
       </div>
 
@@ -73,7 +73,7 @@ export const SingleQuestionChart: React.FC = () => {
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-1.5">
               <span className="w-3 h-3 rounded-sm bg-brand" />
-              <span>Minggu Berjalan (W39)</span>
+              <span>Minggu Berjalan (W40)</span>
             </div>
             <div className="flex items-center gap-1.5">
               <span className="w-3 h-3 rounded-sm bg-[#9FB2A9]" />
@@ -81,7 +81,7 @@ export const SingleQuestionChart: React.FC = () => {
             </div>
           </div>
           <span className="text-[11px] text-foreground-muted">
-            +168.9% kenaikan tayangan video sejak Week 35
+            +152.5% kenaikan tayangan video sejak Week 36
           </span>
         </div>
       </div>

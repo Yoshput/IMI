@@ -16,9 +16,9 @@ export const FormatEfficiencyChart: React.FC = () => {
           </span>
           <ProvenanceBadge
             source="sheets_sync"
-            date="29 September 2026"
+            date="6 Oktober 2026"
             isDemo={false}
-            sourceLabel="Rata-rata 600+ Postingan Rekap Evaluasi Google Sheets 5 Cabang"
+            sourceLabel="Rata-rata 600+ Postingan Rekap Evaluasi Google Sheets 5 Cabang & Live Meta"
           />
         </div>
 
