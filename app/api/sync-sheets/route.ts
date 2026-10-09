@@ -211,15 +211,15 @@ async function syncSpreadsheetData() {
       const row = rawRows[i];
       if (!row || row.length === 0) continue;
       const date = parseExcelDate(cfg.isPWT ? row[1] : row[9]);
-      const title = String((cfg.isPWT ? row[3] : row[2]) || "").trim();
-      const link = String((cfg.isPWT ? row[5] : row[4]) || "").trim();
-      const pillar = String((cfg.isPWT ? row[4] : row[3]) || "Umum").trim();
-      const feed = String((cfg.isPWT ? row[6] : row[5]) || "").trim();
-      const threads = String((cfg.isPWT ? row[8] : row[7]) || "").trim();
-      const tiktok = String((cfg.isPWT ? row[9] : row[8]) || "").trim();
+      const title = String((cfg.isPWT ? row[4] : row[2]) || "").trim();
+      const link = String((cfg.isPWT ? row[6] : row[4]) || "").trim();
+      const pillar = String((cfg.isPWT ? row[5] : row[3]) || "Umum").trim();
+      const feed = String((cfg.isPWT ? row[7] : row[5]) || "").trim();
+      const threads = String((cfg.isPWT ? row[9] : row[7]) || "").trim();
+      const tiktok = String((cfg.isPWT ? row[10] : row[8]) || "").trim();
 
       const isLibur = !title || title === "-" || title.toLowerCase().includes("libur");
-      if (!isLibur && link.startsWith("http") && link.includes("/reel/")) {
+      if (!isLibur && link.startsWith("http")) {
         const info = { title, link, pillar, feed, threads, tiktok, date };
         if (date) linkByUploadDate[date] = info;
         linkByTitle[title.toLowerCase()] = info;
@@ -235,11 +235,11 @@ async function syncSpreadsheetData() {
       const row = rawRows[i];
       if (!row || row.length === 0) continue;
       const evalReportDate = parseExcelDate(cfg.isPWT ? row[1] : row[9]);
-      const targetUploadDate = parseExcelDate(row[13]);
-      let evalTitle = String(row[14] || "").trim();
-      const evalViewers = row[15];
-      const evalLikes = row[16];
-      const bonus = String(row[17] || "-").trim();
+      const targetUploadDate = parseExcelDate(cfg.isPWT ? row[14] : row[13]);
+      let evalTitle = String((cfg.isPWT ? row[15] : row[14]) || "").trim();
+      const evalViewers = cfg.isPWT ? row[16] : row[15];
+      const evalLikes = cfg.isPWT ? row[17] : row[16];
+      const bonus = String((cfg.isPWT ? row[18] : row[17]) || "-").trim();
 
       const isLibur = !evalTitle || evalTitle === "-" || evalTitle.toLowerCase() === "libur";
       const viewers = cleanMetric(evalViewers, true);
@@ -275,15 +275,15 @@ async function syncSpreadsheetData() {
       const reportDate = parseExcelDate(cfg.isPWT ? row[0] : row[9]);
       const uploadDate = parseExcelDate(cfg.isPWT ? row[1] : row[9]);
       const pic = (cfg.isPWT ? row[2] : row[1]) || cfg.picDefault;
-      const rawTitle = String((cfg.isPWT ? row[3] : row[2]) || "").trim();
-      const pillar = String((cfg.isPWT ? row[4] : row[3]) || "Umum").trim();
-      let reelsLink = String((cfg.isPWT ? row[5] : row[4]) || "").trim();
-      const feedLink = String((cfg.isPWT ? row[6] : row[5]) || "").trim();
-      const threadsLink = String((cfg.isPWT ? row[8] : row[7]) || "").trim();
-      const tiktokLink = String((cfg.isPWT ? row[9] : row[8]) || "").trim();
-      const igFollowers = normalizeFollowers(row[10], cfg.isKFollowers);
-      const tiktokFollowers = normalizeFollowers(row[11], cfg.isKFollowers);
-      const obstacle = String(row[12] || "-").trim();
+      const rawTitle = String((cfg.isPWT ? row[4] : row[2]) || "").trim();
+      const pillar = String((cfg.isPWT ? row[5] : row[3]) || "Umum").trim();
+      let reelsLink = String((cfg.isPWT ? row[6] : row[4]) || "").trim();
+      const feedLink = String((cfg.isPWT ? row[7] : row[5]) || "").trim();
+      const threadsLink = String((cfg.isPWT ? row[9] : row[7]) || "").trim();
+      const tiktokLink = String((cfg.isPWT ? row[10] : row[8]) || "").trim();
+      const igFollowers = normalizeFollowers(cfg.isPWT ? row[11] : row[10], cfg.isKFollowers);
+      const tiktokFollowers = normalizeFollowers(cfg.isPWT ? row[12] : row[11], cfg.isKFollowers);
+      const obstacle = String((cfg.isPWT ? row[13] : row[12]) || "-").trim();
 
       if (!reportDate) continue;
 
@@ -355,13 +355,6 @@ async function syncSpreadsheetData() {
         actualLink = titleToLinkMap[rawTitle.toLowerCase()] || "";
       }
 
-      // CRUCIAL: Only add to branchReels if this row is an authentic REEL!
-      // Exclude photo carousels (links with /p/) and rows where no reel was uploaded.
-      const isActualReel = actualLink && actualLink.includes("/reel/");
-      if (!isActualReel) {
-        continue;
-      }
-
       parsedRows.push({
         id: `${cfg.sheetName.toLowerCase()}-${i}`,
         sheetKey: cfg.sheetName,
@@ -399,9 +392,6 @@ async function syncSpreadsheetData() {
     evaluationsList.forEach((e, idx) => {
       if (!matchedEvalIndices.has(idx)) {
         let uploadInfo = linkByUploadDate[e.targetUploadDate] || linkByTitle[e.evalTitle.toLowerCase()];
-        const reelUrl = uploadInfo?.link || (e.evalTitle.startsWith("http") && e.evalTitle.includes("/reel/") ? e.evalTitle : "");
-        if (!reelUrl || !reelUrl.includes("/reel/")) return;
-
         parsedRows.push({
           id: `${cfg.sheetName.toLowerCase()}-eval-${idx}`,
           sheetKey: cfg.sheetName,
@@ -416,7 +406,7 @@ async function syncSpreadsheetData() {
           reelsTitle: uploadInfo?.title || (e.evalTitle.startsWith("http") ? "Konten Reels" : e.evalTitle),
           secondReelsTitle: e.evalTitle,
           contentPillar: uploadInfo?.pillar || "Umum",
-          reelsLink: reelUrl,
+          reelsLink: uploadInfo?.link || (e.evalTitle.startsWith("http") ? e.evalTitle : ""),
           feedLink: uploadInfo?.feed || "",
           threadsLink: uploadInfo?.threads || "",
           tiktokLink: uploadInfo?.tiktok || "",

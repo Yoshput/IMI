@@ -22,6 +22,10 @@ import {
   Clock,
   Layers,
   ZoomIn,
+  ChevronDown,
+  X,
+  Archive,
+  Sparkles,
 } from "lucide-react";
 import { formatNumber } from "@/lib/utils";
 import { AppleMediaSheet, AppleMediaItem } from "@/components/shared/AppleMediaSheet";
@@ -44,10 +48,11 @@ export const ThreeDayCadenceRecap: React.FC<ThreeDayCadenceRecapProps> = ({
   bonusSummary,
   spreadsheetFollowersByBranch,
 }) => {
-  const [selectedCycle, setSelectedCycle] = useState<string>("cycle-7");
+  const [selectedCycle, setSelectedCycle] = useState<string>("cycle-8");
   const [copiedText, setCopiedText] = useState(false);
   const [isPresentationMode, setIsPresentationMode] = useState(false);
   const [selectedMediaItem, setSelectedMediaItem] = useState<AppleMediaItem | null>(null);
+  const [isCycleModalOpen, setIsCycleModalOpen] = useState(false);
 
   // Helper functions for dynamic rolling date calculation
   const toIsoDate = (d: Date) => {
@@ -67,27 +72,17 @@ export const ThreeDayCadenceRecap: React.FC<ThreeDayCadenceRecapProps> = ({
     return `${day} ${months[mIdx] || ""}`;
   };
 
-  // Cycle definitions up to October 2026 with auto-expansion and dynamic rolling 7 days
-  const cycles = useMemo(() => {
-    // Determine dynamic anchor date
-    const systemToday = toIsoDate(new Date());
-    let maxDataDate = "2026-10-05";
-
-    (storyData || []).forEach((s) => {
-      if (s.reportDate && s.reportDate > maxDataDate) maxDataDate = s.reportDate;
-    });
-    Object.values(branchReels || {}).forEach((list) => {
-      (list || []).forEach((r) => {
-        const d = r.uploadDate || r.reportDate;
-        if (d && d > maxDataDate && d.startsWith("2026")) maxDataDate = d;
-      });
-    });
-
-    const anchorDate = systemToday >= maxDataDate ? systemToday : maxDataDate;
+  // Anchor to current local system date (capped against future typos)
+  const systemToday = toIsoDate(new Date());
+  const anchorDate = systemToday;
+  const rolling7StartIso = useMemo(() => {
     const anchorObj = new Date(anchorDate);
     const rolling7StartObj = new Date(anchorObj.getTime() - 6 * 24 * 60 * 60 * 1000);
-    const rolling7StartIso = toIsoDate(rolling7StartObj);
+    return toIsoDate(rolling7StartObj);
+  }, [anchorDate]);
 
+  // Cycle definitions up to October 2026 with auto-expansion and dynamic rolling 7 days
+  const cycles = useMemo(() => {
     const isAfterMeetingCycle7 = anchorDate >= "2026-10-06";
 
     const map: Record<
@@ -95,6 +90,7 @@ export const ThreeDayCadenceRecap: React.FC<ThreeDayCadenceRecapProps> = ({
       {
         id: string;
         name: string;
+        shortName: string;
         periodLabel: string;
         status: string;
         startDate: string;
@@ -102,73 +98,87 @@ export const ThreeDayCadenceRecap: React.FC<ThreeDayCadenceRecapProps> = ({
         isLiveInstagram: boolean;
         description: string;
         badge?: string;
+        category?: "active" | "recent" | "realtime" | "archive" | "upcoming";
       }
     > = {
       "cycle-1": {
         id: "cycle-1",
         name: "Siklus 1 (8–10 Sep)",
+        shortName: "Siklus 1 (8–10 Sep)",
         periodLabel: "8 s/d 10 September 2026",
         status: "Selesai Evaluasi H+3",
         startDate: "2026-09-08",
         endDate: "2026-09-10",
         isLiveInstagram: false,
         description: "Fokus awal pekan: campaign promo awal bulan & testing pilar konten adaptif/POV.",
+        category: "archive",
       },
       "cycle-2": {
         id: "cycle-2",
         name: "Siklus 2 (11–13 Sep)",
+        shortName: "Siklus 2 (11–13 Sep)",
         periodLabel: "11 s/d 13 September 2026",
         status: "Selesai Evaluasi H+3",
         startDate: "2026-09-11",
         endDate: "2026-09-13",
         isLiveInstagram: false,
         description: "Fokus akhir pekan: konten edukasi lensa, restock kacamata, dan tren viral akhir pekan.",
+        category: "archive",
       },
       "cycle-3": {
         id: "cycle-3",
         name: "Siklus 3 (14–17 Sep)",
+        shortName: "Siklus 3 (14–17 Sep)",
         periodLabel: "14 s/d 17 September 2026",
         status: "Selesai Evaluasi H+3",
         startDate: "2026-09-14",
         endDate: "2026-09-17",
         isLiveInstagram: false,
         description: "Siklus evaluasi pertengahan bulan: rilis OTW CEK MATA & video edukasi silinder.",
+        category: "archive",
       },
       "cycle-4": {
         id: "cycle-4",
         name: "Siklus 4 (18–20 Sep)",
+        shortName: "Siklus 4 (18–20 Sep)",
         periodLabel: "18 s/d 20 September 2026",
         status: "Selesai Evaluasi H+3",
         startDate: "2026-09-18",
         endDate: "2026-09-20",
         isLiveInstagram: false,
         description: "Siklus gathering internal Indah Sinergi Yuwana & dokumentasi POV store crew.",
+        category: "archive",
       },
       "cycle-5": {
         id: "cycle-5",
         name: "Siklus 5 (21–24 Sep)",
+        shortName: "Siklus 5 (21–24 Sep)",
         periodLabel: "21 s/d 24 September 2026",
         status: "Selesai Evaluasi H+3",
         startDate: "2026-09-21",
         endDate: "2026-09-24",
         isLiveInstagram: false,
         description: "Siklus edukasi astigmatisme, tren cewek naik motor siang hari, dan cek mata bareng orang tua.",
+        category: "archive",
       },
       "cycle-6": {
         id: "cycle-6",
         name: "Siklus 6 (25–28 Sep)",
+        shortName: "Siklus 6 (25–28 Sep)",
         periodLabel: "25 s/d 28 September 2026",
         status: "Selesai Evaluasi Rapat 29 Sep",
         startDate: "2026-09-25",
         endDate: "2026-09-28",
         isLiveInstagram: false,
         description: "Evaluasi rapat pekan lalu (Selasa 29 Sep): performa video tren, edukasi anatomi, dan minus tinggi.",
+        category: "archive",
       },
       "cycle-7": {
         id: "cycle-7",
         name: isAfterMeetingCycle7
           ? "Siklus 7 (29 Sep – 5 Okt) · Selesai Rapat"
           : "Siklus 7 (29 Sep – 5 Okt) — Rapat Besok",
+        shortName: "Siklus 7 (29 Sep–5 Okt)",
         periodLabel: isAfterMeetingCycle7
           ? "29 September s/d 5 Oktober 2026 (Rapat 6 Okt)"
           : "29 September s/d 5 Oktober 2026 (Live H-1 Rapat)",
@@ -181,11 +191,13 @@ export const ThreeDayCadenceRecap: React.FC<ThreeDayCadenceRecapProps> = ({
         description: isAfterMeetingCycle7
           ? "Evaluasi 7 hari penuh (29 Sep – 5 Okt 2026) untuk rapat evaluasi mingguan Selasa, 6 Oktober 2026."
           : "Evaluasi berjalan 7 hari penuh (29 Sep – 5 Okt 2026) untuk persiapan rapat evaluasi mingguan besok Selasa, 6 Oktober 2026.",
-        badge: isAfterMeetingCycle7 ? undefined : "RAPAT BESOK (6 OKT)",
+        badge: isAfterMeetingCycle7 ? "SELESAI RAPAT" : "RAPAT BESOK (6 OKT)",
+        category: "recent",
       },
       "full-week": {
         id: "full-week",
         name: `1 Minggu Terakhir (${formatShortIndo(rolling7StartIso)} – ${formatShortIndo(anchorDate)}) · Rolling`,
+        shortName: `Rolling 7 Hari (${formatShortIndo(rolling7StartIso)}–${formatShortIndo(anchorDate)})`,
         periodLabel: `${formatShortIndo(rolling7StartIso)} s/d ${formatShortIndo(anchorDate)} (Rolling 7 Hari Realtime)`,
         status: "Rolling 7 Hari Realtime (Auto-Update Harian)",
         startDate: rolling7StartIso,
@@ -193,59 +205,57 @@ export const ThreeDayCadenceRecap: React.FC<ThreeDayCadenceRecapProps> = ({
         isLiveInstagram: true,
         description: `Jendela pemantauan rolling 7 hari terakhir (${rolling7StartIso} s/d ${anchorDate}) yang otomatis bergeser maju setiap hari seiring waktu dan sinkronisasi data spreadsheet tanpa perlu diubah manual.`,
         badge: "AUTO-ROLLING 7 HARI",
+        category: "realtime",
       },
       "full-month": {
         id: "full-month",
         name: "1 Bulan Penuh (Sep – Okt 2026) · Live IG",
-        periodLabel: "1 September s/d 5 Oktober 2026 (Bulan Penuh)",
+        shortName: "1 Bulan Penuh (Sep–Okt)",
+        periodLabel: `1 September s/d ${formatShortIndo(anchorDate)} 2026 (Bulan Penuh)`,
         status: "Konsolidasi Bulanan Resmi Rapat",
         startDate: "2026-09-01",
         endDate: anchorDate,
         isLiveInstagram: true,
         description: "Rangkuman komprehensif performa 1 bulan penuh lintas 5 cabang (4 ISY + 1 Lunar).",
+        badge: "BULAN PENUH",
+        category: "realtime",
+      },
+      "cycle-8": {
+        id: "cycle-8",
+        name: anchorDate >= "2026-10-13"
+          ? "Siklus 8 (6–12 Okt) · Selesai Rapat"
+          : "Siklus 8 (6–12 Okt) — Rapat 13 Okt",
+        shortName: "Siklus 8 (6–12 Okt)",
+        periodLabel: "6 s/d 12 Oktober 2026",
+        status: anchorDate >= "2026-10-13"
+          ? "Selesai Evaluasi Rapat 13 Okt"
+          : "Siklus Berjalan (Rapat Selasa 13 Okt)",
+        startDate: "2026-10-06",
+        endDate: "2026-10-12",
+        isLiveInstagram: true,
+        description: "Siklus evaluasi mingguan pekan berjalan (6 s/d 12 Oktober 2026) untuk persiapan rapat evaluasi hari Selasa, 13 Oktober 2026.",
+        badge: anchorDate >= "2026-10-06" && anchorDate < "2026-10-13" ? "SIKLUS AKTIF" : undefined,
+        category: "active",
+      },
+      "cycle-9": {
+        id: "cycle-9",
+        name: "Siklus 9 (13–19 Okt) — Rapat 20 Okt",
+        shortName: "Siklus 9 (13–19 Okt)",
+        periodLabel: "13 s/d 19 Oktober 2026",
+        status: anchorDate >= "2026-10-13" ? "Siklus Berjalan (Rapat Selasa 20 Okt)" : "Siklus Rapat Mendatang (20 Okt)",
+        startDate: "2026-10-13",
+        endDate: "2026-10-19",
+        isLiveInstagram: true,
+        description: "Siklus evaluasi mingguan pekan ke-3 Oktober 2026 untuk persiapan rapat evaluasi hari Selasa, 20 Oktober 2026.",
+        badge: anchorDate >= "2026-10-13" ? "SIKLUS AKTIF" : "MENDATANG",
+        category: "upcoming",
       },
     };
 
-    // Siklus 8: 6 Okt - 12 Okt (Rapat 13 Okt)
-    map["cycle-8"] = {
-      id: "cycle-8",
-      name: anchorDate >= "2026-10-13"
-        ? "Siklus 8 (6–12 Okt) · Selesai Rapat"
-        : anchorDate >= "2026-10-06"
-        ? "Siklus 8 (6–12 Okt) — Rapat 13 Okt"
-        : "Siklus 8 (6–12 Okt) — Berjalan",
-      periodLabel: "6 s/d 12 Oktober 2026",
-      status: anchorDate >= "2026-10-13"
-        ? "Selesai Evaluasi Rapat 13 Okt"
-        : anchorDate >= "2026-10-06"
-        ? "Siklus Berjalan (Rapat Selasa 13 Okt)"
-        : "Siklus Rapat Berikutnya",
-      startDate: "2026-10-06",
-      endDate: anchorDate >= "2026-10-12" ? "2026-10-12" : (anchorDate >= "2026-10-06" ? anchorDate : "2026-10-12"),
-      isLiveInstagram: true,
-      description: "Siklus evaluasi mingguan pekan berjalan (6 s/d 12 Oktober 2026) untuk rapat evaluasi hari Selasa, 13 Oktober 2026.",
-      badge: anchorDate >= "2026-10-06" && anchorDate < "2026-10-13" ? "SIKLUS AKTIF" : undefined,
-    };
-
-    // Siklus 9 if date advances beyond 12 Okt
-    if (anchorDate >= "2026-10-13") {
-      map["cycle-9"] = {
-        id: "cycle-9",
-        name: "Siklus 9 (13–19 Okt) — Rapat 20 Okt",
-        periodLabel: "13 s/d 19 Oktober 2026",
-        status: "Siklus Berjalan (Rapat Selasa 20 Okt)",
-        startDate: "2026-10-13",
-        endDate: anchorDate >= "2026-10-19" ? "2026-10-19" : anchorDate,
-        isLiveInstagram: true,
-        description: "Siklus evaluasi mingguan pekan ke-3 Oktober 2026 untuk rapat evaluasi hari Selasa, 20 Oktober 2026.",
-        badge: "SIKLUS AKTIF",
-      };
-    }
-
     return map;
-  }, [storyData, branchReels]);
+  }, [anchorDate, rolling7StartIso]);
 
-  const activeCycle = cycles[selectedCycle] || cycles["cycle-7"] || cycles["cycle-1"];
+  const activeCycle = cycles[selectedCycle] || cycles["cycle-8"] || cycles["cycle-7"] || cycles["cycle-1"];
 
   // Index live Instagram cache by shortcode
   const liveMap = useMemo(() => {
@@ -318,8 +328,7 @@ export const ThreeDayCadenceRecap: React.FC<ThreeDayCadenceRecapProps> = ({
     if (key && Array.isArray(list)) {
       list.forEach((r) => {
         const d = r.uploadDate || r.reportDate;
-        const isReel = r.reelsLink && r.reelsLink.includes("/reel/") && !r.reelsLink.includes("/p/");
-        if (!r.isDayOff && r.reelsTitle && r.reelsTitle !== "-" && isReel && d && d >= activeCycle.startDate && d <= activeCycle.endDate) {
+        if (!r.isDayOff && r.reelsTitle && d && d >= activeCycle.startDate && d <= activeCycle.endDate) {
           const code = extractShortcode(r.reelsLink);
           const normTitle = (r.reelsTitle || "").toLowerCase().trim().replace(/\s+/g, " ");
           const dedupKey = code ? `sc_${code}` : `title_${normTitle}`;
@@ -470,67 +479,447 @@ Akses Dashboard Lengkap: https://iseeyou-intelligence.vercel.app/spreadsheet`;
         </div>
       </div>
 
-      {/* Cycle Selector Tabs */}
-      <div className="bg-surface-secondary border border-border rounded-container p-2 flex flex-wrap items-center gap-1.5">
-        {(Object.keys(cycles) as Array<keyof typeof cycles>).map((k) => {
-          const c = cycles[k];
-          const isActive = selectedCycle === k;
-          return (
+      {/* Cycle Selector Bar - Clean, Streamlined & Modern for Web and Mobile */}
+      <div className="bg-surface border border-border rounded-container p-3 sm:p-4 shadow-subtle space-y-3">
+        {/* Top Header: Active Period Indicator + Modal Trigger Button */}
+        <div className="flex items-center justify-between gap-2.5 flex-wrap">
+          <div className="flex items-center gap-2 min-w-0">
+            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-control bg-surface-secondary border border-border text-xs">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+              <span className="text-foreground-secondary text-[11px] hidden sm:inline">Periode Aktif:</span>
+              <span className="font-bold text-foreground truncate max-w-[170px] sm:max-w-none">
+                {activeCycle.shortName || activeCycle.name}
+              </span>
+            </div>
+
+            {activeCycle.badge && (
+              <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-brand/10 text-brand border border-brand/20 shrink-0">
+                {activeCycle.badge}
+              </span>
+            )}
+
+            {activeCycle.isLiveInstagram && (
+              <span className="text-[10px] uppercase font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20 shrink-0 hidden sm:inline-flex items-center gap-1">
+                <Sparkles className="w-2.5 h-2.5" />
+                Live IG
+              </span>
+            )}
+          </div>
+
+          {/* Quick Action: Open Modal Dialog for All Cycles & Archive */}
+          <button
+            type="button"
+            onClick={() => setIsCycleModalOpen(true)}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-control text-xs font-semibold bg-surface-secondary hover:bg-surface border border-border text-foreground hover:border-brand/40 shadow-2xs transition-all shrink-0 ml-auto"
+          >
+            <Layers className="w-3.5 h-3.5 text-brand" />
+            <span>Pilih Siklus ({Object.keys(cycles).length})</span>
+            <ChevronDown className="w-3 h-3 text-foreground-muted" />
+          </button>
+        </div>
+
+        {/* Horizontal Scrollable Quick Pill Bar (Single Clean Line, Zero Wrapping on Mobile) */}
+        <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none py-0.5 -mx-1 px-1 flex-nowrap whitespace-nowrap text-xs">
+          {/* 1. Siklus 8 (Aktif Pekan Ini) */}
+          <button
+            type="button"
+            onClick={() => setSelectedCycle("cycle-8")}
+            className={`px-3 py-1.5 rounded-control text-xs font-semibold transition-all shrink-0 flex items-center gap-1.5 border ${
+              selectedCycle === "cycle-8"
+                ? "bg-brand text-white border-brand shadow-subtle ring-1 ring-brand"
+                : "bg-surface-secondary/70 hover:bg-surface border-border text-foreground hover:border-brand/30"
+            }`}
+          >
+            <span className={`w-1.5 h-1.5 rounded-full ${selectedCycle === "cycle-8" ? "bg-white" : "bg-emerald-500"}`} />
+            <span>Siklus 8 (6–12 Okt)</span>
+            <span className={`text-[9px] uppercase px-1.5 py-0.2 rounded font-bold ${
+              selectedCycle === "cycle-8" ? "bg-white/20 text-white" : "bg-emerald-500/15 text-emerald-700 dark:text-emerald-400"
+            }`}>
+              Aktif
+            </span>
+          </button>
+
+          {/* 2. Siklus 7 (Rapat 6 Okt Selesai) */}
+          <button
+            type="button"
+            onClick={() => setSelectedCycle("cycle-7")}
+            className={`px-3 py-1.5 rounded-control text-xs font-semibold transition-all shrink-0 flex items-center gap-1.5 border ${
+              selectedCycle === "cycle-7"
+                ? "bg-brand text-white border-brand shadow-subtle ring-1 ring-brand"
+                : "bg-surface-secondary/70 hover:bg-surface border-border text-foreground hover:border-brand/30"
+            }`}
+          >
+            <Calendar className="w-3 h-3" />
+            <span>Siklus 7 (29 Sep–5 Okt)</span>
+            <span className={`text-[9px] uppercase px-1.5 py-0.2 rounded font-bold ${
+              selectedCycle === "cycle-7" ? "bg-white/20 text-white" : "bg-surface text-foreground-secondary border border-border/80"
+            }`}>
+              Rapat Lalu
+            </span>
+          </button>
+
+          {/* 3. Rolling 7 Hari Realtime */}
+          <button
+            type="button"
+            onClick={() => setSelectedCycle("full-week")}
+            className={`px-3 py-1.5 rounded-control text-xs font-semibold transition-all shrink-0 flex items-center gap-1.5 border ${
+              selectedCycle === "full-week"
+                ? "bg-brand text-white border-brand shadow-subtle ring-1 ring-brand"
+                : "bg-surface-secondary/70 hover:bg-surface border-border text-foreground hover:border-brand/30"
+            }`}
+          >
+            <Clock className="w-3 h-3" />
+            <span>Rolling 7 Hari ({formatShortIndo(rolling7StartIso)}–{formatShortIndo(anchorDate)})</span>
+            <span className={`text-[9px] uppercase px-1.5 py-0.2 rounded font-bold ${
+              selectedCycle === "full-week" ? "bg-white/20 text-white" : "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20"
+            }`}>
+              Live
+            </span>
+          </button>
+
+          {/* 4. 1 Bulan Penuh (Sep - Okt) */}
+          <button
+            type="button"
+            onClick={() => setSelectedCycle("full-month")}
+            className={`px-3 py-1.5 rounded-control text-xs font-semibold transition-all shrink-0 flex items-center gap-1.5 border ${
+              selectedCycle === "full-month"
+                ? "bg-brand text-white border-brand shadow-subtle ring-1 ring-brand"
+                : "bg-surface-secondary/70 hover:bg-surface border-border text-foreground hover:border-brand/30"
+            }`}
+          >
+            <Layers className="w-3 h-3" />
+            <span>1 Bulan Penuh</span>
+          </button>
+
+          {/* 5. Siklus 9 (Mendatang) */}
+          <button
+            type="button"
+            onClick={() => setSelectedCycle("cycle-9")}
+            className={`px-3 py-1.5 rounded-control text-xs font-semibold transition-all shrink-0 flex items-center gap-1.5 border ${
+              selectedCycle === "cycle-9"
+                ? "bg-brand text-white border-brand shadow-subtle ring-1 ring-brand"
+                : "bg-surface-secondary/70 hover:bg-surface border-border text-foreground hover:border-brand/30"
+            }`}
+          >
+            <Calendar className="w-3 h-3 text-foreground-muted" />
+            <span>Siklus 9 (13–19 Okt)</span>
+            <span className={`text-[9px] uppercase px-1.5 py-0.2 rounded font-bold ${
+              selectedCycle === "cycle-9" ? "bg-white/20 text-white" : "bg-surface text-foreground-muted border border-border/80"
+            }`}>
+              Mendatang
+            </span>
+          </button>
+
+          {/* Dynamic Pill: If selectedCycle is from archive (cycles 1-6) */}
+          {["cycle-1", "cycle-2", "cycle-3", "cycle-4", "cycle-5", "cycle-6"].includes(selectedCycle) && (
             <button
-              key={k}
-              onClick={() => setSelectedCycle(k)}
-              className={`px-3.5 py-2 rounded-control text-xs font-semibold transition-all flex items-center gap-2 ${
-                isActive
-                  ? "bg-surface border border-border text-foreground shadow-subtle"
-                  : "text-foreground-secondary hover:text-foreground hover:bg-surface/50"
-              }`}
+              type="button"
+              onClick={() => setSelectedCycle(selectedCycle)}
+              className="px-3 py-1.5 rounded-control text-xs font-semibold transition-all shrink-0 flex items-center gap-1.5 border bg-brand text-white border-brand shadow-subtle ring-1 ring-brand"
             >
-              <Calendar className={`w-3.5 h-3.5 ${isActive ? "text-brand" : "text-foreground-muted"}`} />
-              <span>{c.name}</span>
-              {c.badge && (
-                <span className="text-[9px] uppercase px-1.5 py-0.2 rounded bg-brand text-white font-bold shadow-2xs">
-                  {c.badge}
-                </span>
-              )}
-              {c.isLiveInstagram && (
-                <span className="text-[9px] uppercase px-1.5 py-0.2 rounded bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 font-bold border border-emerald-500/20">
-                  Live IG
-                </span>
-              )}
+              <Archive className="w-3 h-3 text-white" />
+              <span>{activeCycle.shortName || activeCycle.name}</span>
+              <span className="text-[9px] uppercase px-1.5 py-0.2 rounded font-bold bg-white/20 text-white">
+                Arsip Terpilih
+              </span>
             </button>
-          );
-        })}
+          )}
+
+          {/* 6. Quick Trigger: Arsip Siklus Lalu (Siklus 1-6) */}
+          <button
+            type="button"
+            onClick={() => setIsCycleModalOpen(true)}
+            className="px-3 py-1.5 rounded-control text-xs font-medium text-foreground-secondary hover:text-foreground hover:bg-surface border border-dashed border-border hover:border-brand/40 transition-all shrink-0 flex items-center gap-1.5"
+          >
+            <Archive className="w-3 h-3 text-foreground-muted" />
+            <span>Arsip Siklus 1–6...</span>
+            <ChevronDown className="w-3 h-3 text-foreground-muted" />
+          </button>
+        </div>
       </div>
 
       {/* Cycle Header Summary */}
-      <div className="bg-surface border border-border rounded-container p-4 flex flex-col md:flex-row md:items-center justify-between gap-3 shadow-subtle">
-        <div className="space-y-0.5">
-          <div className="flex items-center gap-2">
-            <span className="text-xs font-bold text-foreground">{activeCycle.periodLabel}</span>
-            <span className="text-[10px] px-2 py-0.2 rounded-full font-semibold bg-surface-secondary text-foreground-secondary border border-border">
+      <div className="bg-surface border border-border rounded-container p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-subtle">
+        <div className="space-y-1">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-sm font-bold text-foreground tracking-tight">{activeCycle.periodLabel}</span>
+            <span className="text-[10px] px-2 py-0.5 rounded-full font-semibold bg-surface-secondary text-foreground-secondary border border-border">
               {activeCycle.status}
             </span>
+            {activeCycle.isLiveInstagram && (
+              <span className="text-[9px] uppercase px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 font-bold border border-emerald-500/20">
+                Live Instagram
+              </span>
+            )}
           </div>
-          <p className="text-xs text-foreground-secondary">{activeCycle.description}</p>
+          <p className="text-xs text-foreground-secondary leading-relaxed max-w-2xl">{activeCycle.description}</p>
         </div>
 
-        <div className="flex items-center gap-4 text-xs font-semibold shrink-0">
-          <div className="text-right">
-            <span className="text-[10px] text-foreground-muted block font-normal uppercase">Story Nuha</span>
-            <span className="text-foreground font-bold">{totalStoriesUploaded} Story</span>
+        <div className="grid grid-cols-3 gap-2 sm:gap-4 pt-3 md:pt-0 border-t md:border-t-0 border-border/60 shrink-0">
+          <div className="text-center md:text-right bg-surface-secondary/40 md:bg-transparent p-2 md:p-0 rounded-control border md:border-none border-border/40">
+            <span className="text-[10px] text-foreground-muted block font-medium uppercase">Story Nuha</span>
+            <span className="text-xs sm:text-sm font-bold text-foreground">{totalStoriesUploaded} Story</span>
           </div>
-          <div className="h-6 w-px bg-border" />
-          <div className="text-right">
-            <span className="text-[10px] text-foreground-muted block font-normal uppercase">Reels 5 Cabang</span>
-            <span className="text-foreground font-bold">{totalReelsUploadedInCycle} Video</span>
+          <div className="text-center md:text-right bg-surface-secondary/40 md:bg-transparent p-2 md:p-0 rounded-control border md:border-none border-border/40 md:border-l md:border-border md:pl-4">
+            <span className="text-[10px] text-foreground-muted block font-medium uppercase">Reels 5 Cabang</span>
+            <span className="text-xs sm:text-sm font-bold text-foreground">{totalReelsUploadedInCycle} Video</span>
           </div>
-          <div className="h-6 w-px bg-border" />
-          <div className="text-right">
-            <span className="text-[10px] text-foreground-muted block font-normal uppercase">Total DM Masuk</span>
-            <span className="text-brand font-bold">{totalDMs} DM</span>
+          <div className="text-center md:text-right bg-surface-secondary/40 md:bg-transparent p-2 md:p-0 rounded-control border md:border-none border-border/40 md:border-l md:border-border md:pl-4">
+            <span className="text-[10px] text-foreground-muted block font-medium uppercase">Total DM</span>
+            <span className="text-xs sm:text-sm font-bold text-brand">{totalDMs} DM</span>
           </div>
         </div>
       </div>
+
+      {/* Modal Dialog: Semua Siklus & Arsip Rekap */}
+      {isCycleModalOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200"
+          onClick={() => setIsCycleModalOpen(false)}
+        >
+          <div
+            className="bg-surface border border-border rounded-container shadow-elevated w-full max-w-lg max-h-[88vh] flex flex-col overflow-hidden animate-in zoom-in-95 duration-200"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Modal Header */}
+            <div className="p-4 border-b border-border flex items-center justify-between bg-surface-secondary/40 shrink-0">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-control bg-brand-light flex items-center justify-center text-brand">
+                  <Calendar className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold text-foreground">Pilih Periode Evaluasi</h3>
+                  <p className="text-[11px] text-foreground-secondary">
+                    Pilih siklus rapat mingguan 6 PIC atau pemantauan realtime
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsCycleModalOpen(false)}
+                className="p-1.5 rounded-control text-foreground-muted hover:text-foreground hover:bg-surface border border-transparent hover:border-border transition-colors"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Modal Body: Grouped List */}
+            <div className="p-4 overflow-y-auto space-y-4">
+              {/* Group 1: Siklus Aktif Pekan Ini */}
+              <div>
+                <span className="text-[10px] uppercase font-bold tracking-wider text-emerald-700 dark:text-emerald-400 mb-1.5 flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                  Siklus Berjalan (Aktif Pekan Ini)
+                </span>
+                {["cycle-8"].map((k) => {
+                  const c = cycles[k];
+                  if (!c) return null;
+                  const isSel = selectedCycle === k;
+                  return (
+                    <button
+                      key={k}
+                      type="button"
+                      onClick={() => {
+                        setSelectedCycle(k);
+                        setIsCycleModalOpen(false);
+                      }}
+                      className={`w-full text-left p-3 rounded-control border transition-all flex items-start justify-between gap-3 ${
+                        isSel
+                          ? "bg-brand/5 border-brand ring-1 ring-brand text-foreground"
+                          : "bg-surface hover:bg-surface-secondary border-border text-foreground hover:border-brand/40"
+                      }`}
+                    >
+                      <div className="space-y-0.5 min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="text-xs font-bold text-foreground">{c.name}</span>
+                          <span className="text-[9px] uppercase px-1.5 py-0.2 rounded bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 font-bold border border-emerald-500/25">
+                            Aktif
+                          </span>
+                          <span className="text-[9px] uppercase px-1.5 py-0.2 rounded bg-brand/10 text-brand font-bold border border-brand/20">
+                            Live IG
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-foreground-secondary">{c.periodLabel}</p>
+                        <p className="text-[11px] text-foreground-muted line-clamp-1">{c.description}</p>
+                      </div>
+                      {isSel && <Check className="w-4 h-4 text-brand shrink-0 mt-0.5" />}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Group 2: Tinjauan Realtime & Konsolidasi */}
+              <div>
+                <span className="text-[10px] uppercase font-bold tracking-wider text-foreground-muted mb-1.5 flex items-center gap-1">
+                  <Clock className="w-3 h-3 text-brand" />
+                  Tinjauan Realtime & Konsolidasi
+                </span>
+                <div className="space-y-1.5">
+                  {["full-week", "full-month"].map((k) => {
+                    const c = cycles[k];
+                    if (!c) return null;
+                    const isSel = selectedCycle === k;
+                    return (
+                      <button
+                        key={k}
+                        type="button"
+                        onClick={() => {
+                          setSelectedCycle(k);
+                          setIsCycleModalOpen(false);
+                        }}
+                        className={`w-full text-left p-2.5 rounded-control border transition-all flex items-start justify-between gap-3 ${
+                          isSel
+                            ? "bg-brand/5 border-brand ring-1 ring-brand text-foreground"
+                            : "bg-surface hover:bg-surface-secondary border-border text-foreground hover:border-brand/40"
+                        }`}
+                      >
+                        <div className="space-y-0.5 min-w-0">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className="text-xs font-bold text-foreground">{c.name}</span>
+                            {c.badge && (
+                              <span className="text-[9px] uppercase px-1.5 py-0.2 rounded bg-surface-secondary text-foreground-secondary font-bold border border-border">
+                                {c.badge}
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-[11px] text-foreground-secondary">{c.periodLabel}</p>
+                        </div>
+                        {isSel && <Check className="w-4 h-4 text-brand shrink-0 mt-0.5" />}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Group 3: Siklus Rapat Baru Selesai */}
+              <div>
+                <span className="text-[10px] uppercase font-bold tracking-wider text-foreground-muted mb-1.5 flex items-center gap-1">
+                  <Calendar className="w-3 h-3 text-foreground-muted" />
+                  Siklus Rapat Baru Selesai
+                </span>
+                {["cycle-7"].map((k) => {
+                  const c = cycles[k];
+                  if (!c) return null;
+                  const isSel = selectedCycle === k;
+                  return (
+                    <button
+                      key={k}
+                      type="button"
+                      onClick={() => {
+                        setSelectedCycle(k);
+                        setIsCycleModalOpen(false);
+                      }}
+                      className={`w-full text-left p-2.5 rounded-control border transition-all flex items-start justify-between gap-3 ${
+                        isSel
+                          ? "bg-brand/5 border-brand ring-1 ring-brand text-foreground"
+                          : "bg-surface hover:bg-surface-secondary border-border text-foreground hover:border-brand/40"
+                      }`}
+                    >
+                      <div className="space-y-0.5 min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="text-xs font-bold text-foreground">{c.name}</span>
+                          <span className="text-[9px] uppercase px-1.5 py-0.2 rounded bg-surface-secondary text-foreground-secondary font-bold border border-border">
+                            Selesai Rapat 6 Okt
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-foreground-secondary">{c.periodLabel}</p>
+                      </div>
+                      {isSel && <Check className="w-4 h-4 text-brand shrink-0 mt-0.5" />}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Group 4: Arsip Siklus Rapat Lalu (September 2026) */}
+              <div>
+                <span className="text-[10px] uppercase font-bold tracking-wider text-foreground-muted mb-1.5 flex items-center gap-1">
+                  <Archive className="w-3 h-3 text-foreground-muted" />
+                  Arsip Siklus Rapat Lalu (September 2026)
+                </span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+                  {["cycle-6", "cycle-5", "cycle-4", "cycle-3", "cycle-2", "cycle-1"].map((k) => {
+                    const c = cycles[k];
+                    if (!c) return null;
+                    const isSel = selectedCycle === k;
+                    return (
+                      <button
+                        key={k}
+                        type="button"
+                        onClick={() => {
+                          setSelectedCycle(k);
+                          setIsCycleModalOpen(false);
+                        }}
+                        className={`text-left p-2 rounded-control border transition-all flex items-center justify-between gap-2 ${
+                          isSel
+                            ? "bg-brand/5 border-brand ring-1 ring-brand text-foreground"
+                            : "bg-surface hover:bg-surface-secondary border-border text-foreground hover:border-brand/30"
+                        }`}
+                      >
+                        <div className="min-w-0">
+                          <span className="text-xs font-semibold text-foreground block truncate">{c.shortName || c.name}</span>
+                          <span className="text-[10px] text-foreground-muted block">{c.periodLabel}</span>
+                        </div>
+                        {isSel && <Check className="w-3.5 h-3.5 text-brand shrink-0" />}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Group 5: Siklus Mendatang */}
+              <div>
+                <span className="text-[10px] uppercase font-bold tracking-wider text-foreground-muted mb-1.5 flex items-center gap-1">
+                  <Calendar className="w-3 h-3 text-foreground-muted" />
+                  Siklus Rapat Mendatang
+                </span>
+                {["cycle-9"].map((k) => {
+                  const c = cycles[k];
+                  if (!c) return null;
+                  const isSel = selectedCycle === k;
+                  return (
+                    <button
+                      key={k}
+                      type="button"
+                      onClick={() => {
+                        setSelectedCycle(k);
+                        setIsCycleModalOpen(false);
+                      }}
+                      className={`w-full text-left p-2.5 rounded-control border transition-all flex items-start justify-between gap-3 ${
+                        isSel
+                          ? "bg-brand/5 border-brand ring-1 ring-brand text-foreground"
+                          : "bg-surface hover:bg-surface-secondary border-border text-foreground hover:border-brand/40"
+                      }`}
+                    >
+                      <div className="space-y-0.5 min-w-0">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="text-xs font-bold text-foreground">{c.name}</span>
+                          <span className="text-[9px] uppercase px-1.5 py-0.2 rounded bg-surface-secondary text-foreground-muted font-bold border border-border">
+                            Mendatang (20 Okt)
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-foreground-secondary">{c.periodLabel}</p>
+                      </div>
+                      {isSel && <Check className="w-4 h-4 text-brand shrink-0 mt-0.5" />}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="p-3 border-t border-border bg-surface-secondary/30 flex items-center justify-between text-xs text-foreground-secondary shrink-0">
+              <span>Total 11 siklus evaluasi</span>
+              <button
+                type="button"
+                onClick={() => setIsCycleModalOpen(false)}
+                className="px-3 py-1 rounded-control bg-surface border border-border text-foreground font-semibold hover:bg-surface-secondary transition-colors"
+              >
+                Tutup
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* 2-Column Core Layout: Story (Nuha) on Left, Reels Cabang on Right */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
