@@ -87,10 +87,10 @@ export function getRealContentItems(
   const isEligibleDate = (dateStr: string) => {
     if (!dateStr) return false;
     if (period === "weekly") {
-      return dateStr >= "2026-09-29" && dateStr <= "2026-10-06";
+      return dateStr >= "2026-09-29";
     }
     return (
-      (dateStr >= "2026-09-01" && dateStr <= "2026-10-06") ||
+      dateStr >= "2026-09-01" ||
       dateStr.startsWith("2026-09") ||
       dateStr.startsWith("2026-10")
     );
@@ -298,27 +298,29 @@ export function getRealContentItems(
           const sheetLikes = Number(r.likes) || 0;
           const liveViewers = liveData && Number(liveData.viewers) > 0 ? Number(liveData.viewers) : null;
           const liveLikes = liveData && Number(liveData.likes) > 0 ? Number(liveData.likes) : null;
+          const liveViewersVal = liveViewers || 0;
+          const targetReach = Math.max(sheetViewers, liveViewersVal);
+          const targetLikes = liveLikes !== null ? liveLikes : sheetLikes;
 
           const existingItem = items.find((it) => it.id === `reel-${code}`);
           if (existingItem) {
-            // Update ke angka evaluasi tertinggi / terbaru (misal evaluasi H+3 49.847 viewers)
-            if (sheetViewers > existingItem.reach) {
-              existingItem.reach = sheetViewers;
+            if (targetReach > existingItem.reach) {
+              existingItem.reach = targetReach;
             }
-            if (liveLikes === null && sheetLikes > existingItem.likes) {
-              existingItem.likes = sheetLikes;
+            if (targetLikes > existingItem.likes) {
+              existingItem.likes = targetLikes;
             }
             return;
           }
 
           seenCodes.add(code);
-          const reach = Math.max(sheetViewers, liveViewers || 0);
-          const likes = liveLikes !== null ? liveLikes : sheetLikes;
+          const reach = targetReach;
+          const likes = targetLikes;
           const sheetComments = Number(r.comments) || 0;
           const comments = liveData && liveData.comments !== undefined ? Number(liveData.comments) : sheetComments;
           const shares = Number(r.shares) || (liveData && liveData.shares ? Number(liveData.shares) : 0);
 
-          let title = (r.reelsTitle || "").trim();
+          let title = (liveData?.coverTitle || liveData?.title || r.reelsTitle || "").trim();
           if (!title || title === "-") {
             if (r.secondReelsTitle && r.secondReelsTitle !== "-") {
               title = r.secondReelsTitle.trim();

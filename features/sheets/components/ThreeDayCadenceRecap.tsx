@@ -318,7 +318,8 @@ export const ThreeDayCadenceRecap: React.FC<ThreeDayCadenceRecapProps> = ({
     if (key && Array.isArray(list)) {
       list.forEach((r) => {
         const d = r.uploadDate || r.reportDate;
-        if (!r.isDayOff && r.reelsTitle && d && d >= activeCycle.startDate && d <= activeCycle.endDate) {
+        const isReel = r.reelsLink && r.reelsLink.includes("/reel/") && !r.reelsLink.includes("/p/");
+        if (!r.isDayOff && r.reelsTitle && r.reelsTitle !== "-" && isReel && d && d >= activeCycle.startDate && d <= activeCycle.endDate) {
           const code = extractShortcode(r.reelsLink);
           const normTitle = (r.reelsTitle || "").toLowerCase().trim().replace(/\s+/g, " ");
           const dedupKey = code ? `sc_${code}` : `title_${normTitle}`;
