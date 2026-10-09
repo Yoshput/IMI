@@ -351,8 +351,22 @@ async function syncSpreadsheetData() {
       };
 
       let actualLink = cleanLink(reelsLink);
+      let actualFeedLink = cleanLink(feedLink);
+
+      // If pillar contains a reel link while actualLink has carousel /p/, recover the reel link
+      if (pillar.includes("/reel/")) {
+        if (!actualFeedLink && actualLink.includes("/p/")) actualFeedLink = actualLink;
+        actualLink = pillar;
+      }
+
       if (!actualLink) {
         actualLink = titleToLinkMap[rawTitle.toLowerCase()] || "";
+      }
+
+      // Strictly ensure photo carousels (/p/) are never stored in reelsLink for spreadsheet evaluation
+      if (actualLink.includes("/p/") && !actualLink.includes("/reel/")) {
+        if (!actualFeedLink) actualFeedLink = actualLink;
+        actualLink = "";
       }
 
       parsedRows.push({
@@ -370,7 +384,7 @@ async function syncSpreadsheetData() {
         secondReelsTitle: matchedEval ? matchedEval.evalTitle : undefined,
         contentPillar: pillar,
         reelsLink: actualLink,
-        feedLink: cleanLink(feedLink),
+        feedLink: actualFeedLink,
         threadsLink: cleanLink(threadsLink),
         tiktokLink: cleanLink(tiktokLink),
         igFollowers,

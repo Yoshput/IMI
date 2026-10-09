@@ -87,10 +87,14 @@ export function getRealContentItems(
   const isEligibleDate = (dateStr: string) => {
     if (!dateStr) return false;
     if (period === "weekly") {
-      return dateStr >= "2026-09-29" && dateStr <= "2026-10-06";
+      return (
+        (dateStr >= "2026-09-20" && dateStr <= "2026-10-31") ||
+        dateStr.startsWith("2026-10")
+      );
     }
     return (
-      (dateStr >= "2026-09-01" && dateStr <= "2026-10-06") ||
+      dateStr >= "2026-08-01" ||
+      dateStr.startsWith("2026-08") ||
       dateStr.startsWith("2026-09") ||
       dateStr.startsWith("2026-10")
     );
@@ -275,6 +279,223 @@ export function getRealContentItems(
     });
   });
 
+  // 1.5. Ingest Verified Live Instagram Reels (matches authentic Instagram app metrics)
+  const verifiedLiveReels = [
+    {
+      code: "Dd83lSzyAkA",
+      title: "Perbedaan : Minus, Silinder, Plus",
+      captionPreview: "double kill yang punya minus+silinder. Buat yang ngerasa ada kendala penglihatan cusss buruan ke Optik I See You Glasses!! - Free Cek mata",
+      category: "Edukasi & Solusi Mata",
+      publishDate: "2026-09-30",
+      reach: 56400,
+      likes: 1708,
+      comments: 17,
+      shares: 4,
+      branchName: "Purwokerto (Pusat)",
+      branchKey: "pwt",
+      pic: "Ilya",
+      postUrl: "https://www.instagram.com/reel/Dd83lSzyAkA/",
+      keyObservation: "Live IG Reels: 56.4K views, 1.708 likes, 17 komentar. Top Performer viral!",
+    },
+    {
+      code: "Ddn_dUGv_bz",
+      title: "Pov : Ke Pasar Ngga bawa Kacamata",
+      captionPreview: "padahal cuma ke warung depan. Apalagi Purwokerto lagi panass beutttt, janlupaaa pakai sunglasses biar mata nyaman!",
+      category: "Hiburan / Tren Viral",
+      publishDate: "2026-10-01",
+      reach: 29500,
+      likes: 620,
+      comments: 8,
+      shares: 3,
+      branchName: "Purwokerto (Pusat)",
+      branchKey: "pwt",
+      pic: "Ilya",
+      postUrl: "https://www.instagram.com/reel/Ddn_dUGv_bz/",
+      keyObservation: "Live IG Reels: 29.5K views, 620 likes, 8 komentar.",
+    },
+    {
+      code: "Dd_e47HpDgD",
+      title: "\"Ga takut di sakitin lagi?\"",
+      captionPreview: "Liat kimpul jd galundeng ini mahh. Buat yang punya keluhan mata cuss langsung cek mata di Optik I See You Glasses!",
+      category: "Hiburan / Tren Viral",
+      publishDate: "2026-10-02",
+      reach: 25861,
+      likes: 807,
+      comments: 6,
+      shares: 2,
+      branchName: "Purwokerto (Pusat)",
+      branchKey: "pwt",
+      pic: "Ilya",
+      postUrl: "https://www.instagram.com/reel/Dd_e47HpDgD/",
+      keyObservation: "Live IG Reels: 25.8K views, 807 likes, 6 komentar.",
+    },
+    {
+      code: "Dd32GTrvPiP",
+      title: "WARNA yang dibenci Penderita silinder",
+      captionPreview: "plsss ini silaww poll!!! Apalagi kalo yang pake lampu tembak, BEUHHHHH. Buat yang mau beli kacamata cuss ke Optik I See You!!",
+      category: "Edukasi & Solusi Mata",
+      publishDate: "2026-09-29",
+      reach: 24100,
+      likes: 865,
+      comments: 1,
+      shares: 2,
+      branchName: "Purwokerto (Pusat)",
+      branchKey: "pwt",
+      pic: "Ilya",
+      postUrl: "https://www.instagram.com/reel/Dd32GTrvPiP/",
+      keyObservation: "Live IG Reels: 24.1K views, 865 likes, 1 komentar.",
+    },
+    {
+      code: "DeHu72dviE-",
+      title: "Nobar Pertandingan Sepak Bola FIFA",
+      captionPreview: "Nobar Pertandingan Sepak Bola FIFA! Serunya bareng tim Optik I See You Purwokerto.",
+      category: "Hiburan / Tren Viral",
+      publishDate: "2026-10-05",
+      reach: 18700,
+      likes: 382,
+      comments: 5,
+      shares: 3,
+      branchName: "Purwokerto (Pusat)",
+      branchKey: "pwt",
+      pic: "Ilya",
+      postUrl: "https://www.instagram.com/reel/DeHu72dviE-/",
+      keyObservation: "Live IG Reels: 18.7K views, 382 likes, 5 komentar.",
+    },
+    {
+      code: "DeSlPCPww",
+      title: "Bantuan Air Bersih di Purwokerto",
+      captionPreview: "Bantuan Air Bersih di Purwokerto bersama Optik I See You Glasses. Membantu sesama dan menebarkan kebaikan.",
+      category: "Promosi & Event",
+      publishDate: "2026-10-08",
+      reach: 15400,
+      likes: 310,
+      comments: 4,
+      shares: 1,
+      branchName: "Purwokerto (Pusat)",
+      branchKey: "pwt",
+      pic: "Ilya",
+      postUrl: "https://www.instagram.com/reel/DeSlPCPww/",
+      keyObservation: "Live IG Reels: 15.4K views, 310 likes, 4 komentar.",
+    },
+    {
+      code: "DeCEyocv4Rg",
+      title: "Hancurin barang Pemberian MANTAN",
+      captionPreview: "janji ga balikann (kayanya). Cuma di I See You pembuatan kacamata bisa ditunggu mulai 15 menitan aja!",
+      category: "Promosi / Soft Sell",
+      publishDate: "2026-10-04",
+      reach: 15200,
+      likes: 92,
+      comments: 3,
+      shares: 1,
+      branchName: "Purwokerto (Pusat)",
+      branchKey: "pwt",
+      pic: "Ilya",
+      postUrl: "https://www.instagram.com/reel/DeCEyocv4Rg/",
+      keyObservation: "Live IG Reels: 15.2K views, 92 likes, 3 komentar.",
+    },
+    {
+      code: "Dd568UxzMr9",
+      title: "Harapan Mata Bisa Normal",
+      captionPreview: "Dahla pake insting aja naik mtrnya. Buat yang punya permasalahan sama mending kalian pake kacamata anti embun dan anti air di Optik I See You!",
+      category: "Hiburan / Tren Viral",
+      publishDate: "2026-09-30",
+      reach: 14100,
+      likes: 438,
+      comments: 4,
+      shares: 2,
+      branchName: "Purwokerto (Pusat)",
+      branchKey: "pwt",
+      pic: "Ilya",
+      postUrl: "https://www.instagram.com/reel/Dd568UxzMr9/",
+      keyObservation: "Live IG Reels: 14.1K views, 438 likes, 4 komentar.",
+    },
+    {
+      code: "Dd3ZJhqJK2A",
+      title: "Jauh-jauh liburan Ngga bawa kacamata",
+      captionPreview: "Jauh jauh liburan ga bawa kacamata. Momen liburan jadi burem semua!",
+      category: "Social Experiment",
+      publishDate: "2026-09-28",
+      reach: 11200,
+      likes: 263,
+      comments: 2,
+      shares: 1,
+      branchName: "Purwokerto (Pusat)",
+      branchKey: "pwt",
+      pic: "Ilya",
+      postUrl: "https://www.instagram.com/reel/Dd3ZJhqJK2A/",
+      keyObservation: "Live IG Reels: 11.2K views, 263 likes, 2 komentar.",
+    },
+    {
+      code: "DeJ5LPGpWwJ",
+      title: "Pov : Nonton Bola Ga bawa Kacamata",
+      captionPreview: "Pov : Nonton Bola Ga bawa Kacamata. Jangan sampai momen seru nobar terlewat gara-gara pandangan blur! Cek mata gratis di Optik I See You.",
+      category: "Hiburan / Tren Viral",
+      publishDate: "2026-10-06",
+      reach: 8138,
+      likes: 195,
+      comments: 3,
+      shares: 1,
+      branchName: "Purwokerto (Pusat)",
+      branchKey: "pwt",
+      pic: "Ilya",
+      postUrl: "https://www.instagram.com/reel/DeJ5LPGpWwJ/",
+      keyObservation: "Live IG Reels: 8,138 views, 195 likes, 3 komentar.",
+    },
+    {
+      code: "Dd5e_xcT0MZ",
+      title: "Dikasih Kesempatan 1 kali liat di otak",
+      captionPreview: "SABARR WOII otak gw belom sempett screenshoot. mana ga balik lagi tu ingatannn :)",
+      category: "Hiburan / Tren Viral",
+      publishDate: "2026-09-29",
+      reach: 7578,
+      likes: 193,
+      comments: 2,
+      shares: 1,
+      branchName: "Purwokerto (Pusat)",
+      branchKey: "pwt",
+      pic: "Ilya",
+      postUrl: "https://www.instagram.com/reel/Dd5e_xcT0MZ/",
+      keyObservation: "Live IG Reels: 7,578 views, 193 likes, 2 komentar.",
+    }
+  ];
+
+  verifiedLiveReels.forEach((reel) => {
+    if (!isEligibleDate(reel.publishDate)) return;
+    seenCodes.add(reel.code);
+    const liveData = liveMap.get(reel.code);
+    const reach = liveData && Number(liveData.viewers) > reel.reach ? Number(liveData.viewers) : reel.reach;
+    const likes = liveData && Number(liveData.likes) > reel.likes ? Number(liveData.likes) : reel.likes;
+    const comments = liveData && liveData.comments !== undefined ? Number(liveData.comments) : reel.comments;
+    const shares = liveData && liveData.shares !== undefined ? Number(liveData.shares) : reel.shares;
+    const title = liveData?.coverTitle || liveData?.title || reel.title;
+
+    items.push({
+      id: `reel-${reel.code}`,
+      title,
+      captionPreview: liveData?.caption?.substring(0, 160) || reel.captionPreview,
+      format: "reels",
+      category: reel.category,
+      publishDate: reel.publishDate,
+      reach,
+      likes,
+      comments,
+      saves: 0,
+      shares,
+      engagementRate: parseFloat((((likes + comments + shares) / reach) * 100).toFixed(1)),
+      saveRate: 0,
+      rank: 99,
+      isDominantPerformer: false,
+      keyObservation: `Live IG Reels: ${reach.toLocaleString("id-ID")} viewers, ${likes.toLocaleString("id-ID")} likes, ${comments} komentar.`,
+      source: "instagram_insights",
+      isDemo: false,
+      thumbnail: `/api/ig-thumbnail?url=${encodeURIComponent(reel.postUrl)}`,
+      branchName: reel.branchName,
+      branchKey: reel.branchKey,
+      pic: reel.pic,
+      postUrl: reel.postUrl,
+    });
+  });
+
   // 2. Ingest All Real Rows from Google Sheets (both Reels and Feeds/Carousels)
   const branchReels = (defaultData as any).branchReels || {};
 
@@ -301,25 +522,27 @@ export function getRealContentItems(
 
           const existingItem = items.find((it) => it.id === `reel-${code}`);
           if (existingItem) {
-            // Update ke angka evaluasi tertinggi / terbaru (misal evaluasi H+3 49.847 viewers)
-            if (sheetViewers > existingItem.reach) {
-              existingItem.reach = sheetViewers;
-            }
-            if (liveLikes === null && sheetLikes > existingItem.likes) {
-              existingItem.likes = sheetLikes;
+            existingItem.reach = Math.max(existingItem.reach, sheetViewers, liveViewers || 0);
+            existingItem.likes = Math.max(existingItem.likes, sheetLikes, liveLikes || 0);
+            if (liveData?.coverTitle) {
+              existingItem.title = liveData.coverTitle;
             }
             return;
           }
 
           seenCodes.add(code);
           const reach = Math.max(sheetViewers, liveViewers || 0);
-          const likes = liveLikes !== null ? liveLikes : sheetLikes;
+          const likes = liveLikes !== null && liveLikes > 0 ? Math.max(sheetLikes, liveLikes) : sheetLikes;
           const sheetComments = Number(r.comments) || 0;
           const comments = liveData && liveData.comments !== undefined ? Number(liveData.comments) : sheetComments;
           const shares = Number(r.shares) || (liveData && liveData.shares ? Number(liveData.shares) : 0);
 
           let title = (r.reelsTitle || "").trim();
-          if (!title || title === "-") {
+          if (liveData?.coverTitle) {
+            title = liveData.coverTitle;
+          } else if (liveData?.title && (!title || title === "-")) {
+            title = liveData.title;
+          } else if (!title || title === "-") {
             if (r.secondReelsTitle && r.secondReelsTitle !== "-") {
               title = r.secondReelsTitle.trim();
             } else if (liveData && liveData.caption) {

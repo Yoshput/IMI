@@ -327,6 +327,10 @@ export const ThreeDayCadenceRecap: React.FC<ThreeDayCadenceRecapProps> = ({
     const key = branchKeyMap[sheetKey];
     if (key && Array.isArray(list)) {
       list.forEach((r) => {
+        // Exclude photo carousels (/p/) from spreadsheet - PICs only evaluate Reels here
+        const isActualReel = r.reelsLink && r.reelsLink.includes("/reel/") && !r.reelsLink.includes("/p/");
+        if (!isActualReel) return;
+
         const d = r.uploadDate || r.reportDate;
         if (!r.isDayOff && r.reelsTitle && d && d >= activeCycle.startDate && d <= activeCycle.endDate) {
           const code = extractShortcode(r.reelsLink);
