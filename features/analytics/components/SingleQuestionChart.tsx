@@ -16,23 +16,23 @@ export const SingleQuestionChart: React.FC = () => {
           </span>
           <ProvenanceBadge
             source="sheets_sync"
-            date="6 Oktober 2026"
+            date="13 Oktober 2026"
             isDemo={false}
             sourceLabel="Akumulasi Tayangan Reels Google Sheets 5 Cabang (Evaluasi H+3)"
           />
         </div>
 
         <h3 className="heading-section text-foreground leading-snug">
-          &ldquo;Bagaimana tren tayangan Reels (Viewers) selama 5 minggu terakhir (hingga 6 Oktober 2026)?&rdquo;
+          &ldquo;Bagaimana tren tayangan Reels (Viewers) selama beberapa siklus evaluasi terakhir (hingga Rapat 13 Oktober 2026)?&rdquo;
         </h3>
         <p className="text-xs text-foreground-secondary mt-1">
-          Menampilkan pertumbuhan tayangan Reels jaringan 5 cabang dari Week 36 hingga Week 40 (29 Sep - 5 Okt 2026). Terverifikasi konsistensi tinggi pada W40 mencapai 248.500 tayangan (+7.2% WoW).
+          Menampilkan pertumbuhan tayangan Reels jaringan 5 cabang dari Siklus 5 hingga Siklus 8 (6–12 Okt 2026 · Cutoff Rapat 13 Okt). Terverifikasi konsistensi tinggi lintas cabang.
         </p>
       </div>
 
       {/* Clean Bar Visualization with Clear Values */}
       <div className="mt-8 space-y-4">
-        <div className="grid grid-cols-5 gap-3 items-end h-44 pt-6 pb-2 border-b border-border/80">
+        <div className="grid grid-cols-4 gap-3 items-end h-44 pt-6 pb-2 border-b border-border/80">
           {ACTUAL_HISTORICAL_TRENDS.map((t, idx) => {
             const heightPercent = Math.round((t.reach / maxReach) * 100);
             const isLatest = idx === ACTUAL_HISTORICAL_TRENDS.length - 1;

@@ -55,12 +55,32 @@ export const PengajuanHubView: React.FC = () => {
   const [pitchPackage, setPitchPackage] = useState("Diamond (Tier Utama / Rp 5.000.000)");
   const [copiedPitch, setCopiedPitch] = useState(false);
 
-  // Proposal database filter from Google Sheets
-  const rawProposals: RawProposalItem[] = ((sheetsData as any).formProposal || []) as RawProposalItem[];
+  // Proposal database loaded dynamically from Google Sheets /api/sync-sheets
+  const [proposals, setProposals] = useState<RawProposalItem[]>(
+    ((sheetsData as any).formProposal || []) as RawProposalItem[]
+  );
+
+  React.useEffect(() => {
+    let isMounted = true;
+    fetch("/api/sync-sheets")
+      .then((res) => res.json())
+      .then((json) => {
+        if (isMounted && json?.success && json?.data?.formProposal) {
+          setProposals(json.data.formProposal);
+        }
+      })
+      .catch((err) => {
+        console.warn("Using initial static proposal data:", err);
+      });
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   const [dbSearch, setDbSearch] = useState("");
   const [dbBranchFilter, setDbBranchFilter] = useState("all");
 
-  const filteredProposals = rawProposals.filter((item) => {
+  const filteredProposals = proposals.filter((item) => {
     const matchesBranch =
       dbBranchFilter === "all" ||
       item.targetBranch.toLowerCase().includes(dbBranchFilter.toLowerCase());
@@ -161,7 +181,7 @@ export const PengajuanHubView: React.FC = () => {
             <FileText className="w-3.5 h-3.5" />
             <span>Database Proposal Masuk (Sheets)</span>
             <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-emerald-500/20 text-emerald-800 dark:text-emerald-300 font-black">
-              {rawProposals.length}
+              {proposals.length}
             </span>
           </button>
         </div>
@@ -523,7 +543,7 @@ export const PengajuanHubView: React.FC = () => {
                   Rekap Database Proposal Sponsorship Masuk
                 </h3>
                 <p className="text-xs text-foreground-secondary mt-0.5">
-                  Total <b>{rawProposals.length} proposal</b> terdata otomatis dari Google Sheets <code>Form Proposal</code>.
+                  Total <b>{proposals.length} proposal</b> terdata otomatis dari Google Sheets <code>Form Proposal</code>.
                 </p>
               </div>
 

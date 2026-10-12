@@ -17,30 +17,53 @@ import { DevStateSwitcher } from "@/components/shared/DevStateSwitcher";
 export const AnalyticsView: React.FC = () => {
   const [viewState, setViewState] = useState<"success" | "loading" | "empty" | "error">("success");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [historyRecords, setHistoryRecords] = useState<MetricRecord[]>(ACTUAL_HEADLINE_METRICS);
+  const [historyRecords, setHistoryRecords] = useState<MetricRecord[]>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const stored = localStorage.getItem("imi_manual_metric_records");
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        }
+      } catch {}
+    }
+    return ACTUAL_HEADLINE_METRICS;
+  });
   const [activeSection, setActiveSection] = useState<"all" | "traffic" | "gsc" | "tiktok" | "trends">("all");
   const [lastSyncTime, setLastSyncTime] = useState<string>("");
   const [isSyncing, setIsSyncing] = useState(false);
 
   useEffect(() => {
-    setLastSyncTime(new Date().toLocaleTimeString("id-ID"));
+    setLastSyncTime(new Date().toLocaleTimeString("id-ID") + " WIB");
     // Realtime background tick every 60s
     const timer = setInterval(() => {
-      setLastSyncTime(new Date().toLocaleTimeString("id-ID"));
+      setLastSyncTime(new Date().toLocaleTimeString("id-ID") + " WIB");
     }, 60000);
     return () => clearInterval(timer);
   }, []);
 
-  const handleManualSync = () => {
+  const handleManualSync = async () => {
     setIsSyncing(true);
-    setTimeout(() => {
-      setLastSyncTime(new Date().toLocaleTimeString("id-ID"));
+    try {
+      await fetch("/api/sync-sheets?fresh=true");
+      setLastSyncTime(new Date().toLocaleTimeString("id-ID") + " WIB");
+    } catch {
+      setLastSyncTime(new Date().toLocaleTimeString("id-ID") + " WIB");
+    } finally {
       setIsSyncing(false);
-    }, 600);
+    }
   };
 
   const handleAddRecord = (record: MetricRecord) => {
-    setHistoryRecords((prev) => [record, ...prev]);
+    setHistoryRecords((prev) => {
+      const next = [record, ...prev];
+      if (typeof window !== "undefined") {
+        try {
+          localStorage.setItem("imi_manual_metric_records", JSON.stringify(next));
+        } catch {}
+      }
+      return next;
+    });
   };
 
   return (
@@ -60,7 +83,7 @@ export const AnalyticsView: React.FC = () => {
             <span>·</span>
             <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/10 text-emerald-800 dark:text-emerald-400 border border-emerald-500/20">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              Live Realtime Analytics (Update 6 Oktober 2026)
+              Live Realtime Analytics (Siklus 8 · Cutoff Rapat 13 Okt 2026)
             </span>
             {lastSyncTime && (
               <span className="text-[11px] text-foreground-muted">

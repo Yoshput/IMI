@@ -194,6 +194,19 @@ export const ThreeDayCadenceRecap: React.FC<ThreeDayCadenceRecapProps> = ({
         badge: isAfterMeetingCycle7 ? "SELESAI RAPAT" : "RAPAT BESOK (6 OKT)",
         category: "recent",
       },
+      "cycle-8": {
+        id: "cycle-8",
+        name: "Siklus 8 (6–12 Okt) · Rapat 13 Okt",
+        shortName: "Siklus 8 (6–12 Okt)",
+        periodLabel: "6 s/d 12 Oktober 2026 (Rapat 13 Okt)",
+        status: anchorDate >= "2026-10-13" ? "Selesai Evaluasi Rapat 13 Okt" : "Evaluasi Rapat Selasa, 13 Oktober 2026",
+        startDate: "2026-10-06",
+        endDate: "2026-10-12",
+        isLiveInstagram: true,
+        description: "Evaluasi berjalan 7 hari penuh (6–12 Oktober 2026) untuk rapat evaluasi mingguan Selasa, 13 Oktober 2026.",
+        badge: anchorDate >= "2026-10-13" ? "SELESAI RAPAT" : "RAPAT 13 OKT",
+        category: "recent",
+      },
       "full-week": {
         id: "full-week",
         name: `1 Minggu Terakhir (${formatShortIndo(rolling7StartIso)} – ${formatShortIndo(anchorDate)}) · Rolling`,
@@ -219,23 +232,6 @@ export const ThreeDayCadenceRecap: React.FC<ThreeDayCadenceRecapProps> = ({
         description: "Rangkuman komprehensif performa 1 bulan penuh lintas 5 cabang (4 ISY + 1 Lunar).",
         badge: "BULAN PENUH",
         category: "realtime",
-      },
-      "cycle-8": {
-        id: "cycle-8",
-        name: anchorDate >= "2026-10-13"
-          ? "Siklus 8 (6–12 Okt) · Selesai Rapat"
-          : "Siklus 8 (6–12 Okt) — Rapat 13 Okt",
-        shortName: "Siklus 8 (6–12 Okt)",
-        periodLabel: "6 s/d 12 Oktober 2026",
-        status: anchorDate >= "2026-10-13"
-          ? "Selesai Evaluasi Rapat 13 Okt"
-          : "Siklus Berjalan (Rapat Selasa 13 Okt)",
-        startDate: "2026-10-06",
-        endDate: "2026-10-12",
-        isLiveInstagram: true,
-        description: "Siklus evaluasi mingguan pekan berjalan (6 s/d 12 Oktober 2026) untuk persiapan rapat evaluasi hari Selasa, 13 Oktober 2026.",
-        badge: anchorDate >= "2026-10-06" && anchorDate < "2026-10-13" ? "SIKLUS AKTIF" : undefined,
-        category: "active",
       },
       "cycle-9": {
         id: "cycle-9",
@@ -801,7 +797,7 @@ Akses Dashboard Lengkap: https://iseeyou-intelligence.vercel.app/spreadsheet`;
                   <Calendar className="w-3 h-3 text-foreground-muted" />
                   Siklus Rapat Baru Selesai
                 </span>
-                {["cycle-7"].map((k) => {
+                {["cycle-8", "cycle-7"].map((k) => {
                   const c = cycles[k];
                   if (!c) return null;
                   const isSel = selectedCycle === k;
@@ -823,7 +819,7 @@ Akses Dashboard Lengkap: https://iseeyou-intelligence.vercel.app/spreadsheet`;
                         <div className="flex items-center gap-2 flex-wrap">
                           <span className="text-xs font-bold text-foreground">{c.name}</span>
                           <span className="text-[9px] uppercase px-1.5 py-0.2 rounded bg-surface-secondary text-foreground-secondary font-bold border border-border">
-                            Selesai Rapat 6 Okt
+                            {k === "cycle-8" ? "Rapat 13 Okt (Aktif)" : "Selesai Rapat 6 Okt"}
                           </span>
                         </div>
                         <p className="text-[11px] text-foreground-secondary">{c.periodLabel}</p>

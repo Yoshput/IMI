@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import * as XLSX from "xlsx";
+import fs from "fs";
+import path from "path";
 import {
   CustomerAftersalesRecord,
   FollowUpStatus,
@@ -10,6 +12,70 @@ export const revalidate = 0;
 
 const AFTERSALES_SHEET_URL =
   "https://docs.google.com/spreadsheets/d/10lKjuzUvWhnUKbKNEo4opo4MiQoesZKW4NhY9sQ4T8w/export?format=xlsx";
+
+const OVERRIDES_FILE = path.join(process.cwd(), "data", "aftersales-overrides.json");
+const TMP_OVERRIDES_FILE = path.join("/tmp", "aftersales-overrides.json");
+
+interface CustomerOverride {
+  status?: FollowUpStatus;
+  notes?: string;
+  logs?: any[];
+  updatedAt?: string;
+}
+
+let memoryOverrides: Record<string, CustomerOverride> = {};
+
+function loadAftersalesOverrides(): Record<string, CustomerOverride> {
+  try {
+    if (fs.existsSync(OVERRIDES_FILE)) {
+      const raw = fs.readFileSync(OVERRIDES_FILE, "utf-8");
+      return JSON.parse(raw);
+    }
+    if (fs.existsSync(TMP_OVERRIDES_FILE)) {
+      const raw = fs.readFileSync(TMP_OVERRIDES_FILE, "utf-8");
+      return JSON.parse(raw);
+    }
+  } catch (err) {
+    console.warn("Could not read aftersales-overrides.json:", err);
+  }
+  return memoryOverrides;
+}
+
+function saveAftersalesOverrides(data: Record<string, CustomerOverride>): boolean {
+  memoryOverrides = data;
+  let saved = false;
+  try {
+    const dir = path.dirname(OVERRIDES_FILE);
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(OVERRIDES_FILE, JSON.stringify(data, null, 2), "utf-8");
+    saved = true;
+  } catch (e) {
+    try {
+      fs.writeFileSync(TMP_OVERRIDES_FILE, JSON.stringify(data, null, 2), "utf-8");
+      saved = true;
+    } catch (e2) {
+      console.warn("Could not persist aftersales overrides to disk or /tmp:", e2);
+    }
+  }
+  return saved;
+}
+
+function getWibDate(offsetDays = 0): string {
+  const d = new Date();
+  if (offsetDays !== 0) {
+    d.setDate(d.getDate() + offsetDays);
+  }
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "Asia/Jakarta",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(d);
+  const y = parts.find((p) => p.type === "year")?.value || "2026";
+  const m = parts.find((p) => p.type === "month")?.value || "10";
+  const day = parts.find((p) => p.type === "day")?.value || "12";
+  return `${y}-${m}-${day}`;
+}
 
 let cachedData: {
   customers: CustomerAftersalesRecord[];
@@ -164,8 +230,24 @@ function downloadBuffer(url: string): Promise<Buffer> {
 }
 
 async function fetchGoogleSheetsAftersales() {
-  const buffer = await downloadBuffer(AFTERSALES_SHEET_URL);
-  const workbook = XLSX.read(buffer, { type: "buffer" });
+  let buffer: Buffer | null = null;
+  try {
+    buffer = await downloadBuffer(AFTERSALES_SHEET_URL);
+  } catch (netErr) {
+    console.warn("Failed to download live aftersales spreadsheet, checking local backup:", netErr);
+  }
+
+  let workbook: XLSX.WorkBook;
+  if (buffer) {
+    workbook = XLSX.read(buffer, { type: "buffer" });
+  } else {
+    const backupPath = path.join(process.cwd(), "google_sheets_aftersales.xlsx");
+    if (fs.existsSync(backupPath)) {
+      workbook = XLSX.readFile(backupPath);
+    } else {
+      throw new Error("Unable to download aftersales spreadsheet and no local backup file found");
+    }
+  }
 
   // 1. Parse REKAP DATA (Feedback & Complaints)
   const rekapSheet = workbook.Sheets["REKAP DATA"];
@@ -358,6 +440,19 @@ async function fetchGoogleSheetsAftersales() {
     });
   });
 
+  // Apply persistent status and note overrides from disk/memory
+  const overrides = loadAftersalesOverrides();
+  parsedList.forEach((c) => {
+    const ov = overrides[c.id];
+    if (ov) {
+      if (ov.status) c.status = ov.status;
+      if (ov.notes !== undefined) c.notes = ov.notes;
+      if (ov.logs && ov.logs.length > 0) {
+        c.logs = [...ov.logs, ...c.logs];
+      }
+    }
+  });
+
   return {
     customers: parsedList,
     topFrames,
@@ -440,22 +535,25 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    // Preset Date Filtering
-    // Reference date: 2026-09-29
+    // Preset Date Filtering based on current WIB date
     if (preset && preset !== "all") {
+      const todayStr = getWibDate(0);
       if (preset === "today") {
-        filtered = filtered.filter((c) => c.timestampDate === "2026-09-29");
+        filtered = filtered.filter((c) => c.timestampDate === todayStr);
       } else if (preset === "7days") {
+        const start7 = getWibDate(-6);
         filtered = filtered.filter(
-          (c) => c.timestampDate >= "2026-09-22" && c.timestampDate <= "2026-09-29"
+          (c) => c.timestampDate >= start7 && c.timestampDate <= todayStr
         );
       } else if (preset === "30days") {
+        const start30 = getWibDate(-29);
         filtered = filtered.filter(
-          (c) => c.timestampDate >= "2026-08-31" && c.timestampDate <= "2026-09-29"
+          (c) => c.timestampDate >= start30 && c.timestampDate <= todayStr
         );
       } else if (preset === "this_month") {
+        const startMonth = todayStr.slice(0, 7) + "-01";
         filtered = filtered.filter(
-          (c) => c.timestampDate >= "2026-09-01" && c.timestampDate <= "2026-09-30"
+          (c) => c.timestampDate >= startMonth && c.timestampDate <= todayStr
         );
       }
     } else if (startDate || endDate) {
@@ -547,7 +645,38 @@ export async function PATCH(req: NextRequest) {
 
     cachedData.customers[idx] = updated;
 
-    return NextResponse.json({ success: true, data: updated });
+    // Persist overrides permanently
+    const currentOverrides = loadAftersalesOverrides();
+    const existingOvLogs = currentOverrides[id]?.logs || [];
+    const newLogs = newLog
+      ? [
+          {
+            id: `log-${Date.now()}`,
+            date: getWibDate(0),
+            type: newLog.type || "whatsapp_message",
+            actor: newLog.actor || "CS Aftersales",
+            note: newLog.note || "Update status",
+          },
+          ...existingOvLogs,
+        ]
+      : existingOvLogs;
+
+    currentOverrides[id] = {
+      status: status || existing.status,
+      notes: notes !== undefined ? notes : existing.notes,
+      logs: newLogs,
+      updatedAt: new Date().toISOString(),
+    };
+    const persisted = saveAftersalesOverrides(currentOverrides);
+
+    return NextResponse.json({
+      success: true,
+      data: updated,
+      persisted,
+      message: persisted
+        ? "Data status aftersales berhasil disimpan permanen"
+        : "Data status aftersales disimpan di memori runtime",
+    });
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }

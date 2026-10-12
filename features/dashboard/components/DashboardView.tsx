@@ -35,9 +35,12 @@ export const DashboardView: React.FC = () => {
         onEmptyAction={() => (window.location.href = "/analytics")}
       >
         <PerformanceHeader
-          periodLabel="Week 40 · 29 September – 5 Oktober 2026 (Periode Evaluasi Rapat Selasa 6 Okt)"
+          periodLabel="Siklus 8 · 6–12 Oktober 2026 (Rapat Evaluasi Selasa, 13 Oktober 2026)"
           publishTargetAchieved={true}
-          totalPostsPublished={36}
+          totalPostsPublished={18}
+          wowGrowthText="Target Kuota 128.6% Terpenuhi (18/14 Konten)"
+          provenanceDate="12 Oktober 2026"
+          provenanceLabel="Data sinkronisasi Google Sheets 5 Cabang terverifikasi per 12 Oktober 2026"
         />
 
         {/* Real-time Google Sheets PIC Submission Alert Banner */}

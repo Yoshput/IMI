@@ -3,15 +3,21 @@ import { ProvenanceBadge } from "@/components/shared/ProvenanceBadge";
 import { Calendar, CheckCircle2, TrendingUp } from "lucide-react";
 
 interface PerformanceHeaderProps {
-  periodLabel: string;
-  publishTargetAchieved: boolean;
-  totalPostsPublished: number;
+  periodLabel?: string;
+  publishTargetAchieved?: boolean;
+  totalPostsPublished?: number;
+  wowGrowthText?: string;
+  provenanceDate?: string;
+  provenanceLabel?: string;
 }
 
 export const PerformanceHeader: React.FC<PerformanceHeaderProps> = ({
-  periodLabel,
-  publishTargetAchieved,
-  totalPostsPublished,
+  periodLabel = "Siklus 8 · 6–12 Oktober 2026 · Rapat 13 Oktober",
+  publishTargetAchieved = true,
+  totalPostsPublished = 18,
+  wowGrowthText = "Target Kuota 128.6% (18/14 Konten)",
+  provenanceDate = "12 Oktober 2026",
+  provenanceLabel = "Data sinkronisasi Google Sheets 5 Cabang terverifikasi per 12 Oktober 2026",
 }) => {
   return (
     <div className="border-b border-border pb-6 mb-8">
@@ -40,14 +46,16 @@ export const PerformanceHeader: React.FC<PerformanceHeaderProps> = ({
             <CheckCircle2 className="w-3.5 h-3.5 text-brand" />
             <span>Target Output: {totalPostsPublished}/14 Post Terpenuhi</span>
           </div>
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-control bg-status-successBg text-status-success text-xs font-semibold">
-            <TrendingUp className="w-3.5 h-3.5" />
-            <span>Tayangan Reels +90.3% WoW</span>
-          </div>
+          {wowGrowthText && (
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-control bg-status-successBg text-status-success text-xs font-semibold">
+              <TrendingUp className="w-3.5 h-3.5" />
+              <span>{wowGrowthText}</span>
+            </div>
+          )}
           <ProvenanceBadge
             source="sheets_sync"
-            date="5 Oktober 2026"
-            sourceLabel="Data sinkronisasi Google Sheets 5 Cabang terverifikasi per 5 Oktober 2026"
+            date={provenanceDate}
+            sourceLabel={provenanceLabel}
             isDemo={false}
           />
         </div>

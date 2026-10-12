@@ -63,6 +63,33 @@ export const AftersalesView: React.FC = () => {
   const [endDate, setEndDate] = useState("");
   const [sortOrder, setSortOrder] = useState<SortOrder>("newest");
 
+  // Dynamic labels for date presets based on Asia/Jakarta WIB
+  const todayLabel = React.useMemo(() => {
+    try {
+      const now = new Date();
+      return now.toLocaleDateString("id-ID", {
+        timeZone: "Asia/Jakarta",
+        day: "numeric",
+        month: "short",
+      });
+    } catch {
+      return "12 Okt";
+    }
+  }, []);
+
+  const monthLabel = React.useMemo(() => {
+    try {
+      const now = new Date();
+      return now.toLocaleDateString("id-ID", {
+        timeZone: "Asia/Jakarta",
+        month: "long",
+        year: "numeric",
+      });
+    } catch {
+      return "Oktober 2026";
+    }
+  }, []);
+
   // Selection modal
   const [selectedCustomer, setSelectedCustomer] = useState<CustomerAftersalesRecord | null>(null);
   const [showAddModal, setShowAddModal] = useState(false);
@@ -576,7 +603,7 @@ export const AftersalesView: React.FC = () => {
                     : "text-foreground-secondary hover:text-foreground"
                 }`}
               >
-                Hari Ini (29 Sep)
+                Hari Ini ({todayLabel})
               </button>
 
               <button
@@ -609,7 +636,7 @@ export const AftersalesView: React.FC = () => {
                     : "text-foreground-secondary hover:text-foreground"
                 }`}
               >
-                Bulan Ini (September 2026)
+                Bulan Ini ({monthLabel})
               </button>
             </div>
           </div>

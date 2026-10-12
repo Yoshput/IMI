@@ -27,23 +27,10 @@ export async function OPTIONS() {
   });
 }
 
-// GET: returns aggregated statistics for Antrian Cek Mata & Web Photobooth
+// GET: returns aggregated statistics for Antrian Cek Mata & Web Photobooth (Read-Only)
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const period = (searchParams.get("period") || "weekly") as "weekly" | "monthly";
-  const action = searchParams.get("action");
-
-  // Live simulation trigger for testing real-time increment in UI
-  if (action === "ping" || action === "simulate") {
-    const branch = searchParams.get("branch") || "pwt";
-    recordAntrianClick({
-      branch,
-      sourceUrl: "https://optikiseeyou.com/booking-antrian?action=live_test",
-      device: "mobile",
-      referrer: "https://optikiseeyou.com",
-      type: "antrian_booking",
-    });
-  }
 
   const stats = getAntrianStats();
   const photobooth = getPhotoboothStats();

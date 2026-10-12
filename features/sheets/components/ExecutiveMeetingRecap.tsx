@@ -75,11 +75,24 @@ export const ExecutiveMeetingRecap: React.FC<ExecutiveMeetingRecapProps> = ({
 
   const periods = executiveRecap.periods || {
     currentMeeting: {
+      periodKey: "2026-10-06_to_2026-10-12",
+      startDate: "2026-10-06",
+      endDate: "2026-10-12",
+      meetingDateTitle: "Selasa, 13 Oktober 2026 (Periode 6–12 Okt)",
+      meetingStatus: "Evaluasi Rapat Terkini (13 Okt 2026)",
+      totalReelsUploaded: 18,
+      totalStoriesRecorded: 92,
+      totalDmInquiries: 27,
+      topViralReels: [],
+      frequentStoryInquiries: [],
+      obstacleLogs: [],
+    },
+    lastTuesday: {
       periodKey: "2026-09-29_to_2026-10-05",
       startDate: "2026-09-29",
       endDate: "2026-10-05",
       meetingDateTitle: "Selasa, 6 Oktober 2026 (Periode 29 Sep – 5 Okt)",
-      meetingStatus: "Evaluasi Rapat Terkini (6 Okt 2026)",
+      meetingStatus: "Evaluasi Rapat Minggu Lalu (6 Okt 2026)",
       totalReelsUploaded: 38,
       totalStoriesRecorded: 7,
       totalDmInquiries: 31,
@@ -87,28 +100,15 @@ export const ExecutiveMeetingRecap: React.FC<ExecutiveMeetingRecapProps> = ({
       frequentStoryInquiries: [],
       obstacleLogs: [],
     },
-    lastTuesday: {
+    nextTuesday: {
       periodKey: "2026-09-22_to_2026-09-28",
       startDate: "2026-09-22",
       endDate: "2026-09-28",
       meetingDateTitle: "Selasa, 29 September 2026 (Periode 22–28 Sep)",
-      meetingStatus: "Evaluasi Rapat Minggu Lalu (29 Sep 2026)",
+      meetingStatus: "Evaluasi Historis (29 Sep 2026)",
       totalReelsUploaded: 36,
       totalStoriesRecorded: 7,
       totalDmInquiries: 27,
-      topViralReels: [],
-      frequentStoryInquiries: [],
-      obstacleLogs: [],
-    },
-    nextTuesday: {
-      periodKey: "2026-09-15_to_2026-09-21",
-      startDate: "2026-09-15",
-      endDate: "2026-09-21",
-      meetingDateTitle: "Selasa, 22 September 2026 (Periode 15–21 Sep)",
-      meetingStatus: "Evaluasi Historis (22 Sep 2026)",
-      totalReelsUploaded: 28,
-      totalStoriesRecorded: 6,
-      totalDmInquiries: 22,
       topViralReels: [],
       frequentStoryInquiries: [],
       obstacleLogs: [],
@@ -121,18 +121,18 @@ export const ExecutiveMeetingRecap: React.FC<ExecutiveMeetingRecapProps> = ({
   const periodOptions = [
     {
       key: "currentMeeting",
-      label: "Rapat Terkini (6 Okt 2026)",
-      dateRange: "29 Sep – 5 Okt 2026",
+      label: "Siklus 8 (Rapat 13 Okt 2026)",
+      dateRange: "6–12 Okt 2026",
     },
     {
       key: "lastTuesday",
-      label: "Rapat Minggu Lalu (29 Sep 2026)",
-      dateRange: "22–28 Sep 2026",
+      label: "Siklus 7 (Rapat 6 Okt 2026)",
+      dateRange: "29 Sep – 5 Okt 2026",
     },
     {
       key: "nextTuesday",
-      label: "Rapat Historis (22 Sep 2026)",
-      dateRange: "15–21 Sep 2026",
+      label: "Siklus 6 (Rapat 29 Sep 2026)",
+      dateRange: "22–28 Sep 2026",
     },
   ];
 
@@ -233,9 +233,9 @@ Link Akses Web: https://imi-puce.vercel.app/spreadsheet`;
                 : "bg-surface border border-border text-foreground-secondary hover:text-foreground"
             }`}
           >
-            <span>Rapat Besok (29 Sep – 5 Okt 2026)</span>
+            <span>Siklus 8 (6–12 Okt 2026)</span>
             <span className="ml-1.5 text-[9px] uppercase px-1.5 py-0.2 rounded bg-emerald-600 text-white font-bold">
-              Aktual 6 Okt (Rapat Besok)
+              Rapat 13 Okt (Aktual)
             </span>
           </button>
 
@@ -247,9 +247,9 @@ Link Akses Web: https://imi-puce.vercel.app/spreadsheet`;
                 : "bg-surface border border-border text-foreground-secondary hover:text-foreground"
             }`}
           >
-            <span>Rapat 29 Sep (22–28 Sep 2026)</span>
+            <span>Siklus 7 (29 Sep – 5 Okt 2026)</span>
             <span className="ml-1.5 text-[9px] uppercase px-1.5 py-0.2 rounded bg-brand-light text-brand">
-              Minggu Lalu
+              Rapat 6 Okt
             </span>
           </button>
 
@@ -261,9 +261,9 @@ Link Akses Web: https://imi-puce.vercel.app/spreadsheet`;
                 : "bg-surface border border-border text-foreground-secondary hover:text-foreground"
             }`}
           >
-            <span>Rapat 22 Sep (15–21 Sep 2026)</span>
+            <span>Siklus 6 (22–28 Sep 2026)</span>
             <span className="ml-1.5 text-[9px] uppercase px-1.5 py-0.2 rounded bg-surface-secondary text-foreground-muted border border-border">
-              Historis
+              Rapat 29 Sep
             </span>
           </button>
         </div>

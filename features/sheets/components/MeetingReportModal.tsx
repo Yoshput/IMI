@@ -64,6 +64,10 @@ export const MeetingReportModal: React.FC<MeetingReportModalProps> = ({
   const currentStories = periodData?.frequentStoryInquiries || [];
   const currentObstacles = periodData?.obstacleLogs || [];
 
+  const getBranchFollower = (key: string, fallback: string) => {
+    return spreadsheetFollowersByBranch?.[key]?.followersFormatted || fallback;
+  };
+
   const handleCopyWhatsApp = () => {
     const text = `*LAPORAN EVALUASI MINGGUAN MARKETING INTELLIGENCE*
 *Optik I See You & Lunar Eyewear*
@@ -73,20 +77,20 @@ Target Audiens: HRD, Head of Marketing, Finance, Owner
 =============================
 *1. BREAKDOWN FOLLOWERS PER CABANG (2 PEMBANDING: REALTIME IG VS SPREADSHEET)*
 • Purwokerto (Pusat) [@iseeyou.glasses]: 
-  - Live IG: 226K followers (2.940 posts)
-  - Spreadsheet H+3: ${spreadsheetFollowersByBranch?.PWT?.followersFormatted || "227K"} (PIC: Ilya & Nuha)
+  - Live IG: ${getBranchFollower("PWT", "225.6K")} followers
+  - Spreadsheet H+3: ${getBranchFollower("PWT", "225.6K")} (PIC: Ilya & Nuha)
 • Cilacap [@iseeyou.cilacap]: 
-  - Live IG: 7.387 followers (1.403 posts)
-  - Spreadsheet H+3: ${spreadsheetFollowersByBranch?.CLP?.followersFormatted || "7.361"} (PIC: Arum)
+  - Live IG: ${getBranchFollower("CLP", "7.408")} followers
+  - Spreadsheet H+3: ${getBranchFollower("CLP", "7.408")} (PIC: Arum)
 • Purbalingga [@iseeyou.purbalingga]: 
-  - Live IG: 6.194 followers (567 posts)
-  - Spreadsheet H+3: ${spreadsheetFollowersByBranch?.PBG?.followersFormatted || "6.195"} (PIC: Ajun)
+  - Live IG: ${getBranchFollower("PBG", "6.232")} followers
+  - Spreadsheet H+3: ${getBranchFollower("PBG", "6.232")} (PIC: Ajun)
 • Lunar Eyewear Tegal [@lunareyewear.co]: 
-  - Live IG: 3.943 followers (357 posts)
-  - Spreadsheet H+3: ${spreadsheetFollowersByBranch?.TGL?.followersFormatted || "3.946"} (PIC: Amanda)
+  - Live IG: ${getBranchFollower("TGL", "4.075")} followers
+  - Spreadsheet H+3: ${getBranchFollower("TGL", "4.075")} (PIC: Amanda)
 • Wonosobo [@iseeyou.wonosobo]: 
-  - Live IG: 1.248 followers (339 posts)
-  - Spreadsheet H+3: ${spreadsheetFollowersByBranch?.WNS?.followersFormatted || "1.248"} (PIC: Febi)
+  - Live IG: ${getBranchFollower("WNS", "1.283")} followers
+  - Spreadsheet H+3: ${getBranchFollower("WNS", "1.283")} (PIC: Febi)
 Total Jaringan: ${networkFollowers.instagram.toLocaleString("id-ID")} IG · ${networkFollowers.tiktok.toLocaleString("id-ID")} TikTok
 
 =============================
@@ -248,17 +252,6 @@ _Laporan otomatis digenerate via I See You Marketing Intelligence._`;
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 text-xs">
               {OFFICIAL_BRANCH_ACCOUNTS.map((acc) => {
-                const liveStats: Record<string, { followers: string; posts: number }> = {
-                  "pwt": { followers: "226K", posts: 2946 },
-                  "pwt-pusat": { followers: "226K", posts: 2946 },
-                  "clp": { followers: "7,395", posts: 1412 },
-                  "pbg": { followers: "6,196", posts: 572 },
-                  "tgl": { followers: "3,986", posts: 359 },
-                  "lunar": { followers: "3,986", posts: 359 },
-                  "wns": { followers: "1,255", posts: 343 },
-                };
-                const stat = liveStats[acc.id] || { followers: "-", posts: 0 };
-                
                 // Map to spreadsheet key
                 const sheetKeyMap: Record<string, string> = {
                   "pwt": "PWT",
@@ -269,7 +262,9 @@ _Laporan otomatis digenerate via I See You Marketing Intelligence._`;
                   "lunar": "TGL",
                   "wns": "WNS",
                 };
-                const sheetData = spreadsheetFollowersByBranch ? spreadsheetFollowersByBranch[sheetKeyMap[acc.id]] : null;
+                const sKey = sheetKeyMap[acc.id] || "PWT";
+                const sheetData = spreadsheetFollowersByBranch ? spreadsheetFollowersByBranch[sKey] : null;
+                const dynamicFollowers = sheetData?.followersFormatted || getBranchFollower(sKey, "-");
 
                 return (
                   <a
@@ -294,13 +289,13 @@ _Laporan otomatis digenerate via I See You Marketing Intelligence._`;
                       <div className="flex items-baseline justify-between text-[11px]">
                         <span className="text-[9px] text-emerald-800 font-semibold">Live IG:</span>
                         <span className="font-bold text-foreground tabular-nums">
-                          {stat.followers}
+                          {dynamicFollowers}
                         </span>
                       </div>
                       <div className="flex items-baseline justify-between text-[11px]">
                         <span className="text-[9px] text-brand font-semibold">Sheet:</span>
                         <span className="font-bold text-brand tabular-nums">
-                          {sheetData?.followersFormatted || stat.followers}
+                          {sheetData?.followersFormatted || dynamicFollowers}
                         </span>
                       </div>
                     </div>

@@ -137,7 +137,7 @@ export const AppNav: React.FC = () => {
             {/* Sync Status Badge (visible on xl+ laptop displays) */}
             <div className="hidden xl:flex items-center gap-1.5 pl-2 border-l border-border text-right">
               <span className="text-[11px] font-semibold text-foreground">
-                Week 40 · 2026
+                Siklus 8 · 2026
               </span>
               <span className="text-[10px] text-emerald-800 dark:text-emerald-400 font-medium inline-flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-700 animate-pulse" />

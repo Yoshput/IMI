@@ -1,6 +1,7 @@
 import { ContentItem } from "@/types";
 import defaultData from "./real-sheets-data.json";
 import liveCache from "./instagram-live-cache.json";
+import { ACTIVE_MEETING_CYCLE } from "./cadence-config";
 
 export function extractShortcode(input?: string | null): string | null {
   if (!input) return null;
@@ -88,15 +89,12 @@ export function getRealContentItems(
     if (!dateStr) return false;
     if (period === "weekly") {
       return (
-        (dateStr >= "2026-09-20" && dateStr <= "2026-10-31") ||
-        dateStr.startsWith("2026-10")
+        dateStr >= ACTIVE_MEETING_CYCLE.startDate &&
+        dateStr <= ACTIVE_MEETING_CYCLE.endDate
       );
     }
     return (
-      dateStr >= "2026-08-01" ||
-      dateStr.startsWith("2026-08") ||
-      dateStr.startsWith("2026-09") ||
-      dateStr.startsWith("2026-10")
+      dateStr >= "2026-09-01" && dateStr <= "2026-10-31"
     );
   };
 
@@ -251,6 +249,7 @@ export function getRealContentItems(
   ];
 
   latestOctoberPosts.forEach((post) => {
+    if (!isEligibleDate(post.publishDate)) return;
     seenCodes.add(post.code);
     items.push({
       id: `carousel-${post.code}`,

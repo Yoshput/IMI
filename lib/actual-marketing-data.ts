@@ -3,127 +3,126 @@ import realSheetsData from "@/lib/real-sheets-data.json";
 
 /**
  * ACTUAL MARKETING INTELLIGENCE DATA
- * Cutoff: 5 Oktober 2026 (Rapat Direksi / Marketing Mingguan)
- * Periode Evaluasi Terkini: Week 40 (29 September – 5 Oktober 2026)
- * Komparasi: Week 39 (22–28 September 2026)
+ * Cutoff: 12 Oktober 2026 (Rapat Evaluasi Mingguan Selasa, 13 Oktober 2026)
+ * Periode Evaluasi Terkini: Siklus 8 (6–12 Oktober 2026)
+ * Komparasi: Siklus 7 (29 September – 5 Oktober 2026)
  * Sumber Data: Google Sheets Rekap 5 Cabang (PWT, PBG, CLP, WNS, TGL),
- *              Instagram Live Synchronization, & TikTok Tracker.
+ *              Instagram Live Tracker, & TikTok Tracker.
  * 
  * ATURAN INTEGRITAS: TIDAK ADA DATA MOCK / SEED / FIKTIF.
  */
 
-// 1. HEADLINE METRICS (Disinkronkan dengan Google Sheets, Instagram Live, & Web Traffic)
+// 1. HEADLINE METRICS (Disinkronkan dengan Google Sheets Rekap Siklus 8)
 export const ACTUAL_HEADLINE_METRICS: MetricRecord[] = [
   {
     id: "m-followers",
     key: "followers",
     label: "Total Followers Jaringan (5 Cabang)",
-    value: 244921,
+    value: 244587,
     unit: "akun IG",
     previousValue: 244830,
-    deltaPercent: 0.1,
-    date: "2026-10-06",
-    source: "instagram_insights",
-    sourceLabel: "Live Meta Instagram Tracker 5 Cabang (Realtime 6 Okt 2026)",
+    deltaPercent: -0.1,
+    date: "2026-10-12",
+    source: "sheets_sync",
+    sourceLabel: "Rekap Harian Google Sheets 5 Cabang (Cutoff 12 Okt 2026)",
     isDemo: false,
-    notes: "Instagram Live: PWT 226.000, CLP 7.414, PBG 6.211, TGL 4.034, WNS 1.262 (+91.535 TikTok Jaringan = Total 336.456 audiens)",
+    notes: "Instagram: PWT 225.589, CLP 7.408, PBG 6.232, TGL 4.075, WNS 1.283 (+91.460 TikTok Jaringan = Total 336.047 audiens gabungan)",
   },
   {
     id: "m-reach",
     key: "weekly_reach",
-    label: "Tayangan Reels Terverifikasi (Week 40)",
-    value: 248500,
-    unit: "tayangan",
-    previousValue: 231866,
-    deltaPercent: 7.2,
-    date: "2026-10-06",
+    label: "Produksi Reels Terverifikasi (Siklus 8)",
+    value: 18,
+    unit: "video reels",
+    previousValue: 38,
+    deltaPercent: -52.6,
+    date: "2026-10-12",
     source: "sheets_sync",
-    sourceLabel: "Google Sheets Rekap 5 Cabang Evaluasi H+3 (Periode 29 Sep - 5 Okt 2026)",
+    sourceLabel: "Google Sheets Rekap 5 Cabang (Periode 6–12 Okt 2026)",
     isDemo: false,
-    notes: "Dipimpin Reels PWT 'Ga takut di sakitin lagi?' (25.861 views), Reels TGL 'pov: baru beli kacamata' (2.820 views), dan Carousel Batik Day Sale",
+    notes: "18 video reels aktif (PBG 5, TGL 5, WNS 5, PWT 3, CLP 0 tertunda). Target kuota 14 video/minggu tercapai 128.6%.",
   },
   {
-    id: "m-web-traffic",
-    key: "web_traffic",
-    label: "Sesi Kunjungan Web & Portal (optikiseeyou.com)",
-    value: 3420,
-    unit: "sesi / minggu",
-    previousValue: 2980,
-    deltaPercent: 14.8,
-    date: "2026-10-06",
-    source: "google_search_console",
-    sourceLabel: "Lalu Lintas Web optikiseeyou.com & Tracking O2O QR Store (6 Okt 2026)",
+    id: "m-story-production",
+    key: "story_production",
+    label: "Produksi Story PWT (Nuha)",
+    value: 92,
+    unit: "story IG",
+    previousValue: 102,
+    deltaPercent: -9.8,
+    date: "2026-10-12",
+    source: "sheets_sync",
+    sourceLabel: "Google Sheets Rekap Story PWT (Periode 6–12 Okt 2026)",
     isDemo: false,
-    notes: "Trafik gabungan Google Search Console organik (38.5%), Instagram bio/stories (34.2%), QR Code meja kasir toko (14.4%), TikTok (8.4%), dan WhatsApp (4.5%).",
+    notes: "92 story terunggah dalam 6 hari kerja (15.3 story/hari). Nuha mencatat kendala ide/referensi & viewers turun.",
   },
   {
     id: "m-engagement",
     key: "engagement",
-    label: "Total Interaksi Konten (Likes + DMs)",
-    value: 7140,
-    unit: "interaksi",
-    previousValue: 6723,
-    deltaPercent: 6.2,
-    date: "2026-10-06",
+    label: "Pesan DM Konsultasi Masuk",
+    value: 27,
+    unit: "pesan DM",
+    previousValue: 31,
+    deltaPercent: -12.9,
+    date: "2026-10-12",
     source: "sheets_sync",
-    sourceLabel: "Google Sheets Rekap Reels & Story PWT (Periode 29 Sep - 5 Okt 2026)",
+    sourceLabel: "Rekap DM Masuk Story PWT (Periode 6–12 Okt 2026)",
     isDemo: false,
-    notes: "7.109 likes terverifikasi H+3 spreadsheet + 31 pesan DM konsultasi periksa mata & booking via portal",
+    notes: "27 DM masuk via Story PWT konsultasi frame, periksa mata & booking jadwal",
   },
   {
     id: "m-save-rate",
     key: "save_rate",
-    label: "Produksi Konten Reels & Carousel (Week 40)",
-    value: 38,
-    unit: "konten",
-    previousValue: 36,
-    deltaPercent: 5.5,
-    date: "2026-10-06",
+    label: "Pencapaian Target Output Kuota",
+    value: 128.6,
+    unit: "% dari target",
+    previousValue: 271,
+    deltaPercent: -52.6,
+    date: "2026-10-12",
     source: "sheets_sync",
-    sourceLabel: "Rekap Harian Google Sheets 5 Cabang (Periode 29 Sep - 5 Okt 2026)",
+    sourceLabel: "Rekap Harian Google Sheets 5 Cabang (Periode 6–12 Okt 2026)",
     isDemo: false,
-    notes: "Target kuota 14 konten/minggu tercapai 271% (PWT 19, PBG 6, TGL 6, WNS 6, CLP 1). Kepatuhan input aktif di awal Oktober.",
+    notes: "Target kuota 14 video/minggu terpenuhi dengan 18 video aktif (surplus +4 video di atas kuota minimal)",
   },
 ];
 
-// 2. STRATEGIC OPPORTUNITIES & ATTENTION ISSUES (Dari Catatan Riil Spreadsheet)
+// 2. STRATEGIC OPPORTUNITIES & ATTENTION ISSUES (Dari Catatan Riil Spreadsheet Siklus 8)
 export const ACTUAL_PRIORITY_ISSUES: PriorityIssue[] = [
   {
     id: "p-1",
-    type: "opportunity",
-    title: "Format Relatable & Promo Hari Batik ('Ga takut di sakitin' 25.8k & Batik Sale) Menarik Audiens Baru",
+    type: "concern",
+    title: "Ajun (PBG) Mengalami Kendala Tripod Rusak Selama Siklus 8 (4 Kali Dicatat)",
     description:
-      "Konten bertema relasional di Purwokerto (25.861 viewers, 807 likes) dan carousel edukasi anatomi kacamata miring menghasilkan interaksi organik tinggi di kalangan mahasiswa dan pekerja muda.",
-    impactMetric: "25.861 Viewers PWT",
-    suggestedAction: "Lanjutkan kampanye edukasi visual dan perbanyak carousel carousel perbandingan frame di semua cabang.",
+      "PIC Purbalingga (Ajun/Juna) mencatat kendala 'Tripod rusak' sebanyak 4 kali pada laporan 6, 7, 10, dan 11 Oktober 2026. Meskipun tetap berhasil menerbitkan 5 Reels, stabilitas video pengambilan angle produk terhambat.",
+    impactMetric: "4 Catatan Kendala PBG",
+    suggestedAction: "Segera lakukan pengadaan tripod baru atau reimbursement peralatan operasional untuk store Purbalingga.",
   },
   {
     id: "p-2",
     type: "concern",
-    title: "Pengisian Rekap CLP (Arum) Tertunda Sejak 22 September 2026",
+    title: "Pengisian Rekap CLP (Arum) Tertunda Sejak 22 September 2026 (Tertunda 20 Hari)",
     description:
-      "PIC Cilacap tertunda pengisian spreadsheet sejak 22 September 2026, sementara 4 cabang lainnya (Purwokerto, Purbalingga, Tegal, Wonosobo) telah mencatat laporan harian lengkap hingga 4–5 Oktober 2026.",
-    impactMetric: "Tertunda 13 Hari",
-    suggestedAction: "Manajer Marketing / HRD segera menghubungi Arum via reminder WhatsApp untuk menginput data keterlambatan.",
+      "PIC Cilacap tertunda pengisian spreadsheet sejak 22 September 2026, sementara 5 PIC lainnya (Nuha, Ilya, Ajun, Amanda, Febi) mencatat laporan harian up-to-date per 11–12 Oktober 2026.",
+    impactMetric: "Tertunda 20 Hari",
+    suggestedAction: "Manajer Marketing / HRD segera menghubungi Arum via reminder WhatsApp untuk menginput data keterlambatan atau verifikasi kendala store.",
   },
   {
     id: "p-3",
-    type: "observation",
-    title: "Portal Pengajuan Sponsorship & Booking Home Service Resmi Beroperasi",
+    type: "opportunity",
+    title: "Nuha (Story PWT) Mencatat Tren Viewers Turun & Perlu Referensi Baru Edukasi Mata",
     description:
-      "Pengajuan sponsorship event dan reservasi Home Service kini dialihkan ke web resmi optikiseeyou.com tanpa Google Form, langsung tersambung via WhatsApp ke Staff Marketing (087778683766) dan CS 4 Cabang.",
-    impactMetric: "Direct WA Routing",
-    suggestedAction: "Pastikan Mas Yoshput (Marketing) dan CS tiap cabang memantau notifikasi pesan masuk secara real-time.",
+      "Pada laporan 10–12 Oktober, Nuha mengidentifikasi penurunan viewers Story dan membutuhkan referensi konten edukasi pemeriksaan mata. Format interaktif baru diperlukan untuk mengembalikan atensi audiens.",
+    impactMetric: "92 Story / 27 DM",
+    suggestedAction: "Sediakan playbook referensi visual dan konten Q&A interaktif (polling, cek minus kacamata) di Story Purwokerto.",
   },
 ];
 
 // 3. HISTORICAL WEEKLY TRENDS (Dihitung dari akumulasi riil spreadsheet)
 export const ACTUAL_HISTORICAL_TRENDS = [
-  { week: "W36 (8–14 Sep)", reach: 98400, interactions: 3620, viewers: 98400, totalPosts: 21 },
-  { week: "W37 (15–21 Sep)", reach: 142560, interactions: 4180, viewers: 142560, totalPosts: 24 },
-  { week: "W38 (15–21 Sep)", reach: 121840, interactions: 4793, viewers: 121840, totalPosts: 28 },
-  { week: "W39 (22–28 Sep)", reach: 231866, interactions: 6723, viewers: 231866, totalPosts: 36 },
-  { week: "W40 (29 Sep – 5 Okt · Aktual)", reach: 248500, interactions: 7140, viewers: 248500, totalPosts: 38 },
+  { week: "Siklus 5 (15–21 Sep)", reach: 142560, interactions: 4180, viewers: 142560, totalPosts: 24 },
+  { week: "Siklus 6 (22–28 Sep)", reach: 231866, interactions: 6723, viewers: 231866, totalPosts: 36 },
+  { week: "Siklus 7 (29 Sep – 5 Okt)", reach: 248500, interactions: 7140, viewers: 248500, totalPosts: 38 },
+  { week: "Siklus 8 (6–12 Okt · Aktual)", reach: 186400, interactions: 4920, viewers: 186400, totalPosts: 18 },
 ];
 
 // 4. FORMAT / PILLAR PERFORMANCE (Dihitung dari 600+ baris rekap Google Sheets)
@@ -135,63 +134,65 @@ export const ACTUAL_FORMAT_PERFORMANCE = [
   { format: "Testimoni / Review", avgReach: 1520, avgLikes: 28, totalPosts: 34, description: "Review pelanggan setelah periksa mata dan ganti lensa" },
 ];
 
-// 5. WEEKLY REPORT EDITORIAL DOCUMENT (Rapat 6 Oktober 2026)
+// 5. WEEKLY REPORT EDITORIAL DOCUMENT (Rapat 13 Oktober 2026)
 export const ACTUAL_WEEKLY_REPORT: WeeklyReport = {
-  id: "rep-w40-2026",
-  weekNumber: 40,
-  periodLabel: "Week 40 · 29 September – 5 Oktober 2026 (Rapat Evaluasi Selasa 6 Oktober 2026)",
-  startDate: "2026-09-29",
-  endDate: "2026-10-05",
+  id: "rep-siklus8-2026",
+  weekNumber: 8,
+  periodLabel: "Siklus 8 · 6–12 Oktober 2026 (Rapat Evaluasi Selasa, 13 Oktober 2026)",
+  startDate: "2026-10-06",
+  endDate: "2026-10-12",
   status: "final",
   executiveSummary:
-    "Evaluasi performa marketing mingguan 5 cabang Optik I See You (Purwokerto, Purbalingga, Cilacap, Wonosobo) dan Lunar Eyewear Tegal untuk Rapat Direksi Selasa 6 Oktober 2026. Total tayangan video Reels terverifikasi mencapai 248.500 tayangan dengan 38 konten diproduksi (271% dari target output 14 konten). Total basis audiens media sosial jaringan mencapai 244.830 followers Instagram dan 91.535 pengikut TikTok (total 336.365 audiens). Kepatuhan pelaporan 4 PIC terpantau aktif hingga 4–5 Oktober 2026, dengan catatan khusus cabang Cilacap masih tertunda pengisian sejak 22 Sep. Fitur portal web pengajuan sponsorship mandiri dan booking Home Service resmi aktif menggantikan Google Form.",
+    "Evaluasi performa marketing mingguan 5 cabang Optik I See You (Purwokerto, Purbalingga, Cilacap, Wonosobo) dan Lunar Eyewear Tegal untuk Rapat Evaluasi Selasa 13 Oktober 2026. Total produksi video Reels aktif mencapai 18 video (128.6% dari kuota target 14 video). Story Purwokerto mencapai 92 konten dalam 6 hari kerja dengan 27 pesan DM konsultasi masuk. Total audiens media sosial jaringan tercatat 244.587 pengikut Instagram dan 91.560 pengikut TikTok di 5 cabang. Kepatuhan pelaporan 5 PIC aktif dan up-to-date, dengan catatan khusus PIC Cilacap (Arum) masih tertunda sejak 22 September. Kendala teknis utama tercatat pada tripod rusak di store Purbalingga (Ajun).",
   headlineMetrics: {
     totalFollowers: ACTUAL_HEADLINE_METRICS[0],
     weeklyReach: ACTUAL_HEADLINE_METRICS[1],
-    totalEngagements: ACTUAL_HEADLINE_METRICS[2],
-    saveToReachRatio: ACTUAL_HEADLINE_METRICS[3],
+    totalEngagements: ACTUAL_HEADLINE_METRICS[3],
+    saveToReachRatio: ACTUAL_HEADLINE_METRICS[4],
   },
   pencapaian: [
-    "Total tayangan video Reels terverifikasi tembus 248.500 tayangan (+7.2% WoW dari minggu sebelumnya 231.866 tayangan).",
-    "Produksi konten mingguan melampaui kuota target: 38 konten Reels & Carousel terbit (Target: 14 konten, rasio pencapaian 271%).",
-    "Top content: Reels PWT 'Ga takut di sakitin lagi?' (25.861 viewers, 807 likes), Reels Amanda Tegal (2.820 viewers, 91 likes), dan Reels WNS Febi 'Problem pengguna kacamata' (1.528 viewers, 25 likes).",
-    "Total basis pengikut jaringan mencapai 336.365 akun (244.830 Instagram + 91.535 TikTok) di 5 cabang.",
-    "Peluncuran sistem web Pengajuan Sponsorship (direct WhatsApp ke Mas Yoshput 087778683766) dan Pengajuan Home Service ke 4 CS cabang.",
-    "Form proposal sponsorship kampus mencakup event FEB Unsoed, UMP, dan komunitas daerah dengan tautan proposal terintegrasi.",
+    "Produksi video Reels melampaui kuota target mingguan: 18 video Reels aktif terbit (Target: 14 konten, rasio pencapaian 128.6%).",
+    "Produksi Story Purwokerto (Nuha) konsisten dengan 92 story terunggah dalam 6 hari kerja (rata-rata 15.3 story/hari) menghasilkan 27 DM konsultasi masuk.",
+    "PIC Amanda (Lunar Eyewear Tegal) menghasilkan 5 Reels aktif (yang gw lakuin, ga takut diomongin siapapun, open booth, kegiatan nyusahin diri sendiri, pov nemu kacamata 100rban) dengan kepatuhan pelaporan sempurna.",
+    "PIC Febi (Wonosobo) produktif menerbitkan 5 konten edukasi & tren (Kacamata + Kelas, Faktor mata minus, Octular parasitosis, prank, Coba Kacamata).",
+    "PIC Ajun (Purbalingga) tetap konsisten menerbitkan 5 video Reels (In this economy, HADUH GIMANA YA, Cetas, Face id, KRING) kendati mengalami kerusakan tripod.",
+    "Total basis pengikut jaringan mencapai 336.147 akun (244.587 Instagram + 91.560 TikTok) di 5 cabang.",
   ],
   kendala: [
-    "Pengisian spreadsheet harian Rekap CLP (Arum) mengalami keterlambatan sejak 22 September 2026.",
-    "Keterbatasan tracking sensor scanner di toko fisik sehingga data kehadiran offline belum tercatat otomatis (masih tercatat via booking WA CS).",
-    "Perlu percepatan follow-up proposal sponsorship masuk melalui format chat WhatsApp yang telah disiapkan.",
+    "Kerusakan alat penunjang: Ajun (PBG) mencatat 'Tripod rusak' sebanyak 4 kali pada laporan harian 6–11 Oktober.",
+    "Keterlambatan input: Rekap CLP (Arum) belum diisi sejak 22 September 2026 (tertunda 20 hari).",
+    "Fluktuasi engagement: Nuha (Story PWT) mencatat penurunan viewers pada story dan membutuhkan referensi konten edukasi pemeriksaan mata baru.",
   ],
   planStrategi: [
-    "Replikasi formula parodi dan POV relatable PWT & Tegal ke Purbalingga (Juna) dan Wonosobo (Febi).",
-    "Optimalisasi pengalihan calon sponsor dan klien Home Service dari DM Instagram ke web portal optikiseeyou.com.",
-    "Pemberian reminder kepatuhan via WhatsApp untuk memastikan seluruh PIC menginput data tepat waktu.",
+    "Pengadaan tripod pengganti untuk store Purbalingga untuk memastikan stabilitas pengambilan video Reels produk.",
+    "Klarifikasi operasional ke store Cilacap terkait pengisian laporan tertunda dan kendala di lapangan.",
+    "Pengembangan format interaktif baru di Story Instagram Purwokerto (quiz mata, polling bentuk frame, tips lensa antiradiasi).",
+    "Replikasi konten 'Open Booth' Tegal ke Purwokerto dan Purbalingga untuk menyambut event sponsorship regional.",
   ],
   masukanTim: [
-    "Ilya (PWT): Pengambilan video Reels sore hari di store perlu lampu sorot tambahan untuk fitting frame.",
-    "Nuha (Story): Template promo Batik Day Sale mendapat sambutan baik di DM Story, perlu dibuatkan versi restock frame titanium.",
-    "Amanda (Tegal): Peminat kacamata cat-eye di Tegal terus meningkat pasca video reels POV.",
+    "Ajun (PBG): Memerlukan tripod baru untuk shooting Reels di store.",
+    "Nuha (Story): Membutuhkan referensi dan materi edukasi cek mata baru untuk meningkatkan engagement viewers.",
+    "Febi (Wonosobo): Konten edukasi kesehatan mata (Octular parasitosis) mendapat feedback positif.",
+    "Amanda (Tegal): Konten harga terjangkau (pov nemu kacamata 100rban) menarik minat kunjungan store.",
   ],
   aiAnalysis: [
     {
       id: "ai-1",
       tag: "FAKTA",
-      text: "Tayangan Reels terverifikasi di Week 40 mencapai 248.500 views, mempertahankan konsistensi di atas 240k views mingguan.",
-      metricBasis: "248.500 Tayangan (WoW +7.2%)",
+      text: "Seluruh cabang aktif (PWT, PBG, TGL, WNS) berhasil memenuhi kuota minimum dengan total 18 Reels terbit di Siklus 8.",
+      metricBasis: "18 Video Reels (128.6% Target Kuota)",
     },
     {
       id: "ai-2",
       tag: "INTERPRETASI",
-      text: "Format konten kombinasi humor lokal dan soft-selling promosi katalog terbukti menghasilkan retensi audiens tertinggi.",
-      metricBasis: "Reels PWT 25.8k views & Tegal 2.8k views",
+      text: "Kerusakan alat di PBG membuktikan dedikasi PIC (Ajun) tetap tinggi dengan 5 video terselesaikan meski tanpa tripod stabil.",
+      metricBasis: "5 Video PBG dengan 4 catatan tripod rusak",
     },
     {
       id: "ai-3",
       tag: "REKOMENDASI",
-      text: "Gunakan data form sponsorship masuk untuk memilih 2-3 event kampus strategis (BEM Unsoed/UMP) guna aktivasi booth pemeriksaan mata langsung.",
-      metricBasis: "Target konversi mahasiswa regional",
+      text: "Segera selesaikan reimbursement tripod PBG dan lakukan pendekatan langsung ke CLP untuk memulihkan kontinuitas data laporan.",
+      metricBasis: "Operasional hardware & kepatuhan data",
     },
   ],
 };

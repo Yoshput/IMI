@@ -437,27 +437,27 @@ Have a nicee dayy ya kaa! 🌸✨`;
 
         <div className="bg-surface p-4 rounded-card border border-border">
           <div className="flex items-center justify-between text-xs text-foreground-muted mb-1">
-            <span>Siap Owning Raw Footage</span>
+            <span>Target Hak Raw Footage</span>
             <Video className="w-4 h-4 text-violet-500" />
           </div>
           <div className="text-xl font-bold text-foreground">
-            {owningReadyCount}/{kols.length} <span className="text-xs font-normal text-foreground-muted">KOL</span>
+            {owningReadyCount}/{kols.length} <span className="text-xs font-normal text-foreground-muted">KOL Ditargetkan</span>
           </div>
           <span className="text-[11px] text-violet-700 font-medium flex items-center gap-1 mt-1">
-            <ShieldCheck className="w-3 h-3 text-violet-600" /> Siap Jadi Bahan Iklan Ads
+            <ShieldCheck className="w-3 h-3 text-violet-600" /> Diajukan di Tahap 3 Pitching
           </span>
         </div>
 
         <div className="bg-surface p-4 rounded-card border border-border">
           <div className="flex items-center justify-between text-xs text-foreground-muted mb-1">
-            <span>Estimasi Jangkauan (Reach)</span>
+            <span>Total Audiens Kreator (Followers)</span>
             <Eye className="w-4 h-4 text-blue-500" />
           </div>
           <div className="text-xl font-bold text-foreground">
             {(totalAudience / 1000).toFixed(1)}K+ <span className="text-xs font-normal text-foreground-muted">Followers</span>
           </div>
           <span className="text-[11px] text-blue-700 font-medium flex items-center gap-1 mt-1">
-            <TrendingUp className="w-3 h-3 text-blue-600" /> Segmentasi Lokal Jateng
+            <TrendingUp className="w-3 h-3 text-blue-600" /> Akumulasi Followers 5 Cabang
           </span>
         </div>
 

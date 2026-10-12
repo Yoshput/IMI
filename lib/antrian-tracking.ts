@@ -163,11 +163,13 @@ export function recordAntrianClick(params: {
   const cleanKey = (params.branch || "pwt").toLowerCase().trim();
   const matched = branchMap[cleanKey] || { id: "pwt", name: "Purwokerto (Pusat)" };
 
-  // Increment dynamic counter for real-time tracking
-  if (dynamicBranchIncrements[matched.id] !== undefined) {
-    dynamicBranchIncrements[matched.id] += 1;
-  } else {
-    dynamicBranchIncrements[matched.id] = 1;
+  // Increment dynamic counter for real-time tracking (only for antrian_booking events)
+  if (!params.type || params.type === "antrian_booking") {
+    if (dynamicBranchIncrements[matched.id] !== undefined) {
+      dynamicBranchIncrements[matched.id] += 1;
+    } else {
+      dynamicBranchIncrements[matched.id] = 1;
+    }
   }
 
   const newEvent: AntrianEvent = {

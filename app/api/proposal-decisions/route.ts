@@ -59,13 +59,18 @@ let memoryDecisions: DecisionsMap = {
 
 const getFilePath = () => path.join(process.cwd(), "data", "proposal-decisions.json");
 
+const TMP_FILE_PATH = path.join("/tmp", "proposal-decisions.json");
+
 function loadFromFile(): DecisionsMap {
   try {
     const filePath = getFilePath();
     if (fs.existsSync(filePath)) {
       const content = fs.readFileSync(filePath, "utf-8");
-      const parsed = JSON.parse(content);
-      return { ...memoryDecisions, ...parsed };
+      return { ...memoryDecisions, ...JSON.parse(content) };
+    }
+    if (fs.existsSync(TMP_FILE_PATH)) {
+      const content = fs.readFileSync(TMP_FILE_PATH, "utf-8");
+      return { ...memoryDecisions, ...JSON.parse(content) };
     }
   } catch (err) {
     console.warn("Could not read proposal-decisions.json from disk, using memory cache:", err);
@@ -73,15 +78,22 @@ function loadFromFile(): DecisionsMap {
   return memoryDecisions;
 }
 
-function saveToFile(data: DecisionsMap) {
+function saveToFile(data: DecisionsMap): { persisted: boolean; storage: "disk" | "tmp" | "memory" } {
   try {
     const dir = path.join(process.cwd(), "data");
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir, { recursive: true });
     }
     fs.writeFileSync(getFilePath(), JSON.stringify(data, null, 2), "utf-8");
+    return { persisted: true, storage: "disk" };
   } catch (err) {
-    console.warn("Could not write proposal-decisions.json to disk (expected on read-only serverless):", err);
+    try {
+      fs.writeFileSync(TMP_FILE_PATH, JSON.stringify(data, null, 2), "utf-8");
+      return { persisted: true, storage: "tmp" };
+    } catch (tmpErr) {
+      console.warn("Could not write proposal-decisions.json to disk or /tmp (read-only filesystem):", err);
+      return { persisted: false, storage: "memory" };
+    }
   }
 }
 
@@ -131,12 +143,16 @@ export async function POST(req: NextRequest) {
     }
 
     memoryDecisions = updated;
-    saveToFile(updated);
+    const saveResult = saveToFile(updated);
 
     return NextResponse.json({
       success: true,
       data: updated,
-      message: "Keputusan proposal berhasil disimpan permanen",
+      persisted: saveResult.persisted,
+      storage: saveResult.storage,
+      message: saveResult.persisted
+        ? "Keputusan proposal berhasil disimpan permanen"
+        : "Keputusan proposal disimpan di memori runtime (penulisan disk tidak tersedia)",
     });
   } catch (err: any) {
     return NextResponse.json(

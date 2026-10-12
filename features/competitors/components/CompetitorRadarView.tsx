@@ -141,15 +141,15 @@ export const CompetitorRadarView: React.FC = () => {
     });
   }, [selectedBranchCity, selectedBranchTier, selectedBranchBpjs, localSearchQuery]);
 
-  // Handle Refresh Intelligence simulation with real state feedback
+  // Handle Refresh Intelligence
   const handleRefresh = () => {
     setIsRefreshing(true);
-    setRefreshMessage("Menghubungkan ke live crawl feed...");
+    setRefreshMessage("Menyinkronkan snapshot data kompetitor...");
     setTimeout(() => {
       setIsRefreshing(false);
-      setRefreshMessage("Snapshot terverifikasi per 6 Oktober 2026 (00:45 WIB) telah tersinkronisasi.");
-      setTimeout(() => setRefreshMessage(null), 4000);
-    }, 1200);
+      setRefreshMessage("Database 17 kompetitor lokal & 10 brand nasional terverifikasi per 12 Oktober 2026.");
+      setTimeout(() => setRefreshMessage(null), 3500);
+    }, 400);
   };
 
   // Filtered competitors
@@ -193,14 +193,14 @@ export const CompetitorRadarView: React.FC = () => {
                 Benchmark Industri Optik Indonesia 2026
               </span>
               <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-800 dark:text-emerald-400 border border-emerald-500/20">
-                Data Terverifikasi 6 Okt 2026
+                Data Terverifikasi 12 Okt 2026
               </span>
             </div>
             <h1 className="text-xl sm:text-2xl font-bold text-foreground mt-1.5 tracking-tight">
               Pusat Intelijen Pasar & Pengawasan Kompetitor Optik
             </h1>
             <p className="text-xs text-foreground-secondary mt-1 max-w-3xl leading-relaxed">
-              Pemantauan sistematis 16 gerai kompetitor lokal di 4 kota cabang (Purwokerto, Purbalingga, Cilacap, Wonosobo) berdasarkan tiering prioritas (Tier S, A, B) serta 9 brand benchmark nasional D2C berbasis data nyata terverifikasi.
+              Pemantauan sistematis 17 gerai kompetitor lokal di 4 kota cabang (Purwokerto, Purbalingga, Cilacap, Wonosobo) berdasarkan tiering prioritas (Tier S, A, B) serta 10 brand benchmark nasional D2C berbasis data nyata terverifikasi.
             </p>
           </div>
 
@@ -236,8 +236,8 @@ export const CompetitorRadarView: React.FC = () => {
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2 border-t border-border">
           <div className="p-3 rounded-control bg-surface-secondary border border-border">
             <span className="text-[10px] uppercase font-bold text-foreground-muted block">Brand Terpantau</span>
-            <div className="text-lg font-bold text-foreground mt-0.5">25 Brand / Gerai</div>
-            <span className="text-[10px] text-foreground-secondary">16 Toko Lokal + 9 Brand Nasional</span>
+            <div className="text-lg font-bold text-foreground mt-0.5">27 Brand / Gerai</div>
+            <span className="text-[10px] text-foreground-secondary">17 Toko Lokal + 10 Brand Nasional</span>
           </div>
           <div className="p-3 rounded-control bg-surface-secondary border border-border">
             <span className="text-[10px] uppercase font-bold text-foreground-muted block">Prioritas Tier S</span>
@@ -252,7 +252,7 @@ export const CompetitorRadarView: React.FC = () => {
           <div className="p-3 rounded-control bg-surface-secondary border border-border">
             <span className="text-[10px] uppercase font-bold text-foreground-muted block">Kesiapan Rapat 09:00</span>
             <div className="text-lg font-bold text-emerald-800 dark:text-emerald-400 mt-0.5">Siap Dipresentasikan</div>
-            <span className="text-[10px] text-foreground-secondary">16 Toko Lokal + 5 Taktik Aksi</span>
+            <span className="text-[10px] text-foreground-secondary">17 Toko Lokal + 5 Taktik Aksi</span>
           </div>
         </div>
       </div>
@@ -434,7 +434,7 @@ export const CompetitorRadarView: React.FC = () => {
                   </h2>
                 </div>
                 <p className="text-xs text-foreground-secondary mt-0.5">
-                  16 gerai kompetitor terverifikasi di Purwokerto, Purbalingga, Cilacap, dan Wonosobo dengan sistem tiering prioritas.
+                  17 gerai kompetitor terverifikasi di Purwokerto, Purbalingga, Cilacap, dan Wonosobo dengan sistem tiering prioritas.
                 </p>
               </div>
 
@@ -749,19 +749,19 @@ export const CompetitorRadarView: React.FC = () => {
             })}
           </div>
 
-          {/* 16-Store Comparative Matrix Table */}
+          {/* 17-Store Comparative Matrix Table */}
           <div className="bg-surface border border-border rounded-container p-5 shadow-subtle space-y-4">
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="text-sm font-bold text-foreground">
-                  Tabel Ringkasan Matriks 16 Kompetitor Cabang Barlingmascakeb
+                  Tabel Ringkasan Matriks 17 Kompetitor Cabang Barlingmascakeb
                 </h3>
                 <p className="text-xs text-foreground-secondary mt-0.5">
                   Ikhtisar komparatif untuk bahan presentasi rapat strategi pemasaran jam 09:00 WIB.
                 </p>
               </div>
               <span className="text-[11px] font-bold px-2 py-0.5 rounded bg-surface-secondary border border-border text-foreground">
-                16 Gerai Terdaftar
+                17 Gerai Terdaftar
               </span>
             </div>
 

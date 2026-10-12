@@ -125,6 +125,65 @@ function normalizeFollowers(val, isKNotation = false) {
   return Math.round(num);
 }
 
+function cleanObstacle(val) {
+  if (val === null || val === undefined) return '-';
+  if (typeof val === 'number') return '-';
+  const str = String(val).trim();
+  if (
+    !str ||
+    str === '-' ||
+    str.toLowerCase() === 'libur' ||
+    str.toLowerCase() === 'tidak ada' ||
+    str.toLowerCase() === 'belum ada' ||
+    str.toLowerCase() === 'aman'
+  ) {
+    return '-';
+  }
+  if (/^\d{5}$/.test(str) || /^\d{4}-\d{2}-\d{2}$/.test(str)) return '-';
+  if (str.startsWith('http://') || str.startsWith('https://')) return '-';
+  return str;
+}
+
+function createColumnMapper(headerRow) {
+  const headers = (headerRow || []).map((h) =>
+    String(h || '')
+      .toLowerCase()
+      .replace(/[\s\r\n\t_]+/g, ' ')
+      .trim()
+  );
+
+  const findIndex = (patterns) => {
+    for (const pattern of patterns) {
+      const idx = headers.findIndex((h) =>
+        typeof pattern === 'string' ? h.includes(pattern) : pattern.test(h)
+      );
+      if (idx !== -1) return idx;
+    }
+    return -1;
+  };
+
+  return {
+    timestampIdx: findIndex(['cap waktu', 'timestamp']),
+    reportDateIdx: findIndex(['tanggal laporan', 'tgl laporan']),
+    picIdx: findIndex(['pengisi laporan', 'pic']),
+    titleIdx: findIndex(['judul reels', 'judul']),
+    pillarIdx: findIndex(['konten pilar', 'pilar']),
+    reelsLinkIdx: findIndex(['link reels instagram', 'link reels']),
+    feedLinkIdx: findIndex(['link feed/carousel instagram', 'link feed', 'link carousel']),
+    storyIdx: findIndex(['story instagram']),
+    threadsLinkIdx: findIndex(['link instagram threads', 'threads']),
+    tiktokLinkIdx: findIndex(['link video tik- tok', 'tik- tok', 'link tiktok', 'tiktok']),
+    igFollowersIdx: findIndex(['jumlah followers (instagram)', 'followers (instagram)', 'followers ig']),
+    tiktokFollowersIdx: findIndex(['jumlah followers (tik-tok)', 'followers (tik-tok)', 'followers tiktok']),
+    obstacleIdx: findIndex(['kendala content creator', 'kendala']),
+    uploadDateIdx: findIndex(['tanggal upload', 'tgl upload']),
+    evalTitleIdx: findIndex(['judul reels 2', 'judul 2', 'evaluasi judul']),
+    evalViewersIdx: findIndex(['jumlah viewers', 'viewers']),
+    evalLikesIdx: findIndex(['jumlah like', 'likes', 'like']),
+    bonusIdx: findIndex(['bonus']),
+  };
+}
+
 async function loadWorkbook() {
   try {
     console.log('Downloading live spreadsheet from Google Sheets...');
@@ -228,6 +287,9 @@ async function main() {
     const rawRows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
 
     // Pass 1: Collect upload links and metadata by date and title
+    const mapper = createColumnMapper(rawRows[0]);
+
+    // Pass 1: Collect upload links and metadata by date and title
     const linkByUploadDate = {};
     const linkByTitle = {};
     const titleToLinkMap = {};
@@ -235,13 +297,13 @@ async function main() {
     for (let i = 1; i < rawRows.length; i++) {
       const row = rawRows[i];
       if (!row || row.length === 0) continue;
-      const date = parseExcelDate(cfg.isPWT ? row[1] : row[9]);
-      const title = String((cfg.isPWT ? row[4] : row[2]) || '').trim();
-      const link = String((cfg.isPWT ? row[6] : row[4]) || '').trim();
-      const pillar = String((cfg.isPWT ? row[5] : row[3]) || 'Umum').trim();
-      const feed = String((cfg.isPWT ? row[7] : row[5]) || '').trim();
-      const threads = String((cfg.isPWT ? row[9] : row[7]) || '').trim();
-      const tiktok = String((cfg.isPWT ? row[10] : row[8]) || '').trim();
+      const date = parseExcelDate(mapper.reportDateIdx !== -1 ? row[mapper.reportDateIdx] : (mapper.timestampIdx !== -1 ? row[mapper.timestampIdx] : null));
+      const title = String((mapper.titleIdx !== -1 ? row[mapper.titleIdx] : '') || '').trim();
+      const link = String((mapper.reelsLinkIdx !== -1 ? row[mapper.reelsLinkIdx] : '') || '').trim();
+      const pillar = String((mapper.pillarIdx !== -1 ? row[mapper.pillarIdx] : '') || 'Umum').trim();
+      const feed = String((mapper.feedLinkIdx !== -1 ? row[mapper.feedLinkIdx] : '') || '').trim();
+      const threads = String((mapper.threadsLinkIdx !== -1 ? row[mapper.threadsLinkIdx] : '') || '').trim();
+      const tiktok = String((mapper.tiktokLinkIdx !== -1 ? row[mapper.tiktokLinkIdx] : '') || '').trim();
 
       const isLibur = !title || title === '-' || title.toLowerCase().includes('libur');
       if (!isLibur && link.startsWith('http')) {
@@ -259,12 +321,12 @@ async function main() {
     for (let i = 1; i < rawRows.length; i++) {
       const row = rawRows[i];
       if (!row || row.length === 0) continue;
-      const evalReportDate = parseExcelDate(cfg.isPWT ? row[1] : row[9]);
-      const targetUploadDate = parseExcelDate(cfg.isPWT ? row[14] : row[13]);
-      let evalTitle = String((cfg.isPWT ? row[15] : row[14]) || '').trim();
-      const evalViewers = cfg.isPWT ? row[16] : row[15];
-      const evalLikes = cfg.isPWT ? row[17] : row[16];
-      const bonus = String((cfg.isPWT ? row[18] : row[17]) || '-').trim();
+      const evalReportDate = parseExcelDate(mapper.reportDateIdx !== -1 ? row[mapper.reportDateIdx] : (mapper.timestampIdx !== -1 ? row[mapper.timestampIdx] : null));
+      const targetUploadDate = parseExcelDate(mapper.uploadDateIdx !== -1 ? row[mapper.uploadDateIdx] : null);
+      let evalTitle = String((mapper.evalTitleIdx !== -1 ? row[mapper.evalTitleIdx] : '') || '').trim();
+      const evalViewers = mapper.evalViewersIdx !== -1 ? row[mapper.evalViewersIdx] : null;
+      const evalLikes = mapper.evalLikesIdx !== -1 ? row[mapper.evalLikesIdx] : null;
+      const bonus = String((mapper.bonusIdx !== -1 ? row[mapper.bonusIdx] : '') || '-').trim();
 
       const isLibur = !evalTitle || evalTitle === '-' || evalTitle.toLowerCase() === 'libur';
       const viewers = cleanMetric(evalViewers, true);
@@ -295,20 +357,19 @@ async function main() {
       const row = rawRows[i];
       if (!row || row.length === 0) continue;
 
-      // For PWT: row[0] is the report submission timestamp, row[1] is the upload date
-      // Use row[0] as reportDate (when they filed) so latestDate tracks actual filing date
-      const reportDate = parseExcelDate(cfg.isPWT ? row[0] : row[9]);
-      const uploadDate = parseExcelDate(cfg.isPWT ? row[1] : row[9]);
-      const pic = (cfg.isPWT ? row[2] : row[1]) || cfg.picDefault;
-      const rawTitle = String((cfg.isPWT ? row[4] : row[2]) || '').trim();
-      const pillar = String((cfg.isPWT ? row[5] : row[3]) || 'Umum').trim();
-      let reelsLink = String((cfg.isPWT ? row[6] : row[4]) || '').trim();
-      const feedLink = String((cfg.isPWT ? row[7] : row[5]) || '').trim();
-      const threadsLink = String((cfg.isPWT ? row[9] : row[7]) || '').trim();
-      const tiktokLink = String((cfg.isPWT ? row[10] : row[8]) || '').trim();
-      const igFollowers = normalizeFollowers(cfg.isPWT ? row[11] : row[10], cfg.isKFollowers);
-      const tiktokFollowers = normalizeFollowers(cfg.isPWT ? row[12] : row[11], cfg.isKFollowers);
-      const obstacle = String((cfg.isPWT ? row[13] : row[12]) || '-').trim();
+      const reportDate = parseExcelDate(mapper.reportDateIdx !== -1 ? row[mapper.reportDateIdx] : (mapper.timestampIdx !== -1 ? row[mapper.timestampIdx] : null));
+      const uploadDateRaw = mapper.uploadDateIdx !== -1 ? parseExcelDate(row[mapper.uploadDateIdx]) : null;
+      const uploadDate = uploadDateRaw || reportDate;
+      const pic = (mapper.picIdx !== -1 && row[mapper.picIdx] ? String(row[mapper.picIdx]).trim() : '') || cfg.picDefault;
+      const rawTitle = String((mapper.titleIdx !== -1 ? row[mapper.titleIdx] : '') || '').trim();
+      const pillar = String((mapper.pillarIdx !== -1 ? row[mapper.pillarIdx] : '') || 'Umum').trim();
+      let reelsLink = String((mapper.reelsLinkIdx !== -1 ? row[mapper.reelsLinkIdx] : '') || '').trim();
+      const feedLink = String((mapper.feedLinkIdx !== -1 ? row[mapper.feedLinkIdx] : '') || '').trim();
+      const threadsLink = String((mapper.threadsLinkIdx !== -1 ? row[mapper.threadsLinkIdx] : '') || '').trim();
+      const tiktokLink = String((mapper.tiktokLinkIdx !== -1 ? row[mapper.tiktokLinkIdx] : '') || '').trim();
+      const igFollowers = normalizeFollowers(mapper.igFollowersIdx !== -1 ? row[mapper.igFollowersIdx] : null, cfg.isKFollowers);
+      const tiktokFollowers = normalizeFollowers(mapper.tiktokFollowersIdx !== -1 ? row[mapper.tiktokFollowersIdx] : null, cfg.isKFollowers);
+      const obstacle = cleanObstacle(mapper.obstacleIdx !== -1 ? row[mapper.obstacleIdx] : '-');
 
       if (!reportDate) continue;
 
@@ -324,7 +385,7 @@ async function main() {
           pic,
           timestamp: reportDate,
           reportDate,
-          uploadDate: cfg.isPWT ? uploadDate : reportDate,
+          uploadDate: reportDate,
           evalReportDate: null,
           reelsTitle: '(Libur / Off Duty)',
           secondReelsTitle: undefined,
@@ -338,7 +399,7 @@ async function main() {
           viewers: 0,
           likes: 0,
           bonus: '-',
-          obstacle: obstacle !== 'tidak ada' && obstacle !== 'belum ada' ? obstacle : '-',
+          obstacle,
           isDayOff: true,
           isEvaluated: false,
           evaluationCadence: 'Libur',
@@ -347,8 +408,7 @@ async function main() {
       }
 
       // Real video upload: match with H+3 evaluation
-      // For PWT, use uploadDate for evaluation matching (the actual video date)
-      const evalMatchDate = cfg.isPWT ? uploadDate : reportDate;
+      const evalMatchDate = reportDate;
       let matchedEval = null;
       const dateEvals = evaluationsByDate[evalMatchDate];
       if (dateEvals && dateEvals.length > 0) {
@@ -376,8 +436,22 @@ async function main() {
       };
 
       let actualLink = cleanLink(reelsLink);
+      let actualFeedLink = cleanLink(feedLink);
+
+      // If pillar contains a reel link while actualLink has carousel /p/, recover the reel link
+      if (pillar.includes('/reel/')) {
+        if (!actualFeedLink && actualLink.includes('/p/')) actualFeedLink = actualLink;
+        actualLink = pillar;
+      }
+
       if (!actualLink) {
         actualLink = titleToLinkMap[rawTitle.toLowerCase()] || '';
+      }
+
+      // Strictly ensure photo carousels (/p/) are never stored in reelsLink for spreadsheet evaluation
+      if (actualLink.includes('/p/') && !actualLink.includes('/reel/')) {
+        if (!actualFeedLink) actualFeedLink = actualLink;
+        actualLink = '';
       }
 
       parsedRows.push({
@@ -389,13 +463,13 @@ async function main() {
         pic,
         timestamp: reportDate,
         reportDate,
-        uploadDate: cfg.isPWT ? uploadDate : reportDate,
+        uploadDate: reportDate,
         evalReportDate: matchedEval ? matchedEval.evalReportDate : null,
         reelsTitle: rawTitle,
         secondReelsTitle: matchedEval ? matchedEval.evalTitle : undefined,
         contentPillar: pillar,
         reelsLink: actualLink,
-        feedLink: cleanLink(feedLink),
+        feedLink: actualFeedLink,
         threadsLink: cleanLink(threadsLink),
         tiktokLink: cleanLink(tiktokLink),
         igFollowers,
@@ -403,7 +477,7 @@ async function main() {
         viewers: (matchedEval && matchedEval.viewers > 0) ? matchedEval.viewers : 0,
         likes: (matchedEval && matchedEval.likes > 0) ? matchedEval.likes : 0,
         bonus: matchedEval ? matchedEval.bonus : '-',
-        obstacle: obstacle !== 'tidak ada' && obstacle !== 'belum ada' ? obstacle : '-',
+        obstacle,
         isDayOff: false,
         isEvaluated: !!(matchedEval && (matchedEval.viewers > 0 || matchedEval.likes > 0)),
         isLiveMetric: false,
@@ -621,6 +695,7 @@ async function main() {
       meetingStatus,
       totalReelsUploaded: dedupedReels.filter((r) => r.uploadDate >= startDate && r.uploadDate <= endDate).length,
       totalStoriesRecorded: weeklyStories.length,
+      totalStoriesUploaded: weeklyStories.reduce((acc, s) => acc + (s.storiesUploaded || 0), 0),
       totalDmInquiries: totalDms,
       topViralReels: dedupedReels.slice(0, 8),
       allWeeklyReels: dedupedReels,
@@ -631,25 +706,32 @@ async function main() {
     };
   };
 
-  const periodHistoric = buildPeriodRecap(
-    '2026-09-15',
-    '2026-09-21',
-    'Selasa, 22 September 2026 (Periode 15–21 Sep)',
-    'Evaluasi Historis (22 Sep 2026)'
+  const periodCycle8 = buildPeriodRecap(
+    '2026-10-06',
+    '2026-10-12',
+    'Selasa, 13 Oktober 2026 (Siklus 8 · 6–12 Okt)',
+    'Evaluasi Rapat Terkini (Siklus 8 · 13 Okt 2026)'
   );
 
-  const periodLastTuesday = buildPeriodRecap(
-    '2026-09-22',
-    '2026-09-28',
-    'Selasa, 29 September 2026 (Periode 22–28 Sep)',
-    'Evaluasi Rapat Minggu Lalu (29 Sep 2026)'
-  );
-
-  const periodCurrentMeeting = buildPeriodRecap(
+  const periodCycle7 = buildPeriodRecap(
     '2026-09-29',
     '2026-10-05',
-    'Selasa, 6 Oktober 2026 (Periode 29 Sep – 5 Okt)',
-    'Evaluasi Rapat Direksi Terkini (6 Okt 2026)'
+    'Selasa, 6 Oktober 2026 (Siklus 7 · 29 Sep – 5 Okt)',
+    'Evaluasi Rapat Siklus 7 (6 Okt 2026)'
+  );
+
+  const periodCycle6 = buildPeriodRecap(
+    '2026-09-22',
+    '2026-09-28',
+    'Selasa, 29 September 2026 (Siklus 6 · 22–28 Sep)',
+    'Evaluasi Rapat Siklus 6 (29 Sep 2026)'
+  );
+
+  const periodCycle5 = buildPeriodRecap(
+    '2026-09-15',
+    '2026-09-21',
+    'Selasa, 22 September 2026 (Siklus 5 · 15–21 Sep)',
+    'Evaluasi Historis Siklus 5 (22 Sep 2026)'
   );
 
   // Extract spreadsheet followers per branch (H+3 latest recorded)
@@ -780,43 +862,60 @@ async function main() {
     purpose: r['Tujuan/alasan pengajuan'] || '-',
   }));
 
-  const output = {
-    syncTimestamp: new Date().toISOString(),
-    sourceUrl: 'https://docs.google.com/spreadsheets/d/1BU0fIDP656Y-eue55bWVSxeaixSeFJwR3GP1n8kwBYc/edit?usp=sharing',
-    officialAccounts: [
-      { name: 'Optik I See You Purwokerto (Pusat)', handle: '@iseeyou.glasses', url: 'https://www.instagram.com/iseeyou.glasses/', city: 'Purwokerto', pic: 'Ilya & Nuha' },
-      { name: 'Optik I See You Purbalingga', handle: '@iseeyou.purbalingga', url: 'https://www.instagram.com/iseeyou.purbalingga/', city: 'Purbalingga', pic: 'Ajun' },
-      { name: 'Optik I See You Cilacap', handle: '@iseeyou.cilacap', url: 'https://www.instagram.com/iseeyou.cilacap/', city: 'Cilacap', pic: 'Arum' },
-      { name: 'Optik I See You Wonosobo', handle: '@iseeyou.wonosobo', url: 'https://www.instagram.com/iseeyou.wonosobo/', city: 'Wonosobo', pic: 'Febi' },
-      { name: 'Lunar Eyewear Tegal (Second Brand)', handle: '@lunareyewear.co', url: 'https://www.instagram.com/lunareyewear.co', city: 'Tegal', pic: 'Amanda' },
-    ],
-    picTracker: picTracker,
-    storyData: storyItems,
-    branchReels: allBranchReels,
-    dailyFollowersTracker: allFollowerDaily,
-    spreadsheetFollowersByBranch: spreadsheetFollowersByBranch,
-    bonusSummary: bonusSummary,
-    databaseDesain: databaseDesain,
-    formProposal: formProposal,
-    formPengajuan: formPengajuan,
-    executiveRecap: {
-      meetingTarget: 'Rapat Direksi Terkini (Selasa, 6 Oktober 2026)',
-      liveFollowersByBranch: igLiveCache?.accounts || null,
+    const totalNetworkIG = Object.values(spreadsheetFollowersByBranch).reduce(
+      (sum, b) => sum + (b.followers || 0),
+      0
+    );
+    const totalNetworkTT = Object.values(allFollowerDaily).reduce(
+      (sum, list) => {
+        const last = list && list.length > 0 ? list[list.length - 1] : null;
+        return sum + (last?.tiktokFollowers || 0);
+      },
+      0
+    );
+
+    const output = {
+      syncTimestamp: new Date().toISOString(),
+      sourceUrl: 'https://docs.google.com/spreadsheets/d/1BU0fIDP656Y-eue55bWVSxeaixSeFJwR3GP1n8kwBYc/edit?usp=sharing',
+      officialAccounts: [
+        { name: 'Optik I See You Purwokerto (Pusat)', handle: '@iseeyou.glasses', url: 'https://www.instagram.com/iseeyou.glasses/', city: 'Purwokerto', pic: 'Ilya & Nuha' },
+        { name: 'Optik I See You Purbalingga', handle: '@iseeyou.purbalingga', url: 'https://www.instagram.com/iseeyou.purbalingga/', city: 'Purbalingga', pic: 'Ajun' },
+        { name: 'Optik I See You Cilacap', handle: '@iseeyou.cilacap', url: 'https://www.instagram.com/iseeyou.cilacap/', city: 'Cilacap', pic: 'Arum' },
+        { name: 'Optik I See You Wonosobo', handle: '@iseeyou.wonosobo', url: 'https://www.instagram.com/iseeyou.wonosobo/', city: 'Wonosobo', pic: 'Febi' },
+        { name: 'Lunar Eyewear Tegal (Second Brand)', handle: '@lunareyewear.co', url: 'https://www.instagram.com/lunareyewear.co', city: 'Tegal', pic: 'Amanda' },
+      ],
+      picTracker: picTracker,
+      storyData: storyItems,
+      branchReels: allBranchReels,
+      dailyFollowersTracker: allFollowerDaily,
       spreadsheetFollowersByBranch: spreadsheetFollowersByBranch,
-      igLiveCache: igLiveCache || null,
       bonusSummary: bonusSummary,
-      latestTotalNetworkFollowers: {
-        instagram: 225920 + 6211 + 7408 + 1257 + 4034, // 244,830 real IG followers across 5 branches
-        tiktok: 86900 + 993 + 57 + 538 + 3047, // 91,535 real TikTok followers across 5 branches
+      databaseDesain: databaseDesain,
+      formProposal: formProposal,
+      formPengajuan: formPengajuan,
+      executiveRecap: {
+        meetingTarget: 'Rapat Evaluasi Mingguan (Selasa, 13 Oktober 2026)',
+        liveFollowersByBranch: igLiveCache?.accounts || null,
+        spreadsheetFollowersByBranch: spreadsheetFollowersByBranch,
+        igLiveCache: igLiveCache || null,
+        bonusSummary: bonusSummary,
+        latestTotalNetworkFollowers: {
+          instagram: totalNetworkIG,
+          tiktok: totalNetworkTT,
+        },
+        periods: {
+          cycle8: periodCycle8,
+          cycle7: periodCycle7,
+          cycle6: periodCycle6,
+          cycle5: periodCycle5,
+          // Backward-compatibility keys for existing UI components:
+          currentMeeting: periodCycle8,
+          lastTuesday: periodCycle7,
+          nextTuesday: periodCycle6,
+        },
+        activePeriodKey: 'cycle8',
       },
-      periods: {
-        currentMeeting: periodCurrentMeeting,
-        lastTuesday: periodLastTuesday,
-        nextTuesday: periodHistoric,
-      },
-      activePeriodKey: 'currentMeeting',
-    },
-  };
+    };
 
   fs.writeFileSync(
     path.join(__dirname, '../lib/real-sheets-data.json'),
