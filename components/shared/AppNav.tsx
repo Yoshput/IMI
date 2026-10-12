@@ -15,6 +15,7 @@ import {
   ClipboardCheck,
   Wallet,
   Lock,
+  MapPin,
 } from "lucide-react";
 import { ThemeToggle } from "@/components/shared/ThemeToggle";
 
@@ -44,6 +45,7 @@ const navItems: NavItem[] = [
   { label: "Aftersales", href: "/aftersales", icon: Glasses },
   { label: "Kompetitor", href: "/competitors", icon: Target },
   { label: "KOL", href: "/kol", icon: Camera },
+  { label: "Venue", href: "/venue", icon: MapPin },
   { label: "Analytics", href: "/analytics", icon: BarChart2 },
   { label: "Laporan", href: "/reports", icon: ClipboardCheck, isLocked: true },
   { label: "Keuangan", href: "/finance", icon: Wallet, isLocked: true },
