@@ -66,7 +66,25 @@ export const VenueDatabaseTab: React.FC<Props> = ({ onStatsChange }) => {
       if (statusFilter !== "all") params.set("outreachStatus", statusFilter);
       const res = await fetch(`/api/venues?${params}`);
       const json = await res.json();
-      if (json.success) setVenues(json.data);
+      if (json.success && Array.isArray(json.data)) {
+        let merged = json.data;
+        if (typeof window !== "undefined") {
+          try {
+            const cacheStr = localStorage.getItem("local_venue_cache");
+            if (cacheStr) {
+              const localVenues: Venue[] = JSON.parse(cacheStr);
+              const serverIds = new Set(json.data.map((v: Venue) => v.id));
+              const missingOnServer = localVenues.filter((v: Venue) => !serverIds.has(v.id));
+              if (missingOnServer.length > 0) {
+                merged = [...missingOnServer, ...json.data];
+              }
+            }
+          } catch {
+            // ignore
+          }
+        }
+        setVenues(merged);
+      }
     } catch { /* empty */ }
     setLoading(false);
   }, [query, catFilter, statusFilter]);

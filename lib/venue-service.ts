@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import os from 'os';
 import {
   Venue,
   Event,
@@ -24,32 +25,51 @@ import {
 } from './venue-types';
 
 const DATA_FILE_PATH = path.join(process.cwd(), 'data', 'venue-intelligence.json');
+const TMP_DATA_FILE_PATH = path.join(os.tmpdir(), 'venue-intelligence.json');
+
+// In-memory cache for serverless environments (e.g. Vercel)
+let inMemoryVenueState: VenueIntelligenceState | null = null;
 
 /**
  * Membaca data keseluruhan intelijen venue dari venue-intelligence.json
+ * Mendukung read-only serverless di Vercel dengan fallback /tmp dan in-memory cache
  */
 export function getVenueData(): VenueIntelligenceState {
+  if (inMemoryVenueState) {
+    return inMemoryVenueState;
+  }
+
+  const defaultState: VenueIntelligenceState = {
+    venues: [],
+    events: [],
+    outreachActivities: [],
+    templates: [],
+    surveyForms: [],
+    budgets: [],
+    attendanceRecords: [],
+    kpiTargets: DEFAULT_KPI_TARGETS,
+    scoreWeights: DEFAULT_SCORE_WEIGHTS,
+  };
+
   try {
-    if (!fs.existsSync(DATA_FILE_PATH)) {
-      const defaultState: VenueIntelligenceState = {
-        venues: [],
-        events: [],
-        outreachActivities: [],
-        templates: [],
-        surveyForms: [],
-        budgets: [],
-        attendanceRecords: [],
-        kpiTargets: DEFAULT_KPI_TARGETS,
-        scoreWeights: DEFAULT_SCORE_WEIGHTS,
-      };
+    // 1. Cek apakah ada data di /tmp yang pernah disimpan di sesi serverless ini
+    let targetPath: string | null = null;
+    if (fs.existsSync(TMP_DATA_FILE_PATH)) {
+      targetPath = TMP_DATA_FILE_PATH;
+    } else if (fs.existsSync(DATA_FILE_PATH)) {
+      targetPath = DATA_FILE_PATH;
+    }
+
+    if (!targetPath) {
+      inMemoryVenueState = defaultState;
       saveVenueData(defaultState);
       return defaultState;
     }
 
-    const raw = fs.readFileSync(DATA_FILE_PATH, 'utf-8');
+    const raw = fs.readFileSync(targetPath, 'utf-8');
     const parsed = JSON.parse(raw);
 
-    return {
+    inMemoryVenueState = {
       venues: Array.isArray(parsed.venues) ? parsed.venues : [],
       events: Array.isArray(parsed.events) ? parsed.events : [],
       outreachActivities: Array.isArray(parsed.outreachActivities) ? parsed.outreachActivities : [],
@@ -60,35 +80,40 @@ export function getVenueData(): VenueIntelligenceState {
       kpiTargets: parsed.kpiTargets || DEFAULT_KPI_TARGETS,
       scoreWeights: parsed.scoreWeights || DEFAULT_SCORE_WEIGHTS,
     };
+
+    return inMemoryVenueState;
   } catch (error) {
-    console.error('Error reading venue-intelligence.json:', error);
-    return {
-      venues: [],
-      events: [],
-      outreachActivities: [],
-      templates: [],
-      surveyForms: [],
-      budgets: [],
-      attendanceRecords: [],
-      kpiTargets: DEFAULT_KPI_TARGETS,
-      scoreWeights: DEFAULT_SCORE_WEIGHTS,
-    };
+    console.warn('Warning reading venue-intelligence.json:', error);
+    inMemoryVenueState = defaultState;
+    return inMemoryVenueState;
   }
 }
 
 /**
  * Menyimpan data keseluruhan ke venue-intelligence.json
+ * Mendukung graceful write fallback pada read-only serverless (Vercel)
  */
 export function saveVenueData(state: VenueIntelligenceState): void {
+  // Selalu perbarui state in-memory
+  inMemoryVenueState = state;
+
+  // 1. Coba simpan ke folder data utama (berhasil di local dev / VPS persistent)
   try {
     const dir = path.dirname(DATA_FILE_PATH);
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir, { recursive: true });
     }
     fs.writeFileSync(DATA_FILE_PATH, JSON.stringify(state, null, 2), 'utf-8');
-  } catch (error) {
-    console.error('Error saving venue-intelligence.json:', error);
-    throw new Error('Gagal menyimpan data intelijen venue');
+    return;
+  } catch (primaryErr) {
+    console.warn('Primary file write skipped (read-only filesystem on serverless):', primaryErr);
+  }
+
+  // 2. Fallback: simpan ke /tmp (direktori yang selalu writable di Vercel / AWS Lambda)
+  try {
+    fs.writeFileSync(TMP_DATA_FILE_PATH, JSON.stringify(state, null, 2), 'utf-8');
+  } catch (tmpErr) {
+    console.warn('Could not write to /tmp storage:', tmpErr);
   }
 }
 

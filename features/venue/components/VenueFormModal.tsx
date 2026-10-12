@@ -388,6 +388,18 @@ export const VenueFormModal: React.FC<VenueFormModalProps> = ({
         throw new Error(data.error || 'Terjadi kesalahan saat menyimpan data venue.');
       }
 
+      // Local storage backup for multi-instance serverless continuity
+      if (typeof window !== 'undefined' && data.data) {
+        try {
+          const cacheStr = localStorage.getItem('local_venue_cache');
+          const cacheList: Venue[] = cacheStr ? JSON.parse(cacheStr) : [];
+          const filtered = cacheList.filter((v) => v.id !== data.data.id);
+          localStorage.setItem('local_venue_cache', JSON.stringify([data.data, ...filtered]));
+        } catch {
+          // ignore
+        }
+      }
+
       setIsDirty(false);
       onSaved();
       onClose();
