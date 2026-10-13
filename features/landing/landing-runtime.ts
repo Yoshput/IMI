@@ -19,11 +19,8 @@ export function mountLanding(options: { dashboardUrl?: string; navigate?: (url: 
     const value = raw ? JSON.parse(raw) : null;
     if (value && value.version === 1 && validBranches.includes(value.branch)) previous = value;
   } catch { /* Entry remains available when browser storage is disabled. */ }
-  if (previous && new URLSearchParams(window.location.search).get('intro') !== '1') {
-    root.dataset.returning = 'true';
-    navigate(dashboardUrl, true);
-    return () => {};
-  }
+  // Retain previously selected branch for the dialog without forcing auto-redirect
+  // Users always land on the landing page first when visiting '/'
 
   const dialog = root.querySelector<HTMLDialogElement>('[data-workspace-dialog]');
   const submit = root.querySelector<HTMLButtonElement>('[data-enter-workspace]');

@@ -96,6 +96,7 @@ export const KolRadarView: React.FC = () => {
   const [viewMode, setViewMode] = useState<"card" | "table">("card");
   const [copiedPitchId, setCopiedPitchId] = useState<string | null>(null);
   const [copiedReport, setCopiedReport] = useState<boolean>(false);
+  const [copiedMemo, setCopiedMemo] = useState<boolean>(false);
   const [activePitchModal, setActivePitchModal] = useState<KolItem | null>(null);
   const [previewRateCard, setPreviewRateCard] = useState<KolItem | null>(null);
   const [zoomScale, setZoomScale] = useState<number>(1);
@@ -267,6 +268,123 @@ Have a nicee dayy ya kaa! 🌸✨`;
     setTimeout(() => setCopiedReport(false), 3000);
   };
 
+  const handleCopyFinanceMemo = () => {
+    const memoText = `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+MEMO PENGAJUAN & RESUME ANGGARAN KOL MARKETING OKTOBER 2026
+OPTIK I SEE YOU & LUNAR EYEWEAR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Kepada Yth : Tim Finance & Management
+Dari        : Tim Marketing (Yossika / Mas Raja / Mba Ilya)
+Perihal     : Pengajuan Realisasi Anggaran KOL Aktif Periode Oktober 2026
+Tanggal     : 8 Oktober 2026
+
+Selamat siang/sore Rekan Tim Finance,
+
+Bersama pesan ini kami sampaikan resume pengajuan kerjasama Influencer / KOL yang telah terkonfirmasi (FIX & ACC) untuk periode penayangan Oktober 2026.
+
+Catatan Pembaruan Roster:
+1. Nanda PWT (Adik Ibu Owner) : Dialihkan ke wave kampanye November 2026.
+2. Yensi Haqun Cilacap        : Dibatalkan (karena meminta fresh money di luar skema barter).
+3. Cabang Wonosobo            : Dikosongkan sementara (proses kurasi kandidat pengganti).
+
+────────────────────────────────────────────────────────────
+A. DAFTAR KOL AKTIF PER CABANG (OCTOBER 2026)
+────────────────────────────────────────────────────────────
+
+1. CABANG PURWOKERTO (PWT) - @iseeyou.glasses
+   a. Yuriko (@yurikonaseu)
+      • Bentuk Kerjasama : 100% Barter Produk Kacamata
+      • Nilai Produk     : Rp 250.000 (Free Frame + Lensa Pilihan)
+      • Voucher Follower : 5 pcs @ Rp 50.000 (Total Rp 250.000)
+      • Biaya Cash       : Rp 0
+      • Timeline         : Visit Store 12 Okt | Maks Upload 14 Okt 2026
+      • Status           : ACC Mas Raja (Siap Visit)
+
+   b. Salsa (@justnnayyaa)
+      • Bentuk Kerjasama : 100% Barter Produk Kacamata
+      • Nilai Produk     : Rp 250.000 (Free Frame + Lensa Pilihan)
+      • Voucher Follower : 5 pcs @ Rp 50.000 (Total Rp 250.000)
+      • Biaya Cash       : Rp 0
+      • Timeline         : Visit Store 19 Okt | Maks Upload 21 Okt 2026
+      • Status           : ACC Mas Raja (Menyesuaikan Hari Libur Kerja)
+
+------------------------------------------------------------
+2. CABANG PURBALINGGA (PBG) - @iseeyou.purbalingga
+   a. Tarisa Dina (@tarisadina)
+      • Bentuk Kerjasama : Barter Produk + Bantuan Transportasi/Operasional
+      • Nilai Produk     : Rp 200.000 (Free Frame + Lensa)
+      • Biaya Cash       : Rp 50.000 (Transportasi 2x Pembuatan Konten)
+      • Deliverables     : 2x Upload Video Reels & TikTok (Bulan ini)
+      • Timeline         : Upload 1 (13-15 Okt) | Upload 2 (27-28 Okt 2026)
+      • Status           : ACC Mba Ilya & Mas Raja
+
+------------------------------------------------------------
+3. CABANG CILACAP (CLP) - @iseeyou.cilacap
+   a. Kang Gono (@kanggonocilacap2)
+      • Bentuk Kerjasama : 100% Barter Produk Kacamata
+      • Nilai Produk     : Rp 350.000 (Free Frame + Lensa Kustom)
+      • Voucher Follower : 5 pcs @ Rp 50.000 (Total Rp 250.000)
+      • Biaya Cash       : Rp 0 (Negosiasi dari rate card cash awal 300k)
+      • Deliverables     : 1x Reels + TikTok Mirroring + Story Support
+      • Timeline         : Fix Visit Store 16 Oktober 2026
+      • Status           : ACC Mas Raja (Siap Visit)
+
+------------------------------------------------------------
+4. CABANG TEGAL (TGL) - @lunareyewear.co
+   a. Meinuraeni / MXeyy (@__mxeyy)
+      • Bentuk Kerjasama : 100% Barter Produk Kacamata
+      • Nilai Produk     : Rp 300.000 (Free Frame + Lensa)
+      • Voucher Follower : 5 pcs @ Rp 50.000 (Total Rp 250.000)
+      • Biaya Cash       : Rp 0
+      • Deliverables     : 1x Video Review/Visit + Story
+      • Status           : CLEAR & ACC Mba Ilya ✅
+
+------------------------------------------------------------
+5. CABANG WONOSOBO (WSB) - @iseeyou.wonosobo
+   • Status              : SEMENTARA DIKOSONGKAN
+   *(Masih tahap seleksi & pitching kandidat baru, akan diajukan terpisah)*
+
+────────────────────────────────────────────────────────────
+B. REKAPITULASI BIAYA & PENGAJUAN ANGGARAN
+────────────────────────────────────────────────────────────
+
+1. TOTAL PENGELUARAN KAS TUNAI (CASH OUTFLOW) :
+   • Uang Transport/Operasional Tarisa PBG : Rp 50.000
+   👉 TOTAL PENGAJUAN DANA KAS TUNAI       : Rp 50.000 (Hanya Lima Puluh Ribu Rupiah)
+
+2. TOTAL ALOKASI BARTER FISIK PRODUK (NON-CASH) :
+   • Yuriko (PWT)    : Rp 250.000
+   • Salsa (PWT)     : Rp 250.000
+   • Tarisa (PBG)    : Rp 200.000
+   • Kang Gono (CLP) : Rp 350.000
+   • MXeyy (TGL)     : Rp 300.000
+   👉 TOTAL VALUE PRODUK (5 Talent)        : Rp 1.350.000 (Satu Juta Tiga Ratus Lima Puluh Ribu Rupiah)
+   *(Produk diambil langsung dari persediaan stok kacamata di masing-masing cabang)*
+
+3. TOTAL ALOKASI VOUCHER POTONGAN FOLLOWERS :
+   • Total Voucher : 20 Lembar @ Rp 50.000 (4 Talent x 5 pcs)
+   • Fungsi        : Stimulus voucher belanja agar followers langsung visit & transaksi di toko cabang.
+
+────────────────────────────────────────────────────────────
+C. KESIMPULAN EFISIENSI MARKETING
+────────────────────────────────────────────────────────────
+Melalui strategi barter produk ini:
+- Perusahaan mendapatkan total 6x penayangan video konten berkualitas di 4 kota aktif (Purwokerto, Purbalingga, Cilacap, Tegal).
+- Efisiensi anggaran mencapai >96% karena total pengeluaran uang kas tunai ke talent HANYA Rp 50.000.
+
+Mohon approval dari Tim Finance agar dana transport Rp 50.000 dapat diproses, dan cabang terkait dapat diberitahukan untuk menyiapkan alokasi kacamata barter.
+
+Terima kasih atas bantuan dan kerjasamanya. 🙏✨
+
+Hormat kami,
+Tim Marketing Optik I See You & Lunar Eyewear
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`;
+    navigator.clipboard.writeText(memoText);
+    setCopiedMemo(true);
+    setTimeout(() => setCopiedMemo(false), 3000);
+  };
+
   const handleAddKol = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newKolForm.name || !newKolForm.handle) return;
@@ -340,6 +458,23 @@ Have a nicee dayy ya kaa! 🌸✨`;
         {/* Action buttons */}
         <div className="flex flex-wrap items-center gap-2.5">
           <button
+            onClick={handleCopyFinanceMemo}
+            className="flex items-center gap-2 px-3.5 py-2 rounded-control bg-emerald-700 text-white text-xs font-semibold hover:bg-emerald-800 transition-all shadow-subtle active:scale-95"
+          >
+            {copiedMemo ? (
+              <>
+                <Check className="w-3.5 h-3.5 text-emerald-300" />
+                <span>Format Memo WhatsApp Tersalin!</span>
+              </>
+            ) : (
+              <>
+                <Send className="w-3.5 h-3.5" />
+                <span>Salin Memo WhatsApp Finance</span>
+              </>
+            )}
+          </button>
+
+          <button
             onClick={handleCopyFullReport}
             className="flex items-center gap-2 px-3.5 py-2 rounded-control bg-foreground text-surface text-xs font-semibold hover:opacity-90 transition-all shadow-subtle active:scale-95"
           >
@@ -372,6 +507,181 @@ Have a nicee dayy ya kaa! 🌸✨`;
             <ExternalLink className="w-3.5 h-3.5 text-foreground-muted" />
             <span>SocialBlade.com</span>
           </a>
+        </div>
+      </div>
+
+      {/* RESUME RESMI ANGGARAN & BARTER KOL OKTOBER 2026 (HEADSTORE & FINANCE COMPLIANCE) */}
+      <div className="bg-surface border-2 border-emerald-600/30 rounded-card p-5 shadow-sm space-y-4">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-3 border-b border-border">
+          <div className="flex items-center gap-2.5">
+            <div className="p-2 rounded-lg bg-emerald-500/15 text-emerald-800">
+              <ClipboardCheck className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h2 className="text-sm font-bold text-foreground">
+                  Memo Resmi: Realisasi &amp; Anggaran Barter KOL Oktober 2026
+                </h2>
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 border border-emerald-300">
+                  FIX &amp; ACC Manajemen
+                </span>
+              </div>
+              <p className="text-xs text-foreground-muted mt-0.5">
+                Acuan resmi Headstore &amp; Tim Finance agar alokasi kacamata barter di cabang siap dan tidak terjadi miskomunikasi.
+              </p>
+            </div>
+          </div>
+
+          <button
+            onClick={handleCopyFinanceMemo}
+            className="flex items-center gap-2 px-3.5 py-2 rounded-control bg-emerald-700 text-white text-xs font-semibold hover:bg-emerald-800 transition-all shadow-subtle active:scale-95 shrink-0"
+          >
+            {copiedMemo ? (
+              <>
+                <Check className="w-3.5 h-3.5 text-emerald-300" />
+                <span>Format Memo WhatsApp Tersalin!</span>
+              </>
+            ) : (
+              <>
+                <Send className="w-3.5 h-3.5" />
+                <span>Salin Memo WhatsApp Finance</span>
+              </>
+            )}
+          </button>
+        </div>
+
+        {/* 4 Financial Highlight KPI Cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          <div className="p-3.5 rounded-lg bg-emerald-50/60 dark:bg-emerald-950/20 border border-emerald-200 dark:border-emerald-900/40">
+            <span className="text-[10px] uppercase font-bold tracking-wider text-emerald-800 dark:text-emerald-400 block">
+              1. Pengeluaran Kas Tunai
+            </span>
+            <div className="text-xl font-bold text-emerald-900 dark:text-emerald-200 mt-1 tabular-nums">
+              Rp 50.000
+            </div>
+            <span className="text-[11px] text-emerald-700 dark:text-emerald-300 mt-1 block">
+              Hanya Transport Tarisa PBG (Hemat &gt;96%)
+            </span>
+          </div>
+
+          <div className="p-3.5 rounded-lg bg-blue-50/60 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-900/40">
+            <span className="text-[10px] uppercase font-bold tracking-wider text-blue-800 dark:text-blue-400 block">
+              2. Alokasi Barter Produk Fisik
+            </span>
+            <div className="text-xl font-bold text-blue-900 dark:text-blue-200 mt-1 tabular-nums">
+              Rp 1.350.000
+            </div>
+            <span className="text-[11px] text-blue-700 dark:text-blue-300 mt-1 block">
+              5 Talent: Kacamata diambil dari stok cabang
+            </span>
+          </div>
+
+          <div className="p-3.5 rounded-lg bg-purple-50/60 dark:bg-purple-950/20 border border-purple-200 dark:border-purple-900/40">
+            <span className="text-[10px] uppercase font-bold tracking-wider text-purple-800 dark:text-purple-400 block">
+              3. Voucher Diskon Followers
+            </span>
+            <div className="text-xl font-bold text-purple-900 dark:text-purple-200 mt-1 tabular-nums">
+              20 Pcs (@ Rp 50.000)
+            </div>
+            <span className="text-[11px] text-purple-700 dark:text-purple-300 mt-1 block">
+              Total Rp 1.000.000 (Stimulus visit toko)
+            </span>
+          </div>
+
+          <div className="p-3.5 rounded-lg bg-amber-50/60 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/40">
+            <span className="text-[10px] uppercase font-bold tracking-wider text-amber-800 dark:text-amber-400 block">
+              4. Total Konten &amp; Roster Aktif
+            </span>
+            <div className="text-xl font-bold text-amber-900 dark:text-amber-200 mt-1 tabular-nums">
+              6x Penayangan (5 Talent)
+            </div>
+            <span className="text-[11px] text-amber-700 dark:text-amber-300 mt-1 block">
+              PWT (2), PBG (1), CLP (1), TGL (1)
+            </span>
+          </div>
+        </div>
+
+        {/* Tabel Rekap Barter Resmi untuk Headstore */}
+        <div className="overflow-x-auto rounded-lg border border-border">
+          <table className="w-full text-left text-xs border-collapse">
+            <thead className="bg-surface-secondary text-foreground-secondary font-semibold border-b border-border">
+              <tr>
+                <th className="py-2.5 px-3 whitespace-nowrap">Cabang &amp; Brand</th>
+                <th className="py-2.5 px-3 whitespace-nowrap">Talent / Akun</th>
+                <th className="py-2.5 px-3 whitespace-nowrap">Bentuk Kerjasama</th>
+                <th className="py-2.5 px-3 text-right whitespace-nowrap">Nilai Barter Produk</th>
+                <th className="py-2.5 px-3 text-right whitespace-nowrap">Kas Tunai</th>
+                <th className="py-2.5 px-3 whitespace-nowrap">Voucher Followers</th>
+                <th className="py-2.5 px-3 whitespace-nowrap">Timeline &amp; Deliverables</th>
+                <th className="py-2.5 px-3 text-center whitespace-nowrap">Status Approval</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-border/70 bg-surface">
+              {/* Purwokerto: Yuriko */}
+              <tr className="hover:bg-surface-secondary/40">
+                <td className="py-2.5 px-3 font-semibold text-foreground">Purwokerto · ISY</td>
+                <td className="py-2.5 px-3 font-medium text-foreground">Yuriko (@yurikonaseu)</td>
+                <td className="py-2.5 px-3 text-foreground-secondary">100% Barter Produk</td>
+                <td className="py-2.5 px-3 text-right font-mono font-bold text-emerald-800">Rp 250.000</td>
+                <td className="py-2.5 px-3 text-right font-mono font-medium text-foreground-muted">Rp 0</td>
+                <td className="py-2.5 px-3">5 pcs @ Rp 50.000</td>
+                <td className="py-2.5 px-3 text-foreground-secondary">Visit 12 Okt | Maks Upload 14 Okt</td>
+                <td className="py-2.5 px-3 text-center"><span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">ACC Mas Raja</span></td>
+              </tr>
+              {/* Purwokerto: Salsa */}
+              <tr className="hover:bg-surface-secondary/40">
+                <td className="py-2.5 px-3 font-semibold text-foreground">Purwokerto · ISY</td>
+                <td className="py-2.5 px-3 font-medium text-foreground">Salsa (@justnnayyaa)</td>
+                <td className="py-2.5 px-3 text-foreground-secondary">100% Barter Produk</td>
+                <td className="py-2.5 px-3 text-right font-mono font-bold text-emerald-800">Rp 250.000</td>
+                <td className="py-2.5 px-3 text-right font-mono font-medium text-foreground-muted">Rp 0</td>
+                <td className="py-2.5 px-3">5 pcs @ Rp 50.000</td>
+                <td className="py-2.5 px-3 text-foreground-secondary">Visit 19 Okt | Maks Upload 21 Okt</td>
+                <td className="py-2.5 px-3 text-center"><span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">ACC Mas Raja</span></td>
+              </tr>
+              {/* Purbalingga: Tarisa Dina */}
+              <tr className="hover:bg-surface-secondary/40">
+                <td className="py-2.5 px-3 font-semibold text-foreground">Purbalingga · ISY</td>
+                <td className="py-2.5 px-3 font-medium text-foreground">Tarisa Dina (@tarisadina)</td>
+                <td className="py-2.5 px-3 text-foreground-secondary">Barter Produk + Transport</td>
+                <td className="py-2.5 px-3 text-right font-mono font-bold text-emerald-800">Rp 200.000</td>
+                <td className="py-2.5 px-3 text-right font-mono font-bold text-amber-800">Rp 50.000</td>
+                <td className="py-2.5 px-3 text-foreground-muted">-</td>
+                <td className="py-2.5 px-3 text-foreground-secondary">2x Video (Upload 1: 13-15 Okt, Upload 2: 27-28 Okt)</td>
+                <td className="py-2.5 px-3 text-center"><span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">ACC Mba Ilya &amp; Raja</span></td>
+              </tr>
+              {/* Cilacap: Kang Gono */}
+              <tr className="hover:bg-surface-secondary/40 bg-emerald-50/20">
+                <td className="py-2.5 px-3 font-semibold text-foreground">Cilacap · ISY</td>
+                <td className="py-2.5 px-3 font-medium text-foreground">Kang Gono (@kanggonocilacap2)</td>
+                <td className="py-2.5 px-3 text-foreground-secondary">100% Barter Produk</td>
+                <td className="py-2.5 px-3 text-right font-mono font-bold text-emerald-800">Rp 350.000</td>
+                <td className="py-2.5 px-3 text-right font-mono font-medium text-foreground-muted">Rp 0</td>
+                <td className="py-2.5 px-3">5 pcs @ Rp 50.000</td>
+                <td className="py-2.5 px-3 font-medium text-emerald-900">Fix Visit 16 Okt · 1x Reels + TikTok Mirroring</td>
+                <td className="py-2.5 px-3 text-center"><span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">ACC Mas Raja</span></td>
+              </tr>
+              {/* Tegal: MXeyy */}
+              <tr className="hover:bg-surface-secondary/40">
+                <td className="py-2.5 px-3 font-semibold text-foreground">Tegal · Lunar</td>
+                <td className="py-2.5 px-3 font-medium text-foreground">Meinuraeni / MXeyy (@__mxeyy)</td>
+                <td className="py-2.5 px-3 text-foreground-secondary">100% Barter Produk</td>
+                <td className="py-2.5 px-3 text-right font-mono font-bold text-emerald-800">Rp 300.000</td>
+                <td className="py-2.5 px-3 text-right font-mono font-medium text-foreground-muted">Rp 0</td>
+                <td className="py-2.5 px-3">5 pcs @ Rp 50.000</td>
+                <td className="py-2.5 px-3 text-foreground-secondary">1x Video Review/Visit + Story</td>
+                <td className="py-2.5 px-3 text-center"><span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">CLEAR &amp; ACC Mba Ilya</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        {/* Catatan Perubahan Roster */}
+        <div className="p-3 bg-surface-secondary rounded-lg border border-border text-xs text-foreground-secondary space-y-1">
+          <span className="font-bold text-foreground block">Catatan Pembaruan Roster:</span>
+          <div>• <strong>1. Nanda PWT (Adik Ibu Owner):</strong> Dialihkan ke wave kampanye November 2026.</div>
+          <div>• <strong>2. Yensi Haqun Cilacap:</strong> Dibatalkan (karena meminta fresh money di luar skema barter perusahaan).</div>
+          <div>• <strong>3. Cabang Wonosobo:</strong> Dikosongkan sementara (proses seleksi &amp; kurasi kandidat baru).</div>
         </div>
       </div>
 
