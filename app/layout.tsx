@@ -3,6 +3,7 @@ import "./globals.css";
 import { AppFrame } from "@/components/shared/AppFrame";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://iseeyou-marketing-intelligence.vercel.app"),
   title: "Optik I See You & Lunar Eyewear · Marketing Intelligence System",
   description: "Enterprise multi-channel marketing intelligence and operational CRM dashboard for Optik I See You (Purwokerto, Purbalingga, Cilacap, Wonosobo) & Lunar Eyewear Tegal.",
   icons: {

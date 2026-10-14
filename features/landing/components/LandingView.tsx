@@ -12,59 +12,6 @@ const branches = [
   { id: 'tgl', name: 'Tegal', detail: 'Lunar Eyewear' },
 ];
 
-const googleMapsReviews = [
-  {
-    id: "rev-pwt",
-    branchName: "Purwokerto (Pusat)",
-    author: "Dwi Aryani",
-    authorRole: "Local Guide",
-    relativeDate: "4 hari yang lalu",
-    rating: 5,
-    text: "Pengerjaan faset kacamata cepet banget 20 menit langsung jadi. Tempatnya estetik, staf ramah pol, periksa mata komputernya detail dan gratis. Kacamata titaniumnya enteng dan nyaman dipake seharian.",
-    mapUrl: "https://maps.app.goo.gl/OptikISeeYouPurwokerto",
-  },
-  {
-    id: "rev-pbg",
-    branchName: "Purbalingga",
-    author: "Rizky Fajar Pratama",
-    authorRole: "Pengunjung Terverifikasi",
-    relativeDate: "7 hari yang lalu",
-    rating: 5,
-    text: "Store kacamata paling aesthetic di Purbalingga! Pilihan frame korean series lengkap dan harganya terjangkau. Mas & mbak yang melayani sabar banget pas bantu nyoba-nyoba frame. Recommended banget!",
-    mapUrl: "https://maps.app.goo.gl/OptikISeeYouPurbalingga",
-  },
-  {
-    id: "rev-clp",
-    branchName: "Cilacap",
-    author: "Annisa Wulandari",
-    authorRole: "Local Guide",
-    relativeDate: "12 hari yang lalu",
-    rating: 5,
-    text: "Akhirnya nemu lensa bluechromic yang pas buat motoran di Cilacap, ga silau sama sekali pas terik. Pelayanan ramah, tempat dingin & bersih, ada garansi fitting frame juga.",
-    mapUrl: "https://maps.app.goo.gl/OptikISeeYouCilacap",
-  },
-  {
-    id: "rev-wns",
-    branchName: "Wonosobo",
-    author: "Bagus Prasetyo",
-    authorRole: "Pengunjung Terverifikasi",
-    relativeDate: "2 minggu yang lalu",
-    rating: 5,
-    text: "Puas banget periksa mata di sini, resep silinder akurat ga bikin pusing sama sekali. Lensa anti embunnya kepake banget buat udara dingin Wonosobo. Sukses terus Optik I See You!",
-    mapUrl: "https://maps.app.goo.gl/OptikISeeYouWonosobo",
-  },
-  {
-    id: "rev-tgl",
-    branchName: "Tegal (Lunar Eyewear)",
-    author: "Siti Maulida",
-    authorRole: "Local Guide",
-    relativeDate: "1 bulan yang lalu",
-    rating: 5,
-    text: "Konsep Lunar Eyewear keren banget di Langon Square Tegal. Koleksi framenya unik, beda dari optik konvensional. Barangnya bagus, staf ramah, dan pembersihan kacamata gratis.",
-    mapUrl: "https://maps.app.goo.gl/LunarEyewearTegal",
-  },
-];
-
 function EntryButton({ children = 'Masuk workspace', className = '' }: { children?: React.ReactNode; className?: string }) {
   return <button type="button" data-open-workspace className={`imi-button ${className}`}>{children}</button>;
 }
@@ -105,7 +52,7 @@ export function LandingView() {
       <a className="imi-skip" href="#imi-main">Lewati navigasi</a>
       <header className="imi-nav">
         <a href="/?intro=1" className="imi-brand" aria-label="I See You Intelligence beranda"><img src="/brand/logo-isy-dark.png" width="114" height="39" alt="Optik I See You" /><span>Intelligence</span></a>
-        <nav aria-label="Navigasi landing page"><a href="#produk">Produk</a><a href="#ulasan">Ulasan Maps</a><a href="#alur">Alur kerja</a><a href="#cabang">Cabang</a></nav>
+        <nav aria-label="Navigasi landing page"><a href="#produk">Produk</a><a href="#alur">Alur kerja</a><a href="#cabang">Cabang</a></nav>
         <EntryButton className="imi-button-small">Buka workspace</EntryButton>
       </header>
       <main id="imi-main">
@@ -117,31 +64,6 @@ export function LandingView() {
         <section id="produk" className="imi-product" aria-labelledby="imi-product-title">
           <div className="imi-section-intro"><p className="imi-eyebrow">SATU RUANG KERJA</p><h2 id="imi-product-title">Pekerjaan yang terhubung.<br /><span>Pandangan yang utuh.</span></h2><p>Mulai dari konten yang dipublikasikan hingga hal yang perlu dibahas bersama. Temukan bagian pekerjaan Anda tanpa berpindah konteks.</p></div>
           <div className="imi-feature-lines"><article><span className="imi-index">01</span><div><h3>Konten & performa.</h3><p>Telusuri aktivitas konten, rekap Story, evaluasi Reels dan analytics. Lihat hasil bersama periode dan sumbernya.</p><div className="imi-module-names">Konten <span>·</span> Spreadsheet <span>·</span> Analytics</div></div></article><article><span className="imi-index">02</span><div><h3>Tim & operasional.</h3><p>Satukan rekap PIC, pengajuan kerja sama dan tindak lanjut pelanggan. Catatan pekerjaan tetap berada di tempat yang tepat.</p><div className="imi-module-names">Pengajuan <span>·</span> Aftersales <span>·</span> Evaluasi PIC</div></div></article><article><span className="imi-index">03</span><div><h3>Riset & keputusan.</h3><p>Susun konteks kompetitor, kandidat KOL dan pilihan venue. Bawa rangkuman yang relevan ke evaluasi mingguan.</p><div className="imi-module-names">Kompetitor <span>·</span> KOL <span>·</span> Venue <span>·</span> Laporan</div></div></article></div>
-        </section>
-        <section id="ulasan" className="imi-reviews" aria-labelledby="imi-reviews-title">
-          <div className="imi-section-intro">
-            <p className="imi-eyebrow">ULASAN GOOGLE MAPS TERKINI</p>
-            <h2 id="imi-reviews-title">Dipercaya ribuan pelanggan.<br /><span>Ulasan riil setiap cabang.</span></h2>
-            <p>Ulasan bintang 5 langsung dari Google Maps resmi seluruh gerai ritel. Pelayanan ramah, periksa mata akurat, dan pengerjaan faset kacamata cepat.</p>
-          </div>
-          <div className="imi-review-grid">
-            {googleMapsReviews.map((rev) => (
-              <article key={rev.id} className="imi-review-card">
-                <div className="imi-review-header">
-                  <span className="imi-review-stars">★★★★★</span>
-                  <span className="imi-review-date">{rev.relativeDate}</span>
-                </div>
-                <p className="imi-review-text">&ldquo;{rev.text}&rdquo;</p>
-                <div className="imi-review-author">
-                  <strong>{rev.author}</strong>
-                  <span>
-                    <span>{rev.authorRole} · {rev.branchName}</span>
-                    <a href={rev.mapUrl} target="_blank" rel="noopener noreferrer">Buka Maps ↗</a>
-                  </span>
-                </div>
-              </article>
-            ))}
-          </div>
         </section>
         <section id="alur" className="imi-workflow" aria-labelledby="imi-workflow-title"><div className="imi-workflow-top"><div><p className="imi-eyebrow">LANGSUNG KE PEKERJAAN ANDA</p><h2 id="imi-workflow-title">Lebih sedikit langkah.<br />Lebih banyak fokus.</h2></div><p>Tidak perlu membuat akun untuk membuka workspace. Mulai sekali, lalu lanjutkan dengan lebih praktis.</p></div><ol><li><span>01</span><h3>Pilih workspace.</h3><p>Seluruh jaringan atau cabang tempat Anda bekerja.</p></li><li><span>02</span><h3>Buka dashboard.</h3><p>Masuk ke sistem dan lanjutkan aktivitas tim.</p></li><li><span>03</span><h3>Kembali lebih cepat.</h3><p>Dengan pilihan diingat, kunjungan berikutnya langsung ke dashboard.</p></li></ol><div className="imi-workflow-bottom"><EntryButton className="imi-button-light">Mulai sekarang</EntryButton><span>Preferensi lokal. Tidak memberikan izin akses tambahan.</span></div></section>
         <section id="cabang" className="imi-branches" aria-labelledby="imi-branches-title"><div><p className="imi-eyebrow">SATU JARINGAN, KONTEKS LOKAL</p><h2 id="imi-branches-title">Dekat dengan<br />setiap cabang.</h2><p>Empat cabang Optik I See You dan Lunar Eyewear Tegal. Satu pintu masuk untuk pekerjaan marketing Anda.</p></div><div className="imi-branch-list">{branches.slice(1).map((branch) => <div key={branch.id}><h3>{branch.name}</h3><span>{branch.id === 'pwt' ? 'Optik I See You · Pusat' : branch.id === 'tgl' ? 'Lunar Eyewear' : 'Optik I See You'}</span></div>)}</div></section>
