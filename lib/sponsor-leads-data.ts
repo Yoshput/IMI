@@ -16,7 +16,7 @@ export const INITIAL_SPONSOR_LEADS: SponsorLead[] = [
   {
     id: "sp-01",
     brandName: "Baby Glows",
-    contactPerson: "Tim PIC Baby Glows",
+    contactPerson: "Tim Manajemen Baby Glows",
     phone: "+62 895-4219-89696",
     cleanPhone: "62895421989696",
     category: "Skincare & Clinic",
@@ -28,7 +28,7 @@ export const INITIAL_SPONSOR_LEADS: SponsorLead[] = [
   {
     id: "sp-02",
     brandName: "GKP - Nuha Cosmetindo",
-    contactPerson: "PIC Nuha Cosmetindo",
+    contactPerson: "Tim Manajemen Nuha Cosmetindo",
     phone: "+62 812-3456-8220",
     cleanPhone: "6281234568220",
     category: "Skincare & Clinic",
@@ -40,7 +40,7 @@ export const INITIAL_SPONSOR_LEADS: SponsorLead[] = [
   {
     id: "sp-03",
     brandName: "Taylor De Virdis",
-    contactPerson: "Tim Taylor De Virdis",
+    contactPerson: "Tim Manajemen Taylor De Virdis",
     phone: "+62 851-3373-0893",
     cleanPhone: "6285133730893",
     category: "Fashion & Tailor",
@@ -64,7 +64,7 @@ export const INITIAL_SPONSOR_LEADS: SponsorLead[] = [
   {
     id: "sp-05",
     brandName: "B2B Clinic",
-    contactPerson: "PIC Marketing B2B Clinic",
+    contactPerson: "Tim Manajemen B2B Clinic",
     phone: "+62 896-7447-1692",
     cleanPhone: "6289674471692",
     category: "Skincare & Clinic",
@@ -76,7 +76,7 @@ export const INITIAL_SPONSOR_LEADS: SponsorLead[] = [
   {
     id: "sp-06",
     brandName: "Navagreen Purwokerto (Line 1)",
-    contactPerson: "Customer Relations & Marketing Navagreen",
+    contactPerson: "Tim Marketing Navagreen",
     phone: "+62 855-4024-6660",
     cleanPhone: "6285540246660",
     category: "Skincare & Clinic",
@@ -88,7 +88,7 @@ export const INITIAL_SPONSOR_LEADS: SponsorLead[] = [
   {
     id: "sp-07",
     brandName: "Reta Beauty Clinic",
-    contactPerson: "PIC Sponsorship Reta Clinic",
+    contactPerson: "Tim Sponsorship Reta Clinic",
     phone: "+62 822-4237-4910",
     cleanPhone: "6282242374910",
     category: "Skincare & Clinic",
@@ -100,7 +100,7 @@ export const INITIAL_SPONSOR_LEADS: SponsorLead[] = [
   {
     id: "sp-08",
     brandName: "Rita Padel Club",
-    contactPerson: "Admin & Marketing Rita Padel Club",
+    contactPerson: "Tim Manajemen Rita Padel Club",
     phone: "+62 815-5876-0009",
     cleanPhone: "6281558760009",
     category: "Sports",
@@ -112,7 +112,7 @@ export const INITIAL_SPONSOR_LEADS: SponsorLead[] = [
   {
     id: "sp-09",
     brandName: "Rita Supermall / Retail",
-    contactPerson: "PIC Partnership Rita Group",
+    contactPerson: "Tim Promosi & Marketing Rita Group",
     phone: "+62 851-6886-1546",
     cleanPhone: "6285168861546",
     category: "Retail & Mall",
@@ -124,7 +124,7 @@ export const INITIAL_SPONSOR_LEADS: SponsorLead[] = [
   {
     id: "sp-10",
     brandName: "Navagreen Promosi & Media (Line 2)",
-    contactPerson: "PIC Promosi & Event Navagreen",
+    contactPerson: "Tim Promosi & Event Navagreen",
     phone: "+62 855-4024-6660",
     cleanPhone: "6285540246660",
     category: "Skincare & Clinic",
@@ -136,7 +136,7 @@ export const INITIAL_SPONSOR_LEADS: SponsorLead[] = [
   {
     id: "sp-11",
     brandName: "Merayu Spa",
-    contactPerson: "Manajemen Merayu Spa",
+    contactPerson: "Tim Manajemen Merayu Spa",
     phone: "+62 821-3682-0064",
     cleanPhone: "6282136820064",
     category: "Wellness & Spa",
@@ -147,47 +147,79 @@ export const INITIAL_SPONSOR_LEADS: SponsorLead[] = [
   },
 ];
 
+function cleanBrandForLetter(raw: string): string {
+  return raw
+    .replace(/\s*\(Line\s*\d+\)/gi, "")
+    .replace(/\s*\/\s*Retail/gi, "")
+    .replace(/^GKP\s*-\s*/gi, "")
+    .replace(/\s*\(Inviz\s*Purwokerto\)/gi, " Purwokerto")
+    .trim();
+}
+
 /**
- * Format prompt WhatsApp yang sopan, profesional, dan mengkonsepkan event "Buka Kelas Konten"
+ * Format teks outreach WhatsApp resmi, formal korporat, tanpa emotikon / simbol AI slop.
+ * Mengikuti tata naskah korespondensi bisnis formal Indonesia.
  */
 export function buildSponsorPitchText(lead: SponsorLead, senderName = "Yoshput"): string {
+  const brand = cleanBrandForLetter(lead.brandName);
+
+  // Susun baris tujuan surat secara formal dan spesifik per entitas mitra
+  let addresseeLine: string;
+  if (lead.brandName.toLowerCase().includes("inul vista")) {
+    addresseeLine = `Yth. Mas Wahyu & Tim Marketing Inul Vista Purwokerto`;
+  } else if (lead.brandName.toLowerCase().includes("navagreen")) {
+    addresseeLine = `Yth. Pimpinan dan Tim Marketing Navagreen Purwokerto`;
+  } else if (lead.brandName.toLowerCase().includes("rita supermall")) {
+    addresseeLine = `Yth. Pimpinan dan Tim Promosi Rita Supermall Purwokerto`;
+  } else if (lead.brandName.toLowerCase().includes("reta")) {
+    addresseeLine = `Yth. Pimpinan dan Tim Sponsorship Reta Beauty Clinic`;
+  } else if (lead.brandName.toLowerCase().includes("nuha")) {
+    addresseeLine = `Yth. Pimpinan dan Tim Manajemen PT Nuha Cosmetindo`;
+  } else {
+    addresseeLine = `Yth. Pimpinan dan Tim Manajemen ${brand}`;
+  }
+
   const lines = [
-    `Halo Selamat Pagi/Siang Kak ${lead.contactPerson || "Tim Marketing"} ${lead.brandName},`,
+    addresseeLine,
+    `di Tempat`,
     ``,
-    `Salam hangat dari Optik I See You 🙏✨`,
-    `Perkenalkan saya *${senderName}* dari Divisi Marketing & Strategic Partnership Optik I See You.`,
+    `Dengan hormat,`,
     ``,
-    `Kami menghubungi Kakak karena melihat *${lead.brandName}* memiliki profil dan target audiens yang sangat selaras dengan segmen anak muda, mahasiswa, profesional, dan kreator konten aktif di Purwokerto dan jaringan 4 cabang kami.`,
+    `Perkenalkan, saya *${senderName}* dari Divisi Strategic Partnership & Marketing Optik I See You.`,
     ``,
-    `Dalam waktu dekat ini, Optik I See You akan menyelenggarakan event edukatif & kreatif:`,
-    `🎯 *"BUKA CLASS KONTEN: Creative Content Masterclass"*`,
-    `Sebuah pelatihan intensif pembuatan konten visual & video bersama pembicara/kreator inspiratif, yang akan diikuti oleh 50+ kreator konten pilihan, influencer lokal, dan pegiat media sosial.`,
+    `Sehubungan dengan agenda program pengembangan kreator konten dan industri kreatif di wilayah Banyumas Raya, Optik I See You bersama Lunar Eyewear akan menyelenggarakan program edukatif:`,
     ``,
-    `Sehubungan dengan agenda tersebut, kami ingin mengundang *${lead.brandName}* untuk berkolaborasi sebagai Official Sponsor / Brand Partner, dengan benefit eksposur multi-channel:`,
-    `1. 🎪 *Open Booth & Direct Activation:* Space pameran produk/konsultasi langsung di lokasi acara.`,
-    `2. 📺 *Retail Showroom Exposure:* Penayangan video iklan/profil ${lead.brandName} di layar TV 4 cabang ritel Optik I See You (Purwokerto, Purbalingga, Cilacap, Wonosobo).`,
-    `3. 🛍️ *Goodie Bag Integration:* Penyisipan sampling produk, tester, atau voucher diskon ${lead.brandName} ke dalam goodie bag resmi seluruh peserta & narasumber.`,
-    `4. 📸 *Social Media Amplification:* Publikasi logo di seluruh aset promosi digital, backdrop panggung, serta mention story dari jaringan akun @iseeyou.glasses (244.000+ followers).`,
+    `*"BUKA CLASS KONTEN: Creative Content Masterclass 2026"*`,
     ``,
-    `💡 *Skema Kolaborasi yang Direkomendasikan:* Paket *${lead.recommendedPackage}*`,
-    lead.specificAngle ? `*(Fokus khusus: ${lead.specificAngle})*` : ``,
+    `Program ini merupakan pelatihan intensif pembuatan konten visual dan video komersial yang menghadirkan narasumber kreator terkemuka, serta diikuti oleh lebih dari 50 kreator konten, mahasiswa, dan pegiat media sosial terpilih di Purwokerto dan sekitarnya.`,
     ``,
-    `📄 *Dokumen Proposal Resmi & Kerjasama Lengkap:*`,
-    `Telah kami siapkan secara detail dan dapat diakses melalui portal resmi kami:`,
-    `🔗 https://iseeyou-marketing-intelligence.vercel.app/proposal-sponsor`,
+    `Melihat profil dan target audiens *${brand}* yang sangat selaras dengan segmen komunitas kami, kami bermaksud mengundang *${brand}* untuk berpartisipasi sebagai Mitra Sponsor Resmi (Official Brand Partner).`,
     ``,
-    `Kira-kira apakah ada waktu luang hari ini atau besok untuk kami follow-up singkat via WhatsApp atau telepon terkait potensi sinergi ini, Kak?`,
+    `Bentuk eksposur dan fasilitas kemitraan yang kami sediakan meliputi:`,
+    `1. Open Booth & Direct Activation: Penyediaan space promosi dan aktivasi langsung di lokasi acara.`,
+    `2. Retail Showroom Exposure: Penayangan video profil / iklan komersial ${brand} pada layar TV Showroom di 4 cabang ritel Optik I See You (Purwokerto, Purbalingga, Cilacap, dan Wonosobo).`,
+    `3. Goodie Bag Integration: Penyisipan tester produk, brosur resmi, atau voucher diskon ${brand} ke dalam official kit seluruh peserta dan pembicara.`,
+    `4. Publikasi Multi-Platform: Pencantuman logo resmi pada backdrop panggung, photowall, materi publikasi cetak, serta publikasi digital melalui media sosial @iseeyou.glasses (244.000+ followers).`,
     ``,
-    `Terima kasih banyak atas perhatian dan waktu Kakak. Sukses selalu untuk ${lead.brandName}! 🙏😊`,
+    `Rekomendasi Skema Kemitraan: *Paket ${lead.recommendedPackage}*`,
+    lead.specificAngle ? `Catatan Fokus Kerjasama: ${lead.specificAngle}` : ``,
+    ``,
+    `Proposal Resmi & Rincian Fasilitas Lengkap dapat diakses melalui tautan berikut:`,
+    `https://iseeyou-marketing-intelligence.vercel.app/proposal-sponsor`,
+    ``,
+    `Apabila Bapak/Ibu berkenan, kami siap untuk berdiskusi lebih lanjut via WhatsApp atau menjadwalkan audiensi singkat guna membahas teknis sinergi ini.`,
+    ``,
+    `Demikian penawaran kerjasama ini kami sampaikan. Atas perhatian dan kesediaan Bapak/Ibu, kami ucapkan terima kasih.`,
     ``,
     `Hormat kami,`,
-    `*${senderName}* · Divisi Marketing & Event`,
+    `*${senderName}*`,
+    `Divisi Strategic Partnership & Marketing`,
     `Optik I See You & Lunar Eyewear`,
-    `WhatsApp: 0877-7868-3766`,
-    `Website: optikiseeyou.com`,
-  ].filter(Boolean);
+    `Kontak WhatsApp: 0877-7868-3766`,
+    `Situs Resmi: optikiseeyou.com`,
+  ];
 
-  return lines.join("\n");
+  return lines.filter((l): l is string => typeof l === "string").join("\n");
 }
 
 export function buildWhatsAppLink(cleanPhone: string, message: string): string {

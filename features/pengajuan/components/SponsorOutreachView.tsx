@@ -30,7 +30,7 @@ import {
   buildWhatsAppLink,
 } from "@/lib/sponsor-leads-data";
 
-const STORAGE_KEY = "imi_sponsor_leads_data_v1";
+const STORAGE_KEY = "imi_sponsor_leads_data_v3";
 
 const STATUS_CONFIG: Record<
   SponsorLead["status"],
@@ -54,7 +54,7 @@ const STATUS_CONFIG: Record<
   Negosiasi: {
     label: "Negosiasi",
     badge: "bg-purple-500/10 text-purple-500 border-purple-500/30",
-    icon: Sparkles,
+    icon: Layers,
   },
   "Deal Disetujui": {
     label: "Deal Disetujui",
@@ -340,12 +340,12 @@ export const SponsorOutreachView: React.FC = () => {
                           STATUS_CONFIG[lead.status]?.badge
                         }`}
                       >
-                        <option value="Belum Dihubungi">⏳ Belum Dihubungi</option>
-                        <option value="Chat Terkirim">📤 Chat Terkirim</option>
-                        <option value="Menunggu Respon">💬 Menunggu Respon</option>
-                        <option value="Negosiasi">🤝 Negosiasi</option>
-                        <option value="Deal Disetujui">✅ Deal Disetujui</option>
-                        <option value="Ditolak">❌ Ditolak</option>
+                        <option value="Belum Dihubungi">Belum Dihubungi</option>
+                        <option value="Chat Terkirim">Chat Terkirim</option>
+                        <option value="Menunggu Respon">Menunggu Respon</option>
+                        <option value="Negosiasi">Negosiasi</option>
+                        <option value="Deal Disetujui">Deal Disetujui</option>
+                        <option value="Ditolak">Ditolak / Belum Pas</option>
                       </select>
                     </div>
                   </div>
@@ -421,8 +421,8 @@ export const SponsorOutreachView: React.FC = () => {
                 </div>
               </div>
 
-              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-white/20 text-white">
-                WA Pitch Preview
+              <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-white/20 text-white tracking-wide">
+                Format Baku Korporat
               </span>
             </div>
 

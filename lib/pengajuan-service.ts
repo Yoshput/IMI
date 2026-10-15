@@ -40,22 +40,22 @@ export function buildSponsorWhatsAppMessage(item: {
     `Perkenalkan saya *${(item.applicantName || "Pemohon").trim()}* dari *${(item.institution || "Panitia Acara").trim()}*.`,
     `Kami bermaksud mengajukan penawaran proposal kerja sama sponsorship melalui web portal optikiseeyou.com:`,
     ``,
-    `📋 *Nama Kegiatan:* ${item.eventName || "-"}`,
-    `👥 *Target Peserta/Audiens:* ${item.targetAudience || "100+"} orang`,
-    `📍 *Target Cabang:* Optik I See You Cabang ${item.targetBranch || "Purwokerto"}`,
-    `📅 *Tanggal Pelaksanaan:* ${item.eventDate || "Sesuai proposal"}`,
+    `- *Nama Kegiatan:* ${item.eventName || "-"}`,
+    `- *Target Peserta/Audiens:* ${item.targetAudience || "100+"} orang`,
+    `- *Target Cabang:* Optik I See You Cabang ${item.targetBranch || "Purwokerto"}`,
+    `- *Tanggal Pelaksanaan:* ${item.eventDate || "Sesuai proposal"}`,
     ``,
-    `📝 *Resume Ringkas Kegiatan:*`,
+    `*Resume Ringkas Kegiatan:*`,
     `"${(item.description || "-").trim()}"`,
     ``,
-    item.offeredBenefits ? `🎁 *Benefit untuk Optik I See You:*\n"${item.offeredBenefits.trim()}"\n` : ``,
-    item.proposalUrl ? `📁 *Link Proposal (Google Drive / File):*\n${item.proposalUrl.trim()}\n` : ``,
+    item.offeredBenefits ? `*Benefit untuk Optik I See You:*\n"${item.offeredBenefits.trim()}"\n` : "",
+    item.proposalUrl ? `*Link Proposal:*\n${item.proposalUrl.trim()}\n` : "",
     `Besar harapan kami untuk dapat berkolaborasi bersama Optik I See You. Mohon kesediaan Mas Yoshput untuk meninjau penawaran ini.`,
     ``,
-    `Terima kasih banyak! 🙏✨`,
-  ].filter(Boolean);
+    `Terima kasih.`,
+  ];
 
-  return lines.join("\n");
+  return lines.filter((l): l is string => typeof l === "string").join("\n");
 }
 
 /**
@@ -67,39 +67,45 @@ export function buildBrandPitchWhatsAppMessage(params: {
   category: string;
   recommendedPackage: string;
 }): string {
+  const brand = params.brandName || "Mitra Brand";
   const lines = [
-    `Yth. Bapak/Ibu *${params.picName || "Brand Manager"}*,`,
-    `Tim Marketing *${params.brandName || "Mitra Brand"}*,`,
+    `Yth. Pimpinan dan Tim Manajemen ${brand},`,
+    params.picName ? `U.p. ${params.picName}` : "",
+    `di Tempat`,
     ``,
-    `Salam hangat dari Optik I See You.`,
-    `Perkenalkan saya *Yoshput* dari Divisi Marketing & Kemitraan Optik I See You.`,
+    `Dengan hormat,`,
     ``,
-    `Kami melihat keselarasan yang sangat kuat antara produk *${params.brandName}* (${params.category}) dengan audiens muda, mahasiswa, dan kreator konten aktif di wilayah Purwokerto dan jaringan 4 cabang kami (Purwokerto, Purbalingga, Cilacap, Wonosobo).`,
+    `Perkenalkan, saya *Yoshput* dari Divisi Strategic Partnership & Marketing Optik I See You.`,
     ``,
-    `Bersama ini, kami bermaksud mengundang *${params.brandName}* untuk berkolaborasi sebagai mitra resmi dalam program unggulan kami:`,
-    `🎯 *"Buka Class Konten"* — Kelas Pembuatan Konten & Digital Creator Masterclass`,
+    `Kami melihat keselarasan yang sangat kuat antara profil produk *${brand}* (${params.category}) dengan audiens muda, mahasiswa, dan kreator konten aktif di wilayah Purwokerto dan jaringan 4 cabang kami (Purwokerto, Purbalingga, Cilacap, Wonosobo).`,
     ``,
-    `💎 *Peluang Eksposur Multi-Channel yang Kami Sediakan:*`,
-    `1. Space Open Booth / Interactive Activation di lokasi event.`,
-    `2. Penayangan iklan video/banner di layar TV Showroom 4 cabang ritel Optik I See You.`,
-    `3. Sesi Product Demo & Sampling langsung ke tangan puluhan kreator & peserta.`,
+    `Bersama ini, kami bermaksud mengundang *${brand}* untuk berkolaborasi sebagai mitra resmi dalam program edukatif kami:`,
+    ``,
+    `*"BUKA CLASS KONTEN: Creative Content Masterclass 2026"*`,
+    ``,
+    `Peluang eksposur dan fasilitas kemitraan yang kami sediakan meliputi:`,
+    `1. Space Open Booth / Interactive Activation di lokasi acara.`,
+    `2. Penayangan iklan video profil pada layar TV Showroom di 4 cabang ritel Optik I See You.`,
+    `3. Sesi Product Demo & Sampling langsung kepada 50+ peserta dan kreator terpilih.`,
     `4. Promosi digital terintegrasi di media sosial resmi (@iseeyou.glasses) dengan total 244.000+ pengikut.`,
     ``,
-    `Paket rekomendasi untuk ${params.brandName}: *Paket ${params.recommendedPackage}*`,
+    `Paket rekomendasi untuk ${brand}: *Paket ${params.recommendedPackage}*`,
     ``,
-    `📄 *Dokumen Proposal Resmi & Rincian Fasilitas Lengkap:*`,
+    `Proposal Resmi & Rincian Fasilitas Lengkap dapat diakses melalui:`,
     `https://iseeyou-marketing-intelligence.vercel.app/proposal-sponsor`,
     ``,
     `Besar harapan kami untuk dapat menjadwalkan diskusi singkat via WhatsApp guna membahas bentuk sinergi yang paling optimal.`,
     ``,
-    `Terima kasih atas perhatian dan waktu Bapak/Ibu. 🙏✨`,
+    `Demikian penawaran ini kami sampaikan. Atas perhatian dan kesediaan Bapak/Ibu, kami ucapkan terima kasih.`,
     ``,
     `Hormat kami,`,
-    `*Yoshput* · Marketing & Partnership Optik I See You`,
-    `WhatsApp: 0877-7868-3766`,
-    `optikiseeyou.com`,
+    `*Yoshput*`,
+    `Divisi Strategic Partnership & Marketing`,
+    `Optik I See You & Lunar Eyewear`,
+    `Kontak WhatsApp: 0877-7868-3766`,
+    `Situs Resmi: optikiseeyou.com`,
   ];
-  return lines.join("\n");
+  return lines.filter((l): l is string => typeof l === "string").join("\n");
 }
 
 export function buildSponsorWhatsAppUrl(item: {
@@ -178,20 +184,19 @@ export function buildHomeServiceWhatsAppMessage(item: {
   complaint?: string;
 }): string {
   const lines = [
-    `Halo CS ${item.targetBranch},`,
+    `Halo Customer Service ${item.targetBranch},`,
     ``,
-    `Saya ingin melakukan *Booking Jadwal Layanan Home Service* (Pemeriksaan Mata & Fitting Frame ke Lokasi) melalui portal optikiseeyou.com:`,
+    `Saya ingin melakukan *Pemesanan Jadwal Layanan Home Service* (Pemeriksaan Mata & Fitting Frame ke Lokasi) melalui portal optikiseeyou.com:`,
     ``,
-    `👤 *Nama Klien:* ${(item.customerName || "-").trim()}`,
-    `📅 *Rencana Jadwal:* ${item.serviceDate || "-"} pukul ${item.serviceTime || "10:00"} WIB`,
-    `📍 *Alamat / Lokasi Kunjungan:*`,
-    `"${(item.address || "-").trim()}"`,
-    `👥 *Jumlah Orang yang Diperiksa:* ${item.participantCount || 1} orang`,
-    item.complaint ? `👓 *Kebutuhan / Keluhan Mata:*\n"${item.complaint.trim()}"\n` : ``,
-    `Mohon konfirmasi ketersediaan slot jadwal tim Refraksionis Optisi (RO) yang bertugas. Terima kasih! 🙏👓`,
-  ].filter(Boolean);
+    `- *Nama Klien:* ${(item.customerName || "-").trim()}`,
+    `- *Rencana Jadwal:* ${item.serviceDate || "-"} pukul ${item.serviceTime || "10:00"} WIB`,
+    `- *Alamat / Lokasi Kunjungan:* "${(item.address || "-").trim()}"`,
+    `- *Jumlah Peserta Pemeriksaan:* ${item.participantCount || 1} orang`,
+    item.complaint ? `- *Keluhan / Kebutuhan Mata:*\n"${item.complaint.trim()}"\n` : "",
+    `Mohon konfirmasi ketersediaan slot jadwal tim Refraksionis Optisi (RO) yang bertugas. Terima kasih.`,
+  ];
 
-  return lines.join("\n");
+  return lines.filter((l): l is string => typeof l === "string").join("\n");
 }
 
 export function buildHomeServiceWhatsAppUrl(
