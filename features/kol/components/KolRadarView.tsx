@@ -314,6 +314,7 @@ A. DAFTAR KOL AKTIF PER CABANG (OCTOBER 2026)
    a. Tarisa Dina (@tarisadina)
       • Bentuk Kerjasama : Barter Produk + Bantuan Transportasi/Operasional
       • Nilai Produk     : Rp 200.000 (Free Frame + Lensa)
+      • Voucher Follower : 5 pcs @ Rp 50.000 (Total Rp 250.000)
       • Biaya Cash       : Rp 50.000 (Transportasi 2x Pembuatan Konten)
       • Deliverables     : 2x Upload Video Reels & TikTok (Bulan ini)
       • Timeline         : Upload 1 (13-15 Okt) | Upload 2 (27-28 Okt 2026)
@@ -363,7 +364,8 @@ B. REKAPITULASI BIAYA & PENGAJUAN ANGGARAN
    *(Produk diambil langsung dari persediaan stok kacamata di masing-masing cabang)*
 
 3. TOTAL ALOKASI VOUCHER POTONGAN FOLLOWERS :
-   • Total Voucher : 20 Lembar @ Rp 50.000 (4 Talent x 5 pcs)
+   • Total Voucher : 25 Lembar @ Rp 50.000 (5 Talent x 5 pcs)
+   • Total Nilai   : Rp 1.250.000 (Alokasi stimulus visit cabang)
    • Fungsi        : Stimulus voucher belanja agar followers langsung visit & transaksi di toko cabang.
 
 ────────────────────────────────────────────────────────────
@@ -581,10 +583,10 @@ Tim Marketing Optik I See You & Lunar Eyewear
               3. Voucher Diskon Followers
             </span>
             <div className="text-xl font-bold text-purple-900 dark:text-purple-200 mt-1 tabular-nums">
-              20 Pcs (@ Rp 50.000)
+              25 Pcs (@ Rp 50.000)
             </div>
             <span className="text-[11px] text-purple-700 dark:text-purple-300 mt-1 block">
-              Total Rp 1.000.000 (Stimulus visit toko)
+              Total Rp 1.250.000 (5 Talent x 5 pcs)
             </span>
           </div>
 
@@ -646,7 +648,7 @@ Tim Marketing Optik I See You & Lunar Eyewear
                 <td className="py-2.5 px-3 text-foreground-secondary">Barter Produk + Transport</td>
                 <td className="py-2.5 px-3 text-right font-mono font-bold text-emerald-800">Rp 200.000</td>
                 <td className="py-2.5 px-3 text-right font-mono font-bold text-amber-800">Rp 50.000</td>
-                <td className="py-2.5 px-3 text-foreground-muted">-</td>
+                <td className="py-2.5 px-3 font-semibold text-purple-900 dark:text-purple-300">5 pcs @ Rp 50.000</td>
                 <td className="py-2.5 px-3 text-foreground-secondary">2x Video (Upload 1: 13-15 Okt, Upload 2: 27-28 Okt)</td>
                 <td className="py-2.5 px-3 text-center"><span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-200">ACC Mba Ilya &amp; Raja</span></td>
               </tr>
