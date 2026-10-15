@@ -37,6 +37,9 @@ import {
   Share2,
   Plus,
   Trash2,
+  Camera,
+  Image as ImageIcon,
+  ZoomIn,
 } from 'lucide-react';
 
 export interface VenueDetailModalProps {
@@ -55,6 +58,7 @@ export const VenueDetailModal: React.FC<VenueDetailModalProps> = ({
   const [venue, setVenue] = useState<Venue | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [selectedImage, setSelectedImage] = useState<{ src: string; caption: string } | null>(null);
 
   // Collapsible section states (all expanded by default for quick glance)
   const [collapsedSections, setCollapsedSections] = useState<Record<string, boolean>>({});
@@ -368,7 +372,65 @@ export const VenueDetailModal: React.FC<VenueDetailModalProps> = ({
                 )}
               </div>
 
-              {/* 2. Lokasi */}
+              {/* 2. Galeri Foto & Dokumentasi Venue */}
+              <div className="border border-border rounded-container overflow-hidden bg-surface-secondary/40">
+                <button
+                  type="button"
+                  onClick={() => toggleSection('galeri')}
+                  className="w-full flex items-center justify-between p-4 bg-surface text-left font-bold text-sm text-foreground border-b border-border hover:bg-surface-secondary/50 transition-colors"
+                >
+                  <span className="flex items-center gap-2">
+                    <Camera className="w-4 h-4 text-brand" /> 2. Galeri Foto &amp; Visual Venue ({venue.assets?.length || 0})
+                  </span>
+                  {collapsedSections['galeri'] ? (
+                    <ChevronDown className="w-4 h-4 text-foreground-muted" />
+                  ) : (
+                    <ChevronUp className="w-4 h-4 text-foreground-muted" />
+                  )}
+                </button>
+
+                {!collapsedSections['galeri'] && (
+                  <div className="p-4 space-y-3 text-xs">
+                    {venue.assets && venue.assets.length > 0 ? (
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        {venue.assets.map((asset, idx) => (
+                          <div
+                            key={asset.assetId || idx}
+                            onClick={() => setSelectedImage({ src: asset.filePath || asset.sourceUrl, caption: asset.description || asset.altText })}
+                            className="group relative rounded-xl overflow-hidden border border-border bg-surface hover:shadow-md transition-all cursor-pointer flex flex-col justify-between"
+                          >
+                            <div className="relative w-full h-44 sm:h-48 bg-surface-secondary overflow-hidden">
+                              {/* eslint-disable-next-line @next/next/no-img-element */}
+                              <img
+                                src={asset.filePath || asset.sourceUrl}
+                                alt={asset.altText || venue.name}
+                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                              />
+                              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-1.5 text-white font-semibold text-xs">
+                                <ZoomIn className="w-4 h-4" /> Perbesar Foto
+                              </div>
+                              {asset.attribution && (
+                                <div className="absolute bottom-2 left-2 px-2 py-0.5 rounded bg-black/60 text-white text-[10px] backdrop-blur-xs font-medium">
+                                  {asset.attribution}
+                                </div>
+                              )}
+                            </div>
+                            <div className="p-2.5 bg-surface text-[11px] text-foreground border-t border-border/60">
+                              <p className="font-medium line-clamp-2">{asset.description || asset.altText}</p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="text-foreground-muted italic">
+                        Belum ada berkas foto dokumentasi yang diunggah untuk venue ini.
+                      </p>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* 3. Lokasi */}
               <div className="border border-border rounded-container overflow-hidden bg-surface-secondary/40">
                 <button
                   type="button"
@@ -376,7 +438,7 @@ export const VenueDetailModal: React.FC<VenueDetailModalProps> = ({
                   className="w-full flex items-center justify-between p-4 bg-surface text-left font-bold text-sm text-foreground border-b border-border hover:bg-surface-secondary/50 transition-colors"
                 >
                   <span className="flex items-center gap-2">
-                    <MapPin className="w-4 h-4 text-brand" /> 2. Lokasi & Akses
+                    <MapPin className="w-4 h-4 text-brand" /> 3. Lokasi &amp; Akses
                   </span>
                   {collapsedSections['lokasi'] ? (
                     <ChevronDown className="w-4 h-4 text-foreground-muted" />
@@ -1225,6 +1287,53 @@ export const VenueDetailModal: React.FC<VenueDetailModalProps> = ({
           </button>
         </div>
       </div>
+
+      {/* Full Resolution Photo Lightbox Modal */}
+      {selectedImage && (
+        <div
+          className="fixed inset-0 z-60 bg-black/85 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6"
+          onClick={() => setSelectedImage(null)}
+        >
+          <div
+            className="relative max-w-4xl w-full bg-surface rounded-2xl overflow-hidden shadow-2xl border border-border flex flex-col"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between p-3.5 bg-surface border-b border-border">
+              <span className="text-xs font-bold text-foreground line-clamp-1">
+                {selectedImage.caption}
+              </span>
+              <button
+                type="button"
+                onClick={() => setSelectedImage(null)}
+                className="p-1 rounded-full hover:bg-surface-secondary text-foreground-muted hover:text-foreground transition-colors"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+            <div className="p-2 sm:p-4 bg-black/95 flex items-center justify-center max-h-[75vh] overflow-hidden">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={selectedImage.src}
+                alt={selectedImage.caption}
+                className="max-w-full max-h-[72vh] object-contain rounded-lg shadow-lg"
+              />
+            </div>
+            <div className="p-3 bg-surface-secondary border-t border-border flex items-center justify-between text-xs">
+              <span className="text-[11px] text-foreground-secondary font-medium truncate max-w-md">
+                {selectedImage.caption}
+              </span>
+              <a
+                href={selectedImage.src}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 text-brand font-bold hover:underline text-xs shrink-0"
+              >
+                Resolusi Asli <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

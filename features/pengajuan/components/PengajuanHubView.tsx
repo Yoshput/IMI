@@ -21,6 +21,7 @@ import {
   PhoneCall,
   CheckCircle2,
   Building2,
+  Send,
 } from "lucide-react";
 import {
   MARKETING_STAFF_PHONE,
@@ -28,6 +29,7 @@ import {
   buildBrandPitchWhatsAppMessage,
 } from "@/lib/pengajuan-service";
 import sheetsData from "@/lib/real-sheets-data.json";
+import { SponsorOutreachView } from "./SponsorOutreachView";
 
 interface RawProposalItem {
   id: string;
@@ -45,8 +47,12 @@ interface RawProposalItem {
   sheetNote?: string;
 }
 
-export const PengajuanHubView: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<"proposal" | "homeservice" | "database">("proposal");
+export interface PengajuanHubViewProps {
+  initialTab?: "sponsor_leads" | "proposal" | "homeservice" | "database";
+}
+
+export const PengajuanHubView: React.FC<PengajuanHubViewProps> = ({ initialTab = "sponsor_leads" }) => {
+  const [activeTab, setActiveTab] = useState<"sponsor_leads" | "proposal" | "homeservice" | "database">(initialTab);
 
   // Pitching Generator State (For Yoshput reaching out to external brands)
   const [pitchBrandName, setPitchBrandName] = useState("Somethinc");
@@ -147,6 +153,21 @@ export const PengajuanHubView: React.FC = () => {
         {/* Tab Navigation */}
         <div className="flex items-center gap-2 mt-6 pt-4 border-t border-border overflow-x-auto no-scrollbar">
           <button
+            onClick={() => setActiveTab("sponsor_leads")}
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
+              activeTab === "sponsor_leads"
+                ? "bg-foreground text-surface shadow-subtle"
+                : "text-foreground-secondary hover:text-foreground hover:bg-surface-secondary"
+            }`}
+          >
+            <Send className="w-3.5 h-3.5 text-emerald-400" />
+            <span>Target Sponsor WA (11 Brand)</span>
+            <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 font-black">
+              11
+            </span>
+          </button>
+
+          <button
             onClick={() => setActiveTab("proposal")}
             className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap ${
               activeTab === "proposal"
@@ -186,6 +207,11 @@ export const PengajuanHubView: React.FC = () => {
           </button>
         </div>
       </div>
+
+      {/* ========================================================================= */}
+      {/* TAB 0: SPONSOR OUTREACH CRM (11 TARGET BRANDS)                            */}
+      {/* ========================================================================= */}
+      {activeTab === "sponsor_leads" && <SponsorOutreachView />}
 
       {/* ========================================================================= */}
       {/* TAB 1: PROPOSAL SPONSORSHIP & BRAND OUTREACH PITCHING TOOL                */}

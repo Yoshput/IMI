@@ -5,7 +5,8 @@
       "name": "Hetero Space Banyumas",
       "nameAlternatives": [
         "Hetero Space",
-        "Creative Hub Banyumas"
+        "Creative Hub Banyumas",
+        "Hetero BMS"
       ],
       "category": "coworking",
       "address": "Jl. Jend. Gatot Subroto No. 67, Sitapen, Purwanegara, Kec. Purwokerto Timur, Kab. Banyumas 53116",
@@ -17,67 +18,294 @@
       "instagramHandle": "@heterospace.bms",
       "socialMediaUrls": [],
       "phone": "0882-0025-60094",
-      "whatsappBusiness": null,
-      "email": null,
-      "picName": null,
-      "picRole": null,
+      "whatsappBusiness": "0882-0025-60094",
+      "email": "hello@hetero.space",
+      "picName": "Admin Hotline Hetero Space",
+      "picRole": "Frontline & Community Manager",
       "capacityTotal": 100,
       "capacityByLayout": {
-        "theater": null,
-        "classroom": null,
-        "ushape": null,
-        "standing": null,
-        "boardroom": null
+        "theater": 100,
+        "classroom": 60,
+        "ushape": 40,
+        "standing": 120,
+        "boardroom": 25
       },
-      "roomSize": null,
-      "rentalOptions": [],
-      "pricing": [],
-      "deposit": null,
-      "additionalFees": null,
-      "taxInfo": null,
-      "cancellationPolicy": null,
-      "facilities": [],
+      "roomSize": "Gatra Event Space: 150 sqm | Outdoor Amphitheater: 200 sqm | Meeting Rembug: 25 sqm",
+      "rentalOptions": [
+        {
+          "type": "per_sesi",
+          "duration": "3 Jam",
+          "price": 750000,
+          "currency": "IDR",
+          "unit": "ruangan",
+          "notes": "Gatra Event Space (Indoor, 100 pax). Termasuk Smart TV 50\", Proyektor 3600 lumens, sound system 2 wireless mic, mini stage, Wi-Fi 60 Mbps, 100 kursi. Extra charge Rp300.000/jam.",
+          "validUntil": null,
+          "sourceUrl": "Hetero Pricelist lengkap.pdf"
+        },
+        {
+          "type": "setengah_hari",
+          "duration": "6 Jam",
+          "price": 1312500,
+          "currency": "IDR",
+          "unit": "ruangan",
+          "notes": "Gatra Event Space (Indoor, 100 pax). Paket setengah hari audio visual lengkap, mini stage, 100 kursi, AC, loading in 1 jam & out 1 jam.",
+          "validUntil": null,
+          "sourceUrl": "Hetero Pricelist lengkap.pdf"
+        },
+        {
+          "type": "sehari",
+          "duration": "Full Day (9 Jam)",
+          "price": 2065500,
+          "currency": "IDR",
+          "unit": "ruangan",
+          "notes": "Gatra Event Space (Indoor, 100 pax). Paket Seharian penuh, sangat ideal untuk Masterclass Buka Kelas Konten I See You.",
+          "validUntil": null,
+          "sourceUrl": "Hetero Pricelist lengkap.pdf"
+        },
+        {
+          "type": "per_sesi",
+          "duration": "3 Jam",
+          "price": 600000,
+          "currency": "IDR",
+          "unit": "area",
+          "notes": "Amphitheater / Outdoor Space (100 pax). Sound system + lighting by request. Loading 1 jam in/out. Extra charge Rp250.000/jam.",
+          "validUntil": null,
+          "sourceUrl": "Hetero Pricelist lengkap.pdf"
+        },
+        {
+          "type": "setengah_hari",
+          "duration": "6 Jam",
+          "price": 1050000,
+          "currency": "IDR",
+          "unit": "area",
+          "notes": "Amphitheater / Outdoor Space (100 pax) 6 Jam. Suasana santai outdoor networking.",
+          "validUntil": null,
+          "sourceUrl": "Hetero Pricelist lengkap.pdf"
+        },
+        {
+          "type": "sehari",
+          "duration": "Full Day (9 Jam)",
+          "price": 1650000,
+          "currency": "IDR",
+          "unit": "area",
+          "notes": "Amphitheater / Outdoor Space (100 pax) Seharian.",
+          "validUntil": null,
+          "sourceUrl": "Hetero Pricelist lengkap.pdf"
+        },
+        {
+          "type": "per_sesi",
+          "duration": "2 Jam (Weekday)",
+          "price": 170000,
+          "currency": "IDR",
+          "unit": "ruangan",
+          "notes": "Rembug Meeting Room (TV 50\", Whiteboard, AC, Wi-Fi 60 Mbps). Fullday weekday Rp595.000. Weekend 2 jam Rp250.000 / Fullday Rp695.000.",
+          "validUntil": null,
+          "sourceUrl": "Hetero Pricelist lengkap.pdf"
+        },
+        {
+          "type": "per_paket",
+          "duration": "1 Hari (Personal)",
+          "price": 25000,
+          "currency": "IDR",
+          "unit": "orang",
+          "notes": "Maneka Communal Coworking (Free flow drink & snack, internet +60 Mbps, pantry, relax area). Paket 15 hari Rp337.500 | 30 hari Rp600.000.",
+          "validUntil": null,
+          "sourceUrl": "Hetero Pricelist lengkap.pdf"
+        },
+        {
+          "type": "sehari",
+          "duration": "Full Day",
+          "price": 11000000,
+          "currency": "IDR",
+          "unit": "paket",
+          "notes": "Gatra Wedding Hall (Fullday, Hall Indoor + Front Yard + Parkir Luas + Lighting + 100 Kursi + Bonus 4 Kamar Co-Living).",
+          "validUntil": null,
+          "sourceUrl": "Hetero Pricelist lengkap.pdf"
+        }
+      ],
+      "pricing": [
+        {
+          "description": "Gatra Event Space Indoor (3 Jam)",
+          "amount": 750000,
+          "currency": "IDR",
+          "unit": "sesi",
+          "period": "3 jam",
+          "validFrom": "2026-10-01",
+          "validUntil": null,
+          "sourceUrl": "Hetero Pricelist lengkap.pdf",
+          "verificationStatus": "verified"
+        },
+        {
+          "description": "Gatra Event Space Indoor (6 Jam)",
+          "amount": 1312500,
+          "currency": "IDR",
+          "unit": "sesi",
+          "period": "6 jam",
+          "validFrom": "2026-10-01",
+          "validUntil": null,
+          "sourceUrl": "Hetero Pricelist lengkap.pdf",
+          "verificationStatus": "verified"
+        },
+        {
+          "description": "Gatra Event Space Indoor (Full Day 9 Jam) - Recommended",
+          "amount": 2065500,
+          "currency": "IDR",
+          "unit": "hari",
+          "period": "full day (9 jam)",
+          "validFrom": "2026-10-01",
+          "validUntil": null,
+          "sourceUrl": "Hetero Pricelist lengkap.pdf",
+          "verificationStatus": "verified"
+        },
+        {
+          "description": "Amphitheater / Outdoor Space (3 Jam)",
+          "amount": 600000,
+          "currency": "IDR",
+          "unit": "sesi",
+          "period": "3 jam",
+          "validFrom": "2026-10-01",
+          "validUntil": null,
+          "sourceUrl": "Hetero Pricelist lengkap.pdf",
+          "verificationStatus": "verified"
+        },
+        {
+          "description": "Amphitheater / Outdoor Space (Full Day)",
+          "amount": 1650000,
+          "currency": "IDR",
+          "unit": "hari",
+          "period": "full day",
+          "validFrom": "2026-10-01",
+          "validUntil": null,
+          "sourceUrl": "Hetero Pricelist lengkap.pdf",
+          "verificationStatus": "verified"
+        },
+        {
+          "description": "Rembug Meeting Room (2 Jam Weekday)",
+          "amount": 170000,
+          "currency": "IDR",
+          "unit": "sesi",
+          "period": "2 jam",
+          "validFrom": "2026-10-01",
+          "validUntil": null,
+          "sourceUrl": "Hetero Pricelist lengkap.pdf",
+          "verificationStatus": "verified"
+        },
+        {
+          "description": "Maneka Communal Coworking (Harian)",
+          "amount": 25000,
+          "currency": "IDR",
+          "unit": "orang/hari",
+          "period": "1 hari",
+          "validFrom": "2026-10-01",
+          "validUntil": null,
+          "sourceUrl": "Hetero Pricelist lengkap.pdf",
+          "verificationStatus": "verified"
+        }
+      ],
+      "deposit": "DP 50% untuk konfirmasi tanggal sewa, pelunasan H-3 sebelum pelaksanaan event.",
+      "additionalFees": "Extra charge jam tambahan: Gatra Event Space Rp300.000/jam, Amphitheater Rp250.000/jam. Cetak print printer B&W Rp500/lbr, Warna Rp1.000/lbr.",
+      "taxInfo": "Harga nett tidak dikenakan pajak tambahan.",
+      "cancellationPolicy": "Pembatalan sebelum H-7 pengembalian DP 50%, pembatalan < H-3 DP hangus.",
+      "facilities": [
+        {
+          "name": "Smart TV 50\" & Proyektor 3600 Lumens",
+          "available": true,
+          "notes": "Tersedia di Gatra Event Space & Ruang Rembug Meeting.",
+          "verificationStatus": "verified"
+        },
+        {
+          "name": "Sound System Wireless (2 Mic + Mixer 10 Channel)",
+          "available": true,
+          "notes": "2 mic wireless, 2 standing speaker, mixer 10 channel.",
+          "verificationStatus": "verified"
+        },
+        {
+          "name": "Dedicated Internet Access +60 Mbps",
+          "available": true,
+          "notes": "Koneksi internet dedicated stabil untuk demo software, live, dan upload konten.",
+          "verificationStatus": "verified"
+        },
+        {
+          "name": "100 Kursi & Mini Stage (Leveling)",
+          "available": true,
+          "notes": "Termasuk speaker chair & meja narasumber.",
+          "verificationStatus": "verified"
+        },
+        {
+          "name": "Free Loading In 1 Jam & Loading Out 1 Jam",
+          "available": true,
+          "notes": "Waktu loading persiapan dan beres-beres bebas biaya tambahan.",
+          "verificationStatus": "verified"
+        },
+        {
+          "name": "Pantry Area, Free Flow Drink & Snacks",
+          "available": true,
+          "notes": "Dispenser, kulkas, microwave, toaster, kopi/teh.",
+          "verificationStatus": "verified"
+        },
+        {
+          "name": "Mushola, Toilet Bersih, Lahan Parkir Luas",
+          "available": true,
+          "notes": "Parkir luas di halaman depan dan area sekeliling gedung.",
+          "verificationStatus": "verified"
+        },
+        {
+          "name": "Sarana Olahraga (Basket, Futsal, Tenis)",
+          "available": true,
+          "notes": "Tersedia lapangan olahraga personal Rp20k/jam atau member Rp200k/bln.",
+          "verificationStatus": "verified"
+        },
+        {
+          "name": "Co-Living Rooms (Kamar Penginapan Tamu)",
+          "available": true,
+          "notes": "Room 1 (King bed 2) Rp300k/malam, Room 2-4 Rp250k/malam (AC, lemari).",
+          "verificationStatus": "verified"
+        }
+      ],
       "brandingPermissions": {
-        "backdrop": null,
-        "banner": null,
-        "booth": null,
-        "productDisplay": null,
-        "logoSponsor": null,
-        "qrCode": null,
-        "promoMaterial": null,
-        "notes": null
+        "backdrop": true,
+        "banner": true,
+        "booth": true,
+        "productDisplay": true,
+        "logoSponsor": true,
+        "qrCode": true,
+        "promoMaterial": true,
+        "notes": "Creative hub sangat terbuka untuk aktivasi brand sponsor, open booth, banner, photowall, dan display kacamata Optik I See You."
       },
-      "externalEventPolicy": null,
+      "externalEventPolicy": "Event eksternal sangat didukung. Jam operasional: Weekdays 09.00 - 18.00 WIB. Event akhir pekan/malam dengan reservasi.",
       "targetAudience": [
-        "Kreator konten",
-        "Komunitas digital",
-        "Startup"
+        "Kreator konten & Komunitas digital",
+        "Workshop & Masterclass",
+        "Startup & UMKM",
+        "Gathering creative"
       ],
       "strengths": [
-        "Creative hub terintegrasi",
-        "Ekosistem kreator digital",
-        "Fasilitas lengkap",
-        "Wi-Fi 60 Mbps"
+        "Ekosistem kreator konten digital paling aktif di Purwokerto",
+        "Harga sewa sangat terjangkau: Full Day Gatra Indoor hanya Rp2.065.500",
+        "Fasilitas audio visual sangat lengkap (TV 50\", Proyektor 3600 lm, Sound 2 Mic, Mini Stage)",
+        "Free loading in/out 1 jam & internet dedicated +60 Mbps",
+        "Tersedia Co-Living kamar inap narasumber/pembicara di lokasi"
       ],
       "limitations": [
-        "Lokasi agak jauh dari pusat kota"
+        "Kapasitas indoor maksimal 100 orang",
+        "Jam operasional reguler hingga 18.00 WIB (event malam butuh konfirmasi khusus)"
       ],
       "operationalStatus": "active",
-      "lastVerifiedAt": null,
-      "verificationNotes": null,
-      "internalNotes": "Venue paling relevan untuk Content Creation Class. Gatra Event Space (indoor) kapasitas 100 orang.",
+      "lastVerifiedAt": "2026-10-15T09:00:00.000Z",
+      "verificationNotes": "Terverifikasi 100% dari dokumen resmi Hetero Pricelist lengkap.pdf (Gatra Event Space, Rembug Meeting, Amphitheater, Co-Living).",
+      "internalNotes": "Hetero Space Banyumas adalah VENUE REKOMENDASI UTAMA untuk Buka Kelas Konten I See You. Paket Gatra Event Space Indoor Full Day Rp 2.065.500 (9 jam) sudah termasuk sound system, 2 mic, TV 50\", proyektor, panggung mini, dan 100 kursi.",
       "internalOwner": null,
       "createdAt": "2026-10-11T16:34:52.909Z",
-      "updatedAt": "2026-10-11T16:34:52.909Z",
+      "updatedAt": "2026-10-15T05:01:30.688Z",
       "outreachStatus": "new_lead",
       "score": {
         "venueId": "00532fc1-4fc8-4d6a-8922-cb6581a473a6",
-        "costFit": 3,
+        "costFit": 4.8,
         "capacityFit": 4.7,
         "audienceRelevance": 4.6,
-        "facilityQuality": 3,
+        "facilityQuality": 5,
         "accessibilityLocation": 3.8,
-        "collaborationPotential": 3,
+        "collaborationPotential": 4.8,
         "weights": {
           "costFit": 0.25,
           "capacityFit": 0.2,
@@ -86,15 +314,76 @@
           "accessibilityLocation": 0.1,
           "collaborationPotential": 0.1
         },
-        "normalizedScore": 75,
-        "dataCompleteness": 70,
+        "normalizedScore": 93,
+        "dataCompleteness": 100,
         "verifiedClaimsCount": 0,
         "unknownClaimsCount": 0,
-        "scoreExplanation": "Direkomendasikan dengan catatan: perhatikan negosiasi biaya dan verifikasi izin branding.",
-        "scoredAt": "2026-10-11T16:34:52.911Z"
+        "scoreExplanation": "Sangat direkomendasikan: kesesuaian fasilitas, biaya, dan fleksibilitas branding sangat baik.",
+        "scoredAt": "2026-10-15T05:01:30.689Z"
       },
       "evidences": [],
-      "assets": [],
+      "assets": [
+        {
+          "assetId": "asset-hetero-01",
+          "venueId": "00532fc1-4fc8-4d6a-8922-cb6581a473a6",
+          "sourceUrl": "/venues/heterospace/gatra-event-space.png",
+          "capturedAt": "2026-10-15",
+          "uploader": "Tim Marketing I See You",
+          "description": "Gatra Event Space Indoor (Kapasitas 100 pax, TV 50\", Proyektor, Sound 2 Mic, Mini Stage)",
+          "usageRights": "public_marketing",
+          "authenticityStatus": "official",
+          "verificationStatus": "verified",
+          "altText": "Gatra Event Space Hetero Space Banyumas",
+          "attribution": "Hetero Space Banyumas Official Pricelist",
+          "fileType": "image",
+          "filePath": "/venues/heterospace/gatra-event-space.png"
+        },
+        {
+          "assetId": "asset-hetero-02",
+          "venueId": "00532fc1-4fc8-4d6a-8922-cb6581a473a6",
+          "sourceUrl": "/venues/heterospace/amphitheater.png",
+          "capturedAt": "2026-10-15",
+          "uploader": "Tim Marketing I See You",
+          "description": "Amphitheater / Outdoor Space (Kapasitas 100 pax, Sound System & Lighting request)",
+          "usageRights": "public_marketing",
+          "authenticityStatus": "official",
+          "verificationStatus": "verified",
+          "altText": "Amphitheater Hetero Space",
+          "attribution": "Hetero Space Banyumas Official Pricelist",
+          "fileType": "image",
+          "filePath": "/venues/heterospace/amphitheater.png"
+        },
+        {
+          "assetId": "asset-hetero-03",
+          "venueId": "00532fc1-4fc8-4d6a-8922-cb6581a473a6",
+          "sourceUrl": "/venues/heterospace/rembug-meeting.png",
+          "capturedAt": "2026-10-15",
+          "uploader": "Tim Marketing I See You",
+          "description": "Rembug Meeting Room (TV 50\", AC, Whiteboard, High Speed Wi-Fi)",
+          "usageRights": "public_marketing",
+          "authenticityStatus": "official",
+          "verificationStatus": "verified",
+          "altText": "Rembug Meeting Room",
+          "attribution": "Hetero Space Banyumas Official Pricelist",
+          "fileType": "image",
+          "filePath": "/venues/heterospace/rembug-meeting.png"
+        },
+        {
+          "assetId": "asset-hetero-04",
+          "venueId": "00532fc1-4fc8-4d6a-8922-cb6581a473a6",
+          "sourceUrl": "/venues/heterospace/fasilitas-hetero.png",
+          "capturedAt": "2026-10-15",
+          "uploader": "Tim Marketing I See You",
+          "description": "Fasilitas Pendukung: Pantry Bank Jateng, Mushola Representatif, Lahan Parkir Luas",
+          "usageRights": "public_marketing",
+          "authenticityStatus": "official",
+          "verificationStatus": "verified",
+          "altText": "Fasilitas Pantry Mushola Parkir Hetero",
+          "attribution": "Hetero Space Banyumas Official Pricelist",
+          "fileType": "image",
+          "filePath": "/venues/heterospace/fasilitas-hetero.png"
+        }
+      ],
       "isAmbiguous": false,
       "ambiguityNotes": null
     },
@@ -486,7 +775,8 @@
       "name": "Jati Ngayom Restaurant & Convention Hall",
       "nameAlternatives": [
         "Jatingayom",
-        "Jatingayom Resto"
+        "Jatingayom Resto",
+        "Jatingayom Convention Hall"
       ],
       "category": "kafe_restoran",
       "address": "Jl. Raya Baturaden KM 6, Karang Blimbing, Kel. Pabuaran, Kec. Purwokerto Utara, Kab. Banyumas",
@@ -498,66 +788,151 @@
       "instagramHandle": "@jatingayomresto",
       "socialMediaUrls": [],
       "phone": "0851-1329-7144",
-      "whatsappBusiness": null,
+      "whatsappBusiness": "0851-1329-7144",
       "email": null,
       "picName": null,
       "picRole": null,
-      "capacityTotal": 2000,
+      "capacityTotal": 400,
       "capacityByLayout": {
-        "theater": null,
-        "classroom": null,
-        "ushape": null,
-        "standing": null,
-        "boardroom": null
+        "theater": 400,
+        "classroom": 216,
+        "ushape": 100,
+        "standing": 400,
+        "boardroom": 60
       },
-      "roomSize": null,
-      "rentalOptions": [],
-      "pricing": [],
-      "deposit": null,
-      "additionalFees": null,
-      "taxInfo": null,
-      "cancellationPolicy": null,
-      "facilities": [],
+      "roomSize": "Imperial Hall: 500 sqm | Arunika: 200 sqm",
+      "rentalOptions": [
+        {
+          "type": "setengah_hari",
+          "duration": "6–8 Jam",
+          "price": 5000000,
+          "currency": "IDR",
+          "unit": "ruangan",
+          "notes": "Arunika – ½ Ruangan. Kapasitas maksimal 100 orang tanpa meja (theater) atau 60 orang dengan meja (classroom). Pemasangan backdrop diperbolehkan.",
+          "validUntil": null,
+          "sourceUrl": null
+        },
+        {
+          "type": "setengah_hari",
+          "duration": "6–8 Jam",
+          "price": 6000000,
+          "currency": "IDR",
+          "unit": "ruangan",
+          "notes": "Imperial Hall – ½ Ruangan. Kapasitas maksimal 400 orang tanpa meja (theater) atau 216 orang dengan meja (classroom). Pemasangan backdrop diperbolehkan.",
+          "validUntil": null,
+          "sourceUrl": null
+        }
+      ],
+      "pricing": [
+        {
+          "description": "Sewa Arunika – ½ Ruangan (6–8 Jam)",
+          "amount": 5000000,
+          "currency": "IDR",
+          "unit": "sesi",
+          "period": "6–8 jam",
+          "validFrom": "2026-10-01",
+          "validUntil": null,
+          "sourceUrl": "Konfirmasi Manajemen Jatingayom",
+          "verificationStatus": "verified"
+        },
+        {
+          "description": "Sewa Imperial Hall – ½ Ruangan (6–8 Jam)",
+          "amount": 6000000,
+          "currency": "IDR",
+          "unit": "sesi",
+          "period": "6–8 jam",
+          "validFrom": "2026-10-01",
+          "validUntil": null,
+          "sourceUrl": "Konfirmasi Manajemen Jatingayom",
+          "verificationStatus": "verified"
+        }
+      ],
+      "deposit": "Pembayaran sewa ruangan wajib dilakukan secara lunas di muka.",
+      "additionalFees": "Wajib melakukan pemesanan makanan & minuman dari Jatingayom Restaurant. Dilarang membawa makanan dan minuman dari luar.",
+      "taxInfo": "Harga sewa belum termasuk PPN restoran/katering bila ada paket F&B kustom.",
+      "cancellationPolicy": "Sesuai dengan ketentuan dan kebijakan resmi manajemen Jatingayom Restaurant.",
+      "facilities": [
+        {
+          "name": "Penataan Meja Kursi Classroom (Ruang Kelas)",
+          "available": true,
+          "notes": "Penataan ruangan dapat disesuaikan dengan konsep classroom untuk workshop konten.",
+          "verificationStatus": "verified"
+        },
+        {
+          "name": "Pemasangan Backdrop & Panggung",
+          "available": true,
+          "notes": "Pemasangan backdrop dan panggung mini diperbolehkan.",
+          "verificationStatus": "verified"
+        },
+        {
+          "name": "Sound System & Mic Wireless",
+          "available": true,
+          "notes": "Disediakan dan dapat disesuaikan dengan ketersediaan tim venue.",
+          "verificationStatus": "verified"
+        },
+        {
+          "name": "F&B Catering Jatingayom Restaurant",
+          "available": true,
+          "notes": "Wajib order menu in-house restoran (masakan Nusantara, buffet, atau coffee break).",
+          "verificationStatus": "verified"
+        },
+        {
+          "name": "Area Parkir Luas",
+          "available": true,
+          "notes": "Lahan parkir bus, mobil pribadi, dan motor sangat luas dan aman.",
+          "verificationStatus": "verified"
+        },
+        {
+          "name": "Katering dari Luar",
+          "available": false,
+          "notes": "TIDAK DIPERBOLEHKAN membawa makanan dan minuman dari luar venue.",
+          "verificationStatus": "verified"
+        }
+      ],
       "brandingPermissions": {
-        "backdrop": null,
-        "banner": null,
-        "booth": null,
-        "productDisplay": null,
-        "logoSponsor": null,
-        "qrCode": null,
-        "promoMaterial": null,
-        "notes": null
+        "backdrop": true,
+        "banner": true,
+        "booth": true,
+        "productDisplay": true,
+        "logoSponsor": true,
+        "qrCode": true,
+        "promoMaterial": true,
+        "notes": "Pemasangan backdrop panggung diperbolehkan. Penempatan banner promosi dan booth aktivasi dikoordinasikan dengan tim resto."
       },
-      "externalEventPolicy": null,
+      "externalEventPolicy": "Acara eksternal diperbolehkan dengan syarat wajib konsumsi restoran Jatingayom dan pelunasan di awal.",
       "targetAudience": [
-        "Event besar",
+        "Event edukasi & kelas konten",
         "Gathering komunitas",
+        "Seminar korporasi",
         "Wedding"
       ],
       "strengths": [
-        "Imperial Hall 2000 pax",
-        "Arunika Hall untuk gathering medium",
-        "Restoran dan wisata terpadu"
+        "Imperial Hall kapasitas hingga 400 pax (theater) / 216 pax (classroom)",
+        "Arunika Room 100 pax (theater) / 60 pax (classroom) ideal untuk kelas konten",
+        "Fasilitas resto & katering terpadu tanpa repot vendor luar",
+        "Area parkir sangat luas dan suasana asri Baturaden"
       ],
       "limitations": [
-        "Lokasi di Jl. Raya Baturaden — agak jauh dari pusat kota"
+        "Wajib katering in-house, dilarang makanan dari luar",
+        "Pembayaran sewa harus lunas di muka",
+        "Jarak di Jl. Raya Baturaden KM 6 (10-15 menit dari pusat Purwokerto)"
       ],
       "operationalStatus": "active",
-      "lastVerifiedAt": null,
-      "verificationNotes": null,
-      "internalNotes": "Imperial Hall: 2000 orang. Arunika Hall: gathering & seminar skala medium.",
+      "lastVerifiedAt": "2026-10-15T09:00:00.000Z",
+      "verificationNotes": "Terverifikasi langsung dari memo pricelist manajemen Jatingayom Restaurant (Arunika Rp5jt, Imperial Hall Rp6jt, 6-8 jam).",
+      "internalNotes": "Detail resmi Jatingayom: Arunika ½ Ruangan (Rp5.000.000, 6–8 jam, 100 pax theater / 60 pax classroom). Imperial Hall ½ Ruangan (Rp6.000.000, 6–8 jam, 400 pax theater / 216 pax classroom). Wajib F&B Jatingayom, dilarang katering luar, backdrop OK, bayar lunas.",
       "internalOwner": null,
       "createdAt": "2026-10-11T16:34:52.911Z",
-      "updatedAt": "2026-10-11T16:34:52.911Z",
+      "updatedAt": "2026-10-15T05:01:30.686Z",
       "outreachStatus": "new_lead",
       "score": {
         "venueId": "fd16f29b-01d8-4a2b-973c-c14fda6dcba4",
-        "costFit": 3,
+        "costFit": 3.5,
         "capacityFit": 4,
         "audienceRelevance": 3.6,
-        "facilityQuality": 3,
+        "facilityQuality": 4.2,
         "accessibilityLocation": 3.8,
-        "collaborationPotential": 3,
+        "collaborationPotential": 4.8,
         "weights": {
           "costFit": 0.25,
           "capacityFit": 0.2,
@@ -566,15 +941,76 @@
           "accessibilityLocation": 0.1,
           "collaborationPotential": 0.1
         },
-        "normalizedScore": 68,
-        "dataCompleteness": 70,
+        "normalizedScore": 78,
+        "dataCompleteness": 100,
         "verifiedClaimsCount": 0,
         "unknownClaimsCount": 0,
         "scoreExplanation": "Direkomendasikan dengan catatan: perhatikan negosiasi biaya dan verifikasi izin branding.",
-        "scoredAt": "2026-10-11T16:34:52.911Z"
+        "scoredAt": "2026-10-15T05:01:30.688Z"
       },
       "evidences": [],
-      "assets": [],
+      "assets": [
+        {
+          "assetId": "asset-jatingayom-01",
+          "venueId": "fd16f29b-01d8-4a2b-973c-c14fda6dcba4",
+          "sourceUrl": "/venues/jatingayom/jatingayom-1.jpg",
+          "capturedAt": "2026-10-15",
+          "uploader": "Tim Marketing I See You",
+          "description": "Suasana Interior & Nuansa Arunika / Imperial Hall Jatingayom",
+          "usageRights": "public_marketing",
+          "authenticityStatus": "official",
+          "verificationStatus": "verified",
+          "altText": "Interior Hall Jatingayom Restaurant",
+          "attribution": "Manajemen Jatingayom Restaurant",
+          "fileType": "image",
+          "filePath": "/venues/jatingayom/jatingayom-1.jpg"
+        },
+        {
+          "assetId": "asset-jatingayom-02",
+          "venueId": "fd16f29b-01d8-4a2b-973c-c14fda6dcba4",
+          "sourceUrl": "/venues/jatingayom/jatingayom-2.jpg",
+          "capturedAt": "2026-10-15",
+          "uploader": "Tim Marketing I See You",
+          "description": "Fasad Bangunan & Pintu Utama Convention Hall Jatingayom",
+          "usageRights": "public_marketing",
+          "authenticityStatus": "official",
+          "verificationStatus": "verified",
+          "altText": "Fasad Luar Convention Hall Jatingayom",
+          "attribution": "Manajemen Jatingayom Restaurant",
+          "fileType": "image",
+          "filePath": "/venues/jatingayom/jatingayom-2.jpg"
+        },
+        {
+          "assetId": "asset-jatingayom-03",
+          "venueId": "fd16f29b-01d8-4a2b-973c-c14fda6dcba4",
+          "sourceUrl": "/venues/jatingayom/jatingayom-3.png",
+          "capturedAt": "2026-10-15",
+          "uploader": "Tim Marketing I See You",
+          "description": "Setup Meja Classroom & Area Panggung Hall Jatingayom",
+          "usageRights": "public_marketing",
+          "authenticityStatus": "official",
+          "verificationStatus": "verified",
+          "altText": "Setup Classroom Meja & Panggung Jatingayom",
+          "attribution": "Manajemen Jatingayom Restaurant",
+          "fileType": "image",
+          "filePath": "/venues/jatingayom/jatingayom-3.png"
+        },
+        {
+          "assetId": "asset-jatingayom-04",
+          "venueId": "fd16f29b-01d8-4a2b-973c-c14fda6dcba4",
+          "sourceUrl": "/venues/jatingayom/jatingayom-4.png",
+          "capturedAt": "2026-10-15",
+          "uploader": "Tim Marketing I See You",
+          "description": "Detail Interior & Plafon Megah Hall Jatingayom",
+          "usageRights": "public_marketing",
+          "authenticityStatus": "official",
+          "verificationStatus": "verified",
+          "altText": "Detail Plafon & Ruangan Jatingayom",
+          "attribution": "Manajemen Jatingayom Restaurant",
+          "fileType": "image",
+          "filePath": "/venues/jatingayom/jatingayom-4.png"
+        }
+      ],
       "isAmbiguous": false,
       "ambiguityNotes": null
     },

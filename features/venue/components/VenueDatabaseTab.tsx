@@ -20,6 +20,7 @@ import {
   ExternalLink,
   AlertTriangle,
   Download,
+  Camera,
 } from "lucide-react";
 import { VenueFormModal } from "./VenueFormModal";
 import { VenueDetailModal } from "./VenueDetailModal";
@@ -305,40 +306,69 @@ export const VenueDatabaseTab: React.FC<Props> = ({ onStatsChange }) => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {pagedVenues.map((v) => {
             const score = v.score?.normalizedScore ?? 0;
+            const coverAsset = v.assets && v.assets.length > 0 ? v.assets[0] : null;
             return (
               <button
                 key={v.id}
                 onClick={() => setDetailId(v.id)}
-                className="bg-surface rounded-container border border-border p-4 text-left hover:shadow-elevated transition-shadow space-y-3"
+                className="group bg-surface rounded-container border border-border overflow-hidden text-left hover:shadow-elevated transition-shadow flex flex-col justify-between"
               >
-                <div>
-                  <div className="flex items-start justify-between gap-2">
-                    <h3 className="text-sm font-bold text-foreground line-clamp-1">{v.name}</h3>
-                    {v.isAmbiguous && <AlertTriangle className="w-3.5 h-3.5 text-amber-500 shrink-0 mt-0.5" />}
-                  </div>
-                  <p className="text-[10px] text-foreground-muted mt-0.5 line-clamp-1">{v.address || "Alamat belum diketahui"}</p>
-                </div>
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="inline-block px-2 py-0.5 rounded-full bg-surface-subtle text-[10px] font-medium text-foreground-secondary">
-                    {getCategoryLabel(v.category)}
-                  </span>
-                  <span className={cn("inline-block px-2 py-0.5 rounded-full text-[10px] font-semibold", OUTREACH_BADGE[v.outreachStatus] || OUTREACH_BADGE.new_lead)}>
-                    {getOutreachStatusLabel(v.outreachStatus)}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between">
-                  {v.capacityTotal !== null ? (
-                    <span className="flex items-center gap-1 text-[10px] text-foreground-secondary">
-                      <Users className="w-3 h-3" /> {formatNumber(v.capacityTotal)} pax
-                    </span>
-                  ) : (
-                    <span className="text-[10px] text-foreground-muted italic">Kapasitas belum diketahui</span>
-                  )}
-                  <div className="flex items-center gap-1.5">
-                    <div className="w-10 h-1.5 rounded-full bg-surface-subtle overflow-hidden">
-                      <div className={cn("h-full rounded-full", scoreColor(score))} style={{ width: `${score}%` }} />
+                {coverAsset && (
+                  <div className="relative w-full h-36 bg-surface-secondary overflow-hidden border-b border-border">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={coverAsset.filePath || coverAsset.sourceUrl}
+                      alt={coverAsset.altText || v.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <div className="absolute top-2 right-2 px-2 py-0.5 rounded bg-black/65 backdrop-blur-xs text-[10px] text-white font-medium flex items-center gap-1 shadow-xs">
+                      <Camera className="w-3 h-3" /> {v.assets.length} Foto
                     </div>
-                    <span className="text-[10px] font-bold text-foreground-secondary">{score}</span>
+                  </div>
+                )}
+
+                <div className="p-4 space-y-3 w-full">
+                  <div>
+                    <div className="flex items-start justify-between gap-2">
+                      <h3 className="text-sm font-bold text-foreground line-clamp-1 group-hover:text-brand transition-colors">
+                        {v.name}
+                      </h3>
+                      {v.isAmbiguous && <AlertTriangle className="w-3.5 h-3.5 text-amber-500 shrink-0 mt-0.5" />}
+                    </div>
+                    <p className="text-[10px] text-foreground-muted mt-0.5 line-clamp-1">
+                      {v.address || "Alamat belum diketahui"}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="inline-block px-2 py-0.5 rounded-full bg-surface-subtle text-[10px] font-medium text-foreground-secondary">
+                      {getCategoryLabel(v.category)}
+                    </span>
+                    <span
+                      className={cn(
+                        "inline-block px-2 py-0.5 rounded-full text-[10px] font-semibold",
+                        OUTREACH_BADGE[v.outreachStatus] || OUTREACH_BADGE.new_lead
+                      )}
+                    >
+                      {getOutreachStatusLabel(v.outreachStatus)}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between pt-1">
+                    {v.capacityTotal !== null ? (
+                      <span className="flex items-center gap-1 text-[10px] text-foreground-secondary font-medium">
+                        <Users className="w-3 h-3 text-brand" /> {formatNumber(v.capacityTotal)} pax
+                      </span>
+                    ) : (
+                      <span className="text-[10px] text-foreground-muted italic">Kapasitas belum diketahui</span>
+                    )}
+                    <div className="flex items-center gap-1.5">
+                      <div className="w-10 h-1.5 rounded-full bg-surface-subtle overflow-hidden">
+                        <div
+                          className={cn("h-full rounded-full", scoreColor(score))}
+                          style={{ width: `${score}%` }}
+                        />
+                      </div>
+                      <span className="text-[10px] font-bold text-foreground-secondary">{score}</span>
+                    </div>
                   </div>
                 </div>
               </button>
