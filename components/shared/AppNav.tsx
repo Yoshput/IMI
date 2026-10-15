@@ -16,6 +16,7 @@ import {
   Wallet,
   Lock,
   MapPin,
+  TrendingUp,
 } from "lucide-react";
 import { ThemeToggle } from "@/components/shared/ThemeToggle";
 
@@ -40,6 +41,7 @@ interface NavItem {
 const navItems: NavItem[] = [
   { label: "Dashboard", href: "/dashboard", icon: LayoutGrid },
   { label: "Spreadsheet", href: "/spreadsheet", icon: Table2 },
+  { label: "Social Blade", href: "/social-blade", icon: TrendingUp },
   { label: "Konten", href: "/content", icon: Video },
   { label: "Pengajuan", href: "/pengajuan", icon: Briefcase },
   { label: "Aftersales", href: "/aftersales", icon: Glasses },

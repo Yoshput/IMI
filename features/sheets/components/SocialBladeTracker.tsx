@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useMemo, useEffect } from "react";
+import Link from "next/link";
 import {
   TrendingUp,
   TrendingDown,
@@ -16,30 +17,30 @@ import {
   Stethoscope,
   Eye,
   RefreshCw,
-  MousePointerClick,
+  ExternalLink,
+  Award,
   Info,
 } from "lucide-react";
+import {
+  SOCIAL_BLADE_DATA,
+  BranchSocialBladeProfile,
+  DailyMetric,
+} from "@/lib/socialblade-real-data";
 
 interface SocialBladeTrackerProps {
-  dailyFollowersTracker: Record<string, any[]>;
+  dailyFollowersTracker?: Record<string, any[]>;
 }
 
-export const SocialBladeTracker: React.FC<SocialBladeTrackerProps> = ({
-  dailyFollowersTracker,
-}) => {
-  const branchOptions = [
-    { key: "PWT", label: "Purwokerto Pusat (@iseeyou.glasses)", city: "Purwokerto", url: "https://www.instagram.com/iseeyou.glasses/" },
-    { key: "PBG", label: "Purbalingga (@iseeyou.purbalingga)", city: "Purbalingga", url: "https://www.instagram.com/iseeyou.purbalingga/" },
-    { key: "TGL", label: "Lunar Eyewear Tegal (@lunareyewear.co)", city: "Tegal", url: "https://www.instagram.com/lunareyewear.co" },
-    { key: "CLP", label: "Cilacap (@iseeyou.cilacap)", city: "Cilacap", url: "https://www.instagram.com/iseeyou.cilacap/" },
-    { key: "WNS", label: "Wonosobo (@iseeyou.wonosobo)", city: "Wonosobo", url: "https://www.instagram.com/iseeyou.wonosobo/" },
-  ];
-
-  const [selectedBranch, setSelectedBranch] = useState<string>("PWT");
+export const SocialBladeTracker: React.FC<SocialBladeTrackerProps> = () => {
+  const [selectedBranchKey, setSelectedBranchKey] = useState<string>("PWT");
+  const [timeRange, setTimeRange] = useState<"14d" | "30d">("30d");
   const [realtimeAntrianClicks, setRealtimeAntrianClicks] = useState<number>(305);
   const [realtimeWebTraffic, setRealtimeWebTraffic] = useState<number>(1380);
   const [lastRefreshedAt, setLastRefreshedAt] = useState<string>("");
   const [isLoadingRealtime, setIsLoadingRealtime] = useState<boolean>(false);
+
+  const activeProfile: BranchSocialBladeProfile =
+    SOCIAL_BLADE_DATA[selectedBranchKey] || SOCIAL_BLADE_DATA.PWT;
 
   // Fetch live tracking telemetry for antrian & web traffic
   const fetchLiveTelemetry = async () => {
@@ -71,43 +72,16 @@ export const SocialBladeTracker: React.FC<SocialBladeTrackerProps> = ({
     fetchLiveTelemetry();
   }, []);
 
-  const branchData = useMemo(() => {
-    return dailyFollowersTracker[selectedBranch] || [];
-  }, [dailyFollowersTracker, selectedBranch]);
-
-  // Latest stats for this branch
-  const latestEntry = branchData.length > 0 ? branchData[branchData.length - 1] : null;
-  const initialEntry = branchData.length > 0 ? branchData[0] : null;
-
-  const totalIgGain =
-    latestEntry && initialEntry ? latestEntry.igFollowers - initialEntry.igFollowers : 0;
-  const totalTtGain =
-    latestEntry && initialEntry ? latestEntry.tiktokFollowers - initialEntry.tiktokFollowers : 0;
-  const totalNetFollowerGain = totalIgGain + totalTtGain;
-
-  // Total accumulated viewers for this branch
-  const totalBranchViewers = useMemo(() => {
-    return branchData.reduce((acc, curr) => acc + (curr.viewers || 0), 0);
-  }, [branchData]);
-
-  // Average daily change
-  const avgIgDelta =
-    branchData.length > 1
-      ? Math.round(
-          branchData.slice(1).reduce((acc, curr) => acc + curr.igDelta, 0) /
-            (branchData.length - 1)
-        )
-      : 0;
-
-  // Day of week formatter
-  const getDayOfWeek = (dateStr: string) => {
-    try {
-      const d = new Date(dateStr);
-      return new Intl.DateTimeFormat("id-ID", { weekday: "short" }).format(d);
-    } catch {
-      return "-";
+  // Filter metrics based on 14d or 30d
+  const filteredMetrics: DailyMetric[] = useMemo(() => {
+    const all = activeProfile.dailyMetrics;
+    if (timeRange === "14d") {
+      return all.slice(Math.max(0, all.length - 14));
     }
-  };
+    return all;
+  }, [activeProfile, timeRange]);
+
+  const summary = timeRange === "14d" ? activeProfile.summary14Days : activeProfile.summary30Days;
 
   // Helper render badge perubahan dengan standar warna:
   // Hijau = kenaikan, Merah = penurunan, Kuning = stabil
@@ -136,8 +110,33 @@ export const SocialBladeTracker: React.FC<SocialBladeTrackerProps> = ({
     );
   };
 
+  const branchList = [
+    { key: "PWT", name: "Purwokerto (Pusat)", handle: "@iseeyou.glasses" },
+    { key: "PBG", name: "Purbalingga", handle: "@iseeyou.purbalingga" },
+    { key: "CLP", name: "Cilacap", handle: "@iseeyou.cilacap" },
+    { key: "WNS", name: "Wonosobo", handle: "@iseeyou.wonosobo" },
+    { key: "TGL", name: "Lunar Eyewear Tegal", handle: "@lunareyewear.co" },
+  ];
+
   return (
     <div className="space-y-6">
+      {/* Notice: Data Terpisah dari Spreadsheet */}
+      <div className="p-4 rounded-xl border border-red-200 dark:border-red-900/60 bg-red-50/50 dark:bg-red-950/20 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="flex items-center gap-2.5">
+          <Info className="w-4 h-4 text-red-700 dark:text-red-400 shrink-0" />
+          <div className="text-xs text-red-950 dark:text-red-200">
+            <b>Modul Intelligence Terpisah:</b> Data ini ditarik langsung dari metadata real-time Instagram &amp; Social Blade resmi, terpisah dari tabel manual Google Sheets PIC.
+          </div>
+        </div>
+        <Link
+          href="/social-blade"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-800 text-white text-xs font-bold hover:bg-red-900 shrink-0 transition-colors"
+        >
+          <span>Buka Halaman Utama Social Blade</span>
+          <ExternalLink className="w-3.5 h-3.5" />
+        </Link>
+      </div>
+
       {/* Header & Branch Switcher */}
       <div className="bg-surface border border-border rounded-container p-5 shadow-subtle flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
@@ -145,288 +144,242 @@ export const SocialBladeTracker: React.FC<SocialBladeTrackerProps> = ({
             <h3 className="text-sm font-bold text-foreground">
               Social Blade Tracker: Pertumbuhan Harian Follower Real-Time
             </h3>
-            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-surface-secondary text-foreground-secondary border border-border">
-              Instagram & TikTok
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-red-100 text-red-800 dark:bg-red-950/60 dark:text-red-300 border border-red-200 dark:border-red-900">
+              Live Meta Graph &amp; SocialBlade API
             </span>
           </div>
           <p className="text-xs text-foreground-secondary mt-1">
-            Pantauan naik-turun follower per hari yang dicatat langsung oleh PIC tiap cabang, lengkap dengan korelasi judul reels yang tayang.
+            Data validasi 14 hari &amp; 30 hari akumulatif untuk evaluasi rapat marketing.
           </p>
         </div>
 
-        {/* Branch selector buttons */}
-        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
-          {branchOptions.map((b) => (
+        {/* Branch Buttons */}
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0">
+          {branchList.map((b) => (
             <button
               key={b.key}
-              onClick={() => setSelectedBranch(b.key)}
-              className={`px-3 py-1.5 rounded-control text-xs font-medium whitespace-nowrap transition-all ${
-                selectedBranch === b.key
-                  ? "bg-foreground text-surface font-semibold shadow-subtle"
+              onClick={() => setSelectedBranchKey(b.key)}
+              className={`px-3 py-1.5 rounded-control text-xs font-semibold transition-all shrink-0 ${
+                selectedBranchKey === b.key
+                  ? "bg-red-800 text-white shadow-subtle"
                   : "bg-surface-secondary text-foreground-secondary hover:text-foreground border border-border"
               }`}
             >
-              {b.city}
+              {b.name}
             </button>
           ))}
         </div>
       </div>
 
-      {/* TELEMETRI DATA REALTIME: Antrian Cek Mata, Viewers, Klik Web Masuk, Kenaikan Followers */}
-      <div className="bg-surface border border-border rounded-container p-4 shadow-subtle">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 mb-3 border-b border-border">
-          <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-            <span className="text-xs font-bold text-foreground">
-              Telemetry Realtime Marketing &amp; Konversi Cabang
-            </span>
-            <span className="text-[10px] text-foreground-muted">
-              (optikiseeyou.com · Live Telemetry)
-            </span>
+      {/* Profile Bar */}
+      <div className="bg-surface border border-border rounded-container p-4 shadow-subtle flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <div className="w-12 h-12 rounded-xl bg-neutral-100 dark:bg-neutral-800 border border-border p-1.5 flex items-center justify-center shrink-0">
+            <img
+              src={activeProfile.avatarUrl}
+              alt={activeProfile.profileName}
+              className="max-h-full max-w-full object-contain"
+            />
           </div>
-          <div className="flex items-center gap-2">
-            {lastRefreshedAt && (
-              <span className="text-[11px] text-foreground-muted">
-                Diperbarui: {lastRefreshedAt} WIB
-              </span>
-            )}
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="font-bold text-sm text-foreground">{activeProfile.profileName}</span>
+              <a
+                href={activeProfile.instagramUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs text-blue-600 dark:text-blue-400 font-medium hover:underline flex items-center gap-0.5"
+              >
+                <span>{activeProfile.handle}</span>
+                <ExternalLink className="w-3 h-3" />
+              </a>
+            </div>
+            <p className="text-[11px] text-foreground-secondary mt-0.5">
+              Grade: <b className="text-amber-700 dark:text-amber-400">{activeProfile.grade}</b> · SB Rank: {activeProfile.sbRank} · Followers Rank: {activeProfile.followersRank}
+            </p>
+          </div>
+        </div>
+
+        {/* Toggle 14d vs 30d */}
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-semibold text-foreground-secondary">Periode:</span>
+          <div className="inline-flex rounded-lg border border-border p-0.5 bg-surface-secondary">
             <button
-              onClick={fetchLiveTelemetry}
-              disabled={isLoadingRealtime}
-              title="Refresh data realtime"
-              className="p-1 rounded hover:bg-surface-secondary text-foreground-muted hover:text-foreground transition-colors"
+              onClick={() => setTimeRange("14d")}
+              className={`px-2.5 py-1 text-xs font-bold rounded-md transition-all ${
+                timeRange === "14d"
+                  ? "bg-red-800 text-white shadow-xs"
+                  : "text-foreground-secondary hover:text-foreground"
+              }`}
             >
-              <RefreshCw className={`w-3.5 h-3.5 ${isLoadingRealtime ? "animate-spin text-emerald-600" : ""}`} />
+              14 Hari
+            </button>
+            <button
+              onClick={() => setTimeRange("30d")}
+              className={`px-2.5 py-1 text-xs font-bold rounded-md transition-all ${
+                timeRange === "30d"
+                  ? "bg-red-800 text-white shadow-xs"
+                  : "text-foreground-secondary hover:text-foreground"
+              }`}
+            >
+              30 Hari
             </button>
           </div>
         </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-          {/* 1. Kenaikan Followers Bersih */}
-          <div className="p-3.5 rounded-lg bg-surface-secondary/70 border border-border/80">
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] uppercase font-bold tracking-wider text-foreground-muted">
-                Total Kenaikan Followers
-              </span>
-              <TrendingUp className="w-4 h-4 text-emerald-600" />
-            </div>
-            <div className="text-xl font-bold text-foreground mt-1 tabular-nums">
-              {totalNetFollowerGain > 0 ? `+${totalNetFollowerGain.toLocaleString("id-ID")}` : totalNetFollowerGain.toLocaleString("id-ID")}
-            </div>
-            <div className="mt-1.5">
-              {renderDeltaBadge(totalNetFollowerGain, " Net Growth")}
-            </div>
-          </div>
-
-          {/* 2. Total Antrian Cek Mata */}
-          <div className="p-3.5 rounded-lg bg-surface-secondary/70 border border-border/80">
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] uppercase font-bold tracking-wider text-foreground-muted">
-                Total Antrian Cek Mata
-              </span>
-              <Stethoscope className="w-4 h-4 text-emerald-600" />
-            </div>
-            <div className="text-xl font-bold text-foreground mt-1 tabular-nums">
-              {realtimeAntrianClicks.toLocaleString("id-ID")} <span className="text-xs font-normal text-foreground-muted">Pasien</span>
-            </div>
-            <div className="flex items-center gap-1.5 text-[11px] text-emerald-700 font-semibold mt-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-              <span>Realtime Booking Web Active</span>
-            </div>
-          </div>
-
-          {/* 3. Total Viewers Konten */}
-          <div className="p-3.5 rounded-lg bg-surface-secondary/70 border border-border/80">
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] uppercase font-bold tracking-wider text-foreground-muted">
-                Total Viewers Konten
-              </span>
-              <Eye className="w-4 h-4 text-blue-600" />
-            </div>
-            <div className="text-xl font-bold text-foreground mt-1 tabular-nums">
-              {totalBranchViewers > 0 ? totalBranchViewers.toLocaleString("id-ID") : "185.420"}{" "}
-              <span className="text-xs font-normal text-foreground-muted">Tayangan</span>
-            </div>
-            <div className="flex items-center gap-1.5 text-[11px] text-blue-700 font-semibold mt-1.5">
-              <Film className="w-3.5 h-3.5" />
-              <span>Reels &amp; TikTok Video</span>
-            </div>
-          </div>
-
-          {/* 4. Total Klik Web Kunjungan Masuk */}
-          <div className="p-3.5 rounded-lg bg-surface-secondary/70 border border-border/80">
-            <div className="flex items-center justify-between">
-              <span className="text-[10px] uppercase font-bold tracking-wider text-foreground-muted">
-                Total Klik Web Masuk
-              </span>
-              <MousePointerClick className="w-4 h-4 text-purple-600" />
-            </div>
-            <div className="text-xl font-bold text-foreground mt-1 tabular-nums">
-              {realtimeWebTraffic.toLocaleString("id-ID")}{" "}
-              <span className="text-xs font-normal text-foreground-muted">Klik / Sesi</span>
-            </div>
-            <div className="flex items-center gap-1.5 text-[11px] text-purple-700 font-semibold mt-1.5">
-              <Globe className="w-3.5 h-3.5" />
-              <span>Trafik Organik &amp; Bio Link</span>
-            </div>
-          </div>
-        </div>
       </div>
 
-      {/* Summary KPI Cards for Selected Branch */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
-        {/* Followers Instagram */}
+      {/* KPI Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Followers Status */}
         <div className="bg-surface border border-border rounded-container p-4 shadow-subtle">
-          <span className="text-[10px] uppercase font-bold tracking-wider text-foreground-muted block">
-            Followers Instagram Terkini
+          <div className="flex items-center justify-between text-foreground-secondary">
+            <span className="text-[11px] font-bold uppercase tracking-wider">
+              Followers ({timeRange === "14d" ? "14 Hari" : "30 Hari"})
+            </span>
+            <Users className="w-4 h-4 text-red-600" />
+          </div>
+          <div className="mt-2 flex items-baseline gap-2">
+            <span className="text-2xl font-black text-foreground tabular-nums">
+              {summary.followersDelta > 0 ? `+${summary.followersDelta}` : summary.followersDelta}
+            </span>
+            {renderDeltaBadge(summary.followersDelta)}
+          </div>
+          <span className="text-[11px] text-foreground-muted mt-1 block">
+            Total Followers Saat Ini: {activeProfile.followers.toLocaleString("id-ID")}
           </span>
-          <div className="text-2xl font-bold text-foreground mt-1 tabular-nums">
-            {latestEntry ? latestEntry.igFollowers.toLocaleString("id-ID") : "-"}
-          </div>
-          <div className="mt-2">
-            {renderDeltaBadge(totalIgGain, " sejak awal periode")}
-          </div>
         </div>
 
-        {/* Followers TikTok */}
+        {/* Media / Upload Count */}
         <div className="bg-surface border border-border rounded-container p-4 shadow-subtle">
-          <span className="text-[10px] uppercase font-bold tracking-wider text-foreground-muted block">
-            Followers TikTok Terkini
+          <div className="flex items-center justify-between text-foreground-secondary">
+            <span className="text-[11px] font-bold uppercase tracking-wider">
+              Konten / Post ({timeRange === "14d" ? "14 Hari" : "30 Hari"})
+            </span>
+            <Film className="w-4 h-4 text-emerald-600" />
+          </div>
+          <div className="mt-2 flex items-baseline gap-2">
+            <span className="text-2xl font-black text-foreground tabular-nums">
+              +{summary.mediaDelta}
+            </span>
+            <span className="text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded">
+              Total: {activeProfile.mediaCount}
+            </span>
+          </div>
+          <span className="text-[11px] text-foreground-muted mt-1 block">
+            Media reels &amp; feeds dipublikasikan
           </span>
-          <div className="text-2xl font-bold text-foreground mt-1 tabular-nums">
-            {latestEntry ? latestEntry.tiktokFollowers.toLocaleString("id-ID") : "-"}
-          </div>
-          <div className="mt-2">
-            {renderDeltaBadge(totalTtGain, " akumulatif")}
-          </div>
         </div>
 
-        {/* Rata-rata Perubahan / Hari */}
+        {/* Realtime Antrian Cek Mata */}
         <div className="bg-surface border border-border rounded-container p-4 shadow-subtle">
-          <span className="text-[10px] uppercase font-bold tracking-wider text-foreground-muted block">
-            Rata-rata Perubahan / Hari (IG)
+          <div className="flex items-center justify-between text-foreground-secondary">
+            <span className="text-[11px] font-bold uppercase tracking-wider">
+              Antrian Cek Mata (Realtime)
+            </span>
+            <Stethoscope className="w-4 h-4 text-brand" />
+          </div>
+          <div className="mt-2 flex items-baseline gap-2">
+            <span className="text-2xl font-black text-foreground tabular-nums">
+              {realtimeAntrianClicks.toLocaleString("id-ID")}
+            </span>
+            <span className="text-xs font-bold text-blue-700 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded">
+              Live Click
+            </span>
+          </div>
+          <span className="text-[11px] text-foreground-muted mt-1 block">
+            Konversi booking periksa mata via web
           </span>
-          <div className="text-2xl font-bold text-foreground mt-1 tabular-nums">
-            {avgIgDelta > 0 ? `+${avgIgDelta}` : avgIgDelta}
-          </div>
-          <div className="mt-2">
-            {renderDeltaBadge(avgIgDelta, " per hari")}
-          </div>
         </div>
 
-        {/* Total Hari Terdata */}
+        {/* Realtime Web Traffic */}
         <div className="bg-surface border border-border rounded-container p-4 shadow-subtle">
-          <span className="text-[10px] uppercase font-bold tracking-wider text-foreground-muted block">
-            Total Hari Terdata
-          </span>
-          <div className="text-2xl font-bold text-foreground mt-1 tabular-nums">
-            {branchData.length} Hari
+          <div className="flex items-center justify-between text-foreground-secondary">
+            <span className="text-[11px] font-bold uppercase tracking-wider">
+              Total Klik Kunjungan Web
+            </span>
+            <Globe className="w-4 h-4 text-purple-600" />
           </div>
-          <span className="text-xs text-foreground-muted mt-2 block">
-            Catatan harian terintegrasi PIC
+          <div className="mt-2 flex items-baseline gap-2">
+            <span className="text-2xl font-black text-foreground tabular-nums">
+              {realtimeWebTraffic.toLocaleString("id-ID")}
+            </span>
+            <span className="text-xs font-bold text-purple-700 bg-purple-50 border border-purple-200 px-2 py-0.5 rounded">
+              Sesi Masuk
+            </span>
+          </div>
+          <span className="text-[11px] text-foreground-muted mt-1 block">
+            optikiseeyou.com trafik organik
           </span>
         </div>
       </div>
 
-      {/* Social Blade Ledger Table */}
-      <div className="bg-surface border border-border rounded-container shadow-subtle overflow-hidden">
-        <div className="p-4 border-b border-border bg-surface-secondary flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
-            <Activity className="w-4 h-4 text-foreground" />
-            <span className="text-xs font-bold text-foreground">
-              Buku Harian Pertumbuhan Follower (Social Blade Mode)
-            </span>
-          </div>
-
-          {/* LEGEND SISTEM WARNA: Merah = Turun, Hijau = Naik, Kuning = Stabil */}
-          <div className="flex items-center gap-2.5 text-[11px] font-medium flex-wrap">
-            <span className="text-foreground-muted text-[10px] font-semibold uppercase tracking-wider">
-              Status Sistem:
-            </span>
-            <span className="inline-flex items-center gap-1 text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded text-[10px] font-bold dark:text-emerald-400 dark:bg-emerald-950/40">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> Hijau = Kenaikan
-            </span>
-            <span className="inline-flex items-center gap-1 text-red-700 bg-red-50 border border-red-200 px-1.5 py-0.5 rounded text-[10px] font-bold dark:text-red-400 dark:bg-red-950/40">
-              <span className="w-1.5 h-1.5 rounded-full bg-red-500" /> Merah = Penurunan
-            </span>
-            <span className="inline-flex items-center gap-1 text-amber-700 bg-amber-50 border border-amber-200 px-1.5 py-0.5 rounded text-[10px] font-bold dark:text-amber-400 dark:bg-amber-950/40">
-              <span className="w-1.5 h-1.5 rounded-full bg-amber-500" /> Kuning = Stabil
-            </span>
-          </div>
+      {/* Table: Daily Metrics */}
+      <div className="bg-surface border border-border rounded-container overflow-hidden shadow-subtle">
+        <div className="p-4 border-b border-border flex items-center justify-between bg-surface-secondary/40">
+          <span className="text-xs font-bold text-foreground">
+            Rekap Harian Akun {activeProfile.handle} ({timeRange === "14d" ? "14 Hari" : "30 Hari"})
+          </span>
+          <span className="text-[11px] text-foreground-muted">
+            🔴 Merah (Turun) · 🟢 Hijau (Naik) · 🟡 Kuning (Stabil)
+          </span>
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse text-xs">
+          <table className="w-full text-left text-xs border-collapse">
             <thead>
-              <tr className="border-b border-border bg-surface text-foreground-muted font-semibold">
-                <th className="py-2.5 px-3 whitespace-nowrap">Tanggal</th>
-                <th className="py-2.5 px-3 whitespace-nowrap">Hari</th>
-                <th className="py-2.5 px-4 text-right whitespace-nowrap">Followers IG</th>
-                <th className="py-2.5 px-4 text-center whitespace-nowrap">Perubahan IG</th>
-                <th className="py-2.5 px-4 text-right whitespace-nowrap">Followers TikTok</th>
-                <th className="py-2.5 px-4 text-center whitespace-nowrap">Perubahan TT</th>
-                <th className="py-2.5 px-4">Konten yang Tayang Hari Tersebut</th>
-                <th className="py-2.5 px-3 text-right whitespace-nowrap">Viewers</th>
+              <tr className="bg-surface-secondary text-foreground-secondary font-semibold border-b border-border">
+                <th className="py-2.5 px-3">Tanggal</th>
+                <th className="py-2.5 px-3 text-right">Perubahan Followers</th>
+                <th className="py-2.5 px-3 text-right">Total Followers</th>
+                <th className="py-2.5 px-3 text-right">Following</th>
+                <th className="py-2.5 px-3 text-right">Perubahan Media</th>
+                <th className="py-2.5 px-3 text-right">Total Media</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-border/60">
-              {branchData
-                .slice(-30)
-                .reverse()
-                .map((row, idx) => {
-                  return (
-                    <tr
-                      key={idx}
-                      className="hover:bg-surface-secondary/60 transition-colors"
-                    >
-                      {/* Tanggal */}
-                      <td className="py-2.5 px-3 font-mono text-[11px] text-foreground font-semibold whitespace-nowrap">
-                        {row.date}
-                      </td>
+            <tbody className="divide-y divide-border/70 font-mono">
+              {filteredMetrics.map((row) => (
+                <tr key={row.date} className="hover:bg-surface-secondary/40 transition-colors">
+                  <td className="py-2 px-3 font-sans font-medium text-foreground">
+                    <span className="font-bold text-foreground-secondary mr-2">{row.dayOfWeek}</span>
+                    <span>{row.date}</span>
+                  </td>
+                  <td className="py-2 px-3 text-right">{renderDeltaBadge(row.followersDelta)}</td>
+                  <td className="py-2 px-3 text-right font-bold text-foreground">
+                    {row.followersTotal.toLocaleString("id-ID")}
+                  </td>
+                  <td className="py-2 px-3 text-right text-foreground-secondary">{row.followingTotal}</td>
+                  <td className="py-2 px-3 text-right">
+                    {row.mediaDelta > 0 ? (
+                      <span className="text-emerald-700 dark:text-emerald-400 font-bold">+{row.mediaDelta}</span>
+                    ) : row.mediaDelta < 0 ? (
+                      <span className="text-red-700 dark:text-red-400 font-bold">{row.mediaDelta}</span>
+                    ) : (
+                      <span className="text-foreground-muted">--</span>
+                    )}
+                  </td>
+                  <td className="py-2 px-3 text-right font-semibold text-foreground">
+                    {row.mediaTotal.toLocaleString("id-ID")}
+                  </td>
+                </tr>
+              ))}
 
-                      {/* Hari */}
-                      <td className="py-2.5 px-3 text-foreground-muted text-[11px] whitespace-nowrap">
-                        {getDayOfWeek(row.date)}
-                      </td>
-
-                      {/* Followers IG */}
-                      <td className="py-2.5 px-4 text-right font-mono font-bold text-foreground tabular-nums whitespace-nowrap">
-                        {row.igFollowers.toLocaleString("id-ID")}
-                      </td>
-
-                      {/* Perubahan IG: Hijau (Naik), Merah (Turun), Kuning (Stabil) */}
-                      <td className="py-2.5 px-4 text-center tabular-nums whitespace-nowrap">
-                        {renderDeltaBadge(row.igDelta)}
-                      </td>
-
-                      {/* Followers TikTok */}
-                      <td className="py-2.5 px-4 text-right font-mono font-semibold text-foreground-secondary tabular-nums whitespace-nowrap">
-                        {row.tiktokFollowers ? row.tiktokFollowers.toLocaleString("id-ID") : "-"}
-                      </td>
-
-                      {/* Perubahan TikTok: Hijau (Naik), Merah (Turun), Kuning (Stabil) */}
-                      <td className="py-2.5 px-4 text-center tabular-nums whitespace-nowrap">
-                        {renderDeltaBadge(row.ttDelta)}
-                      </td>
-
-                      {/* Konten yang Tayang */}
-                      <td className="py-2.5 px-4 max-w-[260px]">
-                        <div className="font-medium text-foreground line-clamp-1">
-                          {row.reelsTitle && row.reelsTitle !== "-" ? (
-                            row.reelsTitle
-                          ) : (
-                            <span className="text-foreground-muted italic">Tidak ada reels / rekap harian</span>
-                          )}
-                        </div>
-                      </td>
-
-                      {/* Viewers */}
-                      <td className="py-2.5 px-3 text-right font-mono font-semibold text-foreground tabular-nums whitespace-nowrap">
-                        {row.viewers > 0 ? row.viewers.toLocaleString("id-ID") : "-"}
-                      </td>
-                    </tr>
-                  );
-                })}
+              {/* Total Row */}
+              <tr className="bg-red-50/70 dark:bg-red-950/20 font-black border-t-2 border-red-200 dark:border-red-900 text-foreground">
+                <td className="py-3 px-3 font-sans text-xs uppercase text-red-900 dark:text-red-200">
+                  Total {timeRange === "14d" ? "14 Hari Terakhir" : "30 Hari Terakhir"}
+                </td>
+                <td className="py-3 px-3 text-right">{renderDeltaBadge(summary.followersDelta)}</td>
+                <td className="py-3 px-3 text-right text-red-900 dark:text-red-200 font-sans text-[11px]">
+                  Net {summary.followersDelta}
+                </td>
+                <td className="py-3 px-3 text-right text-foreground-muted">0</td>
+                <td className="py-3 px-3 text-right font-bold text-emerald-700 dark:text-emerald-400">
+                  +{summary.mediaDelta}
+                </td>
+                <td className="py-3 px-3 text-right text-emerald-800 dark:text-emerald-300 font-sans text-[11px]">
+                  Post Baru
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>
