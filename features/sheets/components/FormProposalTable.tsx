@@ -239,7 +239,11 @@ export const getWhatsAppVoucherOfferText = (
     ``,
     `Menindaklanjuti proposal sponsorship yang telah diajukan untuk kegiatan "${eventName.trim()}", pihak manajemen Optik I See You tertarik untuk memberikan dukungan kerja sama.`,
     ``,
-    `Kami dapat berpartisipasi dengan paket sponsorship senilai total Rp1.000.000 (satu juta rupiah) dalam bentuk 20 lembar Voucher Belanja Kacamata masing-masing senilai Rp50.000 serta produk kacamata untuk doorprize. Voucher ini dapat dialokasikan oleh panitia sebagai hadiah pemenang lomba, doorprize peserta, maupun apresiasi narasumber.`,
+    `Kami dapat berpartisipasi dengan paket sponsorship barter voucher resmi berupa 20 lembar voucher, dengan rincian:`,
+    `1. 10 lembar Voucher Kacamata Gratis (khusus untuk hadiah utama pemenang lomba atau doorprize peserta, dapat diklaim dan fitting kacamata langsung di gerai store Optik I See You Cabang ${cleanBranch})`,
+    `2. 10 lembar Voucher Belanja Kacamata masing-masing senilai Rp50.000 (total senilai Rp500.000, dapat dialokasikan untuk apresiasi narasumber, panitia, atau peserta)`,
+    ``,
+    `Dukungan ini kami serahkan sepenuhnya dalam bentuk fisik voucher resmi agar pemenang kacamata gratis dapat leluasa memilih model frame kacamata yang cocok serta mendapatkan pemeriksaan refraksi mata secara gratis langsung di store kami.`,
     ``,
     `Sebagai timbal balik kerja sama, kami berharap dapat memperoleh fasilitas promosi sponsorship seperti:`,
     `1. Pencantuman logo Optik I See You pada media publikasi utama (backdrop / banner / pamflet)`,
@@ -291,9 +295,9 @@ export const getWhatsAppOfferByCategory = (
       ``,
       `Menindaklanjuti pengajuan proposal untuk event akbar "${eventName.trim()}", pihak manajemen Optik I See You sangat antusias untuk berpartisipasi sebagai Official Eyewear Partner.`,
       ``,
-      `Melihat skala kegiatan yang besar serta audiens yang sangat potensial, kami siap memberikan dukungan terpadu (Paket Golden Sponsorship) berupa:`,
-      `1. Paket Barter Voucher Belanja Kacamata Resmi Optik I See You (Voucher nominal Rp20.000 / Rp50.000 untuk peserta & hadiah lomba)`,
-      `2. Produk Kacamata Trendy / Frame Premium untuk hadiah pemenang lomba atau doorprize utama`,
+      `Melihat skala kegiatan yang besar serta audiens yang sangat potensial, kami siap memberikan dukungan kemitraan berupa:`,
+      `1. 10 lembar Voucher Belanja Kacamata masing-masing senilai Rp50.000 (Voucher potongan belanja untuk panitia/peserta)`,
+      `2. 10 lembar Voucher Kacamata Gratis (Free Frame & Cek Mata di Store untuk hadiah utama pemenang lomba / doorprize)`,
       `3. Hak Pembukaan Stand / Booth Pemeriksaan Mata Gratis & Edukasi Visual oleh tim profesional Optik I See You di lokasi acara`,
       `4. Alokasi dukungan sponsorship proporsional yang dapat diselaraskan dengan hak promosi utama (penempatan logo backdrop, adlibs MC, dan aktivasi booth)`,
       ``,
@@ -437,17 +441,17 @@ export const evaluateBarterVoucher = (item: FormProposalItem): BarterEvaluation 
   let qualityCategory: "bagus" | "sedang" | "jelek" = "sedang";
   let qualityLabel = "Skala Kampus / Menengah";
   let qualityBadge = "bg-blue-500/10 text-blue-700 dark:text-blue-300 border-blue-500/30";
-  let recommendedDecision = "Setujui Paket Barter Voucher & Produk Kacamata";
-  let packageOffered = "Voucher Belanja Kacamata + Produk Kacamata Hadiah";
-  let negotiationNote = "Skala kegiatan menengah. Tawarkan barter voucher belanja kacamata resmi + produk kacamata doorprize tanpa dana tunai.";
+  let recommendedDecision = "Setujui Barter Voucher (10x 50rb + 10x Kacamata Gratis)";
+  let packageOffered = "10 Voucher Belanja 50rb + 10 Voucher Kacamata Gratis";
+  let negotiationNote = "Skala kegiatan menengah. Tawarkan paket barter voucher resmi: 10 voucher belanja 50rb + 10 voucher kacamata gratis klaim store (tanpa serah fisik produk di awal).";
 
   if (isBigEventOr500Plus) {
     qualityCategory = "bagus";
     qualityLabel = "Skala Besar (Event Publik / 500+ Peserta)";
     qualityBadge = "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border-emerald-500/30 font-bold";
-    recommendedDecision = "Prioritas Kemitraan (Barter Voucher + Stand Edukasi & Cek Mata Gratis)";
-    packageOffered = "Paket Voucher Belanja + Free Cek Mata & Produk Kacamata Hadiah";
-    negotiationNote = "Event berskala besar. Maksimalkan aktivasi kemitraan dengan pembukaan booth/stand pemeriksaan mata gratis & barter voucher.";
+    recommendedDecision = "Prioritas Kemitraan (10x 50rb + 10x Kacamata Gratis + Booth Cek Mata)";
+    packageOffered = "10 Voucher Belanja + 10 Voucher Kacamata Gratis + Stand Cek Mata";
+    negotiationNote = "Event berskala besar. Maksimalkan aktivasi kemitraan dengan pembukaan booth/stand pemeriksaan mata gratis & barter 20 voucher resmi.";
   } else if (isRegularSmaSmk || isSmallOrUnder50) {
     qualityCategory = "jelek";
     qualityLabel = "Skala Pelajar / Komunitas";
@@ -1257,7 +1261,7 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
               Arahan Hubungi 5 Dulu
             </span>
             <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
-              20 Voucher @ 50rb (1 Juta)
+              20 Voucher (10x 50rb + 10x Free Kacamata)
             </span>
           </div>
           <p className="text-[11px] text-foreground-secondary leading-relaxed">
@@ -1550,7 +1554,7 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
                           ? "Kirim Format Voucher Cuci via WhatsApp"
                           : barter.qualityCategory === "bagus"
                           ? "Kirim Tawaran Golden Tier via WhatsApp"
-                          : "Kirim Penawaran 20 Voucher via WhatsApp"}
+                          : "Kirim Penawaran 20 Voucher (10 Belanja + 10 Free Kacamata) via WhatsApp"}
                       </span>
                     </a>
 
@@ -1611,7 +1615,7 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
                               ? "Salin Draft Chat (Voucher Cuci Gratis)"
                               : barter.qualityCategory === "bagus"
                               ? "Salin Draft Chat (Paket Golden Tier)"
-                              : "Salin Draft Chat WA (20 Voucher @ 50rb)"}
+                              : "Salin Draft Chat WA (10 Voucher 50rb + 10 Kacamata Gratis)"}
                           </span>
                         </>
                       )}
@@ -2087,7 +2091,7 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
                 Arahan Manajemen: Hubungi 5 Dulu
               </span>
               <span className="text-xs font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20">
-                20 Voucher @ Rp50.000 (Total Rp1.000.000)
+                20 Voucher (10x 50rb + 10x Free Kacamata)
               </span>
             </div>
             <p className="text-xs text-foreground-secondary">
@@ -2733,9 +2737,9 @@ export const FormProposalTable: React.FC<FormProposalTableProps> = ({
                   `1. Skala Pelajar / Sekolah:`,
                   `   - Berikan Voucher Layanan Perawatan & Pembersihan Kacamata Gratis; efisiensi dana tunai.`,
                   `2. Skala Menengah (Kampus & Komunitas):`,
-                  `   - Paket Barter 20 Voucher Belanja @ Rp50.000 (Total Rp1.000.000) + Produk Kacamata Doorprize.`,
+                  `   - Paket Barter 20 Voucher Resmi: 10 Voucher Belanja @ Rp50.000 + 10 Voucher Kacamata Gratis untuk Doorprize (Klaim Store, Tanpa Serah Fisik Produk).`,
                   `3. Skala Besar (Event Publik / Festival / Expo):`,
-                  `   - Paket Kemitraan Terpadu: Barter Voucher Belanja, Frame Kacamata, Open Stand Booth Cek Mata Gratis.`,
+                  `   - Paket Kemitraan Terpadu: 10 Voucher Belanja @ 50rb + 10 Voucher Kacamata Gratis + Open Stand Booth Cek Mata Gratis.`,
                   `----------------------------------------`,
                   ``,
                   ...barterProposals.map((item, idx) => {
