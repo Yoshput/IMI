@@ -7,9 +7,9 @@ import {
 } from "@/features/pengajuan/components/SponsorProposalDocument";
 
 export const metadata: Metadata = {
-  title: "Proposal Sponsorship · Buka Class Konten | Optik I See You",
+  title: "Proposal Sponsorship & Kemitraan B2B · Creative Content Masterclass 2026 | Optik I See You",
   description:
-    "Proposal pengajuan sponsorship & kerjasama mitra strategis program Buka Class Konten oleh Optik I See You.",
+    "Proposal resmi pengajuan sponsorship & kemitraan strategis B2B program Creative Content Masterclass 2026 oleh Optik I See You & Lunar Eyewear.",
 };
 
 const ACCOUNTS: { key: string; account: string; label: string; isSecondBrand?: boolean }[] = [

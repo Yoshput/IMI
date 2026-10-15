@@ -170,14 +170,14 @@ export const SponsorOutreachView: React.FC = () => {
               <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-brand/10 text-brand border border-brand/20">
                 Outreach CRM & Sponsorship Event
               </span>
-              <span className="text-xs text-foreground-muted font-medium">Buka Kelas Konten 2026</span>
+              <span className="text-xs text-foreground-muted font-medium">Creative Content Masterclass 2026</span>
             </div>
             <h2 className="text-xl sm:text-2xl font-black text-foreground tracking-tight">
-              Daftar Sponsor Prospektif & Template WhatsApp
+              Daftar Sponsor Prospektif & Naskah Kemitraan B2B
             </h2>
             <p className="text-xs sm:text-sm text-foreground-secondary max-w-2xl">
-              11 target brand lokal dan regional Purwokerto untuk pengajuan kerja sama sponsorship kelas konten kreator
-              Optik I See You. Klik kirim via WhatsApp atau salin draf untuk follow-up cepat.
+              11 target brand mitra bisnis lokal dan regional untuk sinergi kemitraan B2B (tukar voucher, display brosur kasir 4 cabang, dan sponsorship event)
+              bersama Optik I See You & Lunar Eyewear.
             </p>
           </div>
 

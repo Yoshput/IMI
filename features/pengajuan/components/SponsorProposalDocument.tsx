@@ -59,36 +59,36 @@ interface ProposalData {
   packages: PackageTier[];
 }
 
-const STORAGE_KEY = "isy_proposal_sponsor_formal_v3";
+const STORAGE_KEY = "isy_proposal_sponsor_formal_v4";
 
 const DEFAULT_DATA: ProposalData = {
   docNo: "024/MKT-ISY/PROP-SPONSOR/X/2026",
   docAttachment: "1 (Satu) Berkas Proposal Kerjasama",
-  docSubject: "Permohonan Kerjasama Sponsorship Program Edukasi 'Buka Class Konten'",
+  docSubject: "Permohonan Kerjasama Sponsorship & Sinergi Kemitraan B2B 'Creative Content Masterclass 2026'",
   letterCity: "Purwokerto",
   letterDate: "15 Oktober 2026",
   recipientTitle: "Pimpinan / Brand & Marketing Manager",
   recipientCompany: "[Nama Perusahaan / Brand Mitra]",
   recipientCity: "di Tempat",
   letterIntro:
-    "Sehubungan dengan rencana pelaksanaan program pengembangan kreator digital dan edukasi visual bertajuk 'Buka Class Konten', kami dari Divisi Marketing & Kemitraan Strategis Optik I See You bermaksud mengajukan penawaran kerjasama sponsorship kepada perusahaan/brand yang Bapak/Ibu pimpin.",
+    "Sehubungan dengan rencana pelaksanaan program pengembangan kreator konten digital dan sinergi industri kreatif bertajuk 'Creative Content Masterclass 2026: Buka Kelas Konten', kami dari Divisi Strategic Partnership & Marketing Optik I See You bermaksud mengajukan penawaran kerjasama sponsorship serta kolaborasi bisnis Business-to-Business (B2B) kepada perusahaan/brand yang Bapak/Ibu pimpin.",
   letterClosing:
-    "Demikian surat penawaran kerjasama sponsorship ini kami sampaikan. Besar harapan kami agar terjalin kolaborasi yang saling menguntungkan dan berdampak nyata bagi pertumbuhan kedua belah pihak. Atas perhatian dan kesempatan yang diberikan, kami ucapkan terima kasih.",
-  eventName: "Buka Class Konten",
-  eventSubtitle: "Masterclass Kreator Digital & Workshop Konten Ritel",
-  eventTheme: "Smart Framing, Authentic Storytelling: Tampil Percaya Diri dengan Konten Berkualitas",
-  eventOrganizer: "Divisi Marketing & Kemitraan Strategis, Optik I See You & Lunar Eyewear",
+    "Demikian surat penawaran kerjasama sponsorship ini kami sampaikan. Besar harapan kami agar terjalin kolaborasi B2B yang saling menguntungkan (win-win synergy) dan berdampak nyata bagi pertumbuhan kedua belah pihak. Atas perhatian dan kesempatan yang diberikan, kami ucapkan terima kasih.",
+  eventName: "CREATIVE CONTENT MASTERCLASS 2026",
+  eventSubtitle: "Buka Kelas Konten: Masterclass Kreator Digital & Kolaborasi Brand Masa Kini",
+  eventTheme: "Elevate Your Visuals, Scale Your Impact: Strategi Produksi Konten Komersial, Estetika Ritel & Kolaborasi Brand Masa Kini",
+  eventOrganizer: "Divisi Marketing & Strategic Partnership, Optik I See You & Lunar Eyewear",
   eventDate: "Sabtu, 14 November 2026",
   eventTime: "09.00 – 15.00 WIB",
-  eventVenue: "Creative Hub & Showroom Optik I See You Purwokerto (Pusat)",
-  eventParticipants: "50 Peserta Terpilih (Kreator konten, Gen-Z, mahasiswa, dan pelaku UMKM lokal)",
-  eventFormat: "Workshop interaktif, presentasi/demo produk sponsor, praktik pembuatan konten, dan sesi networking",
+  eventVenue: "Creative Hall & Event Space Banyumas Raya",
+  eventParticipants: "50 Peserta Terpilih (Kreator konten, influencer lokal, pegiat media sosial, dan tim kreatif brand)",
+  eventFormat: "Workshop intensif pembuatan konten, bedah studi kasus komersial, unboxing produk sponsor, mini booth expo, dan sesi B2B networking",
   backgroundText1:
-    "Pertumbuhan media sosial saat ini menjadikan konten visual sebagai rujukan utama konsumen muda dalam memilih produk gaya hidup, mulai dari kacamata, perawatan diri (skincare/grooming), hingga fashion. Namun di wilayah Purwokerto dan sekitarnya, ruang pelatihan yang memadukan teori estetika visual dengan praktik teknis pembuatan konten yang berorientasi komersial masih sangat terbatas.",
+    "Perkembangan lanskap digital saat ini menuntut brand dan pelaku bisnis untuk terus hadir dengan konten visual yang otentik, estetis, dan bernilai komersial tinggi. Bagi brand lokal dan regional di wilayah Banyumas Raya dan sekitarnya, kolaborasi terpadu bersama kreator konten aktif merupakan strategi pemasaran yang paling efektif dalam menjangkau audiens muda, mahasiswa, hingga segmen keluarga modern.",
   backgroundText2:
-    "Optik I See You bersama Lunar Eyewear berinisiatif menghadirkan program 'Buka Class Konten'. Program ini dirancang bukan sekadar seminar satu arah, melainkan kelas intensif di mana peserta langsung memproduksi video ulasan dan konten promosi otentik.",
+    "Optik I See You bersama Lunar Eyewear menginisiasi program 'Creative Content Masterclass 2026: Buka Kelas Konten'. Program ini dirancang bukan sekadar seminar teori satu arah, melainkan inkubator praktik di mana 50 peserta kreator terpilih langsung memproduksi konten video promosi dan ulasan produk mitra sponsor secara riil di lokasi.",
   backgroundText3:
-    "Melalui kegiatan ini, mitra sponsor berkesempatan melakukan aktivasi multi-kanal: tatap muka langsung dengan peserta di lokasi kegiatan, penayangan materi video/poster promosi di seluruh layar TV showroom gerai resmi, serta paparan terintegrasi di media sosial resmi perusahaan.",
+    "Melalui kemitraan B2B ini, brand mitra memperoleh aktivasi multi-kanal: tatap muka langsung dan sampling produk kepada kreator, penempatan materi promosi (brosur/voucher) di meja kasir 4 gerai ritel, penayangan video di TV Showroom, serta publikasi digital melalui media sosial resmi @iseeyou.glasses (244.000+ followers).",
   picName: "Yoshput",
   picRole: "Staff Kemitraan & Sponsorship Marketing",
   picWa: "0877-7868-3766",
@@ -106,10 +106,10 @@ const DEFAULT_DATA: ProposalData = {
       price: "Rp 5.000.000,-",
       benefits: [
         "Hak pembukaan 1 (satu) booth/stand promosi interaktif eksklusif di lokasi acara.",
-        "Penayangan video profil / iklan produk di layar TV Showroom 4 cabang ritel selama 1 (satu) bulan penuh.",
+        "Penayangan video profil / iklan komersial di layar TV Showroom 4 cabang ritel selama 1 (satu) bulan penuh.",
         "Sesi presentasi / product demo di panggung utama selama 15 menit.",
         "Pencantuman logo ukuran BESAR pada backdrop panggung, x-banner, flyer cetak, dan frame photobooth.",
-        "Penyertaan produk sampling / voucher resmi di dalam goodie bag seluruh peserta.",
+        "Penyertaan produk sampling / voucher resmi di dalam goodie bag seluruh peserta dan narasumber.",
         "Penyebutan (ad-lips) nama brand oleh Master of Ceremony (MC) sebanyak 10 kali selama acara.",
         "1 (satu) kali penayangan video Reels/Feed dedicated di akun Instagram resmi @iseeyou.glasses.",
       ],
@@ -142,14 +142,14 @@ const DEFAULT_DATA: ProposalData = {
     },
     {
       id: "barter",
-      name: "PAKET BARTER / IN-KIND (SPONSOR PENDUKUNG)",
-      tagline: "Dukungan Produk, Konsumsi, Goodie Bag, & Doorprize",
-      price: "Non-Tunai (Ekuivalen Produk)",
+      name: "PAKET KEMITRAAN B2B & BARTER SINERGI (CROSS-PROMOTION)",
+      tagline: "Sinergi Ritel Store-to-Store: Tukar Voucher, Display Meja Kasir & Goodie Bag",
+      price: "Non-Tunai / Barter Ekuivalen",
       benefits: [
-        "Penyediaan produk sampling, gift set, goodie bag, konsumsi, atau voucher belanja untuk peserta & doorprize kuis.",
-        "Pencantuman logo ukuran KECIL pada banner pendukung sponsorship.",
-        "Penyebaran flyer promosi di area meja registrasi peserta.",
-        "Instagram Story appreciation dari akun resmi Optik I See You pada hari H kegiatan.",
+        "Skema Tukar Voucher (Cross-Voucher): Penyertaan 50 pcs voucher diskon / treatment mitra ke dalam Official Goodie Bag peserta & penukaran voucher belanja kacamata Optik I See You untuk pelanggan setia mitra.",
+        "Skema Tukar Display Meja Kasir (Cross-Brochure): Penempatan brosur, flyer, atau tent card promosi mitra di area kasir 4 gerai cabang ritel Optik I See You (Purwokerto, Purbalingga, Cilacap, Wonosobo).",
+        "Penayangan materi promosi / slide produk mitra pada layar TV Showroom seluruh gerai cabang selama periode kegiatan.",
+        "Hak penyediaan tester produk / sampling di area venue event serta apresiasi kemitraan di Instagram Story @iseeyou.glasses (244.000+ followers).",
       ],
     },
   ],
@@ -400,8 +400,54 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
           </div>
         </div>
 
-        {/* Second Row: Typography & Style Controls */}
-        <div className="flex flex-wrap items-center justify-between gap-3 pt-3 text-xs">
+        {/* Second Row: Target Recipient Customizer (Universal for Any Brand) */}
+        <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-neutral-200 text-xs">
+          <div className="flex items-center gap-2 flex-1 min-w-[280px]">
+            <span className="font-semibold text-neutral-700 whitespace-nowrap">Target Mitra / Perusahaan:</span>
+            <input
+              type="text"
+              value={data.recipientCompany}
+              onChange={(e) => updateField("recipientCompany", e.target.value)}
+              placeholder="Contoh: PT Nuha Cosmetindo / Baby Glows"
+              className="flex-1 max-w-[320px] px-2.5 py-1 bg-neutral-50 border border-neutral-300 rounded text-xs font-semibold text-neutral-900 focus:outline-none focus:ring-1 focus:ring-black"
+            />
+          </div>
+
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <span className="text-[11px] text-neutral-500 font-medium mr-1">Isi Cepat:</span>
+            {[
+              { label: "Umum / Universal", company: "[Nama Perusahaan / Brand Mitra]", title: "Pimpinan / Brand & Marketing Manager" },
+              { label: "Baby Glows", company: "Baby Glows", title: "Pimpinan & Tim Manajemen" },
+              { label: "Nuha Cosmetindo", company: "PT Nuha Cosmetindo", title: "Pimpinan & Tim Marketing" },
+              { label: "Taylor De Virdis", company: "Taylor De Virdis", title: "Pimpinan & Tim Manajemen" },
+              { label: "Inul Vista", company: "Inul Vista Purwokerto", title: "Mas Wahyu & Tim Marketing" },
+              { label: "B2B Clinic", company: "B2B Clinic", title: "Pimpinan & Tim Marketing" },
+              { label: "Navagreen", company: "Navagreen Purwokerto", title: "Tim Marketing & Kemitraan" },
+              { label: "Reta Clinic", company: "Reta Beauty Clinic", title: "Tim Sponsorship & Promosi" },
+              { label: "Rita Group", company: "Rita Supermall Purwokerto", title: "Tim Promosi & Partnership" },
+              { label: "Merayu Spa", company: "Merayu Spa Purwokerto", title: "Pimpinan & Tim Manajemen" },
+            ].map((p) => (
+              <button
+                key={p.label}
+                type="button"
+                onClick={() => {
+                  updateField("recipientCompany", p.company);
+                  updateField("recipientTitle", p.title);
+                }}
+                className={`px-2 py-0.5 rounded text-[10px] font-semibold border transition-all ${
+                  data.recipientCompany === p.company
+                    ? "bg-neutral-900 text-white border-neutral-900"
+                    : "bg-neutral-100 text-neutral-700 hover:bg-neutral-200 border-neutral-300"
+                }`}
+              >
+                {p.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Third Row: Typography & Style Controls */}
+        <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-neutral-200 text-xs">
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-1.5">
               <span className="font-semibold text-neutral-700">Jenis Font:</span>
