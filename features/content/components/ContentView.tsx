@@ -251,7 +251,7 @@ export const ContentView: React.FC = () => {
             <h3 className="heading-section text-foreground flex items-center gap-2">
               <span>
                 Daftar Seluruh Konten &amp; Ranking Bukti (
-                {period === "weekly" ? "Mingguan · Konten Terbaru" : "Bulanan · September - Oktober 2026"}
+                {period === "weekly" ? "Mingguan · Konten Terbaru (6 - 16 Okt 2026)" : "Bulanan · Rekap September - Oktober 2026 & All-Time"}
                 )
               </span>
               <span className="text-xs font-normal text-foreground-secondary">

@@ -87,17 +87,20 @@ export function getRealContentItems(
     return { key: "pwt", name: "Purwokerto (Pusat)" };
   };
 
-  // Dynamic date eligibility (no hardcoded blockades)
+  // Dynamic date eligibility (Strict separation: Weekly = Minggu Ini 6-16 Okt, Monthly = Sep-Okt & All-Time)
   const isEligibleDate = (dateStr: string) => {
     if (!dateStr) return false;
-    // Format YYYY-MM-DD
     const cleanDate = dateStr.slice(0, 10);
     if (period === "weekly") {
-      // 10 hari terakhir (6 Oktober 2026 s.d. saat ini dan seterusnya)
-      return cleanDate >= "2026-10-06";
+      // HANYA konten yang benar-benar tayang di minggu evaluasi terbaru (6 - 16 Oktober 2026)
+      return cleanDate >= "2026-10-06" && cleanDate <= "2026-10-16";
     }
-    // Bulanan: September - Oktober 2026
-    return cleanDate >= "2026-09-01" && cleanDate <= "2026-10-31";
+    // Bulanan: Seluruh konten September - Oktober 2026 serta Rekor All-Time
+    return (
+      (cleanDate >= "2026-09-01" && cleanDate <= "2026-10-31") ||
+      cleanDate.startsWith("2025") ||
+      cleanDate.startsWith("2026-06")
+    );
   };
 
   // Tracking for deduplication by shortcode and title-slug
@@ -159,9 +162,9 @@ export function getRealContentItems(
       title: "cewek + makeup + kacamata =",
       captionPreview: "definisi cewek + makeup + kacamata = perfection! Kacamata bikin fitur wajah makin tegas dan aesthetic. Order online & offline di Lunar Eyewear Rita Mall Tegal.",
       category: "Hiburan / Tren Viral",
-      publishDate: "2026-10-08",
+      publishDate: "2025-07-02", // Asli tayang 2 Juli 2025 (67w) - All-Time Viral Champion
       reach: 5400000,
-      likes: 380000,
+      likes: 244000,
       comments: 2450,
       shares: 12000,
       branchName: "Lunar Eyewear Tegal (Second Brand)",
@@ -171,19 +174,19 @@ export function getRealContentItems(
       format: "reels" as ContentFormat,
     },
     {
-      code: "LNR_Helm02",
-      title: "POV: cewek kalo keluar siang hari naik motor pake helm",
-      captionPreview: "helm udah siap, kacamata anti silau udah nempel, tinggal gas! Solusi kacamata stylish anti pusing cuma di Lunar Eyewear Tegal.",
+      code: "DZw2oUzTuEs",
+      title: "POV: cewek kalo keluar siang hari naik motor pake helm (alesan gamau nyetir malem)",
+      captionPreview: "alesan kenapa aku gamau nyetir kalo malem: apalagi kalo ada yg pake lampu tembak. Solusi kacamata stylish anti pusing di Lunar Eyewear Tegal.",
       category: "Hiburan / Tren Viral",
-      publishDate: "2026-10-06",
+      publishDate: "2026-06-19", // Asli tayang 19 Juni 2026 (16w) - Historical Viral
       reach: 1800000,
-      likes: 125000,
-      comments: 980,
+      likes: 216000,
+      comments: 1084,
       shares: 4500,
       branchName: "Lunar Eyewear Tegal (Second Brand)",
       branchKey: "tgl",
       pic: "Amanda",
-      postUrl: "https://www.instagram.com/lunareyewear.co/reel/LNR_Helm02/",
+      postUrl: "https://www.instagram.com/reel/DZw2oUzTuEs/",
       format: "reels" as ContentFormat,
     },
     {
@@ -191,7 +194,7 @@ export function getRealContentItems(
       title: "mata silinder / mata minus+silinder di malam hari",
       captionPreview: "plisss lampu tembak di jalan bikin pusing berputar! Yang punya minus silinder merapat ke Lunar Eyewear, cek mata gratis & pasang lensa 15 menit.",
       category: "Edukasi & Solusi Mata",
-      publishDate: "2026-10-04",
+      publishDate: "2026-06-10",
       reach: 640000,
       likes: 48000,
       comments: 420,
@@ -207,9 +210,9 @@ export function getRealContentItems(
       title: "knp lu kalo malem pelan bgt si nyetirnya?",
       captionPreview: "ga brani ngebut😭 Yuk order kacamata di Lunar Eyewear Tegal, gratis cek mata & bisa ditunggu 15 menit!",
       category: "Edukasi & Solusi Mata",
-      publishDate: "2026-10-13",
+      publishDate: "2026-10-13", // MINGGUAN TERBARU (13 Okt 2026)
       reach: 194000,
-      likes: 8412,
+      likes: 8415,
       comments: 70,
       shares: 320,
       branchName: "Lunar Eyewear Tegal (Second Brand)",
@@ -223,7 +226,7 @@ export function getRealContentItems(
       title: "pov: maksa keluar malem ga pake kacamata",
       captionPreview: "semua lampu jadi bintang jatuh astaga! Jangan maksa jalan tanpa kacamata, bahaya ges. Cek mata gratis di Lunar Eyewear.",
       category: "Hiburan / Tren Viral",
-      publishDate: "2026-10-14",
+      publishDate: "2026-10-14", // MINGGUAN TERBARU (14 Okt 2026)
       reach: 19400,
       likes: 850,
       comments: 18,
@@ -237,11 +240,11 @@ export function getRealContentItems(
     {
       code: "DeUCuiURW6s",
       title: "pov: nemu kacamata cuma 100rban di Tegal",
-      captionPreview: "nemu kacamata cuma 100rban udah dapet frame aesthetic + lensa radiasi di Lunar Eyewear Tegal!",
+      captionPreview: "kacamata minus cuma 160rb di Booth Optik Lunar Eyewear Rita Mall Tegal periode 10-11 Oktober!",
       category: "Promosi / Soft Sell",
-      publishDate: "2026-10-10",
+      publishDate: "2026-10-10", // MINGGUAN TERBARU (10 Okt 2026)
       reach: 16136,
-      likes: 70,
+      likes: 40,
       comments: 6,
       shares: 12,
       branchName: "Lunar Eyewear Tegal (Second Brand)",
@@ -365,19 +368,19 @@ export function getRealContentItems(
       format: "reels" as ContentFormat,
     },
     {
-      code: "DeSlPCPww",
+      code: "DeMl4cIJvGI",
       title: "Bantuan Air Bersih di Purwokerto",
-      captionPreview: "Bantuan Air Bersih di Purwokerto bersama Optik I See You Glasses. Membantu sesama dan menebarkan kebaikan.",
+      captionPreview: "Sebab, terkadang yang terlihat sederhana bagi kita, bisa menjadi sesuatu yang sangat berarti bagi orang lain. Bantuan Air Bersih di Purwokerto bersama Optik I See You Glasses.",
       category: "Promosi & Event",
       publishDate: "2026-10-08",
       reach: 19178,
-      likes: 654,
-      comments: 14,
+      likes: 678,
+      comments: 20,
       shares: 8,
       branchName: "Purwokerto (Pusat)",
       branchKey: "pwt",
       pic: "Ilya",
-      postUrl: "https://www.instagram.com/reel/DeSlPCPww/",
+      postUrl: "https://www.instagram.com/reel/DeMl4cIJvGI/",
       format: "reels" as ContentFormat,
     },
     {

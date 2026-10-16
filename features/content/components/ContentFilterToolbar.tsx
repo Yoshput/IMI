@@ -66,7 +66,7 @@ export const ContentFilterToolbar: React.FC<ContentFilterToolbarProps> = ({
             }`}
           >
             <Clock className="w-3.5 h-3.5" />
-            <span>Mingguan (Terbaru)</span>
+            <span>Mingguan (Terbaru · 6 - 16 Okt 2026)</span>
           </button>
           <button
             onClick={() => onPeriodChange("monthly")}
@@ -77,7 +77,7 @@ export const ContentFilterToolbar: React.FC<ContentFilterToolbarProps> = ({
             }`}
           >
             <Calendar className="w-3.5 h-3.5" />
-            <span>Bulanan (September - Oktober 2026)</span>
+            <span>Bulanan (September - Oktober 2026 & All-Time)</span>
           </button>
         </div>
 
