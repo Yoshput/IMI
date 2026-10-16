@@ -24,6 +24,7 @@ import {
 } from "lucide-react";
 import { VenueFormModal } from "./VenueFormModal";
 import { VenueDetailModal } from "./VenueDetailModal";
+import { VenueImage } from "./VenueImage";
 
 const OUTREACH_BADGE: Record<string, string> = {
   new_lead: "bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300",
@@ -315,13 +316,12 @@ export const VenueDatabaseTab: React.FC<Props> = ({ onStatsChange }) => {
               >
                 {coverAsset && (
                   <div className="relative w-full h-36 bg-surface-secondary overflow-hidden border-b border-border">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
+                    <VenueImage
                       src={coverAsset.filePath || coverAsset.sourceUrl}
                       alt={coverAsset.altText || v.name}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      className="group-hover:scale-105 transition-transform duration-300"
                     />
-                    <div className="absolute top-2 right-2 px-2 py-0.5 rounded bg-black/65 backdrop-blur-xs text-[10px] text-white font-medium flex items-center gap-1 shadow-xs">
+                    <div className="absolute top-2 right-2 px-2 py-0.5 rounded bg-black/65 backdrop-blur-xs text-[10px] text-white font-medium flex items-center gap-1 shadow-xs z-10">
                       <Camera className="w-3 h-3" /> {v.assets.length} Foto
                     </div>
                   </div>

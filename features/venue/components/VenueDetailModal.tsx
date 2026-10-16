@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { cn, formatNumber, formatDateIndo } from '@/lib/utils';
 import {
   Venue,
+  VenueAsset,
   SourceType,
   VerificationStatus,
   getCategoryLabel,
@@ -11,6 +12,8 @@ import {
   getVerificationStatusLabel,
   getSourceTypeLabel,
 } from '@/lib/venue-types';
+import { VenueImage } from './VenueImage';
+import { VenuePhotoUploader } from './VenuePhotoUploader';
 import {
   X,
   Pencil,
@@ -59,6 +62,34 @@ export const VenueDetailModal: React.FC<VenueDetailModalProps> = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [selectedImage, setSelectedImage] = useState<{ src: string; caption: string } | null>(null);
+  const [showPhotoUploader, setShowPhotoUploader] = useState(false);
+  const [deletingAssetId, setDeletingAssetId] = useState<string | null>(null);
+
+  const handleAssetAdded = (newAsset: VenueAsset) => {
+    setVenue((prev) => (prev ? { ...prev, assets: [newAsset, ...(prev.assets || [])] } : null));
+    setShowPhotoUploader(false);
+  };
+
+  const handleDeleteAsset = async (e: React.MouseEvent, assetId: string) => {
+    e.stopPropagation();
+    if (!venueId || !confirm('Hapus foto ini dari galeri venue?')) return;
+    setDeletingAssetId(assetId);
+    try {
+      const res = await fetch(`/api/venues/upload?venueId=${venueId}&assetId=${assetId}`, {
+        method: 'DELETE',
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setVenue((prev) =>
+          prev ? { ...prev, assets: (prev.assets || []).filter((a) => a.assetId !== assetId) } : null
+        );
+      }
+    } catch (err) {
+      console.error('Failed to delete venue asset:', err);
+    } finally {
+      setDeletingAssetId(null);
+    }
+  };
 
   // Collapsible section states (all expanded by default for quick glance)
   const [collapsedSections, setCollapsedSections] = useState<Record<string, boolean>>({});
@@ -374,23 +405,47 @@ export const VenueDetailModal: React.FC<VenueDetailModalProps> = ({
 
               {/* 2. Galeri Foto & Dokumentasi Venue */}
               <div className="border border-border rounded-container overflow-hidden bg-surface-secondary/40">
-                <button
-                  type="button"
-                  onClick={() => toggleSection('galeri')}
-                  className="w-full flex items-center justify-between p-4 bg-surface text-left font-bold text-sm text-foreground border-b border-border hover:bg-surface-secondary/50 transition-colors"
-                >
-                  <span className="flex items-center gap-2">
+                <div className="w-full flex items-center justify-between p-4 bg-surface border-b border-border">
+                  <button
+                    type="button"
+                    onClick={() => toggleSection('galeri')}
+                    className="flex items-center gap-2 font-bold text-sm text-foreground hover:text-brand transition-colors text-left"
+                  >
                     <Camera className="w-4 h-4 text-brand" /> 2. Galeri Foto &amp; Visual Venue ({venue.assets?.length || 0})
-                  </span>
-                  {collapsedSections['galeri'] ? (
-                    <ChevronDown className="w-4 h-4 text-foreground-muted" />
-                  ) : (
-                    <ChevronUp className="w-4 h-4 text-foreground-muted" />
-                  )}
-                </button>
+                    {collapsedSections['galeri'] ? (
+                      <ChevronDown className="w-4 h-4 text-foreground-muted" />
+                    ) : (
+                      <ChevronUp className="w-4 h-4 text-foreground-muted" />
+                    )}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (collapsedSections['galeri']) {
+                        setCollapsedSections((prev) => ({ ...prev, galeri: false }));
+                      }
+                      setShowPhotoUploader((prev) => !prev);
+                    }}
+                    className="flex items-center gap-1.5 px-3 py-1 rounded-control bg-brand/10 hover:bg-brand/20 text-brand text-xs font-semibold transition-colors border border-brand/20"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                    <span>{showPhotoUploader ? 'Tutup Upload' : 'Tambah Foto'}</span>
+                  </button>
+                </div>
 
                 {!collapsedSections['galeri'] && (
-                  <div className="p-4 space-y-3 text-xs">
+                  <div className="p-4 space-y-4 text-xs">
+                    {/* Panel Upload WebP Instan */}
+                    {showPhotoUploader && (
+                      <VenuePhotoUploader
+                        venueId={venue.id}
+                        venueName={venue.name}
+                        onAssetAdded={handleAssetAdded}
+                        onCancel={() => setShowPhotoUploader(false)}
+                      />
+                    )}
+
                     {venue.assets && venue.assets.length > 0 ? (
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         {venue.assets.map((asset, idx) => (
@@ -400,20 +455,33 @@ export const VenueDetailModal: React.FC<VenueDetailModalProps> = ({
                             className="group relative rounded-xl overflow-hidden border border-border bg-surface hover:shadow-md transition-all cursor-pointer flex flex-col justify-between"
                           >
                             <div className="relative w-full h-44 sm:h-48 bg-surface-secondary overflow-hidden">
-                              {/* eslint-disable-next-line @next/next/no-img-element */}
-                              <img
+                              <VenueImage
                                 src={asset.filePath || asset.sourceUrl}
                                 alt={asset.altText || venue.name}
-                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                                className="group-hover:scale-105 transition-transform duration-300"
                               />
-                              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-1.5 text-white font-semibold text-xs">
+                              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-1.5 text-white font-semibold text-xs pointer-events-none">
                                 <ZoomIn className="w-4 h-4" /> Perbesar Foto
                               </div>
                               {asset.attribution && (
-                                <div className="absolute bottom-2 left-2 px-2 py-0.5 rounded bg-black/60 text-white text-[10px] backdrop-blur-xs font-medium">
+                                <div className="absolute bottom-2 left-2 px-2 py-0.5 rounded bg-black/60 text-white text-[10px] backdrop-blur-xs font-medium z-10">
                                   {asset.attribution}
                                 </div>
                               )}
+                              {/* Tombol Hapus Foto */}
+                              <button
+                                type="button"
+                                onClick={(e) => handleDeleteAsset(e, asset.assetId)}
+                                disabled={deletingAssetId === asset.assetId}
+                                title="Hapus foto dari galeri"
+                                className="absolute top-2 right-2 p-1.5 rounded-lg bg-black/60 hover:bg-status-error text-white opacity-0 group-hover:opacity-100 transition-all z-10"
+                              >
+                                {deletingAssetId === asset.assetId ? (
+                                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                                ) : (
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                )}
+                              </button>
                             </div>
                             <div className="p-2.5 bg-surface text-[11px] text-foreground border-t border-border/60">
                               <p className="font-medium line-clamp-2">{asset.description || asset.altText}</p>
@@ -422,9 +490,21 @@ export const VenueDetailModal: React.FC<VenueDetailModalProps> = ({
                         ))}
                       </div>
                     ) : (
-                      <p className="text-foreground-muted italic">
-                        Belum ada berkas foto dokumentasi yang diunggah untuk venue ini.
-                      </p>
+                      !showPhotoUploader && (
+                        <div className="text-center py-6 border border-dashed border-border rounded-xl">
+                          <ImageIcon className="w-8 h-8 text-foreground-muted/50 mx-auto mb-2" />
+                          <p className="text-foreground-muted italic mb-2">
+                            Belum ada berkas foto dokumentasi yang diunggah untuk venue ini.
+                          </p>
+                          <button
+                            type="button"
+                            onClick={() => setShowPhotoUploader(true)}
+                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-control bg-brand text-brand-contrast text-xs font-semibold hover:brightness-110"
+                          >
+                            <Plus className="w-3.5 h-3.5" /> Unggah Foto Pertama
+                          </button>
+                        </div>
+                      )
                     )}
                   </div>
                 )}
@@ -1315,6 +1395,8 @@ export const VenueDetailModal: React.FC<VenueDetailModalProps> = ({
               <img
                 src={selectedImage.src}
                 alt={selectedImage.caption}
+                loading="lazy"
+                decoding="async"
                 className="max-w-full max-h-[72vh] object-contain rounded-lg shadow-lg"
               />
             </div>

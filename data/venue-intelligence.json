@@ -326,7 +326,7 @@
         {
           "assetId": "asset-hetero-01",
           "venueId": "00532fc1-4fc8-4d6a-8922-cb6581a473a6",
-          "sourceUrl": "/venues/heterospace/gatra-event-space.png",
+          "sourceUrl": "/venues/heterospace/gatra-event-space.webp",
           "capturedAt": "2026-10-15",
           "uploader": "Tim Marketing I See You",
           "description": "Gatra Event Space Indoor (Kapasitas 100 pax, TV 50\", Proyektor, Sound 2 Mic, Mini Stage)",
@@ -336,12 +336,12 @@
           "altText": "Gatra Event Space Hetero Space Banyumas",
           "attribution": "Hetero Space Banyumas Official Pricelist",
           "fileType": "image",
-          "filePath": "/venues/heterospace/gatra-event-space.png"
+          "filePath": "/venues/heterospace/gatra-event-space.webp"
         },
         {
           "assetId": "asset-hetero-02",
           "venueId": "00532fc1-4fc8-4d6a-8922-cb6581a473a6",
-          "sourceUrl": "/venues/heterospace/amphitheater.png",
+          "sourceUrl": "/venues/heterospace/amphitheater.webp",
           "capturedAt": "2026-10-15",
           "uploader": "Tim Marketing I See You",
           "description": "Amphitheater / Outdoor Space (Kapasitas 100 pax, Sound System & Lighting request)",
@@ -351,12 +351,12 @@
           "altText": "Amphitheater Hetero Space",
           "attribution": "Hetero Space Banyumas Official Pricelist",
           "fileType": "image",
-          "filePath": "/venues/heterospace/amphitheater.png"
+          "filePath": "/venues/heterospace/amphitheater.webp"
         },
         {
           "assetId": "asset-hetero-03",
           "venueId": "00532fc1-4fc8-4d6a-8922-cb6581a473a6",
-          "sourceUrl": "/venues/heterospace/rembug-meeting.png",
+          "sourceUrl": "/venues/heterospace/rembug-meeting.webp",
           "capturedAt": "2026-10-15",
           "uploader": "Tim Marketing I See You",
           "description": "Rembug Meeting Room (TV 50\", AC, Whiteboard, High Speed Wi-Fi)",
@@ -366,12 +366,12 @@
           "altText": "Rembug Meeting Room",
           "attribution": "Hetero Space Banyumas Official Pricelist",
           "fileType": "image",
-          "filePath": "/venues/heterospace/rembug-meeting.png"
+          "filePath": "/venues/heterospace/rembug-meeting.webp"
         },
         {
           "assetId": "asset-hetero-04",
           "venueId": "00532fc1-4fc8-4d6a-8922-cb6581a473a6",
-          "sourceUrl": "/venues/heterospace/fasilitas-hetero.png",
+          "sourceUrl": "/venues/heterospace/fasilitas-hetero.webp",
           "capturedAt": "2026-10-15",
           "uploader": "Tim Marketing I See You",
           "description": "Fasilitas Pendukung: Pantry Bank Jateng, Mushola Representatif, Lahan Parkir Luas",
@@ -381,7 +381,7 @@
           "altText": "Fasilitas Pantry Mushola Parkir Hetero",
           "attribution": "Hetero Space Banyumas Official Pricelist",
           "fileType": "image",
-          "filePath": "/venues/heterospace/fasilitas-hetero.png"
+          "filePath": "/venues/heterospace/fasilitas-hetero.webp"
         }
       ],
       "isAmbiguous": false,
@@ -953,7 +953,7 @@
         {
           "assetId": "asset-jatingayom-01",
           "venueId": "fd16f29b-01d8-4a2b-973c-c14fda6dcba4",
-          "sourceUrl": "/venues/jatingayom/jatingayom-1.jpg",
+          "sourceUrl": "/venues/jatingayom/jatingayom-1.webp",
           "capturedAt": "2026-10-15",
           "uploader": "Tim Marketing I See You",
           "description": "Suasana Interior & Nuansa Arunika / Imperial Hall Jatingayom",
@@ -963,12 +963,12 @@
           "altText": "Interior Hall Jatingayom Restaurant",
           "attribution": "Manajemen Jatingayom Restaurant",
           "fileType": "image",
-          "filePath": "/venues/jatingayom/jatingayom-1.jpg"
+          "filePath": "/venues/jatingayom/jatingayom-1.webp"
         },
         {
           "assetId": "asset-jatingayom-02",
           "venueId": "fd16f29b-01d8-4a2b-973c-c14fda6dcba4",
-          "sourceUrl": "/venues/jatingayom/jatingayom-2.jpg",
+          "sourceUrl": "/venues/jatingayom/jatingayom-2.webp",
           "capturedAt": "2026-10-15",
           "uploader": "Tim Marketing I See You",
           "description": "Fasad Bangunan & Pintu Utama Convention Hall Jatingayom",
@@ -978,12 +978,12 @@
           "altText": "Fasad Luar Convention Hall Jatingayom",
           "attribution": "Manajemen Jatingayom Restaurant",
           "fileType": "image",
-          "filePath": "/venues/jatingayom/jatingayom-2.jpg"
+          "filePath": "/venues/jatingayom/jatingayom-2.webp"
         },
         {
           "assetId": "asset-jatingayom-03",
           "venueId": "fd16f29b-01d8-4a2b-973c-c14fda6dcba4",
-          "sourceUrl": "/venues/jatingayom/jatingayom-3.png",
+          "sourceUrl": "/venues/jatingayom/jatingayom-3.webp",
           "capturedAt": "2026-10-15",
           "uploader": "Tim Marketing I See You",
           "description": "Setup Meja Classroom & Area Panggung Hall Jatingayom",
@@ -993,12 +993,12 @@
           "altText": "Setup Classroom Meja & Panggung Jatingayom",
           "attribution": "Manajemen Jatingayom Restaurant",
           "fileType": "image",
-          "filePath": "/venues/jatingayom/jatingayom-3.png"
+          "filePath": "/venues/jatingayom/jatingayom-3.webp"
         },
         {
           "assetId": "asset-jatingayom-04",
           "venueId": "fd16f29b-01d8-4a2b-973c-c14fda6dcba4",
-          "sourceUrl": "/venues/jatingayom/jatingayom-4.png",
+          "sourceUrl": "/venues/jatingayom/jatingayom-4.webp",
           "capturedAt": "2026-10-15",
           "uploader": "Tim Marketing I See You",
           "description": "Detail Interior & Plafon Megah Hall Jatingayom",
@@ -1008,7 +1008,7 @@
           "altText": "Detail Plafon & Ruangan Jatingayom",
           "attribution": "Manajemen Jatingayom Restaurant",
           "fileType": "image",
-          "filePath": "/venues/jatingayom/jatingayom-4.png"
+          "filePath": "/venues/jatingayom/jatingayom-4.webp"
         }
       ],
       "isAmbiguous": false,
