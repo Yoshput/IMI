@@ -6,8 +6,9 @@ import { DominantPerformer } from "./DominantPerformer";
 import { ContentFilterToolbar } from "./ContentFilterToolbar";
 import { RankedContentTable } from "./RankedContentTable";
 import { StateRenderer } from "@/components/shared/StateRenderer";
-import { Film, Plus, RefreshCw, ExternalLink, ShieldCheck } from "lucide-react";
+import { Film, Plus, RefreshCw, ExternalLink, ShieldCheck, Download } from "lucide-react";
 import { DevStateSwitcher } from "@/components/shared/DevStateSwitcher";
+import { downloadCSV } from "@/lib/export-csv";
 
 export const ContentView: React.FC = () => {
   const [viewState, setViewState] = useState<"success" | "loading" | "empty" | "error">("success");
@@ -103,6 +104,33 @@ export const ContentView: React.FC = () => {
     }
   };
 
+  const handleExportCSV = () => {
+    const headers = [
+      "Rank",
+      "Judul / Caption",
+      "Cabang",
+      "Format Konten",
+      "Total Reach",
+      "Likes",
+      "Engagement Rate (%)",
+      "Tanggal Posting",
+      "URL Tautan",
+    ];
+    const rows = filteredItems.map((it) => [
+      it.rank,
+      it.title,
+      it.branchName || "Optik I See You",
+      it.format,
+      it.reach,
+      it.likes,
+      it.engagementRate,
+      it.publishDate,
+      it.postUrl || "-",
+    ]);
+    const branchLabel = activeBranch === "all" ? "semua-cabang" : activeBranch;
+    downloadCSV(`konten-intelligence-${branchLabel}-${new Date().toISOString().slice(0, 10)}.csv`, headers, rows);
+  };
+
   return (
     <div className="space-y-6">
       <DevStateSwitcher
@@ -146,6 +174,14 @@ export const ContentView: React.FC = () => {
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isSyncing ? "animate-spin text-brand" : ""}`} />
             <span>{isSyncing ? "Sinkronisasi Live..." : "Sinkronkan Live Instagram"}</span>
+          </button>
+          <button
+            onClick={handleExportCSV}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-control bg-surface border border-border text-foreground text-xs font-semibold hover:bg-surface-secondary transition-colors shadow-subtle cursor-pointer"
+            title="Unduh 40 Data Konten (.csv)"
+          >
+            <Download className="w-3.5 h-3.5 text-brand" />
+            <span>Export CSV</span>
           </button>
           <a
             href="https://www.instagram.com/iseeyou.glasses/"

@@ -32,9 +32,11 @@ import {
   ZoomIn,
   ZoomOut,
   RotateCcw,
-  Maximize2
+  Maximize2,
+  Download,
 } from "lucide-react";
 import initialKolData from "@/lib/kol-data.json";
+import { downloadCSV } from "@/lib/export-csv";
 
 export interface KolItem {
   id: string;
@@ -232,6 +234,34 @@ Have a nicee dayy ya kaa! 🌸✨`;
     navigator.clipboard.writeText(text);
     setCopiedPitchId(item.id);
     setTimeout(() => setCopiedPitchId(null), 2500);
+  };
+
+  // Export filtered KOL to UTF-8 CSV
+  const handleExportCSV = () => {
+    const headers = [
+      "Nama KOL",
+      "Handle IG",
+      "Cabang",
+      "Followers",
+      "Engagement Rate (%)",
+      "Niche / Kategori",
+      "Fokus Konten",
+      "Status Kemitraan",
+      "WhatsApp Contact",
+    ];
+    const rows = filteredKols.map((k) => [
+      k.name,
+      k.handle,
+      k.branchName,
+      k.followers,
+      k.engagementRate,
+      k.niche,
+      k.contentFocus || "-",
+      k.status,
+      k.contactWa || "-",
+    ]);
+    const branchLabel = selectedBranch === "all" ? "semua-cabang" : selectedBranch;
+    downloadCSV(`kol-intelligence-${branchLabel}-${new Date().toISOString().slice(0, 10)}.csv`, headers, rows);
   };
 
   // Copy Comprehensive Report for Mas Raja
@@ -879,8 +909,16 @@ Tim Marketing Optik I See You & Lunar Eyewear
             </select>
           </div>
 
-          {/* View mode toggle */}
-          <div className="flex items-center gap-1 self-end sm:self-auto">
+          {/* View mode toggle & CSV Export */}
+          <div className="flex items-center gap-1.5 self-end sm:self-auto">
+            <button
+              onClick={handleExportCSV}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-control text-xs font-semibold bg-surface-secondary text-foreground hover:bg-surface border border-border shadow-2xs transition-colors cursor-pointer"
+              title="Unduh Data KOL Terfilter (.csv)"
+            >
+              <Download className="w-3.5 h-3.5 text-brand" />
+              <span className="hidden sm:inline">Export CSV</span>
+            </button>
             <button
               onClick={() => setViewMode("card")}
               className={`p-1.5 rounded-control text-xs border ${

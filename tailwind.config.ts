@@ -34,12 +34,21 @@ const config: Config = {
           accentLight: "rgb(var(--brand-accent-light) / <alpha-value>)",
         },
         status: {
-          success: "#1F7A4D",
+          success: "#16A34A",
           successBg: "var(--status-success-bg)",
           warning: "#B25E09",
           warningBg: "var(--status-warning-bg)",
           error: "#C02626",
           errorBg: "var(--status-error-bg)",
+        },
+        canvas: "#F8F5ED",
+        warm: {
+          DEFAULT: "#F3EFE6",
+          border: "#E5E0D5",
+        },
+        forest: {
+          DEFAULT: "#124734",
+          dark: "#183C30",
         },
       },
       borderRadius: {
@@ -49,6 +58,7 @@ const config: Config = {
       },
       fontFamily: {
         sans: [
+          "var(--font-poppins)",
           "-apple-system",
           "BlinkMacSystemFont",
           '"Segoe UI"',
@@ -57,10 +67,23 @@ const config: Config = {
           "Arial",
           "sans-serif",
         ],
+        serif: [
+          "var(--font-playfair)",
+          '"Playfair Display"',
+          "Georgia",
+          "serif",
+        ],
+        display: [
+          "var(--font-playfair)",
+          '"Playfair Display"',
+          "Georgia",
+          "serif",
+        ],
       },
       boxShadow: {
-        subtle: "0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02)",
-        elevated: "0 4px 12px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.02)",
+        subtle: "0 1px 3px rgba(18, 71, 52, 0.04), 0 1px 2px rgba(18, 71, 52, 0.02)",
+        elevated: "0 4px 12px rgba(18, 71, 52, 0.05), 0 1px 3px rgba(18, 71, 52, 0.02)",
+        warm: "0 8px 30px -4px rgba(18, 71, 52, 0.06)",
       },
     },
   },

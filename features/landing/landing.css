@@ -1,13 +1,13 @@
 .imi-landing {
-  --imi-ink: #17221f;
-  --imi-muted: #66716b;
-  --imi-green: #174e3f;
-  --imi-paper: #f5f6f3;
-  --imi-rule: #dee3dd;
+  --imi-ink: #183C30;
+  --imi-muted: #5C6B64;
+  --imi-green: #124734;
+  --imi-paper: #F8F5ED;
+  --imi-rule: #E5E0D5;
   color: var(--imi-ink);
   background: var(--imi-paper);
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI Variable', 'Segoe UI', 'Helvetica Neue', sans-serif;
-  letter-spacing: -.025em;
+  font-family: var(--font-poppins), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  letter-spacing: -.02em;
   overflow: clip;
   font-synthesis: none;
 }

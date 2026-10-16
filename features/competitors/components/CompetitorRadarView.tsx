@@ -40,7 +40,9 @@ import {
   GraduationCap,
   Calendar,
   Users,
+  Download,
 } from "lucide-react";
+import { downloadCSV } from "@/lib/export-csv";
 import {
   LOCAL_BRANCH_COMPETITORS,
   LOCAL_BRANCH_STATS,
@@ -179,6 +181,39 @@ export const CompetitorRadarView: React.FC = () => {
     });
   }, [searchQuery, selectedCategory, selectedConfidence]);
 
+  const handleExportCSV = () => {
+    const headers = [
+      "Nama Kompetitor / Gerai",
+      "Kategori",
+      "Wilayah Cabang",
+      "Tier Prioritas",
+      "Rentang Harga",
+      "Ancaman & Taktik",
+      "Catatan Strategi",
+    ];
+    const rows = [
+      ...filteredLocalCompetitors.map((c) => [
+        c.name,
+        "Kompetitor Ritel Lokal",
+        c.city,
+        c.tierLabel,
+        c.priceLevel,
+        c.threatLevel,
+        c.actionRecommendationForISeeYou || c.threatAnalysis || "-",
+      ]),
+      ...filteredCompetitors.map((c) => [
+        c.name,
+        c.category,
+        c.location,
+        c.segment,
+        c.priceRange,
+        c.signatureHook,
+        c.tacticalOpportunityForISeeYou || "-",
+      ]),
+    ];
+    downloadCSV(`competitors-radar-${new Date().toISOString().slice(0, 10)}.csv`, headers, rows);
+  };
+
   return (
     <div className="space-y-8 pb-12">
       {/* 1. Header & Live Intelligence Bar */}
@@ -212,6 +247,15 @@ export const CompetitorRadarView: React.FC = () => {
             >
               <RefreshCw className={`w-3.5 h-3.5 ${isRefreshing ? "animate-spin text-brand" : "text-foreground-muted"}`} />
               <span>{isRefreshing ? "Menyinkronkan..." : "Perbarui Data"}</span>
+            </button>
+
+            <button
+              onClick={handleExportCSV}
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-control text-xs font-semibold border border-border bg-surface hover:bg-surface-secondary text-foreground transition-all shadow-subtle cursor-pointer"
+              title="Unduh 27 Data Kompetitor (.csv)"
+            >
+              <Download className="w-3.5 h-3.5 text-brand" />
+              <span>Export CSV</span>
             </button>
 
             <button

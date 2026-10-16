@@ -1,6 +1,22 @@
 import type { Metadata } from "next";
+import { Poppins, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { AppFrame } from "@/components/shared/AppFrame";
+
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-poppins",
+  display: "swap",
+});
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+  style: ["normal", "italic"],
+  variable: "--font-playfair",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://iseeyou-marketing-intelligence.vercel.app"),
@@ -19,7 +35,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="id" suppressHydrationWarning>
+    <html lang="id" className={`${poppins.variable} ${playfair.variable}`} suppressHydrationWarning>
       <head>
         <script
           dangerouslySetInnerHTML={{
@@ -27,7 +43,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-screen bg-background text-foreground flex flex-col antialiased">
+      <body className="min-h-screen bg-background text-foreground flex flex-col font-sans antialiased">
         <AppFrame>{children}</AppFrame>
       </body>
     </html>

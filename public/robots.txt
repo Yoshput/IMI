@@ -1,0 +1,21 @@
+User-agent: *
+Allow: /
+Allow: /proposal-sponsor
+Disallow: /dashboard
+Disallow: /dashboard/*
+Disallow: /spreadsheet
+Disallow: /social-blade
+Disallow: /content
+Disallow: /pengajuan
+Disallow: /aftersales
+Disallow: /competitors
+Disallow: /kol
+Disallow: /venue
+Disallow: /analytics
+Disallow: /reports
+Disallow: /finance
+Disallow: /proposal
+Disallow: /sponsor
+Disallow: /api/*
+
+Sitemap: https://iseeyou-marketing-intelligence.vercel.app/sitemap.xml

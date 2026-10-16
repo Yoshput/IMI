@@ -3,9 +3,9 @@ import { LandingView } from "@/features/landing/components/LandingView";
 import "@/features/landing/landing.css";
 
 export const metadata: Metadata = {
-  title: "I See You Intelligence | Workspace Marketing Enterprise",
+  title: "I See You Marketing Intelligence | Workspace Optik I See You & Lunar Eyewear",
   description:
-    "Ruang kerja marketing terpadu Optik I See You (Purwokerto, Purbalingga, Cilacap, Wonosobo) dan Lunar Eyewear Tegal. Konten, aktivitas cabang, riset kompetitor, kemitraan KOL, venue, aftersales CRM, dan evaluasi mingguan dalam satu sistem cerdas.",
+    "Platform marketing intelligence terpadu untuk memantau performa konten Reels & Story, sinkronisasi laporan 6 PIC, analitik 5 cabang (Purwokerto, Purbalingga, Cilacap, Wonosobo, Tegal), riset kompetitor, KOL, dan aftersales.",
   keywords: [
     "Optik I See You",
     "Lunar Eyewear",
@@ -20,10 +20,13 @@ export const metadata: Metadata = {
     "Aftersales CRM",
   ],
   authors: [{ name: "Tim Marketing Optik I See You & Lunar Eyewear" }],
+  alternates: {
+    canonical: "https://iseeyou-marketing-intelligence.vercel.app",
+  },
   openGraph: {
-    title: "I See You Intelligence · Enterprise Marketing Workspace",
+    title: "I See You Marketing Intelligence | Workspace Optik I See You & Lunar Eyewear",
     description:
-      "Ruang kerja marketing terpadu Optik I See You dan Lunar Eyewear. Lihat performa konten, satukan aktivitas 5 cabang, dan bawa konteks ke setiap keputusan evaluasi mingguan.",
+      "Platform marketing intelligence terpadu untuk memantau performa konten Reels & Story, sinkronisasi laporan 6 PIC, analitik 5 cabang (Purwokerto, Purbalingga, Cilacap, Wonosobo, Tegal), riset kompetitor, KOL, dan aftersales.",
     url: "https://iseeyou-marketing-intelligence.vercel.app",
     siteName: "I See You Marketing Intelligence",
     images: [
@@ -39,9 +42,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "I See You Intelligence · Workspace Marketing",
+    title: "I See You Marketing Intelligence | Workspace Optik I See You & Lunar Eyewear",
     description:
-      "Ruang kerja marketing Optik I See You & Lunar Eyewear. Konten, cabang, dan evaluasi mingguan dalam satu workspace.",
+      "Platform marketing intelligence terpadu untuk memantau performa konten Reels & Story, sinkronisasi laporan 6 PIC, analitik 5 cabang, riset kompetitor, KOL, dan aftersales.",
   },
   robots: {
     index: true,

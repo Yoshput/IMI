@@ -3,18 +3,18 @@
 @tailwind utilities;
 
 :root {
-  --bg-primary: #F5F5F7;
+  --bg-primary: #F8F5ED;
   --bg-surface: 255 255 255;
-  --bg-secondary: 250 250 250;
-  --bg-subtle: 240 240 242;
-  --text-primary: 17 17 17;
-  --text-secondary: 82 82 91;
-  --text-muted: 113 113 122;
-  --border-color: 0 0 0;
-  --border-alpha: 0.08;
-  --brand-primary: 30 58 52;
-  --brand-light: 234 239 234;
-  --brand-hover: 22 43 39;
+  --bg-secondary: 243 239 230;
+  --bg-subtle: 236 231 221;
+  --text-primary: 24 60 48;
+  --text-secondary: 45 58 52;
+  --text-muted: 92 107 100;
+  --border-color: 18 71 52;
+  --border-alpha: 0.12;
+  --brand-primary: 18 71 52;
+  --brand-light: 235 242 238;
+  --brand-hover: 14 55 41;
   --brand-accent: 200 138 53;
   --brand-accent-light: 248 241 231;
   --status-success-bg: #EDF7F1;
@@ -23,21 +23,21 @@
 }
 
 html.dark {
-  --bg-primary: #0B0D13;
-  --bg-surface: 21 24 33;
-  --bg-secondary: 30 34 45;
-  --bg-subtle: 39 44 58;
-  --text-primary: 243 244 246;
-  --text-secondary: 161 161 170;
-  --text-muted: 113 113 122;
-  --border-color: 255 255 255;
+  --bg-primary: #0D1612;
+  --bg-surface: 20 34 28;
+  --bg-secondary: 27 45 38;
+  --bg-subtle: 35 58 49;
+  --text-primary: 241 245 243;
+  --text-secondary: 180 195 188;
+  --text-muted: 130 148 140;
+  --border-color: 241 245 243;
   --border-alpha: 0.12;
-  --brand-primary: 45 90 80;
-  --brand-light: 35 55 50;
-  --brand-hover: 59 114 102;
+  --brand-primary: 34 140 102;
+  --brand-light: 22 45 36;
+  --brand-hover: 42 165 120;
   --brand-accent: 229 169 85;
   --brand-accent-light: 50 40 25;
-  --status-success-bg: rgba(31, 122, 77, 0.2);
+  --status-success-bg: rgba(22, 163, 74, 0.2);
   --status-warning-bg: rgba(178, 94, 9, 0.2);
   --status-error-bg: rgba(192, 38, 38, 0.2);
 }
@@ -50,12 +50,16 @@ html,
 body {
   background-color: var(--bg-primary);
   color: rgb(var(--text-primary));
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-family: var(--font-poppins), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   margin: 0;
   padding: 0;
   overflow-x: hidden;
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
 }
 
 * {
@@ -127,9 +131,9 @@ body {
 .skeleton {
   background: linear-gradient(
     90deg,
-    #ECECEE 25%,
-    #F5F5F7 50%,
-    #ECECEE 75%
+    #E8E3D7 25%,
+    #F3EFE6 50%,
+    #E8E3D7 75%
   );
   background-size: 200% 100%;
   animation: shimmer 1.6s infinite ease-in-out;
@@ -139,9 +143,9 @@ body {
 html.dark .skeleton {
   background: linear-gradient(
     90deg,
-    #1E222D 25%,
-    #272D3B 50%,
-    #1E222D 75%
+    #13241C 25%,
+    #1C3327 50%,
+    #13241C 75%
   );
   background-size: 200% 100%;
 }
@@ -149,10 +153,10 @@ html.dark .skeleton {
 @media (prefers-reduced-motion: reduce) {
   .skeleton {
     animation: none;
-    background: #ECECEE;
+    background: #E8E3D7;
   }
   html.dark .skeleton {
-    background: #1E222D;
+    background: #13241C;
   }
 }
 
