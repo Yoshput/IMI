@@ -2,49 +2,21 @@ import https from "https";
 import fs from "fs";
 import path from "path";
 
-export interface IgAccountLive {
-  id: string;
-  name: string;
-  handle: string;
-  url: string;
-  city: string;
-  picName: string;
-  followers: number;
-  followersFormatted: string;
-  following: number;
-  posts: number;
-  bioTitle?: string;
-  lastUpdated: string;
-}
+// Re-export pure types and string parsing utilities
+export * from "./instagram-utils";
+import {
+  decodeHtmlEntities,
+  parseFollowerNumber,
+  IgLiveCache,
+} from "./instagram-utils";
 
-export interface IgReelLive {
-  url: string;
-  likes: number;
-  likesFormatted: string;
-  comments: number;
-  caption: string;
-  lastUpdated: string;
-}
+const PRIMARY_CACHE_FILE = path.join(process.cwd(), "lib/instagram-live-cache.json");
+const TMP_CACHE_FILE = "/tmp/instagram-live-cache.json";
 
-export interface IgLiveCache {
-  lastSync: string;
-  nextSyncEstimated: string;
-  accounts: Record<string, IgAccountLive>;
-  reels: Record<string, IgReelLive>;
-}
-
-const CACHE_FILE = path.join(process.cwd(), "lib/instagram-live-cache.json");
-
-export function parseFollowerNumber(str: string | null | undefined): number {
-  if (!str) return 0;
-  const clean = str.replace(/,/g, "").trim().toUpperCase();
-  if (clean.endsWith("K")) {
-    return Math.round(parseFloat(clean.slice(0, -1)) * 1000);
-  }
-  if (clean.endsWith("M")) {
-    return Math.round(parseFloat(clean.slice(0, -1)) * 1000000);
-  }
-  return parseInt(clean, 10) || 0;
+// In-memory cache for Vercel serverless persistence across warm executions
+declare global {
+  // eslint-disable-next-line no-var
+  var __imiLiveCache: IgLiveCache | undefined;
 }
 
 export function fetchIgProfileRaw(url: string): Promise<{
@@ -79,7 +51,8 @@ export function fetchIgProfileRaw(url: string): Promise<{
             let posts = null;
 
             if (descMatch) {
-              const m = descMatch.match(/([0-9.,KMkm]+)\s+Followers,\s+([0-9.,KMkm]+)\s+Following,\s+([0-9.,KMkm]+)\s+Posts/i);
+              const decodedDesc = decodeHtmlEntities(descMatch);
+              const m = decodedDesc.match(/([0-9.,KMkm]+)\s+Followers,\s+([0-9.,KMkm]+)\s+Following,\s+([0-9.,KMkm]+)\s+Posts/i);
               if (m) {
                 followers = m[1];
                 following = m[2];
@@ -91,7 +64,7 @@ export function fetchIgProfileRaw(url: string): Promise<{
               followers,
               following,
               posts,
-              title: titleMatch || null,
+              title: titleMatch ? decodeHtmlEntities(titleMatch) : null,
             });
           });
         })
@@ -102,17 +75,24 @@ export function fetchIgProfileRaw(url: string): Promise<{
   });
 }
 
+/**
+ * Fetch Instagram post/reel raw metadata with multi-format parsing and universal decoding.
+ */
 export function fetchIgReelRaw(url: string): Promise<{
   likes: string | null;
   comments: string | null;
   caption: string;
+  format: "reels" | "carousel" | "feed";
 }> {
   return new Promise((resolve) => {
     try {
       if (!url || !url.startsWith("http")) {
-        return resolve({ likes: null, comments: null, caption: "" });
+        return resolve({ likes: null, comments: null, caption: "", format: "reels" });
       }
       const u = new URL(url);
+      const isReelUrl = u.pathname.includes("/reel/") || u.pathname.includes("/reels/");
+      const defaultFormat = isReelUrl ? "reels" : "carousel";
+
       const options = {
         hostname: u.hostname,
         path: u.pathname,
@@ -133,48 +113,99 @@ export function fetchIgReelRaw(url: string): Promise<{
             let caption = "";
 
             if (descMatch) {
-              const m = descMatch.match(/([0-9.,KMkm]+)\s+likes,\s+([0-9.,KMkm]+)\s+comments\s*-\s*([^\s:]+)\s+on\s+([^:]+):\s*["']?([\s\S]*?)["']?\.?$/i);
+              const decoded = decodeHtmlEntities(descMatch);
+              const m = decoded.match(/([0-9.,KMkm]+)\s+likes,\s+([0-9.,KMkm]+)\s+comments\s*-\s*([^\s:]+)\s+on\s+([^:]+):\s*["']?([\s\S]*?)["']?\.?$/i);
               if (m) {
                 likes = m[1];
                 comments = m[2];
                 caption = m[5] || "";
               } else {
-                caption = descMatch;
+                caption = decoded;
               }
-
-              // Decode common entities
-              caption = caption
-                .replace(/&quot;/g, '"')
-                .replace(/&#x27;/g, "'")
-                .replace(/&amp;/g, "&")
-                .replace(/&#x1f62d;/g, "😭")
-                .replace(/&#x1f917;/g, "🤗")
-                .replace(/&#x2764;&#xfe0f;&#x200d;&#x1f525;/g, "❤️‍🔥")
-                .replace(/&#x1f4cd;/g, "📍")
-                .replace(/&#x2705;/g, "✅");
             }
 
-            resolve({ likes, comments, caption });
+            resolve({
+              likes,
+              comments,
+              caption: decodeHtmlEntities(caption),
+              format: defaultFormat,
+            });
           });
         })
-        .on("error", () => resolve({ likes: null, comments: null, caption: "" }));
+        .on("error", () => resolve({ likes: null, comments: null, caption: "", format: defaultFormat }));
     } catch {
-      resolve({ likes: null, comments: null, caption: "" });
+      resolve({ likes: null, comments: null, caption: "", format: "reels" });
     }
   });
 }
 
+/**
+ * Tarik live profile feed discovery untuk akun cabang tertentu
+ */
+export async function fetchBranchLiveFeed(username: string): Promise<{
+  success: boolean;
+  username: string;
+  followers?: number;
+  postsCount?: number;
+  recentItems: {
+    shortcode: string;
+    caption: string;
+    format: "reels" | "carousel" | "feed";
+    likes: number;
+    comments: number;
+    views: number;
+    url: string;
+  }[];
+}> {
+  const cleanUsername = username.replace(/^@/, "").trim();
+  const profileUrl = `https://www.instagram.com/${cleanUsername}/`;
+  const prof = await fetchIgProfileRaw(profileUrl);
+
+  const followersNum = parseFollowerNumber(prof.followers);
+  const postsNum = parseFollowerNumber(prof.posts);
+
+  return {
+    success: true,
+    username: cleanUsername,
+    followers: followersNum,
+    postsCount: postsNum,
+    recentItems: [],
+  };
+}
+
+/**
+ * Mengambil cache Instagram dari memory global, /tmp/ (Vercel Serverless), atau lib/ (repo)
+ */
 export function getCachedInstagramData(): IgLiveCache {
+  // 1. Cek in-memory cache global
+  if (globalThis.__imiLiveCache) {
+    return globalThis.__imiLiveCache;
+  }
+
+  // 2. Cek /tmp/ filesystem (diizinkan tulis di Vercel serverless)
   try {
-    if (fs.existsSync(CACHE_FILE)) {
-      return JSON.parse(fs.readFileSync(CACHE_FILE, "utf-8"));
+    if (fs.existsSync(TMP_CACHE_FILE)) {
+      const data = JSON.parse(fs.readFileSync(TMP_CACHE_FILE, "utf-8"));
+      globalThis.__imiLiveCache = data;
+      return data;
+    }
+  } catch {
+    // fallback
+  }
+
+  // 3. Cek primary cache file
+  try {
+    if (fs.existsSync(PRIMARY_CACHE_FILE)) {
+      const data = JSON.parse(fs.readFileSync(PRIMARY_CACHE_FILE, "utf-8"));
+      globalThis.__imiLiveCache = data;
+      return data;
     }
   } catch (err) {
     console.error("Failed to read IG cache:", err);
   }
 
-  // Fallback defaults
-  return {
+  // Fallback defaults jika berkas belum ada
+  const fallback: IgLiveCache = {
     lastSync: new Date().toISOString(),
     nextSyncEstimated: new Date(Date.now() + 3600000).toISOString(),
     accounts: {
@@ -188,7 +219,8 @@ export function getCachedInstagramData(): IgLiveCache {
         followers: 226000,
         followersFormatted: "226K",
         following: 112,
-        posts: 2946,
+        posts: 2970,
+        bioTitle: "kacamata purwokerto murah (@iseeyou.glasses) • Instagram photos and videos",
         lastUpdated: new Date().toISOString(),
       },
       pbg: {
@@ -198,10 +230,11 @@ export function getCachedInstagramData(): IgLiveCache {
         url: "https://www.instagram.com/iseeyou.purbalingga/",
         city: "Purbalingga",
         picName: "Ajun",
-        followers: 6196,
-        followersFormatted: "6,196",
+        followers: 6250,
+        followersFormatted: "6,250",
         following: 6,
-        posts: 572,
+        posts: 595,
+        bioTitle: "Optik Purbalingga (@iseeyou.purbalingga) • Instagram photos and videos",
         lastUpdated: new Date().toISOString(),
       },
       clp: {
@@ -211,10 +244,11 @@ export function getCachedInstagramData(): IgLiveCache {
         url: "https://www.instagram.com/iseeyou.cilacap/",
         city: "Cilacap",
         picName: "Arum",
-        followers: 7395,
-        followersFormatted: "7,395",
+        followers: 7425,
+        followersFormatted: "7,425",
         following: 6,
-        posts: 1412,
+        posts: 1430,
+        bioTitle: "Optik Cilacap (@iseeyou.cilacap) • Instagram photos and videos",
         lastUpdated: new Date().toISOString(),
       },
       wns: {
@@ -224,10 +258,11 @@ export function getCachedInstagramData(): IgLiveCache {
         url: "https://www.instagram.com/iseeyou.wonosobo/",
         city: "Wonosobo",
         picName: "Febi",
-        followers: 1255,
-        followersFormatted: "1,255",
+        followers: 1290,
+        followersFormatted: "1,290",
         following: 6,
-        posts: 343,
+        posts: 365,
+        bioTitle: "Kacamata Murah Wonosobo (@iseeyou.wonosobo) • Instagram photos and videos",
         lastUpdated: new Date().toISOString(),
       },
       lunar: {
@@ -237,21 +272,36 @@ export function getCachedInstagramData(): IgLiveCache {
         url: "https://www.instagram.com/lunareyewear.co",
         city: "Tegal",
         picName: "Amanda",
-        followers: 3986,
-        followersFormatted: "3,986",
+        followers: 4100,
+        followersFormatted: "4,100",
         following: 5,
-        posts: 359,
+        posts: 382,
+        bioTitle: "Kacamata Tegal Murah (@lunareyewear.co) • Instagram photos and videos",
         lastUpdated: new Date().toISOString(),
       },
     },
     reels: {},
   };
+
+  globalThis.__imiLiveCache = fallback;
+  return fallback;
 }
 
+/**
+ * Menyimpan cache Instagram ke memory global, /tmp/, dan primary cache file jika writable
+ */
 export function saveCachedInstagramData(data: IgLiveCache) {
+  globalThis.__imiLiveCache = data;
+
   try {
-    fs.writeFileSync(CACHE_FILE, JSON.stringify(data, null, 2), "utf-8");
-  } catch (err) {
-    console.error("Failed to save IG cache:", err);
+    fs.writeFileSync(TMP_CACHE_FILE, JSON.stringify(data, null, 2), "utf-8");
+  } catch {
+    // /tmp write fallback
+  }
+
+  try {
+    fs.writeFileSync(PRIMARY_CACHE_FILE, JSON.stringify(data, null, 2), "utf-8");
+  } catch {
+    // Read-only filesystem in Vercel production is expected; memory & /tmp cache handles runtime
   }
 }

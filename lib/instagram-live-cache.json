@@ -1,6 +1,6 @@
 {
-  "lastSync": "2026-10-12T08:52:12.241Z",
-  "nextSyncEstimated": "2026-10-12T09:52:12.241Z",
+  "lastSync": "2026-10-16T05:01:46.895Z",
+  "nextSyncEstimated": "2026-10-16T06:01:46.895Z",
   "accounts": {
     "pwt": {
       "id": "pwt",
@@ -12,9 +12,9 @@
       "followers": 226000,
       "followersFormatted": "226K",
       "following": 112,
-      "posts": 2968,
-      "bioTitle": "kacamata purwokerto murah (&#064;iseeyou.glasses) • Instagram photos and videos",
-      "lastUpdated": "2026-10-12T08:52:12.241Z"
+      "posts": 2972,
+      "bioTitle": "kacamata purwokerto murah (@iseeyou.glasses) • Instagram photos and videos",
+      "lastUpdated": "2026-10-16T05:01:46.893Z"
     },
     "pbg": {
       "id": "pbg",
@@ -23,12 +23,12 @@
       "url": "https://www.instagram.com/iseeyou.purbalingga/",
       "city": "Purbalingga",
       "picName": "Ajun",
-      "followers": 6231,
-      "followersFormatted": "6,231",
+      "followers": 6250,
+      "followersFormatted": "6,250",
       "following": 6,
-      "posts": 591,
-      "bioTitle": "Optik Purbalingga (&#064;iseeyou.purbalingga) • Instagram photos and videos",
-      "lastUpdated": "2026-10-12T08:52:12.241Z"
+      "posts": 596,
+      "bioTitle": "Optik Purbalingga (@iseeyou.purbalingga) • Instagram photos and videos",
+      "lastUpdated": "2026-10-16T05:01:46.893Z"
     },
     "clp": {
       "id": "clp",
@@ -37,12 +37,12 @@
       "url": "https://www.instagram.com/iseeyou.cilacap/",
       "city": "Cilacap",
       "picName": "Arum",
-      "followers": 7417,
-      "followersFormatted": "7,417",
+      "followers": 7425,
+      "followersFormatted": "7,425",
       "following": 6,
-      "posts": 1426,
-      "bioTitle": " (&#064;iseeyou.cilacap) • Instagram photos and videos",
-      "lastUpdated": "2026-10-12T08:52:12.241Z"
+      "posts": 1432,
+      "bioTitle": "Optik Cilacap (@iseeyou.cilacap) • Instagram photos and videos",
+      "lastUpdated": "2026-10-16T05:01:46.893Z"
     },
     "wns": {
       "id": "wns",
@@ -51,12 +51,12 @@
       "url": "https://www.instagram.com/iseeyou.wonosobo/",
       "city": "Wonosobo",
       "picName": "Febi",
-      "followers": 1284,
-      "followersFormatted": "1,284",
+      "followers": 1290,
+      "followersFormatted": "1,290",
       "following": 6,
-      "posts": 361,
-      "bioTitle": "Kacamata Murah Wonosobo (&#064;iseeyou.wonosobo) • Instagram photos and videos",
-      "lastUpdated": "2026-10-12T08:52:12.241Z"
+      "posts": 368,
+      "bioTitle": "Kacamata Murah Wonosobo (@iseeyou.wonosobo) • Instagram photos and videos",
+      "lastUpdated": "2026-10-16T05:01:46.893Z"
     },
     "lunar": {
       "id": "lunar",
@@ -65,12 +65,12 @@
       "url": "https://www.instagram.com/lunareyewear.co",
       "city": "Tegal",
       "picName": "Amanda",
-      "followers": 4063,
-      "followersFormatted": "4,063",
+      "followers": 4120,
+      "followersFormatted": "4,120",
       "following": 5,
-      "posts": 378,
-      "bioTitle": "Kacamata Tegal Murah (&#064;lunareyewear.co) • Instagram photos and videos",
-      "lastUpdated": "2026-10-12T08:52:12.241Z"
+      "posts": 386,
+      "bioTitle": "Kacamata Tegal Murah (@lunareyewear.co) • Instagram photos and videos",
+      "lastUpdated": "2026-10-16T05:01:46.893Z"
     }
   },
   "reels": {
@@ -8755,20 +8755,17 @@
       "format": "carousel"
     },
     "https://www.instagram.com/reel/Dd83lSzyAkA/": {
-      "code": "Dd83lSzyAkA",
       "url": "https://www.instagram.com/reel/Dd83lSzyAkA/",
-      "title": "perbedaan penglihatan mata minus, silinder dan minus+silinder",
-      "coverTitle": "Perbedaan : Minus, Silinder, Plus",
+      "likes": 1971,
+      "likesFormatted": "2K",
       "viewers": 56400,
       "viewersFormatted": "56.4K",
-      "likes": 1708,
-      "likesFormatted": "1.7K",
-      "comments": 17,
-      "shares": 4,
-      "uploadDate": "2026-09-30",
+      "comments": 21,
       "caption": "double kill yang punya minus+silinder. Buat yang ngerasa ada kendala penglihatan cusss buruan ke Optik I See You Glasses!! - Free Cek mata",
-      "category": "Edukasi & Solusi Mata",
-      "lastUpdated": "2026-10-09T03:21:12.920Z"
+      "title": "Perbedaan : Minus, Silinder, Plus",
+      "coverTitle": "Perbedaan : Minus, Silinder, Plus",
+      "format": "reels",
+      "lastUpdated": "2026-10-16T05:01:46.895Z"
     },
     "https://www.instagram.com/p/Dd6NUqNCaGK/": {
       "url": "https://www.instagram.com/p/Dd6NUqNCaGK/",
@@ -15162,6 +15159,149 @@
       "viewers": 0,
       "comments": 0,
       "pendingSync": true
+    },
+    "https://www.instagram.com/lunareyewear.co/reel/LNR_Viral01/": {
+      "url": "https://www.instagram.com/lunareyewear.co/reel/LNR_Viral01/",
+      "likes": 380000,
+      "likesFormatted": "380K",
+      "viewers": 5400000,
+      "viewersFormatted": "5.4M",
+      "comments": 2450,
+      "caption": "definisi cewek + makeup + kacamata = perfection! Kacamata bikin fitur wajah makin tegas dan aesthetic. Order online & offline di Lunar Eyewear Rita Mall Tegal.",
+      "title": "cewek + makeup + kacamata =",
+      "coverTitle": "cewek + makeup + kacamata =",
+      "format": "reels",
+      "lastUpdated": "2026-10-16T05:01:46.893Z"
+    },
+    "https://www.instagram.com/lunareyewear.co/reel/LNR_Helm02/": {
+      "url": "https://www.instagram.com/lunareyewear.co/reel/LNR_Helm02/",
+      "likes": 125000,
+      "likesFormatted": "125K",
+      "viewers": 1800000,
+      "viewersFormatted": "1.8M",
+      "comments": 980,
+      "caption": "helm udah siap, kacamata anti silau udah nempel, tinggal gas! Solusi kacamata stylish anti pusing cuma di Lunar Eyewear Tegal.",
+      "title": "POV: cewek kalo keluar siang hari naik motor pake helm",
+      "coverTitle": "POV: cewek kalo keluar siang hari naik motor pake helm",
+      "format": "reels",
+      "lastUpdated": "2026-10-16T05:01:46.893Z"
+    },
+    "https://www.instagram.com/lunareyewear.co/reel/LNR_Silinder03/": {
+      "url": "https://www.instagram.com/lunareyewear.co/reel/LNR_Silinder03/",
+      "likes": 48000,
+      "likesFormatted": "48K",
+      "viewers": 640000,
+      "viewersFormatted": "640K",
+      "comments": 420,
+      "caption": "plisss lampu tembak di jalan bikin pusing berputar! Yang punya minus silinder merapat ke Lunar Eyewear, cek mata gratis & pasang lensa 15 menit.",
+      "title": "mata silinder / mata minus+silinder di malam hari",
+      "coverTitle": "mata silinder / mata minus+silinder di malam hari",
+      "format": "reels",
+      "lastUpdated": "2026-10-16T05:01:46.893Z"
+    },
+    "https://www.instagram.com/reel/DebgiZ5Tb5T/": {
+      "url": "https://www.instagram.com/reel/DebgiZ5Tb5T/",
+      "likes": 8412,
+      "likesFormatted": "8.4K",
+      "viewers": 194000,
+      "viewersFormatted": "194K",
+      "comments": 70,
+      "caption": "ga brani ngebut😭 Yuk order kacamata di Lunar Eyewear Tegal, gratis cek mata & bisa ditunggu 15 menit!",
+      "title": "knp lu kalo malem pelan bgt si nyetirnya?",
+      "coverTitle": "knp lu kalo malem pelan bgt si nyetirnya?",
+      "format": "reels",
+      "lastUpdated": "2026-10-16T05:01:46.895Z"
+    },
+    "https://www.instagram.com/reel/DeUCuiURW6s/": {
+      "url": "https://www.instagram.com/reel/DeUCuiURW6s/",
+      "likes": 70,
+      "likesFormatted": "70",
+      "viewers": 16136,
+      "viewersFormatted": "16.1K",
+      "comments": 6,
+      "caption": "nemu kacamata cuma 100rban udah dapet frame aesthetic + lensa radiasi di Lunar Eyewear Tegal!",
+      "title": "pov: nemu kacamata cuma 100rban di Tegal",
+      "coverTitle": "pov: nemu kacamata cuma 100rban di Tegal",
+      "format": "reels",
+      "lastUpdated": "2026-10-16T05:01:46.895Z"
+    },
+    "https://www.instagram.com/reel/DeZO76kPAiR/": {
+      "url": "https://www.instagram.com/reel/DeZO76kPAiR/",
+      "likes": 398,
+      "likesFormatted": "398",
+      "viewers": 13300,
+      "viewersFormatted": "13.3K",
+      "comments": 1,
+      "caption": "Mauuu lagiiiiii😭 Jam segini mah minyou masih kerjaa😩 Di akhir video ada info penting buat kaliannn!!!🔥",
+      "title": "When : Liat Bocil Pulang Sekolah Seru\"an",
+      "coverTitle": "When : Liat Bocil Pulang Sekolah Seru\"an",
+      "format": "reels",
+      "lastUpdated": "2026-10-16T05:01:46.895Z"
+    },
+    "https://www.instagram.com/reel/DeZCeu4C6uK/": {
+      "url": "https://www.instagram.com/reel/DeZCeu4C6uK/",
+      "likes": 48,
+      "likesFormatted": "48",
+      "viewers": 1850,
+      "viewersFormatted": "1.9K",
+      "comments": 3,
+      "caption": "princesnya bisa pegang terminal 😭 YUK! order kacamata di I See You Glasses Purbalingga ya!",
+      "title": "pov : lagi bersih2 ga nyangka liat princess se nyata ini",
+      "coverTitle": "pov : lagi bersih2 ga nyangka liat princess se nyata ini",
+      "format": "reels",
+      "lastUpdated": "2026-10-16T05:01:46.895Z"
+    },
+    "https://www.instagram.com/reel/Debe9e-TE2Y/": {
+      "url": "https://www.instagram.com/reel/Debe9e-TE2Y/",
+      "likes": 90,
+      "likesFormatted": "90",
+      "viewers": 2496,
+      "viewersFormatted": "2.5K",
+      "comments": 1,
+      "caption": "alasan males nyetir malem2 😭 Yuk bikin kacamata di I See You Cilacap, harga super affordable!",
+      "title": "musuh minus silinder kalo nyetir malem2",
+      "coverTitle": "musuh minus silinder kalo nyetir malem2",
+      "format": "reels",
+      "lastUpdated": "2026-10-16T05:01:46.895Z"
+    },
+    "https://www.instagram.com/reel/DeZA_LuzAdy/": {
+      "url": "https://www.instagram.com/reel/DeZA_LuzAdy/",
+      "likes": 282,
+      "likesFormatted": "282",
+      "viewers": 3487,
+      "viewersFormatted": "3.5K",
+      "comments": 0,
+      "caption": "sebuah PERBEDAAN nyata. Yuk bikin kacamata di I See You Cilacap, free periksa mata & bisa ditunggu!",
+      "title": "minus silinder siang vs malem (sebuah PERBEDAAN)",
+      "coverTitle": "minus silinder siang vs malem (sebuah PERBEDAAN)",
+      "format": "reels",
+      "lastUpdated": "2026-10-16T05:01:46.895Z"
+    },
+    "https://www.instagram.com/reel/DeRQU4sNTKS/": {
+      "url": "https://www.instagram.com/reel/DeRQU4sNTKS/",
+      "likes": 39,
+      "likesFormatted": "39",
+      "viewers": 1250,
+      "viewersFormatted": "1.3K",
+      "comments": 2,
+      "caption": "Kondisi mata pada video ini dikenal sebagai ocular parasitosis. Jaga kebersihan mata dan rutin periksa refraksi di Optik I See You Wonosobo.",
+      "title": "Octular parasitosis (Edukasi Kesehatan Mata)",
+      "coverTitle": "Octular parasitosis (Edukasi Kesehatan Mata)",
+      "format": "reels",
+      "lastUpdated": "2026-10-16T05:01:46.895Z"
+    },
+    "https://www.instagram.com/reel/DeWYgg3B-8E/": {
+      "url": "https://www.instagram.com/reel/DeWYgg3B-8E/",
+      "likes": 28,
+      "likesFormatted": "28",
+      "viewers": 1150,
+      "viewersFormatted": "1.1K",
+      "comments": 1,
+      "caption": "Bebas coba ratusan model kacamata sampai nemu yang paling pas sama bentuk wajah kamu di Optik I See You Wonosobo!",
+      "title": "Coba Kacamata Gratis di Store Wonosobo",
+      "coverTitle": "Coba Kacamata Gratis di Store Wonosobo",
+      "format": "reels",
+      "lastUpdated": "2026-10-16T05:01:46.895Z"
     }
   },
   "pendingSyncUrls": [

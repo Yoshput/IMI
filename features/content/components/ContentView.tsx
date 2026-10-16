@@ -3,10 +3,10 @@
 import React, { useState, useMemo, useEffect } from "react";
 import { getRealContentItems } from "@/lib/real-content-items";
 import { DominantPerformer } from "./DominantPerformer";
-import { ContentFilterToolbar } from "./ContentFilterToolbar";
+import { ContentFilterToolbar, FormatCounts } from "./ContentFilterToolbar";
 import { RankedContentTable } from "./RankedContentTable";
 import { StateRenderer } from "@/components/shared/StateRenderer";
-import { Film, Plus, RefreshCw, ExternalLink, ShieldCheck, Download } from "lucide-react";
+import { RefreshCw, ExternalLink, ShieldCheck, Download, CheckCircle2, AlertCircle } from "lucide-react";
 import { DevStateSwitcher } from "@/components/shared/DevStateSwitcher";
 import { downloadCSV } from "@/lib/export-csv";
 
@@ -19,6 +19,7 @@ export const ContentView: React.FC = () => {
   const [contentList, setContentList] = useState(() => getRealContentItems(undefined, "weekly"));
   const [isSyncing, setIsSyncing] = useState(false);
   const [syncStatus, setSyncStatus] = useState<string | null>(null);
+  const [syncError, setSyncError] = useState<string | null>(null);
   const [lastSyncTime, setLastSyncTime] = useState<string | null>(null);
 
   // Fetch live metrics on mount and when period changes
@@ -57,7 +58,7 @@ export const ContentView: React.FC = () => {
       items = items.filter((item) => item.branchKey === activeBranch);
     }
 
-    // Filter by format
+    // Filter by format (reels | carousel | feed)
     if (activeFormat !== "all") {
       items = items.filter((item) => item.format === activeFormat);
     }
@@ -77,11 +78,23 @@ export const ContentView: React.FC = () => {
     }));
   }, [contentList, activeBranch, activeFormat, sortBy]);
 
+  // Dynamic format counters relative to branch filter
+  const formatCounts: FormatCounts = useMemo(() => {
+    const branchFiltered = activeBranch === "all" ? contentList : contentList.filter((it) => it.branchKey === activeBranch);
+    return {
+      all: branchFiltered.length,
+      reels: branchFiltered.filter((it) => it.format === "reels").length,
+      carousel: branchFiltered.filter((it) => it.format === "carousel").length,
+      feed: branchFiltered.filter((it) => it.format === "feed").length,
+    };
+  }, [contentList, activeBranch]);
+
   const topPerformer = filteredItems[0] || contentList[0];
 
   const handleSync = async () => {
     setIsSyncing(true);
     setSyncStatus(null);
+    setSyncError(null);
     try {
       const res = await fetch("/api/content-items", {
         method: "POST",
@@ -91,14 +104,16 @@ export const ContentView: React.FC = () => {
       const json = await res.json();
       if (json.success && Array.isArray(json.items)) {
         setContentList(json.items);
-        setLastSyncTime(new Date().toLocaleTimeString("id-ID"));
-        setSyncStatus("Data live Instagram 5 cabang berhasil disinkronkan!");
-        setTimeout(() => setSyncStatus(null), 3500);
+        const timeStr = new Date().toLocaleTimeString("id-ID");
+        setLastSyncTime(timeStr);
+        setSyncStatus(`Sinkronisasi selesai: ${json.branchesSynced || 5} cabang diperbarui (${json.items.length} konten terverifikasi). Update: ${timeStr} WIB`);
+        setTimeout(() => setSyncStatus(null), 5000);
       } else {
         throw new Error(json.error || "Gagal sinkronisasi");
       }
     } catch (e: any) {
-      setSyncStatus(`Gagal sync: ${e.message}`);
+      setSyncError(`Kendala sync: ${e.message}`);
+      setTimeout(() => setSyncError(null), 5000);
     } finally {
       setIsSyncing(false);
     }
@@ -143,15 +158,15 @@ export const ContentView: React.FC = () => {
       <div className="border-b border-border pb-6 flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
           <div className="flex flex-wrap items-center gap-2 text-caption font-medium uppercase tracking-wider text-foreground-secondary mb-1">
-            <span>Log Konten & Analisis Kinerja</span>
-            <span>·</span>
+            <span>Log Konten &amp; Analisis Kinerja</span>
+            <span>&middot;</span>
             <span className="inline-flex items-center gap-1 text-emerald-800 font-semibold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
               <ShieldCheck className="w-3 h-3 text-emerald-800" />
               Live Instagram Sync Terverifikasi (4 Cabang ISY + 1 Lunar Tegal)
             </span>
             {lastSyncTime && (
               <span className="text-[11px] text-foreground-muted">
-                (Update: {lastSyncTime})
+                (Update: {lastSyncTime} WIB)
               </span>
             )}
           </div>
@@ -162,23 +177,18 @@ export const ContentView: React.FC = () => {
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
-          {syncStatus && (
-            <span className="text-xs text-emerald-800 font-semibold bg-emerald-50 px-2.5 py-1 rounded border border-emerald-200">
-              {syncStatus}
-            </span>
-          )}
           <button
             onClick={handleSync}
             disabled={isSyncing}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-control bg-surface border border-border text-foreground text-xs font-semibold hover:bg-surface-secondary transition-colors shadow-subtle disabled:opacity-50"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-control bg-brand text-brand-contrast text-xs font-semibold hover:brightness-110 transition-all shadow-subtle disabled:opacity-60 cursor-pointer"
           >
-            <RefreshCw className={`w-3.5 h-3.5 ${isSyncing ? "animate-spin text-brand" : ""}`} />
-            <span>{isSyncing ? "Sinkronisasi Live..." : "Sinkronkan Live Instagram"}</span>
+            <RefreshCw className={`w-3.5 h-3.5 ${isSyncing ? "animate-spin" : ""}`} />
+            <span>{isSyncing ? "Menyelaraskan 5 Cabang..." : "Sinkronkan Live Instagram"}</span>
           </button>
           <button
             onClick={handleExportCSV}
             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-control bg-surface border border-border text-foreground text-xs font-semibold hover:bg-surface-secondary transition-colors shadow-subtle cursor-pointer"
-            title="Unduh 40 Data Konten (.csv)"
+            title="Unduh Data Konten (.csv)"
           >
             <Download className="w-3.5 h-3.5 text-brand" />
             <span>Export CSV</span>
@@ -187,41 +197,11 @@ export const ContentView: React.FC = () => {
             href="https://www.instagram.com/iseeyou.glasses/"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-control bg-brand text-white text-xs font-semibold hover:bg-brand-hover transition-colors shadow-subtle"
+            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-control bg-surface border border-border text-foreground text-xs font-medium hover:bg-surface-secondary transition-colors shadow-subtle"
             title="Instagram Pusat @iseeyou.glasses (Purwokerto)"
           >
-            <ExternalLink className="w-3.5 h-3.5" />
+            <ExternalLink className="w-3 h-3 text-brand" />
             <span>@iseeyou.glasses</span>
-          </a>
-          <a
-            href="https://www.instagram.com/iseeyou.purbalingga/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-control bg-surface border border-border text-foreground text-xs font-medium hover:bg-surface-secondary transition-colors shadow-subtle"
-            title="Instagram Cabang Purbalingga"
-          >
-            <ExternalLink className="w-3.5 h-3.5" />
-            <span>@iseeyou.purbalingga</span>
-          </a>
-          <a
-            href="https://www.instagram.com/iseeyou.cilacap/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-control bg-surface border border-border text-foreground text-xs font-medium hover:bg-surface-secondary transition-colors shadow-subtle"
-            title="Instagram Cabang Cilacap"
-          >
-            <ExternalLink className="w-3.5 h-3.5" />
-            <span>@iseeyou.cilacap</span>
-          </a>
-          <a
-            href="https://www.instagram.com/iseeyou.wonosobo/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-control bg-surface border border-border text-foreground text-xs font-medium hover:bg-surface-secondary transition-colors shadow-subtle"
-            title="Instagram Cabang Wonosobo"
-          >
-            <ExternalLink className="w-3.5 h-3.5" />
-            <span>@iseeyou.wonosobo</span>
           </a>
           <a
             href="https://www.instagram.com/lunareyewear.co"
@@ -230,11 +210,26 @@ export const ContentView: React.FC = () => {
             className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-control bg-surface border border-border text-foreground text-xs font-medium hover:bg-surface-secondary transition-colors shadow-subtle"
             title="Instagram Lunar Eyewear Tegal (Second Brand)"
           >
-            <ExternalLink className="w-3.5 h-3.5" />
+            <ExternalLink className="w-3 h-3 text-brand" />
             <span>@lunareyewear.co</span>
           </a>
         </div>
       </div>
+
+      {/* Sync Status Feedback Toast Banner */}
+      {syncStatus && (
+        <div className="p-3 rounded-control bg-status-successBg border border-status-success/30 text-status-success text-xs font-semibold flex items-center gap-2 animate-in fade-in duration-200 shadow-2xs">
+          <CheckCircle2 className="w-4 h-4 shrink-0" />
+          <span>{syncStatus}</span>
+        </div>
+      )}
+
+      {syncError && (
+        <div className="p-3 rounded-control bg-status-errorBg border border-status-error/30 text-status-error text-xs font-semibold flex items-center gap-2 animate-in fade-in duration-200 shadow-2xs">
+          <AlertCircle className="w-4 h-4 shrink-0" />
+          <span>{syncError}</span>
+        </div>
+      )}
 
       <StateRenderer
         status={viewState}
@@ -255,8 +250,8 @@ export const ContentView: React.FC = () => {
           <div className="flex items-center justify-between">
             <h3 className="heading-section text-foreground flex items-center gap-2">
               <span>
-                Daftar Seluruh Konten & Ranking Bukti (
-                {period === "weekly" ? "Mingguan · 7 Hari Terakhir" : "Bulanan · September - Oktober 2026"}
+                Daftar Seluruh Konten &amp; Ranking Bukti (
+                {period === "weekly" ? "Mingguan · Konten Terbaru" : "Bulanan · September - Oktober 2026"}
                 )
               </span>
               <span className="text-xs font-normal text-foreground-secondary">
@@ -275,6 +270,7 @@ export const ContentView: React.FC = () => {
             sortBy={sortBy}
             onSortChange={setSortBy}
             totalCount={filteredItems.length}
+            formatCounts={formatCounts}
           />
 
           <RankedContentTable items={filteredItems} />

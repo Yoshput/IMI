@@ -121,7 +121,7 @@ export const RankedContentTable: React.FC<RankedContentTableProps> = ({ items })
                 <td className="py-4 px-3 whitespace-nowrap">
                   <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-medium bg-surface-secondary border border-border">
                     {getFormatIcon(item.format)}
-                    <span className="capitalize">{item.format}</span>
+                    <span className="font-semibold">{item.format === "feed" ? "Feed Single" : item.format === "carousel" ? "Carousel" : "Reels"}</span>
                   </span>
                 </td>
 
