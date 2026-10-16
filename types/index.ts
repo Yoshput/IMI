@@ -54,6 +54,7 @@ export interface ContentItem {
   branchKey?: string;
   postUrl?: string;
   pic?: string;
+  isPinned?: boolean;
 }
 
 export interface PriorityIssue {

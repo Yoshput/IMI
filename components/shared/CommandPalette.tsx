@@ -24,6 +24,9 @@ import {
   ExternalLink,
   Sparkles,
   Database,
+  Wallet,
+  Lock,
+  User,
 } from 'lucide-react';
 import { downloadCSV } from '@/lib/export-csv';
 import { exportWorkspaceBackup } from '@/lib/backup-service';
@@ -38,6 +41,8 @@ interface CommandPaletteProps {
 // Pre-configured modules
 const MODULES = [
   { label: 'Dashboard Eksekutif', category: 'Eksekutif & Rekap', path: '/dashboard', icon: LayoutGrid, desc: 'Ringkasan KPI, 6 PIC, & evaluasi mingguan' },
+  { label: 'Finance & Bonus PIC 🔒', category: 'Eksekutif & Rekap', path: '/finance', icon: Wallet, desc: 'Laporan keuangan, insentif kreator & kalkulasi bonus H+3' },
+  { label: 'Report Eksekutif & Evaluasi 🔒', category: 'Eksekutif & Rekap', path: '/reports', icon: FileText, desc: 'Weekly management evaluation report & strategi cabang' },
   { label: 'Spreadsheet Rekap 6 PIC', category: 'Eksekutif & Rekap', path: '/spreadsheet', icon: Table2, desc: 'Rekap harian Sheets, story & omset kacamata' },
   { label: 'Social Blade Realtime', category: 'Sosial & Konten', path: '/social-blade', icon: TrendingUp, desc: 'Instagram Meta Graph real-time growth tracker' },
   { label: 'Konten & Reels Hub', category: 'Sosial & Konten', path: '/content', icon: Video, desc: 'Jurnal 40 konten, video viral, & ide kreatif' },
@@ -48,6 +53,23 @@ const MODULES = [
   { label: '17 Venue Event & Gedung', category: 'Riset & Pertumbuhan', path: '/venue', icon: MapPin, desc: 'Jatingayom, Hetero Space, Aston, Java Heritage' },
   { label: 'Meta Graph Analytics', category: 'Eksekutif & Rekap', path: '/analytics', icon: BarChart2, desc: 'Jangkauan, impresi, profil demographics' },
   { label: 'Proposal Sponsor Publik', category: 'Dokumen Resmi', path: '/proposal-sponsor', icon: FileText, desc: 'Template proposal formal B2B tanpa emoji' },
+];
+
+const SEARCHABLE_PICS = [
+  { name: 'Ilya', branch: 'Purwokerto (Pusat)', role: 'PIC Konten Reels', path: '/content?branch=purwokerto' },
+  { name: 'Nuha', branch: 'Purwokerto (Pusat)', role: 'PIC Konten Story IG', path: '/dashboard?branch=purwokerto' },
+  { name: 'Ajun', branch: 'Purbalingga', role: 'PIC Konten Reels & TikTok', path: '/content?branch=purbalingga' },
+  { name: 'Amanda', branch: 'Lunar Eyewear Tegal', role: 'PIC Konten Reels & TikTok', path: '/content?branch=lunar_tegal' },
+  { name: 'Arum', branch: 'Cilacap', role: 'PIC Konten Reels & TikTok', path: '/content?branch=cilacap' },
+  { name: 'Febi', branch: 'Wonosobo', role: 'PIC Konten Reels & TikTok', path: '/content?branch=wonosobo' },
+];
+
+const SEARCHABLE_BRANCHES = [
+  { name: 'Purwokerto (Pusat & Lab)', code: 'PWT', path: '/dashboard?branch=purwokerto', desc: 'Optik I See You Purwokerto (Pusat)' },
+  { name: 'Purbalingga', code: 'PBG', path: '/dashboard?branch=purbalingga', desc: 'Optik I See You Purbalingga' },
+  { name: 'Cilacap', code: 'CLP', path: '/dashboard?branch=cilacap', desc: 'Optik I See You Cilacap' },
+  { name: 'Wonosobo', code: 'WNS', path: '/dashboard?branch=wonosobo', desc: 'Optik I See You Wonosobo' },
+  { name: 'Lunar Tegal', code: 'TGL', path: '/dashboard?branch=lunar_tegal', desc: 'Lunar Eyewear Tegal (Second Brand)' },
 ];
 
 export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
@@ -160,6 +182,22 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
     return (initialKolData as any[])
       .filter((k) => k.name.toLowerCase().includes(q) || k.handle.toLowerCase().includes(q) || (k.city && k.city.toLowerCase().includes(q)))
       .slice(0, 5);
+  }, [query]);
+
+  const filteredPics = useMemo(() => {
+    if (!query) return [];
+    const q = query.toLowerCase();
+    return SEARCHABLE_PICS.filter(
+      (p) => p.name.toLowerCase().includes(q) || p.branch.toLowerCase().includes(q) || p.role.toLowerCase().includes(q)
+    );
+  }, [query]);
+
+  const filteredBranches = useMemo(() => {
+    if (!query) return [];
+    const q = query.toLowerCase();
+    return SEARCHABLE_BRANCHES.filter(
+      (b) => b.name.toLowerCase().includes(q) || b.code.toLowerCase().includes(q) || b.desc.toLowerCase().includes(q)
+    );
   }, [query]);
 
   if (!isOpen) return null;
@@ -354,6 +392,70 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
                     </div>
                     <span className="text-[10px] font-semibold text-[#124734] flex items-center gap-1">
                       Lihat Profil <ArrowRight className="w-3 h-3" />
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Section: PIC Cabang Search Results */}
+          {filteredPics.length > 0 && (
+            <div>
+              <span className="text-[11px] uppercase tracking-wider font-bold text-[#5C6B64] block mb-2 px-2">
+                PIC Cabang Ditemukan ({filteredPics.length})
+              </span>
+              <div className="space-y-1.5">
+                {filteredPics.map((p, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => navigateTo(p.path)}
+                    className="w-full p-2.5 rounded-xl bg-white hover:bg-[#F3EFE6] border border-[#124734]/10 text-left text-xs flex items-center justify-between text-[#183C30] transition-colors"
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-800 flex items-center justify-center shrink-0 font-bold text-xs">
+                        {p.name.charAt(0)}
+                      </div>
+                      <div>
+                        <span className="font-bold block">{p.name} ({p.branch})</span>
+                        <span className="text-[11px] text-[#5C6B64]">{p.role}</span>
+                      </div>
+                    </div>
+                    <span className="text-[10px] font-semibold text-[#124734] flex items-center gap-1">
+                      Audit PIC <ArrowRight className="w-3 h-3" />
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Section: Branches Search Results */}
+          {filteredBranches.length > 0 && (
+            <div>
+              <span className="text-[11px] uppercase tracking-wider font-bold text-[#5C6B64] block mb-2 px-2">
+                Cabang Ditemukan ({filteredBranches.length})
+              </span>
+              <div className="space-y-1.5">
+                {filteredBranches.map((b, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => navigateTo(b.path)}
+                    className="w-full p-2.5 rounded-xl bg-white hover:bg-[#F3EFE6] border border-[#124734]/10 text-left text-xs flex items-center justify-between text-[#183C30] transition-colors"
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-7 h-7 rounded-lg bg-brand/10 text-brand flex items-center justify-center shrink-0">
+                        <Building2 className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <span className="font-bold block">{b.name} ({b.code})</span>
+                        <span className="text-[11px] text-[#5C6B64]">{b.desc}</span>
+                      </div>
+                    </div>
+                    <span className="text-[10px] font-semibold text-[#124734] flex items-center gap-1">
+                      Buka Cabang <ArrowRight className="w-3 h-3" />
                     </span>
                   </button>
                 ))}

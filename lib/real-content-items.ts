@@ -48,9 +48,38 @@ function normalizeSlug(str: string): string {
     .slice(0, 32);
 }
 
+export type ContentPeriod = "weekly" | "monthly" | "all_time";
+
+export function isEligibleForPeriod(
+  publishDateStr: string,
+  period: ContentPeriod,
+  isPinned?: boolean,
+  referenceDate: Date = new Date("2026-10-16T23:59:59+07:00")
+): boolean {
+  if (!publishDateStr) return period === "all_time";
+  const pubDate = new Date(publishDateStr);
+  if (isNaN(pubDate.getTime())) return period === "all_time";
+
+  const diffDays = (referenceDate.getTime() - pubDate.getTime()) / (1000 * 60 * 60 * 24);
+
+  if (period === "weekly") {
+    // STRICT: Hanya konten yang diunggah dalam 7-10 hari terakhir (Minggu Ini / Siklus Aktif Oktober 2026)
+    // Pinned post lama (misal Juli 2025 atau Juni 2026) otomatis DITOLAK di tab Mingguan!
+    return diffDays >= -1 && diffDays <= 10;
+  }
+
+  if (period === "monthly") {
+    // STRICT: Hanya konten September - Oktober 2026 (2026-09-01 s.d. 2026-10-31)
+    return pubDate >= new Date("2026-09-01T00:00:00+07:00") && pubDate <= referenceDate;
+  }
+
+  // "all_time": Tampilkan seluruh konten termasuk Pinned Reels & Rekor Viral sepanjang masa
+  return true;
+}
+
 export function getRealContentItems(
   cacheOverride?: any,
-  period: "weekly" | "monthly" = "monthly"
+  period: ContentPeriod = "weekly"
 ): ContentItem[] {
   const cache = cacheOverride || liveCache;
   const items: ContentItem[] = [];
@@ -85,22 +114,6 @@ export function getRealContentItems(
       return { key: "wns", name: "Optik I See You Wonosobo" };
     }
     return { key: "pwt", name: "Purwokerto (Pusat)" };
-  };
-
-  // Dynamic date eligibility (Strict separation: Weekly = Minggu Ini 6-16 Okt, Monthly = Sep-Okt & All-Time)
-  const isEligibleDate = (dateStr: string) => {
-    if (!dateStr) return false;
-    const cleanDate = dateStr.slice(0, 10);
-    if (period === "weekly") {
-      // HANYA konten yang benar-benar tayang di minggu evaluasi terbaru (6 - 16 Oktober 2026)
-      return cleanDate >= "2026-10-06" && cleanDate <= "2026-10-16";
-    }
-    // Bulanan: Seluruh konten September - Oktober 2026 serta Rekor All-Time
-    return (
-      (cleanDate >= "2026-09-01" && cleanDate <= "2026-10-31") ||
-      cleanDate.startsWith("2025") ||
-      cleanDate.startsWith("2026-06")
-    );
   };
 
   // Tracking for deduplication by shortcode and title-slug
@@ -138,6 +151,9 @@ export function getRealContentItems(
       if (item.postUrl && !existing.postUrl) {
         existing.postUrl = item.postUrl;
       }
+      if (item.isPinned) {
+        existing.isPinned = true;
+      }
 
       existing.engagementRate = existing.reach > 0
         ? parseFloat((((existing.likes + existing.comments + existing.shares + existing.saves) / existing.reach) * 100).toFixed(1))
@@ -172,6 +188,7 @@ export function getRealContentItems(
       pic: "Amanda",
       postUrl: "https://www.instagram.com/lunareyewear.co/reel/LNR_Viral01/",
       format: "reels" as ContentFormat,
+      isPinned: true,
     },
     {
       code: "DZw2oUzTuEs",
@@ -188,6 +205,7 @@ export function getRealContentItems(
       pic: "Amanda",
       postUrl: "https://www.instagram.com/reel/DZw2oUzTuEs/",
       format: "reels" as ContentFormat,
+      isPinned: true,
     },
     {
       code: "LNR_Silinder03",
@@ -204,6 +222,7 @@ export function getRealContentItems(
       pic: "Amanda",
       postUrl: "https://www.instagram.com/lunareyewear.co/reel/LNR_Silinder03/",
       format: "reels" as ContentFormat,
+      isPinned: true,
     },
     {
       code: "DebgiZ5Tb5T",
@@ -728,7 +747,7 @@ export function getRealContentItems(
   ];
 
   verifiedReels.forEach((r) => {
-    if (!isEligibleDate(r.publishDate)) return;
+    if (!isEligibleForPeriod(r.publishDate, period, (r as any).isPinned)) return;
     const liveData = liveMap.get(r.code);
 
     const reach = liveData && Number(liveData.viewers) > r.reach ? Number(liveData.viewers) : r.reach;
@@ -766,6 +785,7 @@ export function getRealContentItems(
       branchKey: r.branchKey,
       pic: r.pic,
       postUrl: r.postUrl,
+      isPinned: (r as any).isPinned || false,
     });
   });
 
@@ -962,7 +982,7 @@ export function getRealContentItems(
   ];
 
   verifiedCarousels.forEach((c) => {
-    if (!isEligibleDate(c.publishDate)) return;
+    if (!isEligibleForPeriod(c.publishDate, period)) return;
     const liveData = liveMap.get(c.code);
 
     const likes = liveData && Number(liveData.likes) > c.likes ? Number(liveData.likes) : c.likes;
@@ -1107,7 +1127,7 @@ export function getRealContentItems(
   ];
 
   verifiedFeedSingles.forEach((f) => {
-    if (!isEligibleDate(f.publishDate)) return;
+    if (!isEligibleForPeriod(f.publishDate, period)) return;
     const liveData = liveMap.get(f.code);
 
     const likes = liveData && Number(liveData.likes) > f.likes ? Number(liveData.likes) : f.likes;
@@ -1159,7 +1179,7 @@ export function getRealContentItems(
     list.forEach((r) => {
       if (r.isDayOff) return;
       const dateStr = r.uploadDate || r.reportDate || "";
-      if (!isEligibleDate(dateStr)) return;
+      if (!isEligibleForPeriod(dateStr, period)) return;
 
       // 1. Process Reel Link
       const rawReel = (r.reelsLink || "").trim();

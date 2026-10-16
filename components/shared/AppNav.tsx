@@ -28,6 +28,8 @@ import {
 } from "lucide-react";
 import { ThemeToggle } from "@/components/shared/ThemeToggle";
 
+import { useBranch } from "@/context/BranchContext";
+
 interface NavItem {
   label: string;
   href: string;
@@ -48,6 +50,8 @@ const NAV_CATEGORIES: NavCategory[] = [
       { label: "Dashboard", href: "/dashboard", icon: LayoutGrid },
       { label: "Spreadsheet", href: "/spreadsheet", icon: Table2 },
       { label: "Analytics", href: "/analytics", icon: BarChart2 },
+      { label: "Finance 🔒", href: "/finance", icon: Wallet, isLocked: true },
+      { label: "Report Eksekutif 🔒", href: "/reports", icon: ClipboardCheck, isLocked: true },
     ],
   },
   {
@@ -74,63 +78,12 @@ const NAV_CATEGORIES: NavCategory[] = [
   },
 ];
 
-const BRANCH_OPTIONS = [
-  { id: "all", label: "Semua Cabang (5)", code: "ALL" },
-  { id: "pwt", label: "Purwokerto Pusat", code: "PWT" },
-  { id: "pbg", label: "Purbalingga", code: "PBG" },
-  { id: "clp", label: "Cilacap", code: "CLP" },
-  { id: "wns", label: "Wonosobo", code: "WNS" },
-  { id: "tgl", label: "Lunar Tegal", code: "TGL" },
-];
-
 export const AppNav: React.FC = () => {
   const pathname = usePathname();
   const router = useRouter();
-  const searchParams = useSearchParams();
+  const { selectedBranchId, setSelectedBranchId, branches } = useBranch();
 
-  const [activeBranch, setActiveBranch] = useState<string>("all");
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [activeCategoryTab, setActiveCategoryTab] = useState<number>(0);
-
-  // Sync active branch from URL query param or localStorage
-  useEffect(() => {
-    const urlBranch = searchParams?.get("branch");
-    if (urlBranch && BRANCH_OPTIONS.some((b) => b.id === urlBranch)) {
-      setActiveBranch(urlBranch);
-      try {
-        localStorage.setItem("isy_active_branch", urlBranch);
-      } catch {
-        // ignore
-      }
-    } else {
-      try {
-        const saved = localStorage.getItem("isy_active_branch");
-        if (saved && BRANCH_OPTIONS.some((b) => b.id === saved)) {
-          setActiveBranch(saved);
-        }
-      } catch {
-        // ignore
-      }
-    }
-  }, [searchParams]);
-
-  // Handle branch switch
-  const handleBranchChange = (newBranch: string) => {
-    setActiveBranch(newBranch);
-    try {
-      localStorage.setItem("isy_active_branch", newBranch);
-    } catch {
-      // ignore
-    }
-    const currentParams = new URLSearchParams(searchParams?.toString() || "");
-    if (newBranch === "all") {
-      currentParams.delete("branch");
-    } else {
-      currentParams.set("branch", newBranch);
-    }
-    const query = currentParams.toString() ? `?${currentParams.toString()}` : "";
-    router.push(`${pathname}${query}`);
-  };
 
   const openCommandPalette = () => {
     window.dispatchEvent(new CustomEvent("open-command-palette"));
@@ -139,6 +92,9 @@ export const AppNav: React.FC = () => {
   const isCurrentActive = (href: string) => {
     if (href === "/dashboard") {
       return pathname === "/dashboard" || pathname === "/";
+    }
+    if (href === "/reports") {
+      return pathname === "/reports" || pathname === "/report";
     }
     return pathname.startsWith(href);
   };
@@ -194,11 +150,11 @@ export const AppNav: React.FC = () => {
               <div className="hidden sm:flex items-center gap-1.5 ml-2 bg-[#F3EFE6] dark:bg-[#14221C] px-2.5 py-1 rounded-full border border-[#124734]/15">
                 <Building2 className="w-3.5 h-3.5 text-[#124734] dark:text-emerald-400" />
                 <select
-                  value={activeBranch}
-                  onChange={(e) => handleBranchChange(e.target.value)}
+                  value={selectedBranchId}
+                  onChange={(e) => setSelectedBranchId(e.target.value)}
                   className="bg-transparent text-xs font-bold text-[#183C30] dark:text-emerald-200 focus:outline-none cursor-pointer pr-1"
                 >
-                  {BRANCH_OPTIONS.map((b) => (
+                  {branches.map((b) => (
                     <option key={b.id} value={b.id} className="text-black bg-white">
                       {b.label}
                     </option>
@@ -228,7 +184,7 @@ export const AppNav: React.FC = () => {
                     </div>
 
                     {/* Dropdown Menu on Hover */}
-                    <div className="absolute top-full left-0 mt-1.5 w-48 bg-white dark:bg-[#14221C] rounded-2xl shadow-xl border border-[#124734]/15 dark:border-[#124734]/30 p-2 hidden group-hover:block animate-in fade-in slide-in-from-top-1 z-50">
+                    <div className="absolute top-full left-0 mt-1.5 w-52 bg-white dark:bg-[#14221C] rounded-2xl shadow-xl border border-[#124734]/15 dark:border-[#124734]/30 p-2 hidden group-hover:block animate-in fade-in slide-in-from-top-1 z-50">
                       <div className="text-[10px] font-bold uppercase tracking-wider text-[#5C6B64] px-2.5 py-1 mb-1 border-b border-[#124734]/10">
                         {cat.title}
                       </div>
@@ -238,15 +194,20 @@ export const AppNav: React.FC = () => {
                         return (
                           <Link
                             key={item.href}
-                            href={`${item.href}${activeBranch !== "all" ? `?branch=${activeBranch}` : ""}`}
-                            className={`flex items-center gap-2 px-2.5 py-2 rounded-xl text-xs font-medium transition-colors ${
+                            href={`${item.href}${selectedBranchId !== "all" ? `?branch=${selectedBranchId}` : ""}`}
+                            className={`flex items-center justify-between px-2.5 py-2 rounded-xl text-xs font-medium transition-colors ${
                               active
                                 ? "bg-[#124734] text-white font-bold"
                                 : "text-[#2D3A34] dark:text-emerald-100 hover:bg-[#F3EFE6] dark:hover:bg-[#1B2D26]"
                             }`}
                           >
-                            <Icon className="w-3.5 h-3.5 shrink-0 opacity-80" />
-                            <span>{item.label}</span>
+                            <div className="flex items-center gap-2">
+                              <Icon className="w-3.5 h-3.5 shrink-0 opacity-80" />
+                              <span>{item.label}</span>
+                            </div>
+                            {item.isLocked && (
+                              <Lock className="w-3 h-3 text-amber-500 opacity-90" />
+                            )}
                           </Link>
                         );
                       })}
@@ -254,6 +215,20 @@ export const AppNav: React.FC = () => {
                   </div>
                 );
               })}
+
+              {/* Dedicated Finance & Report Quick Pill (🔒) */}
+              <Link
+                href={`/finance${selectedBranchId !== "all" ? `?branch=${selectedBranchId}` : ""}`}
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition-colors ${
+                  pathname === "/finance" || pathname === "/reports" || pathname === "/report"
+                    ? "bg-amber-600 text-white shadow-xs"
+                    : "text-amber-800 dark:text-amber-300 bg-amber-500/15 dark:bg-amber-950/40 border border-amber-500/25 hover:bg-amber-500/25"
+                }`}
+                title="Buka Halaman Keuangan & Laporan Eksekutif (Memerlukan Password)"
+              >
+                <Lock className="w-3.5 h-3.5" />
+                <span>Finance &amp; Report 🔒</span>
+              </Link>
 
               {/* Proposal Sponsor Direct Link */}
               <Link
@@ -351,16 +326,16 @@ export const AppNav: React.FC = () => {
                   Fokus Cabang Aktif:
                 </label>
                 <div className="grid grid-cols-2 gap-1.5">
-                  {BRANCH_OPTIONS.map((b) => (
+                  {branches.map((b) => (
                     <button
                       key={b.id}
                       type="button"
                       onClick={() => {
-                        handleBranchChange(b.id);
+                        setSelectedBranchId(b.id);
                         setIsDrawerOpen(false);
                       }}
                       className={`p-2 rounded-xl text-xs font-semibold text-left transition-colors ${
-                        activeBranch === b.id
+                        selectedBranchId === b.id
                           ? "bg-[#124734] text-white"
                           : "bg-[#F8F5ED] dark:bg-[#1B2D26] text-[#2D3A34] dark:text-emerald-100 hover:bg-[#F3EFE6]"
                       }`}
@@ -386,16 +361,21 @@ export const AppNav: React.FC = () => {
                         return (
                           <Link
                             key={item.href}
-                            href={`${item.href}${activeBranch !== "all" ? `?branch=${activeBranch}` : ""}`}
+                            href={`${item.href}${selectedBranchId !== "all" ? `?branch=${selectedBranchId}` : ""}`}
                             onClick={() => setIsDrawerOpen(false)}
-                            className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors ${
+                            className={`flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition-colors ${
                               active
                                 ? "bg-[#124734] text-white shadow-xs"
                                 : "text-[#2D3A34] dark:text-emerald-100 hover:bg-white dark:hover:bg-[#14221C]"
                             }`}
                           >
-                            <Icon className="w-4 h-4 opacity-80" />
-                            <span>{item.label}</span>
+                            <div className="flex items-center gap-3">
+                              <Icon className="w-4 h-4 opacity-80" />
+                              <span>{item.label}</span>
+                            </div>
+                            {item.isLocked && (
+                              <Lock className="w-3.5 h-3.5 text-amber-500" />
+                            )}
                           </Link>
                         );
                       })}
@@ -404,10 +384,18 @@ export const AppNav: React.FC = () => {
                 ))}
 
                 {/* Additional Links in Drawer */}
-                <div className="pt-2 border-t border-[#124734]/15">
+                <div className="pt-2 border-t border-[#124734]/15 space-y-1.5">
                   <span className="text-[10px] font-bold uppercase tracking-wider text-[#5C6B64] block mb-1.5 px-2">
                     Dokumen & Eksternal
                   </span>
+                  <Link
+                    href={`/finance${selectedBranchId !== "all" ? `?branch=${selectedBranchId}` : ""}`}
+                    onClick={() => setIsDrawerOpen(false)}
+                    className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold text-amber-900 dark:text-amber-300 bg-amber-500/15 dark:bg-amber-950/40 border border-amber-500/20"
+                  >
+                    <Lock className="w-4 h-4" />
+                    <span>Finance &amp; Report Eksekutif 🔒</span>
+                  </Link>
                   <Link
                     href="/proposal-sponsor"
                     onClick={() => setIsDrawerOpen(false)}
@@ -454,7 +442,7 @@ export const AppNav: React.FC = () => {
             return (
               <Link
                 key={item.href}
-                href={`${item.href}${activeBranch !== "all" ? `?branch=${activeBranch}` : ""}`}
+                href={`${item.href}${selectedBranchId !== "all" ? `?branch=${selectedBranchId}` : ""}`}
                 className={`flex flex-col items-center justify-center py-1 rounded-xl text-[10px] font-semibold transition-colors ${
                   active
                     ? "text-[#124734] dark:text-emerald-300 bg-[#124734]/12 dark:bg-emerald-950/60 font-bold"

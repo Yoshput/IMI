@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useMemo, useEffect } from "react";
-import { getRealContentItems } from "@/lib/real-content-items";
+import { getRealContentItems, ContentPeriod } from "@/lib/real-content-items";
 import { DominantPerformer } from "./DominantPerformer";
 import { ContentFilterToolbar, FormatCounts } from "./ContentFilterToolbar";
 import { RankedContentTable } from "./RankedContentTable";
@@ -9,11 +9,14 @@ import { StateRenderer } from "@/components/shared/StateRenderer";
 import { RefreshCw, ExternalLink, ShieldCheck, Download, CheckCircle2, AlertCircle } from "lucide-react";
 import { DevStateSwitcher } from "@/components/shared/DevStateSwitcher";
 import { downloadCSV } from "@/lib/export-csv";
+import { useBranch } from "@/context/BranchContext";
+import { matchesBranch } from "@/lib/branch-accounts";
 
 export const ContentView: React.FC = () => {
+  const { selectedBranchId, setSelectedBranchId } = useBranch();
   const [viewState, setViewState] = useState<"success" | "loading" | "empty" | "error">("success");
-  const [period, setPeriod] = useState<"weekly" | "monthly">("weekly");
-  const [activeBranch, setActiveBranch] = useState<string>("all");
+  const [period, setPeriod] = useState<ContentPeriod>("weekly");
+  const [activeBranch, setActiveBranch] = useState<string>(selectedBranchId);
   const [activeFormat, setActiveFormat] = useState<string>("all");
   const [sortBy, setSortBy] = useState<"reach" | "likes" | "engagement" | "rank">("reach");
   const [contentList, setContentList] = useState(() => getRealContentItems(undefined, "weekly"));
@@ -22,8 +25,18 @@ export const ContentView: React.FC = () => {
   const [syncError, setSyncError] = useState<string | null>(null);
   const [lastSyncTime, setLastSyncTime] = useState<string | null>(null);
 
+  // Synchronize local activeBranch when global selectedBranchId changes
+  useEffect(() => {
+    setActiveBranch(selectedBranchId);
+  }, [selectedBranchId]);
+
+  const handleBranchSelect = (branch: string) => {
+    setActiveBranch(branch);
+    setSelectedBranchId(branch as any);
+  };
+
   // Fetch live metrics on mount and when period changes
-  const loadData = async (targetPeriod: "weekly" | "monthly") => {
+  const loadData = async (targetPeriod: ContentPeriod) => {
     try {
       const res = await fetch(`/api/content-items?period=${targetPeriod}`);
       const data = await res.json();
@@ -45,7 +58,7 @@ export const ContentView: React.FC = () => {
     return () => clearInterval(interval);
   }, [period]);
 
-  const handlePeriodChange = (newPeriod: "weekly" | "monthly") => {
+  const handlePeriodChange = (newPeriod: ContentPeriod) => {
     setPeriod(newPeriod);
   };
 
@@ -55,7 +68,11 @@ export const ContentView: React.FC = () => {
 
     // Filter by branch (4 Optik I See You + 1 Lunar Tegal)
     if (activeBranch !== "all") {
-      items = items.filter((item) => item.branchKey === activeBranch);
+      items = items.filter(
+        (item) =>
+          matchesBranch(item.branchKey || "", activeBranch) ||
+          matchesBranch(item.branchName || "", activeBranch)
+      );
     }
 
     // Filter by format (reels | carousel | feed)
@@ -80,7 +97,14 @@ export const ContentView: React.FC = () => {
 
   // Dynamic format counters relative to branch filter
   const formatCounts: FormatCounts = useMemo(() => {
-    const branchFiltered = activeBranch === "all" ? contentList : contentList.filter((it) => it.branchKey === activeBranch);
+    const branchFiltered =
+      activeBranch === "all"
+        ? contentList
+        : contentList.filter(
+            (it) =>
+              matchesBranch(it.branchKey || "", activeBranch) ||
+              matchesBranch(it.branchName || "", activeBranch)
+          );
     return {
       all: branchFiltered.length,
       reels: branchFiltered.filter((it) => it.format === "reels").length,
@@ -238,7 +262,7 @@ export const ContentView: React.FC = () => {
         emptyDescription="Tidak ada data konten yang cocok dengan filter cabang atau format yang dipilih."
         emptyActionLabel="Reset Filter"
         onEmptyAction={() => {
-          setActiveBranch("all");
+          handleBranchSelect("all");
           setActiveFormat("all");
         }}
       >
@@ -251,7 +275,11 @@ export const ContentView: React.FC = () => {
             <h3 className="heading-section text-foreground flex items-center gap-2">
               <span>
                 Daftar Seluruh Konten &amp; Ranking Bukti (
-                {period === "weekly" ? "Mingguan · Konten Terbaru (6 - 16 Okt 2026)" : "Bulanan · Rekap September - Oktober 2026 & All-Time"}
+                {period === "weekly"
+                  ? "Mingguan · Konten Minggu Ini (6 - 16 Okt 2026)"
+                  : period === "monthly"
+                  ? "Bulanan · Rekap September - Oktober 2026"
+                  : "Semua Waktu · All-Time & Rekor Viral"}
                 )
               </span>
               <span className="text-xs font-normal text-foreground-secondary">
@@ -264,7 +292,7 @@ export const ContentView: React.FC = () => {
             period={period}
             onPeriodChange={handlePeriodChange}
             activeBranch={activeBranch}
-            onBranchChange={setActiveBranch}
+            onBranchChange={handleBranchSelect}
             activeFormat={activeFormat}
             onFormatChange={setActiveFormat}
             sortBy={sortBy}

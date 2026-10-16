@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getRealContentItems } from "@/lib/real-content-items";
+import { getRealContentItems, ContentPeriod } from "@/lib/real-content-items";
 import {
   getCachedInstagramData,
   saveCachedInstagramData,
@@ -14,7 +14,7 @@ export const revalidate = 0;
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
-    const period = (searchParams.get("period") || "weekly") as "weekly" | "monthly";
+    const period = (searchParams.get("period") || "weekly") as ContentPeriod;
     const cache = getCachedInstagramData();
     const items = getRealContentItems(cache, period);
 
@@ -41,7 +41,7 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json().catch(() => ({}));
-    const period = (body.period || "weekly") as "weekly" | "monthly";
+    const period = (body.period || "weekly") as ContentPeriod;
     const refreshLive = Boolean(body.refreshLive);
 
     const cache = getCachedInstagramData();

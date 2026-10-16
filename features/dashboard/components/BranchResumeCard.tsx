@@ -16,6 +16,7 @@ import {
   RefreshCw,
 } from "lucide-react";
 import { TIKTOK_BRANCH_REGISTRY, TikTokBranchData } from "@/lib/tiktok-accounts";
+import { useBranch } from "@/context/BranchContext";
 
 interface BranchResumeCardProps {
   initialBranchId?: string;
@@ -24,8 +25,29 @@ interface BranchResumeCardProps {
 export const BranchResumeCard: React.FC<BranchResumeCardProps> = ({
   initialBranchId = "all",
 }) => {
+  const { selectedBranchId, setSelectedBranchId } = useBranch();
   const [selectedBranch, setSelectedBranch] = useState<string>(initialBranchId);
   const [branches, setBranches] = useState<TikTokBranchData[]>(TIKTOK_BRANCH_REGISTRY);
+
+  // Sync with global branch selection
+  useEffect(() => {
+    if (selectedBranchId === "all") setSelectedBranch("all");
+    else if (selectedBranchId === "purwokerto") setSelectedBranch("pwt");
+    else if (selectedBranchId === "purbalingga") setSelectedBranch("pbg");
+    else if (selectedBranchId === "cilacap") setSelectedBranch("clp");
+    else if (selectedBranchId === "wonosobo") setSelectedBranch("wns");
+    else if (selectedBranchId === "lunar_tegal") setSelectedBranch("tgl");
+  }, [selectedBranchId]);
+
+  const handleSelectTab = (tabId: string) => {
+    setSelectedBranch(tabId);
+    if (tabId === "all") setSelectedBranchId("all");
+    else if (tabId === "pwt") setSelectedBranchId("purwokerto");
+    else if (tabId === "pbg") setSelectedBranchId("purbalingga");
+    else if (tabId === "clp") setSelectedBranchId("cilacap");
+    else if (tabId === "wns") setSelectedBranchId("wonosobo");
+    else if (tabId === "tgl") setSelectedBranchId("lunar_tegal");
+  };
 
   // Web metrics per branch, default calibrated + updated dynamically from /api/track-event & /api/sync-sheets
   const [branchWebMetrics, setBranchWebMetrics] = useState<
@@ -133,8 +155,8 @@ export const BranchResumeCard: React.FC<BranchResumeCardProps> = ({
         {/* Branch Filter Tabs */}
         <div className="flex items-center gap-1 p-1 bg-surface-secondary rounded-xl border border-border overflow-x-auto max-w-full">
           <button
-            onClick={() => setSelectedBranch("all")}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all ${
+            onClick={() => handleSelectTab("all")}
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
               selectedBranch === "all"
                 ? "bg-foreground text-surface shadow-subtle"
                 : "text-foreground-secondary hover:text-foreground"
@@ -145,8 +167,8 @@ export const BranchResumeCard: React.FC<BranchResumeCardProps> = ({
           {branches.map((b) => (
             <button
               key={b.branchId}
-              onClick={() => setSelectedBranch(b.branchId)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all ${
+              onClick={() => handleSelectTab(b.branchId)}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all cursor-pointer ${
                 selectedBranch === b.branchId
                   ? "bg-foreground text-surface shadow-subtle"
                   : "text-foreground-secondary hover:text-foreground"

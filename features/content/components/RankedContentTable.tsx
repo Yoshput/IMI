@@ -111,7 +111,12 @@ export const RankedContentTable: React.FC<RankedContentTableProps> = ({ items })
                           {item.category}
                         </span>
                         <span>·</span>
-                        <span>{item.publishDate}</span>
+                        <span className="font-mono">{item.publishDate}</span>
+                        {item.isPinned && (
+                          <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded bg-amber-500/15 text-amber-700 dark:text-amber-400 font-bold text-[10px] border border-amber-500/30">
+                            📌 Pinned / Rekor All-Time
+                          </span>
+                        )}
                       </div>
                     </div>
                   </div>

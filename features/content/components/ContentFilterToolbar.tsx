@@ -1,7 +1,9 @@
 "use client";
 
 import React from "react";
-import { Calendar, Clock, Filter, Building2 } from "lucide-react";
+import { Calendar, Clock, Filter, Building2, Sparkles } from "lucide-react";
+import { ContentPeriod } from "@/lib/real-content-items";
+import { normalizeBranchId } from "@/lib/branch-accounts";
 
 export interface FormatCounts {
   all: number;
@@ -11,8 +13,8 @@ export interface FormatCounts {
 }
 
 interface ContentFilterToolbarProps {
-  period: "weekly" | "monthly";
-  onPeriodChange: (period: "weekly" | "monthly") => void;
+  period: ContentPeriod;
+  onPeriodChange: (period: ContentPeriod) => void;
   activeBranch: string;
   onBranchChange: (branch: string) => void;
   activeFormat: string;
@@ -35,13 +37,15 @@ export const ContentFilterToolbar: React.FC<ContentFilterToolbarProps> = ({
   totalCount,
   formatCounts,
 }) => {
+  const normalizedActiveBranch = normalizeBranchId(activeBranch);
+
   const branches = [
     { label: "Semua Cabang (5 Cabang)", value: "all" },
-    { label: "Purwokerto (Pusat)", value: "pwt" },
-    { label: "Purbalingga", value: "pbg" },
-    { label: "Cilacap", value: "clp" },
-    { label: "Wonosobo", value: "wns" },
-    { label: "Lunar Tegal (Second Brand)", value: "tgl" },
+    { label: "Purwokerto (Pusat)", value: "purwokerto" },
+    { label: "Purbalingga", value: "purbalingga" },
+    { label: "Cilacap", value: "cilacap" },
+    { label: "Wonosobo", value: "wonosobo" },
+    { label: "Lunar Tegal (Second Brand)", value: "lunar_tegal" },
   ];
 
   const formats = [
@@ -53,31 +57,45 @@ export const ContentFilterToolbar: React.FC<ContentFilterToolbarProps> = ({
 
   return (
     <div className="space-y-3 pb-4 mb-4 border-b border-border text-xs">
-      {/* Row 1: Period Toggle (Mingguan vs Bulanan) & Sorting */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-surface-secondary/60 p-2.5 rounded-control border border-border">
-        {/* Segmented Period Control */}
-        <div className="flex items-center gap-1 bg-surface p-1 rounded-control border border-border shadow-2xs">
+      {/* Row 1: Period Toggle (Mingguan, Bulanan, Semua Waktu) & Sorting */}
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 bg-surface-secondary/60 p-2.5 rounded-control border border-border">
+        {/* Segmented 3-Period Control */}
+        <div className="flex flex-wrap items-center gap-1 bg-surface p-1 rounded-control border border-border shadow-2xs">
           <button
+            type="button"
             onClick={() => onPeriodChange("weekly")}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-control font-semibold transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-control font-semibold transition-all cursor-pointer ${
               period === "weekly"
                 ? "bg-brand text-white shadow-subtle"
                 : "text-foreground-secondary hover:text-foreground"
             }`}
           >
             <Clock className="w-3.5 h-3.5" />
-            <span>Mingguan (Terbaru · 6 - 16 Okt 2026)</span>
+            <span>Mingguan (Minggu Ini · 7 Hari Terakhir)</span>
           </button>
           <button
+            type="button"
             onClick={() => onPeriodChange("monthly")}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-control font-semibold transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-control font-semibold transition-all cursor-pointer ${
               period === "monthly"
                 ? "bg-brand text-white shadow-subtle"
                 : "text-foreground-secondary hover:text-foreground"
             }`}
           >
             <Calendar className="w-3.5 h-3.5" />
-            <span>Bulanan (September - Oktober 2026 & All-Time)</span>
+            <span>Bulanan (September – Oktober 2026)</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => onPeriodChange("all_time")}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-control font-semibold transition-all cursor-pointer ${
+              period === "all_time"
+                ? "bg-brand text-white shadow-subtle"
+                : "text-foreground-secondary hover:text-foreground"
+            }`}
+          >
+            <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+            <span>Semua Waktu (All-Time &amp; Pinned)</span>
           </button>
         </div>
 
@@ -112,9 +130,10 @@ export const ContentFilterToolbar: React.FC<ContentFilterToolbarProps> = ({
           {branches.map((b) => (
             <button
               key={b.value}
+              type="button"
               onClick={() => onBranchChange(b.value)}
-              className={`px-2.5 py-1 rounded-control font-medium whitespace-nowrap transition-colors ${
-                activeBranch === b.value
+              className={`px-2.5 py-1 rounded-control font-medium whitespace-nowrap transition-colors cursor-pointer ${
+                normalizedActiveBranch === b.value
                   ? "bg-foreground text-surface font-semibold shadow-2xs"
                   : "bg-surface text-foreground-secondary hover:text-foreground border border-border"
               }`}
@@ -133,8 +152,9 @@ export const ContentFilterToolbar: React.FC<ContentFilterToolbarProps> = ({
           {formats.map((f) => (
             <button
               key={f.value}
+              type="button"
               onClick={() => onFormatChange(f.value)}
-              className={`px-2.5 py-1 rounded-control font-medium whitespace-nowrap transition-colors flex items-center gap-1 ${
+              className={`px-2.5 py-1 rounded-control font-medium whitespace-nowrap transition-colors flex items-center gap-1 cursor-pointer ${
                 activeFormat === f.value
                   ? "bg-brand text-white font-semibold shadow-2xs"
                   : "bg-surface text-foreground-secondary hover:text-foreground border border-border"

@@ -5,6 +5,7 @@ import { AlertTriangle, CheckCircle2, RefreshCw, Clock, Users, ArrowRight, Exter
 import Link from "next/link";
 import realSheetsData from "@/lib/real-sheets-data.json";
 import { PicDetailModal, PicTrackerItem } from "./PicDetailModal";
+import { useBranch } from "@/context/BranchContext";
 
 interface PicStatus extends PicTrackerItem {}
 
@@ -19,6 +20,7 @@ export const PicSubmissionBanner: React.FC<PicSubmissionBannerProps> = ({
   lastSync = realSheetsData.syncTimestamp,
   onRefresh,
 }) => {
+  const { selectedBranchId, selectedBranchMeta, matchesCurrentBranch } = useBranch();
   const [currentTracker, setCurrentTracker] = useState<PicStatus[]>(picTracker);
   const [currentSyncTime, setCurrentSyncTime] = useState<string>(lastSync);
   const [sheetsData, setSheetsData] = useState<any>(realSheetsData);
@@ -43,8 +45,13 @@ export const PicSubmissionBanner: React.FC<PicSubmissionBannerProps> = ({
     };
   }, []);
 
-  const pendingPics = currentTracker.filter((p) => !p.isUpToDate);
-  const completedCount = currentTracker.length - pendingPics.length;
+  const visibleTracker = React.useMemo(() => {
+    if (selectedBranchId === "all") return currentTracker;
+    return currentTracker.filter((p) => matchesCurrentBranch(p.branch));
+  }, [currentTracker, selectedBranchId, matchesCurrentBranch]);
+
+  const pendingPics = visibleTracker.filter((p) => !p.isUpToDate);
+  const completedCount = visibleTracker.length - pendingPics.length;
 
   const handleSyncNow = async () => {
     setIsSyncing(true);
@@ -88,7 +95,7 @@ export const PicSubmissionBanner: React.FC<PicSubmissionBannerProps> = ({
           <div>
             <div className="flex items-center gap-2">
               <h3 className="text-xs font-bold uppercase tracking-wider text-foreground">
-                Pengingat Status Laporan 6 PIC Cabang
+                Pengingat Status Laporan {selectedBranchId === "all" ? "6 PIC Cabang" : `PIC ${selectedBranchMeta.city}`}
               </h3>
               <span
                 className={`text-[10px] font-bold px-2 py-0.2 rounded-full uppercase tracking-wider ${
@@ -97,7 +104,7 @@ export const PicSubmissionBanner: React.FC<PicSubmissionBannerProps> = ({
                     : "bg-emerald-100 text-emerald-900"
                 }`}
               >
-                {completedCount}/{currentTracker.length} PIC Up-to-date
+                {completedCount}/{visibleTracker.length} PIC Up-to-date
               </span>
             </div>
             <p className="text-xs text-foreground-secondary mt-0.5">
@@ -108,7 +115,10 @@ export const PicSubmissionBanner: React.FC<PicSubmissionBannerProps> = ({
                 </span>
               ) : (
                 <span className="text-emerald-800">
-                  Seluruh 6 PIC cabang telah tuntas mengisi laporan konten & story terbaru!
+                  {selectedBranchId === "all"
+                    ? "Seluruh 6 PIC cabang telah tuntas mengisi laporan konten & story terbaru!"
+                    : `Seluruh PIC cabang ${selectedBranchMeta.city} telah tuntas mengisi laporan!`
+                  }
                 </span>
               )}
             </p>
@@ -155,8 +165,16 @@ export const PicSubmissionBanner: React.FC<PicSubmissionBannerProps> = ({
       </div>
 
       {/* PIC Status Pills Bar */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
-        {currentTracker.map((p) => (
+      <div
+        className={`grid gap-2 ${
+          visibleTracker.length === 1
+            ? "grid-cols-1 max-w-xs"
+            : visibleTracker.length === 2
+            ? "grid-cols-2 max-w-md"
+            : "grid-cols-2 sm:grid-cols-3 lg:grid-cols-6"
+        }`}
+      >
+        {visibleTracker.map((p) => (
           <button
             key={p.sheetKey}
             type="button"
