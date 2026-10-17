@@ -84,6 +84,9 @@ export const AppNav: React.FC = () => {
   const { selectedBranchId, setSelectedBranchId, branches } = useBranch();
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [openCategory, setOpenCategory] = useState<string | null>(null);
+  const closeTimeoutRef = React.useRef<NodeJS.Timeout | null>(null);
+  const navRef = React.useRef<HTMLElement | null>(null);
 
   const openCommandPalette = () => {
     window.dispatchEvent(new CustomEvent("open-command-palette"));
@@ -99,10 +102,60 @@ export const AppNav: React.FC = () => {
     return pathname.startsWith(href);
   };
 
-  // Close drawer on path change
+  // Close drawer and dropdown on path change
   useEffect(() => {
     setIsDrawerOpen(false);
+    setOpenCategory(null);
   }, [pathname]);
+
+  // Click outside to dismiss dropdown and Escape key listener
+  useEffect(() => {
+    const handleOutsideClick = (e: MouseEvent) => {
+      if (navRef.current && !navRef.current.contains(e.target as Node)) {
+        setOpenCategory(null);
+      }
+    };
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpenCategory(null);
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+      document.removeEventListener("keydown", handleKeyDown);
+      if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
+    };
+  }, []);
+
+  const handleCategoryMouseEnter = (title: string) => {
+    if (closeTimeoutRef.current) {
+      clearTimeout(closeTimeoutRef.current);
+      closeTimeoutRef.current = null;
+    }
+    setOpenCategory(title);
+  };
+
+  const handleCategoryMouseLeave = () => {
+    if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
+    closeTimeoutRef.current = setTimeout(() => {
+      setOpenCategory(null);
+    }, 240); // 240ms safe hover buffer to prevent accidental dismiss
+  };
+
+  const handleDropdownMouseEnter = () => {
+    if (closeTimeoutRef.current) {
+      clearTimeout(closeTimeoutRef.current);
+      closeTimeoutRef.current = null;
+    }
+  };
+
+  const handleDropdownMouseLeave = () => {
+    if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
+    closeTimeoutRef.current = setTimeout(() => {
+      setOpenCategory(null);
+    }, 240);
+  };
 
   return (
     <>
@@ -165,52 +218,95 @@ export const AppNav: React.FC = () => {
 
             {/* Desktop Navigation: Grouped Categories (lg: and above) */}
             <nav
+              ref={navRef}
               aria-label="Navigasi Utama 4 Kategori"
               className="hidden lg:flex items-center gap-1 xl:gap-2"
             >
-              {NAV_CATEGORIES.map((cat, catIdx) => {
+              {NAV_CATEGORIES.map((cat) => {
                 const hasActiveChild = cat.items.some((item) => isCurrentActive(item.href));
+                const isOpen = openCategory === cat.title;
+
                 return (
-                  <div key={cat.title} className="relative group">
-                    <div
-                      className={`flex items-center gap-1 px-2.5 py-1.5 rounded-full text-xs font-semibold transition-colors cursor-pointer ${
+                  <div
+                    key={cat.title}
+                    className="relative"
+                    onMouseEnter={() => handleCategoryMouseEnter(cat.title)}
+                    onMouseLeave={handleCategoryMouseLeave}
+                  >
+                    <button
+                      type="button"
+                      onClick={() => setOpenCategory((prev) => (prev === cat.title ? null : cat.title))}
+                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition-all duration-150 cursor-pointer select-none ${
                         hasActiveChild
                           ? "bg-[#124734] text-white shadow-xs"
+                          : isOpen
+                          ? "bg-[#EAE5DA] dark:bg-[#1C2C24] text-[#124734] dark:text-emerald-300 ring-1 ring-[#124734]/20"
                           : "text-[#2D3A34] dark:text-emerald-100/80 hover:bg-[#F3EFE6] dark:hover:bg-[#14221C]"
                       }`}
                     >
                       <span>{cat.title}</span>
-                      <ChevronDown className="w-3 h-3 opacity-70 group-hover:rotate-180 transition-transform" />
-                    </div>
+                      <ChevronDown
+                        className={`w-3.5 h-3.5 transition-transform duration-200 ${
+                          isOpen ? "rotate-180 text-current" : "opacity-70"
+                        }`}
+                      />
+                    </button>
 
-                    {/* Dropdown Menu on Hover */}
-                    <div className="absolute top-full left-0 mt-1.5 w-52 bg-white dark:bg-[#14221C] rounded-2xl shadow-xl border border-[#124734]/15 dark:border-[#124734]/30 p-2 hidden group-hover:block animate-in fade-in slide-in-from-top-1 z-50">
-                      <div className="text-[10px] font-bold uppercase tracking-wider text-[#5C6B64] px-2.5 py-1 mb-1 border-b border-[#124734]/10">
-                        {cat.title}
+                    {/* Dropdown Menu on Hover / Click with Zero-Gap Bridge */}
+                    <div
+                      onMouseEnter={handleDropdownMouseEnter}
+                      onMouseLeave={handleDropdownMouseLeave}
+                      className={`absolute top-full left-0 pt-2 w-56 z-50 transition-all duration-200 ease-out origin-top ${
+                        isOpen
+                          ? "opacity-100 scale-100 translate-y-0 pointer-events-auto"
+                          : "opacity-0 scale-95 -translate-y-1 pointer-events-none"
+                      }`}
+                    >
+                      {/* Invisible hover bridge to eliminate any gap disconnection */}
+                      <div className="absolute -top-3 left-0 right-0 h-4 pointer-events-auto" />
+
+                      <div className="bg-white/95 dark:bg-[#14221C]/95 backdrop-blur-2xl rounded-2xl shadow-[0_12px_36px_-4px_rgba(0,0,0,0.14),0_2px_8px_rgba(0,0,0,0.06)] border border-[#124734]/15 dark:border-white/10 p-1.5 space-y-0.5">
+                        <div className="text-[10px] font-bold uppercase tracking-wider text-[#5C6B64] dark:text-emerald-400/80 px-2.5 py-1 mb-1 border-b border-[#124734]/10 dark:border-white/10 flex items-center justify-between">
+                          <span>{cat.title}</span>
+                          <span className="text-[9px] text-[#5C6B64]/70 dark:text-emerald-400/50 lowercase">
+                            {cat.items.length} menu
+                          </span>
+                        </div>
+                        {cat.items.map((item) => {
+                          const Icon = item.icon;
+                          const active = isCurrentActive(item.href);
+                          return (
+                            <Link
+                              key={item.href}
+                              href={`${item.href}${selectedBranchId !== "all" ? `?branch=${selectedBranchId}` : ""}`}
+                              onClick={() => setOpenCategory(null)}
+                              className={`group/item flex items-center justify-between px-2.5 py-2 rounded-xl text-xs font-semibold transition-all duration-150 ${
+                                active
+                                  ? "bg-[#124734] text-white shadow-xs"
+                                  : "text-[#2D3A34] dark:text-emerald-100 hover:bg-[#F3EFE6] dark:hover:bg-[#1B2D26] hover:text-[#124734] dark:hover:text-emerald-200"
+                              }`}
+                            >
+                              <div className="flex items-center gap-2.5">
+                                <div
+                                  className={`w-6 h-6 rounded-lg flex items-center justify-center transition-colors ${
+                                    active
+                                      ? "bg-white/20 text-white"
+                                      : "bg-[#124734]/5 dark:bg-white/5 text-[#124734] dark:text-emerald-400 group-hover/item:bg-[#124734]/15 dark:group-hover/item:bg-white/10"
+                                  }`}
+                                >
+                                  <Icon className="w-3.5 h-3.5 shrink-0" />
+                                </div>
+                                <span>{item.label}</span>
+                              </div>
+                              {item.isLocked && (
+                                <span className="flex items-center gap-1 text-[10px] px-1.5 py-0.5 rounded-md bg-amber-500/15 text-amber-700 dark:text-amber-400 font-bold border border-amber-500/20">
+                                  <Lock className="w-2.5 h-2.5" />
+                                </span>
+                              )}
+                            </Link>
+                          );
+                        })}
                       </div>
-                      {cat.items.map((item) => {
-                        const Icon = item.icon;
-                        const active = isCurrentActive(item.href);
-                        return (
-                          <Link
-                            key={item.href}
-                            href={`${item.href}${selectedBranchId !== "all" ? `?branch=${selectedBranchId}` : ""}`}
-                            className={`flex items-center justify-between px-2.5 py-2 rounded-xl text-xs font-medium transition-colors ${
-                              active
-                                ? "bg-[#124734] text-white font-bold"
-                                : "text-[#2D3A34] dark:text-emerald-100 hover:bg-[#F3EFE6] dark:hover:bg-[#1B2D26]"
-                            }`}
-                          >
-                            <div className="flex items-center gap-2">
-                              <Icon className="w-3.5 h-3.5 shrink-0 opacity-80" />
-                              <span>{item.label}</span>
-                            </div>
-                            {item.isLocked && (
-                              <Lock className="w-3 h-3 text-amber-500 opacity-90" />
-                            )}
-                          </Link>
-                        );
-                      })}
                     </div>
                   </div>
                 );

@@ -499,7 +499,7 @@ export const VenueDetailModal: React.FC<VenueDetailModalProps> = ({
                           <button
                             type="button"
                             onClick={() => setShowPhotoUploader(true)}
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-control bg-brand text-brand-contrast text-xs font-semibold hover:brightness-110"
+                            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-brand text-white text-xs font-semibold hover:bg-brand-hover transition-colors shadow-xs active:scale-95"
                           >
                             <Plus className="w-3.5 h-3.5" /> Unggah Foto Pertama
                           </button>

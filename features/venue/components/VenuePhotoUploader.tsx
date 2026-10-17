@@ -321,7 +321,7 @@ export const VenuePhotoUploader: React.FC<VenuePhotoUploaderProps> = ({
             <button
               type="submit"
               disabled={isUploading}
-              className="flex items-center gap-1.5 px-4 py-1.5 rounded-control bg-brand text-brand-contrast text-xs font-bold hover:brightness-110 transition-all disabled:opacity-50"
+              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-brand text-white text-xs font-bold hover:bg-brand-hover transition-all shadow-sm active:scale-95 disabled:opacity-50"
             >
               {isUploading ? (
                 <>

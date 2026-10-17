@@ -130,16 +130,16 @@ export const PicSubmissionBanner: React.FC<PicSubmissionBannerProps> = ({
           <button
             onClick={handleSyncNow}
             disabled={isSyncing}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-control bg-surface-secondary border border-border hover:bg-surface-subtle text-xs font-semibold text-foreground transition-colors shadow-2xs disabled:opacity-50"
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-[#124734] hover:bg-[#0E3829] dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white text-xs font-bold transition-all shadow-sm active:scale-95 disabled:opacity-50 cursor-pointer"
             title="Tarik data live terbaru dari Google Sheets"
           >
-            <RefreshCw className={`w-3.5 h-3.5 ${isSyncing ? "animate-spin text-brand" : "text-foreground-muted"}`} />
-            <span>{isSyncing ? "Menyinkronkan..." : "Sinkronkan Spreadsheet"}</span>
+            <RefreshCw className={`w-3.5 h-3.5 text-white ${isSyncing ? "animate-spin" : ""}`} />
+            <span className="text-white font-bold">{isSyncing ? "Menyinkronkan..." : "Sinkronkan Spreadsheet"}</span>
           </button>
 
           <Link
             href="/spreadsheet"
-            className="inline-flex items-center gap-1 px-3 py-1.5 rounded-control bg-brand text-white text-xs font-semibold hover:bg-brand-hover transition-colors shadow-subtle"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-surface border border-border text-foreground font-semibold text-xs hover:bg-surface-secondary hover:text-brand transition-all shadow-xs active:scale-95"
           >
             <span>Buka Rekap Lengkap</span>
             <ArrowRight className="w-3.5 h-3.5" />

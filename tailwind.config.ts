@@ -32,6 +32,7 @@ const config: Config = {
           hover: "rgb(var(--brand-hover) / <alpha-value>)",
           accent: "rgb(var(--brand-accent) / <alpha-value>)",
           accentLight: "rgb(var(--brand-accent-light) / <alpha-value>)",
+          contrast: "#ffffff",
         },
         status: {
           success: "#16A34A",
