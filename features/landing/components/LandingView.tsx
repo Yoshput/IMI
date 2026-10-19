@@ -138,6 +138,8 @@ const INITIAL_BRANCHES: BranchData[] = [
   },
 ];
 
+export const BRANCHES = INITIAL_BRANCHES;
+
 const TARGET_MODULES = [
   { id: '/dashboard', label: 'Dashboard Eksekutif', detail: 'Ringkasan KPI & 6 PIC' },
   { id: '/spreadsheet', label: 'Spreadsheet 6 PIC', detail: 'Sinkronisasi Sheets Harian' },
