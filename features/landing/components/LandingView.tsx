@@ -170,11 +170,14 @@ export function LandingView() {
   const [launcherModule, setLauncherModule] = useState<string>('/dashboard');
   const [rememberPreference, setRememberPreference] = useState<boolean>(true);
 
+  const [branches, setBranches] = useState<BranchData[]>(INITIAL_BRANCHES);
+  const [isLoadingLive, setIsLoadingLive] = useState<boolean>(true);
+
   // Initial load preference
   useEffect(() => {
     try {
       const saved = localStorage.getItem('isy_active_branch');
-      if (saved && BRANCHES.some((b) => b.id === saved)) {
+      if (saved && INITIAL_BRANCHES.some((b) => b.id === saved)) {
         setSelectedBranchId(saved);
         setLauncherBranch(saved);
       }
@@ -183,7 +186,173 @@ export function LandingView() {
     }
   }, []);
 
-  const currentBranch = BRANCHES.find((b) => b.id === selectedBranchId) || BRANCHES[0];
+  // Dynamic live sync from Google Sheets and Instagram endpoints
+  useEffect(() => {
+    let isMounted = true;
+    async function loadLiveMetrics() {
+      try {
+        setIsLoadingLive(true);
+        const [sheetsRes, igRes] = await Promise.allSettled([
+          fetch('/api/sync-sheets').then((r) => r.json()),
+          fetch('/api/instagram-realtime').then((r) => r.json()),
+        ]);
+
+        if (!isMounted) return;
+
+        let igAccounts: Record<string, any> = {};
+        if (igRes.status === 'fulfilled' && igRes.value?.success && igRes.value?.data?.accounts) {
+          igAccounts = igRes.value.data.accounts;
+        }
+
+        let branchReelsData: Record<string, any[]> = {};
+        let spreadsheetFollowers: Record<string, any> = {};
+        if (sheetsRes.status === 'fulfilled' && sheetsRes.value?.success && sheetsRes.value?.data) {
+          branchReelsData = sheetsRes.value.data.branchReels || {};
+          spreadsheetFollowers = sheetsRes.value.data.spreadsheetFollowersByBranch || {};
+          if (Object.keys(igAccounts).length === 0 && sheetsRes.value.data.executiveRecap?.liveFollowersByBranch) {
+            igAccounts = sheetsRes.value.data.executiveRecap.liveFollowersByBranch;
+          }
+        }
+
+        setBranches((prevBranches) => {
+          const branchIds = ['pwt', 'pbg', 'clp', 'wns', 'tgl'];
+          const metricsByBranch: Record<string, { followers: number; followersFormatted: string; reelsCount: number; er: string }> = {};
+
+          let totalFollowers = 0;
+          let totalReels = 0;
+          let totalLikes = 0;
+          let totalComments = 0;
+          let totalPostsWithMetrics = 0;
+
+          branchIds.forEach((bId) => {
+            const initial = INITIAL_BRANCHES.find((b) => b.id === bId);
+            const igKey = bId === 'tgl' ? (igAccounts['tgl'] ? 'tgl' : 'lunar') : bId;
+            const sheetKey = bId === 'pwt' ? 'purwokerto' : bId === 'pbg' ? 'purbalingga' : bId === 'clp' ? 'cilacap' : bId === 'wns' ? 'wonosobo' : 'lunar_tegal';
+
+            const igAcc = igAccounts[igKey];
+            const sFollowers = spreadsheetFollowers[sheetKey];
+            const reelsList = branchReelsData[sheetKey] || [];
+
+            let followersVal = initial?.followers || 0;
+            let followersFormatted = initial?.followersFormatted || '';
+
+            if (igAcc?.followers && igAcc.followers > 0) {
+              followersVal = igAcc.followers;
+              if (followersVal >= 10000) {
+                followersFormatted = `${(followersVal / 1000).toFixed(1)}K`;
+              } else if (followersVal >= 1000) {
+                followersFormatted = new Intl.NumberFormat('id-ID').format(followersVal);
+              } else {
+                followersFormatted = String(followersVal);
+              }
+            } else if (sFollowers?.instagram && sFollowers.instagram > 0) {
+              followersVal = sFollowers.instagram;
+              if (followersVal >= 10000) {
+                followersFormatted = `${(followersVal / 1000).toFixed(1)}K`;
+              } else if (followersVal >= 1000) {
+                followersFormatted = new Intl.NumberFormat('id-ID').format(followersVal);
+              } else {
+                followersFormatted = String(followersVal);
+              }
+            }
+
+            let reelsCount = initial?.reelsCount || 0;
+            if (reelsList.length > 0) {
+              reelsCount = reelsList.length;
+            }
+
+            let calculatedER = initial?.engagementRate || '8.0%';
+            if (reelsList.length > 0 && followersVal > 0) {
+              let branchLikes = 0;
+              let branchComments = 0;
+              let branchReelsWithMetrics = 0;
+              reelsList.forEach((r: any) => {
+                const likes = Number(r.likes) || 0;
+                const comments = Number(r.comments) || 0;
+                if (likes > 0 || comments > 0) {
+                  branchLikes += likes;
+                  branchComments += comments;
+                  branchReelsWithMetrics++;
+                  totalLikes += likes;
+                  totalComments += comments;
+                  totalPostsWithMetrics++;
+                }
+              });
+              if (branchReelsWithMetrics > 0) {
+                const avgEngagement = (branchLikes + branchComments) / branchReelsWithMetrics;
+                const erNum = (avgEngagement / followersVal) * 100;
+                if (erNum > 0 && erNum < 50) {
+                  calculatedER = `${erNum.toFixed(1)}%`;
+                }
+              }
+            }
+
+            totalFollowers += followersVal;
+            totalReels += reelsCount;
+
+            metricsByBranch[bId] = {
+              followers: followersVal,
+              followersFormatted,
+              reelsCount,
+              er: calculatedER,
+            };
+          });
+
+          let aggregateER = '8.5%';
+          if (totalFollowers > 0 && totalPostsWithMetrics > 0) {
+            const avgEng = (totalLikes + totalComments) / totalPostsWithMetrics;
+            const netER = (avgEng / totalFollowers) * 100;
+            if (netER > 0 && netER < 50) {
+              aggregateER = `${netER.toFixed(1)}%`;
+            }
+          }
+
+          const aggregateFollowers = totalFollowers > 0 ? totalFollowers : 344100;
+          const aggregateFollowersFormatted = new Intl.NumberFormat('id-ID').format(aggregateFollowers);
+          const aggregateReels = totalReels > 0 ? totalReels : 40;
+
+          return prevBranches.map((branch) => {
+            if (branch.id === 'all') {
+              return {
+                ...branch,
+                followers: aggregateFollowers,
+                followersFormatted: aggregateFollowersFormatted,
+                reelsCount: aggregateReels,
+                engagementRate: aggregateER,
+              };
+            }
+
+            const updated = metricsByBranch[branch.id];
+            if (updated) {
+              return {
+                ...branch,
+                followers: updated.followers,
+                followersFormatted: updated.followersFormatted,
+                reelsCount: updated.reelsCount,
+                engagementRate: updated.er,
+              };
+            }
+
+            return branch;
+          });
+        });
+      } catch (err) {
+        console.warn('Failed to load dynamic metrics for Landing Sandbox:', err);
+      } finally {
+        if (isMounted) {
+          setIsLoadingLive(false);
+        }
+      }
+    }
+
+    loadLiveMetrics();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const currentBranch = branches.find((b) => b.id === selectedBranchId) || branches[0];
 
   const handleLaunchSystem = (overrideBranch?: string, overrideModule?: string) => {
     const branchToUse = overrideBranch || launcherBranch;
@@ -302,7 +471,7 @@ export function LandingView() {
                 <span className="text-[11px] font-semibold text-[#5C6B64] uppercase tracking-wider mr-1">
                   Pilih Cabang:
                 </span>
-                {BRANCHES.map((branch) => {
+                {branches.map((branch) => {
                   const isSelected = branch.id === selectedBranchId;
                   return (
                     <button
@@ -345,8 +514,8 @@ export function LandingView() {
 
                 <div className="flex items-center gap-3">
                   <span className="text-[11px] font-semibold text-[#16A34A] bg-[#16A34A]/10 px-2.5 py-1 rounded-full flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#16A34A] animate-pulse" />
-                    Live Sandbox
+                    <span className={`w-1.5 h-1.5 rounded-full ${isLoadingLive ? 'bg-[#EAB308]' : 'bg-[#16A34A]'} animate-pulse`} />
+                    {isLoadingLive ? 'Sinkronisasi Live...' : 'Live Sandbox'}
                   </span>
                   <button
                     type="button"
@@ -365,9 +534,13 @@ export function LandingView() {
                     <Users className="w-3.5 h-3.5 text-[#124734]" /> Followers Jaringan
                   </span>
                   <div className="mt-1.5 flex items-baseline gap-2">
-                    <span className="text-2xl sm:text-3xl font-bold text-[#183C30] tabular-nums tracking-tight">
-                      {currentBranch.followersFormatted}
-                    </span>
+                    {isLoadingLive ? (
+                      <span className="inline-block h-8 w-24 bg-[#E5E0D5]/70 rounded-md animate-pulse my-0.5" />
+                    ) : (
+                      <span className="text-2xl sm:text-3xl font-bold text-[#183C30] tabular-nums tracking-tight">
+                        {currentBranch.followersFormatted}
+                      </span>
+                    )}
                     <span className="text-[11px] font-semibold text-[#16A34A]">
                       {currentBranch.growth}
                     </span>
@@ -382,9 +555,13 @@ export function LandingView() {
                     <Video className="w-3.5 h-3.5 text-[#124734]" /> Produksi Reels
                   </span>
                   <div className="mt-1.5 flex items-baseline gap-2">
-                    <span className="text-2xl sm:text-3xl font-bold text-[#183C30] tabular-nums tracking-tight">
-                      {currentBranch.reelsCount}
-                    </span>
+                    {isLoadingLive ? (
+                      <span className="inline-block h-8 w-14 bg-[#E5E0D5]/70 rounded-md animate-pulse my-0.5" />
+                    ) : (
+                      <span className="text-2xl sm:text-3xl font-bold text-[#183C30] tabular-nums tracking-tight">
+                        {currentBranch.reelsCount}
+                      </span>
+                    )}
                     <span className="text-[11px] text-[#5C6B64]">Reels terdata</span>
                   </div>
                   <span className="text-[11px] text-[#124734] font-medium block mt-0.5">
@@ -415,8 +592,8 @@ export function LandingView() {
                       {currentBranch.picName}
                     </span>
                   </div>
-                  <span className="text-[11px] text-[#5C6B64] block mt-1 font-medium truncate">
-                    {currentBranch.focus.slice(0, 36)}...
+                  <span className="text-[11px] text-[#5C6B64] block mt-1 font-medium line-clamp-2 leading-relaxed">
+                    {currentBranch.focus}
                   </span>
                 </div>
               </div>
@@ -457,7 +634,7 @@ export function LandingView() {
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-[#F3EFE6] p-4 rounded-2xl border border-[#124734]/10">
                       <div>
                         <span className="text-xs font-semibold text-[#124734] uppercase tracking-wider block">
-                          Evaluasi Siklus 8 · 2026
+                          Evaluasi {ACTIVE_MEETING_CYCLE.shortLabel} · 2026
                         </span>
                         <h4 className="text-base font-bold text-[#183C30] mt-0.5">
                           Progress Laporan 6 PIC & Sinkronisasi Sheets
@@ -903,7 +1080,7 @@ export function LandingView() {
                             Instagram Tracker Live
                           </span>
                           <span className="text-[#5C6B64]">
-                            Total 244.587 Followers (+1.482 Siklus 8)
+                            Total {branches[0]?.followersFormatted || '344.100'} Followers ({branches[0]?.growth || '+2.512 minggu ini'})
                           </span>
                         </div>
                         <span className="px-2.5 py-1 rounded-full bg-[#124734]/15 text-[#124734] font-bold text-[10px]">
@@ -1152,7 +1329,7 @@ export function LandingView() {
                       1. Pilih Fokus Wilayah Cabang:
                     </label>
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                      {BRANCHES.map((b) => (
+                      {branches.map((b) => (
                         <button
                           key={b.id}
                           type="button"
@@ -1244,7 +1421,7 @@ export function LandingView() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {BRANCHES.slice(1).map((branch) => (
+              {branches.slice(1).map((branch) => (
                 <div
                   key={branch.id}
                   className="bg-white rounded-3xl p-6 border border-[#124734]/15 shadow-sm hover:shadow-md hover:border-[#124734]/35 transition-all flex flex-col justify-between"
@@ -1325,18 +1502,22 @@ export function LandingView() {
                         Total Followers Media Sosial
                       </span>
                       <span className="text-2xl font-bold text-[#183C30] tabular-nums">
-                        244.587
+                        {branches[0]?.followersFormatted || '344.100'}
                       </span>
                     </div>
 
                     <div className="grid grid-cols-2 gap-2 text-xs">
                       <div className="p-2.5 bg-white rounded-xl border border-[#124734]/10">
                         <span className="text-[10px] text-[#5C6B64] block">Total Reels</span>
-                        <span className="font-bold text-[#183C30] tabular-nums">40 Konten</span>
+                        <span className="font-bold text-[#183C30] tabular-nums">
+                          {branches[0]?.reelsCount || 40} Konten
+                        </span>
                       </div>
                       <div className="p-2.5 bg-white rounded-xl border border-[#124734]/10">
                         <span className="text-[10px] text-[#5C6B64] block">PIC Terdata</span>
-                        <span className="font-bold text-[#183C30] tabular-nums">6 Penanggung Jawab</span>
+                        <span className="font-bold text-[#183C30] tabular-nums">
+                          {branches[0]?.picName || '6 Penanggung Jawab'}
+                        </span>
                       </div>
                     </div>
                   </div>
