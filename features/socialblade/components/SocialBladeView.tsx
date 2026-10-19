@@ -37,17 +37,24 @@ export const SocialBladeView: React.FC = () => {
   const [realtimeWebTraffic, setRealtimeWebTraffic] = useState<number>(1380);
   const [isLoadingRealtime, setIsLoadingRealtime] = useState<boolean>(false);
   const [lastRefreshedAt, setLastRefreshedAt] = useState<string>("");
+  const [liveAccounts, setLiveAccounts] = useState<Record<string, any>>({});
 
   const activeProfile: BranchSocialBladeProfile =
     SOCIAL_BLADE_DATA[selectedBranchKey] || SOCIAL_BLADE_DATA.PWT;
+
+  const liveAcc = liveAccounts[selectedBranchKey.toLowerCase()];
+  const displayFollowers = liveAcc?.followers || activeProfile.followers;
+  const displayFollowing = liveAcc?.following || activeProfile.following;
+  const displayMediaCount = liveAcc?.posts || activeProfile.mediaCount;
 
   // Live telemetry fetch
   const fetchLiveTelemetry = async () => {
     setIsLoadingRealtime(true);
     try {
-      const [resAntrian, resTraffic] = await Promise.all([
+      const [resAntrian, resTraffic, resIg] = await Promise.all([
         fetch("/api/track-event").then((r) => r.json()).catch(() => null),
         fetch("/api/traffic").then((r) => r.json()).catch(() => null),
+        fetch("/api/instagram-realtime").then((r) => r.json()).catch(() => null),
       ]);
 
       if (resAntrian?.success && resAntrian.data) {
@@ -59,6 +66,11 @@ export const SocialBladeView: React.FC = () => {
         const weeklySessions = resTraffic.data.weeklySessions || resTraffic.data.todaySessions * 4;
         if (weeklySessions) setRealtimeWebTraffic(weeklySessions);
       }
+
+      if (resIg?.success && resIg.data?.accounts) {
+        setLiveAccounts(resIg.data.accounts);
+      }
+
       setLastRefreshedAt(new Date().toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" }));
     } catch {
       // Keep calibrated fallback
@@ -239,19 +251,19 @@ export const SocialBladeView: React.FC = () => {
             <div className="text-center p-2 rounded-lg bg-surface-secondary/60 border border-border/60">
               <span className="text-[10px] uppercase font-bold text-foreground-secondary block">Followers</span>
               <span className="text-sm font-black text-foreground tabular-nums">
-                {activeProfile.followers.toLocaleString("id-ID")}
+                {displayFollowers.toLocaleString("id-ID")}
               </span>
             </div>
             <div className="text-center p-2 rounded-lg bg-surface-secondary/60 border border-border/60">
               <span className="text-[10px] uppercase font-bold text-foreground-secondary block">Following</span>
               <span className="text-sm font-black text-foreground tabular-nums">
-                {activeProfile.following}
+                {displayFollowing}
               </span>
             </div>
             <div className="text-center p-2 rounded-lg bg-surface-secondary/60 border border-border/60">
               <span className="text-[10px] uppercase font-bold text-foreground-secondary block">Media Count</span>
               <span className="text-sm font-black text-foreground tabular-nums">
-                {activeProfile.mediaCount.toLocaleString("id-ID")}
+                {displayMediaCount.toLocaleString("id-ID")}
               </span>
             </div>
             <div className="text-center p-2 rounded-lg bg-surface-secondary/60 border border-border/60">
