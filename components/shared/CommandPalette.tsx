@@ -28,6 +28,7 @@ import {
   Lock,
   User,
 } from 'lucide-react';
+import { ACTIVE_MEETING_CYCLE } from '@/lib/cadence-config';
 import { downloadCSV } from '@/lib/export-csv';
 import { exportWorkspaceBackup } from '@/lib/backup-service';
 import initialKolData from '@/lib/kol-data.json';
@@ -122,7 +123,7 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
   };
 
   const handleCopyDirectorReport = () => {
-    const text = `LAPORAN EVALUASI MINGGUAN DIREKSI - OPTIK I SEE YOU & LUNAR EYEWEAR\nPeriode: Siklus 8 (6–12 Oktober 2026)\n\n1. KONTEN & REACH:\n- Total 40 Konten Reels Terdata\n- 18 Reels Purwokerto, 7 Purbalingga, 6 Cilacap, 5 Wonosobo, 4 Tegal\n- Total Audience: 244.587 Followers (+1.482 minggu ini)\n\n2. REKAP PIC 5 CABANG:\n- Kepatuhan Laporan: 92% (5/6 PIC On-Schedule)\n\n3. AFTERSALES CRM:\n- Total 4.106 Pasang Kacamata Terdata\n- Bluray: 2.393 | Photocromic: 949 | Bluecromic: 764\n\n4. SPONSORSHIP B2B:\n- 11 Brand Leads Terhubung (Baby Glows, Navagreen, Inul Vizta, dll.)\n\nDashboard: https://iseeyou-marketing-intelligence.vercel.app/dashboard`;
+    const text = `LAPORAN EVALUASI MINGGUAN DIREKSI - OPTIK I SEE YOU & LUNAR EYEWEAR\nPeriode: ${ACTIVE_MEETING_CYCLE.label}\n\n1. KONTEN & REACH:\n- Total 40 Konten Reels Terdata\n- 18 Reels Purwokerto, 7 Purbalingga, 6 Cilacap, 5 Wonosobo, 4 Tegal\n- Total Audience: 244.587 Followers (+1.482 minggu ini)\n\n2. REKAP PIC 5 CABANG:\n- Kepatuhan Laporan: 92% (5/6 PIC On-Schedule)\n\n3. AFTERSALES CRM:\n- Total 4.106 Pasang Kacamata Terdata\n- Bluray: 2.393 | Photocromic: 949 | Bluecromic: 764\n\n4. SPONSORSHIP B2B:\n- 11 Brand Leads Terhubung (Baby Glows, Navagreen, Inul Vizta, dll.)\n\nDashboard: https://iseeyou-marketing-intelligence.vercel.app/dashboard`;
     navigator.clipboard.writeText(text);
     triggerToast('Ringkasan Evaluasi Direksi berhasil disalin!');
   };

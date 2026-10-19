@@ -3,9 +3,56 @@ import fs from "fs";
 import path from "path";
 import * as XLSX from "xlsx";
 import { getCachedInstagramData } from "@/lib/instagram-realtime";
+import { getWibToday, ACTIVE_MEETING_CYCLE } from "@/lib/cadence-config";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
+
+let memorySheetsData: any = null;
+const TMP_DATA_PATH = path.join("/tmp", "real-sheets-data.json");
+const LOCAL_DATA_PATH = path.join(process.cwd(), "lib/real-sheets-data.json");
+
+function saveSheetsData(data: any) {
+  memorySheetsData = data;
+  try {
+    const dir = path.dirname(LOCAL_DATA_PATH);
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(LOCAL_DATA_PATH, JSON.stringify(data, null, 2), "utf-8");
+  } catch {
+    // Read-only filesystem in Vercel lambda
+  }
+  try {
+    fs.writeFileSync(TMP_DATA_PATH, JSON.stringify(data, null, 2), "utf-8");
+  } catch {
+    // Fallback to memory
+  }
+}
+
+function loadCachedSheetsData(): { data: any; ageMs: number } | null {
+  if (memorySheetsData) {
+    const age = memorySheetsData.syncTimestamp ? Date.now() - new Date(memorySheetsData.syncTimestamp).getTime() : 0;
+    return { data: memorySheetsData, ageMs: Math.max(0, age) };
+  }
+  try {
+    if (fs.existsSync(TMP_DATA_PATH)) {
+      const raw = fs.readFileSync(TMP_DATA_PATH, "utf-8");
+      const data = JSON.parse(raw);
+      memorySheetsData = data;
+      const age = data.syncTimestamp ? Date.now() - new Date(data.syncTimestamp).getTime() : 0;
+      return { data, ageMs: Math.max(0, age) };
+    }
+  } catch {}
+  try {
+    if (fs.existsSync(LOCAL_DATA_PATH)) {
+      const raw = fs.readFileSync(LOCAL_DATA_PATH, "utf-8");
+      const data = JSON.parse(raw);
+      memorySheetsData = data;
+      const age = data.syncTimestamp ? Date.now() - new Date(data.syncTimestamp).getTime() : 0;
+      return { data, ageMs: Math.max(0, age) };
+    }
+  } catch {}
+  return null;
+}
 
 function parseExcelDate(serial: any): string | null {
   if (!serial) return null;
@@ -530,7 +577,7 @@ async function syncSpreadsheetData() {
     });
   });
 
-  const todayStr = new Date().toISOString().split("T")[0];
+  const todayStr = getWibToday();
   const picTracker = [
     { pic: "Nuha", role: "Rekap Story PWT", branch: "Purwokerto (Pusat)", sheetKey: "Rekap Story PWT", data: storyItems },
     { pic: "Ilya", role: "Rekap Reels PWT", branch: "Purwokerto (Pusat)", sheetKey: "Rekap PWT", data: allBranchReels["Rekap PWT"] || [] },
@@ -678,11 +725,25 @@ async function syncSpreadsheetData() {
     };
   };
 
+  const periodCycle10 = buildPeriodRecap(
+    "2026-10-20",
+    "2026-10-26",
+    "Selasa, 27 Oktober 2026 (Siklus 10 · 20–26 Okt)",
+    "Evaluasi Rapat Siklus 10 (27 Okt 2026)"
+  );
+
+  const periodCycle9 = buildPeriodRecap(
+    "2026-10-13",
+    "2026-10-19",
+    "Selasa, 20 Oktober 2026 (Siklus 9 · 13–19 Okt)",
+    "Evaluasi Rapat Terkini (Siklus 9 · 20 Okt 2026)"
+  );
+
   const periodCycle8 = buildPeriodRecap(
     "2026-10-06",
     "2026-10-12",
     "Selasa, 13 Oktober 2026 (Siklus 8 · 6–12 Okt)",
-    "Evaluasi Rapat Terkini (Siklus 8 · 13 Okt 2026)"
+    "Evaluasi Rapat Siklus 8 (13 Okt 2026)"
   );
 
   const periodCycle7 = buildPeriodRecap(
@@ -879,13 +940,15 @@ async function syncSpreadsheetData() {
   // Merge web proposals (placed first) with Google Sheet proposals, avoiding duplicates
   const combinedProposal = [...webProposals];
   for (const p of formProposal) {
-    const isDup = combinedProposal.some(
-      (w) =>
-        w.id === p.id ||
-        w.stableId === p.stableId ||
-        (w.eventName.toLowerCase() === p.eventName.toLowerCase() &&
-          w.applicantPhone.replace(/[^0-9]/g, "").slice(-8) === p.applicantPhone.replace(/[^0-9]/g, "").slice(-8))
-    );
+    const isDup = combinedProposal.some((w) => {
+      if (w.id === p.id || (w.stableId && w.stableId === p.stableId)) return true;
+      const nameW = String(w.eventName || "").trim().toLowerCase();
+      const nameP = String(p.eventName || "").trim().toLowerCase();
+      const phoneW = String(w.applicantPhone || "").replace(/[^0-9]/g, "");
+      const phoneP = String(p.applicantPhone || "").replace(/[^0-9]/g, "");
+      const validPhoneMatch = phoneW.length >= 6 && phoneP.length >= 6 && phoneW.slice(-8) === phoneP.slice(-8);
+      return nameW && nameP && nameW === nameP && validPhoneMatch;
+    });
     if (!isDup) {
       combinedProposal.push(p);
     }
@@ -935,7 +998,8 @@ async function syncSpreadsheetData() {
       formProposal: combinedProposal,
       formPengajuan: formPengajuan,
       executiveRecap: {
-        meetingTarget: "Rapat Evaluasi Mingguan (Selasa, 13 Oktober 2026)",
+        meetingTarget: "Rapat Evaluasi Mingguan (Selasa, 20 Oktober 2026)",
+        activeCycleId: "cycle-9",
         liveFollowersByBranch: igLiveCache?.accounts || null,
         spreadsheetFollowersByBranch: spreadsheetFollowersByBranch,
         igLiveCache: igLiveCache || null,
@@ -945,25 +1009,22 @@ async function syncSpreadsheetData() {
           tiktok: totalNetworkTT,
         },
         periods: {
+          cycle10: periodCycle10,
+          cycle9: periodCycle9,
           cycle8: periodCycle8,
           cycle7: periodCycle7,
           cycle6: periodCycle6,
           cycle5: periodCycle5,
           // Backward-compatibility keys for existing UI components:
-          currentMeeting: periodCycle8,
-          lastTuesday: periodCycle7,
-          nextTuesday: periodCycle6,
+          currentMeeting: periodCycle9,
+          lastTuesday: periodCycle8,
+          nextTuesday: periodCycle7,
         },
-        activePeriodKey: "cycle8",
+        activePeriodKey: "currentMeeting",
       },
     };
 
-  const outPath = path.join(process.cwd(), "lib/real-sheets-data.json");
-  try {
-    fs.writeFileSync(outPath, JSON.stringify(output, null, 2), "utf-8");
-  } catch {
-    // Vercel serverless read-only fallback
-  }
+  saveSheetsData(output);
 
   // ─── AUTO-SYNC: Collect all reel URLs from spreadsheet & update IG live cache ───
   // This runs in the background so it doesn't block the API response.
@@ -1001,7 +1062,11 @@ async function syncSpreadsheetData() {
 
           if (newUrlsAdded > 0) {
             igCache.pendingSyncUrls = uniqueUrls;
-            fs.writeFileSync(igCachePath, JSON.stringify(igCache, null, 2), "utf-8");
+            try {
+              fs.writeFileSync(igCachePath, JSON.stringify(igCache, null, 2), "utf-8");
+            } catch {
+              // Serverless read-only fallback
+            }
           }
         } catch {
           // Non-blocking: ignore errors
@@ -1021,35 +1086,24 @@ export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const forceFresh = searchParams.get("fresh") === "true" || searchParams.get("force") === "true";
-    const filePath = path.join(process.cwd(), "lib/real-sheets-data.json");
 
-    let cachedData: any = null;
-    let cacheAgeMs = Infinity;
-
-    if (fs.existsSync(filePath)) {
-      try {
-        cachedData = JSON.parse(fs.readFileSync(filePath, "utf-8"));
-        if (cachedData.syncTimestamp) {
-          cacheAgeMs = Date.now() - new Date(cachedData.syncTimestamp).getTime();
-        }
-      } catch (e) {
-        cachedData = null;
-      }
-    }
+    const cached = loadCachedSheetsData();
+    const MAX_CACHE_AGE_MS = 5 * 60 * 1000;
 
     // If cache is younger than 5 minutes (300,000 ms) and force is not requested, return fast cache
-    const MAX_CACHE_AGE_MS = 5 * 60 * 1000;
-    if (cachedData && cacheAgeMs < MAX_CACHE_AGE_MS && !forceFresh) {
+    if (cached && cached.ageMs < MAX_CACHE_AGE_MS && !forceFresh) {
       return NextResponse.json({
         success: true,
-        data: cachedData,
+        data: cached.data,
         source: "cache",
-        ageSeconds: Math.round(cacheAgeMs / 1000),
+        ageSeconds: Math.round(cached.ageMs / 1000),
       });
     }
 
     // Otherwise, perform live automatic sync
     const freshData = await syncSpreadsheetData();
+    saveSheetsData(freshData);
+
     return NextResponse.json({
       success: true,
       data: freshData,
@@ -1057,29 +1111,47 @@ export async function GET(req: NextRequest) {
       ageSeconds: 0,
     });
   } catch (err: any) {
-    // If live sync fails but we have stale cache, return stale cache with warning
-    const filePath = path.join(process.cwd(), "lib/real-sheets-data.json");
-    if (fs.existsSync(filePath)) {
-      const data = JSON.parse(fs.readFileSync(filePath, "utf-8"));
+    // If live sync fails but we have stale cache, return stale cache with explicit warning
+    const cached = loadCachedSheetsData();
+    if (cached) {
       return NextResponse.json({
         success: true,
-        data,
+        data: {
+          ...cached.data,
+          isStale: true,
+          lastSuccessfulSync: cached.data.syncTimestamp,
+        },
         source: "stale_fallback",
-        warning: `Live sync gagal: ${err.message}`,
+        warning: `Live sync Google Sheets gagal (${err.message}). Menampilkan snapshot data terakhir yang berhasil tersimpan (${cached.data.syncTimestamp || "tersimpan"}).`,
       });
     }
     return NextResponse.json({ success: false, error: err.message }, { status: 500 });
   }
 }
 
-// POST: explicit on-demand sync
-export async function POST() {
+// POST: explicit on-demand sync (with optional webhook secret protection)
+export async function POST(req: NextRequest) {
   try {
+    const envSecret = process.env.SYNC_SECRET || process.env.WEBHOOK_SECRET;
+    if (envSecret) {
+      const authHeader = req.headers.get("authorization");
+      const urlSecret = new URL(req.url).searchParams.get("secret");
+      const referer = req.headers.get("referer");
+      const host = req.headers.get("host");
+      const isInternal = referer && host && referer.includes(host);
+      if (!isInternal && authHeader !== `Bearer ${envSecret}` && urlSecret !== envSecret) {
+        return NextResponse.json({ success: false, error: "Unauthorized sync request" }, { status: 401 });
+      }
+    }
+
     const data = await syncSpreadsheetData();
+    saveSheetsData(data);
+
     return NextResponse.json({
       success: true,
       message: "Sinkronisasi Google Sheets berhasil diperbarui!",
       data,
+      source: "live_sync",
     });
   } catch (err: any) {
     return NextResponse.json({ success: false, error: err.message }, { status: 500 });

@@ -8,7 +8,9 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
-    "test:venue": "npx tsx lib/__tests__/run-venue-tests.ts"
+    "test:venue": "npx tsx lib/__tests__/run-venue-tests.ts",
+    "test:spreadsheet": "npx tsx lib/__tests__/run-spreadsheet-tests.ts",
+    "test": "npm run test:venue && npm run test:spreadsheet"
   },
   "dependencies": {
     "clsx": "^2.1.1",

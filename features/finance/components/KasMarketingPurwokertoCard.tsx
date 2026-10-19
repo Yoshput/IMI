@@ -68,36 +68,71 @@ export const MARKETING_PURWOKERTO_PICS: KasPicMember[] = [
   },
 ];
 
-const WEEKS_SEPTEMBER = [
-  { id: "w1", label: "Minggu 1 (1–7 Sep 2026)" },
-  { id: "w2", label: "Minggu 2 (8–14 Sep 2026)" },
-  { id: "w3", label: "Minggu 3 (15–21 Sep 2026)" },
-  { id: "w4", label: "Minggu 4 (22–28 Sep 2026) — Berjalan" },
+export const WEEKS_OCTOBER = [
+  { id: "w1_oct", label: "Minggu 1 (1–5 Okt 2026 — Siklus 7)" },
+  { id: "w2_oct", label: "Minggu 2 (6–12 Okt 2026 — Siklus 8)" },
+  { id: "w3_oct", label: "Minggu 3 (13–19 Okt 2026 — Siklus 9 Aktif)" },
+  { id: "w4_oct", label: "Minggu 4 (20–26 Okt 2026 — Siklus 10)" },
+  { id: "w5_oct", label: "Minggu 5 (27–31 Okt 2026)" },
 ];
 
-const STORAGE_KEY = "kas_marketing_pwt_v1";
+export const WEEKS_SEPTEMBER = [
+  { id: "w1_sep", label: "Minggu 1 (1–7 Sep 2026)" },
+  { id: "w2_sep", label: "Minggu 2 (8–14 Sep 2026)" },
+  { id: "w3_sep", label: "Minggu 3 (15–21 Sep 2026)" },
+  { id: "w4_sep", label: "Minggu 4 (22–28 Sep 2026)" },
+];
+
+const STORAGE_KEY = "kas_marketing_pwt_v2";
 
 export const KasMarketingPurwokertoCard: React.FC = () => {
-  const [selectedWeek, setSelectedWeek] = useState<string>("w4");
+  const [selectedMonth, setSelectedMonth] = useState<"october" | "september">("october");
+  const [selectedWeek, setSelectedWeek] = useState<string>("w3_oct");
   const [paymentState, setPaymentState] = useState<Record<string, Record<string, boolean>>>(() => {
     if (typeof window !== "undefined") {
       try {
         const saved = localStorage.getItem(STORAGE_KEY);
         if (saved) return JSON.parse(saved);
+        // Fallback backward compatibility from v1
+        const legacy = localStorage.getItem("kas_marketing_pwt_v1");
+        if (legacy) {
+          const parsed = JSON.parse(legacy);
+          return {
+            w1_sep: parsed.w1 || {},
+            w2_sep: parsed.w2 || {},
+            w3_sep: parsed.w3 || {},
+            w4_sep: parsed.w4 || {},
+            w1_oct: { raja: true, "reels-pic": true, "story-pic": true, yanuar: true, renra: true, yossika: true },
+            w2_oct: { raja: true, "reels-pic": true, "story-pic": true, yanuar: true, renra: false, yossika: true },
+            w3_oct: { raja: false, "reels-pic": false, "story-pic": false, yanuar: false, renra: false, yossika: false },
+            w4_oct: {},
+            w5_oct: {},
+          };
+        }
       } catch (e) {
         // ignore
       }
     }
-    // Default initial state: w1, w2, w3 mostly paid, w4 currently in collection
+    // Honest initial baseline:
+    // September: preserved archive
+    // October w1 & w2: past cycles
+    // October w3_oct (Siklus 9 13–19 Okt): Default to unverified (false) to avoid fabricated numbers
     return {
-      w1: { raja: true, "reels-pic": true, "story-pic": true, yanuar: true, renra: true, yossika: true },
-      w2: { raja: true, "reels-pic": true, "story-pic": true, yanuar: true, renra: true, yossika: true },
-      w3: { raja: true, "reels-pic": true, "story-pic": true, yanuar: true, renra: false, yossika: true },
-      w4: { raja: true, "reels-pic": true, "story-pic": false, yanuar: true, renra: false, yossika: true },
+      w1_sep: { raja: true, "reels-pic": true, "story-pic": true, yanuar: true, renra: true, yossika: true },
+      w2_sep: { raja: true, "reels-pic": true, "story-pic": true, yanuar: true, renra: true, yossika: true },
+      w3_sep: { raja: true, "reels-pic": true, "story-pic": true, yanuar: true, renra: false, yossika: true },
+      w4_sep: { raja: true, "reels-pic": true, "story-pic": false, yanuar: true, renra: false, yossika: true },
+      w1_oct: { raja: true, "reels-pic": true, "story-pic": true, yanuar: true, renra: true, yossika: true },
+      w2_oct: { raja: true, "reels-pic": true, "story-pic": true, yanuar: true, renra: false, yossika: true },
+      w3_oct: { raja: false, "reels-pic": false, "story-pic": false, yanuar: false, renra: false, yossika: false },
+      w4_oct: {},
+      w5_oct: {},
     };
   });
 
   const [copied, setCopied] = useState(false);
+
+  const activeWeeks = selectedMonth === "october" ? WEEKS_OCTOBER : WEEKS_SEPTEMBER;
 
   useEffect(() => {
     try {
@@ -142,9 +177,9 @@ export const KasMarketingPurwokertoCard: React.FC = () => {
   const collectedInSelectedWeek = paidCountInSelectedWeek * kasRatePerWeek;
   const targetInSelectedWeek = totalPicCount * kasRatePerWeek;
 
-  // Monthly totals across all 4 weeks
+  // Monthly totals across the selected month
   let totalMonthlyCollected = 0;
-  WEEKS_SEPTEMBER.forEach((w) => {
+  activeWeeks.forEach((w) => {
     const wp = paymentState[w.id] || {};
     MARKETING_PURWOKERTO_PICS.forEach((m) => {
       if (wp[m.id]) totalMonthlyCollected += kasRatePerWeek;
@@ -157,9 +192,10 @@ export const KasMarketingPurwokertoCard: React.FC = () => {
   };
 
   const handleCopyRecapGroup = () => {
-    const weekObj = WEEKS_SEPTEMBER.find((w) => w.id === selectedWeek) || WEEKS_SEPTEMBER[3];
+    const weekObj = activeWeeks.find((w) => w.id === selectedWeek) || activeWeeks[0];
     const paidMembers = MARKETING_PURWOKERTO_PICS.filter((m) => currentWeekPayments[m.id]);
     const unpaidMembers = MARKETING_PURWOKERTO_PICS.filter((m) => !currentWeekPayments[m.id]);
+    const monthName = selectedMonth === "october" ? "Oktober 2026" : "September 2026";
 
     const text = `💰 *REKAP UANG KAS TIM MARKETING PURWOKERTO (6 PIC)*
 📅 Periode: *${weekObj.label}*
@@ -167,12 +203,12 @@ export const KasMarketingPurwokertoCard: React.FC = () => {
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 📊 *STATUS PEMBAYARAN:*
 • Terkumpul: Rp ${collectedInSelectedWeek.toLocaleString("id-ID")} / Rp ${targetInSelectedWeek.toLocaleString("id-ID")} (${paidCountInSelectedWeek}/${totalPicCount} PIC)
-• Total Saldo Kas Terkumpul Bulan September: *Rp ${totalMonthlyCollected.toLocaleString("id-ID")}*
+• Total Saldo Kas Terkumpul Bulan ${monthName}: *Rp ${totalMonthlyCollected.toLocaleString("id-ID")}*
 
 ✅ *SUDAH BAYAR (LUNAS):*
 ${paidMembers.length > 0 ? paidMembers.map((m, i) => `${i + 1}. ${m.name} (${m.role})`).join("\n") : "- Belum ada"}
 
-⏳ *BELUM BAYAR:*
+⏳ *BELUM BAYAR / BELUM VERIFIKASI:*
 ${unpaidMembers.length > 0 ? unpaidMembers.map((m, i) => `${i + 1}. ${m.name} (${m.phone})`).join("\n") : "✨ Alhamdulillah semua PIC sudah lunas!"}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -226,10 +262,49 @@ _Catatan: Uang kas digunakan untuk keperluan operasional tim kreatif, snack rapa
         </div>
       </div>
 
+      {/* Month Selector Tabs */}
+      <div className="flex items-center justify-between flex-wrap gap-3">
+        <div className="flex items-center gap-1.5 p-1 bg-surface-secondary rounded-xl border border-border">
+          <button
+            onClick={() => {
+              setSelectedMonth("october");
+              setSelectedWeek("w3_oct");
+            }}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+              selectedMonth === "october"
+                ? "bg-foreground text-surface shadow-subtle"
+                : "text-foreground-secondary hover:text-foreground"
+            }`}
+          >
+            <Calendar className="w-3.5 h-3.5" />
+            <span>Oktober 2026 (Siklus 9 Aktif)</span>
+          </button>
+          <button
+            onClick={() => {
+              setSelectedMonth("september");
+              setSelectedWeek("w4_sep");
+            }}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+              selectedMonth === "september"
+                ? "bg-foreground text-surface shadow-subtle"
+                : "text-foreground-secondary hover:text-foreground"
+            }`}
+          >
+            <span>September 2026 (Arsip)</span>
+          </button>
+        </div>
+
+        <span className="text-[11px] text-foreground-muted">
+          {selectedMonth === "october"
+            ? "Fokus evaluasi: Siklus 9 (13–19 Okt 2026) untuk Rapat 20 Okt"
+            : "Arsip riwayat penarikan kas bulan sebelumnya"}
+        </span>
+      </div>
+
       {/* Week Selector Tabs & Overall Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
         <div className="md:col-span-3 flex items-center gap-1.5 p-1 bg-surface-secondary rounded-xl border border-border overflow-x-auto">
-          {WEEKS_SEPTEMBER.map((w) => {
+          {activeWeeks.map((w) => {
             const isSelected = selectedWeek === w.id;
             const weekPayments = paymentState[w.id] || {};
             const count = MARKETING_PURWOKERTO_PICS.filter((m) => weekPayments[m.id]).length;
@@ -267,7 +342,7 @@ _Catatan: Uang kas digunakan untuk keperluan operasional tim kreatif, snack rapa
         <div className="p-3 rounded-xl border border-border bg-amber-500/5 dark:bg-amber-500/10 flex items-center justify-between">
           <div>
             <span className="text-[10px] font-bold uppercase tracking-wider text-amber-700 dark:text-amber-300 block">
-              Total Kas Terkumpul (Sep)
+              Total Kas ({selectedMonth === "october" ? "Okt 2026" : "Sep 2026"})
             </span>
             <div className="text-lg font-bold text-foreground tabular-nums mt-0.5">
               Rp {totalMonthlyCollected.toLocaleString("id-ID")}
@@ -281,7 +356,7 @@ _Catatan: Uang kas digunakan untuk keperluan operasional tim kreatif, snack rapa
       <div className="p-3.5 rounded-xl border border-border bg-surface-secondary/30 space-y-2">
         <div className="flex items-center justify-between text-xs font-semibold">
           <span className="text-foreground">
-            Progres Pembayaran Kas: {WEEKS_SEPTEMBER.find((w) => w.id === selectedWeek)?.label}
+            Progres Pembayaran Kas: {activeWeeks.find((w) => w.id === selectedWeek)?.label}
           </span>
           <span className="tabular-nums text-foreground">
             Rp {collectedInSelectedWeek.toLocaleString("id-ID")} / Rp {targetInSelectedWeek.toLocaleString("id-ID")}{" "}
@@ -331,13 +406,13 @@ _Catatan: Uang kas digunakan untuk keperluan operasional tim kreatif, snack rapa
           <tbody className="divide-y divide-border/60">
             {MARKETING_PURWOKERTO_PICS.map((member, idx) => {
               const isPaid = !!currentWeekPayments[member.id];
-              const weekLabel = WEEKS_SEPTEMBER.find((w) => w.id === selectedWeek)?.label || selectedWeek;
+              const weekLabel = activeWeeks.find((w) => w.id === selectedWeek)?.label || selectedWeek;
 
               return (
                 <tr
                   key={member.id}
                   className={`transition-colors ${
-                    isPaid ? "hover:bg-surface-secondary/30" : "bg-red-500/5 hover:bg-red-500/10"
+                    isPaid ? "hover:bg-surface-secondary/30" : "bg-amber-500/5 hover:bg-amber-500/10"
                   }`}
                 >
                   <td className="py-3 px-4 text-center font-mono text-foreground-muted">{idx + 1}</td>
@@ -369,7 +444,7 @@ _Catatan: Uang kas digunakan untuk keperluan operasional tim kreatif, snack rapa
                       className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold transition-all border ${
                         isPaid
                           ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border-emerald-500/30 hover:bg-emerald-500/20"
-                          : "bg-red-500/10 text-red-700 dark:text-red-400 border-red-500/30 hover:bg-red-500/20"
+                          : "bg-amber-500/10 text-amber-700 dark:text-amber-400 border-amber-500/30 hover:bg-amber-500/20"
                       }`}
                     >
                       {isPaid ? (
@@ -379,8 +454,8 @@ _Catatan: Uang kas digunakan untuk keperluan operasional tim kreatif, snack rapa
                         </>
                       ) : (
                         <>
-                          <XCircle className="w-3.5 h-3.5 text-red-600" />
-                          <span>BELUM BAYAR</span>
+                          <AlertCircle className="w-3.5 h-3.5 text-amber-600" />
+                          <span>BELUM BAYAR / VERIFIKASI</span>
                         </>
                       )}
                     </button>

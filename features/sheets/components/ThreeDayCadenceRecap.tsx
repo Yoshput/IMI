@@ -29,6 +29,7 @@ import {
 } from "lucide-react";
 import { formatNumber } from "@/lib/utils";
 import { AppleMediaSheet, AppleMediaItem } from "@/components/shared/AppleMediaSheet";
+import { ACTIVE_MEETING_CYCLE, PRODUCTION_BASE_URL } from "@/lib/cadence-config";
 
 import liveCache from "@/lib/instagram-live-cache.json";
 import { extractShortcode } from "@/lib/real-content-items";
@@ -48,7 +49,7 @@ export const ThreeDayCadenceRecap: React.FC<ThreeDayCadenceRecapProps> = ({
   bonusSummary,
   spreadsheetFollowersByBranch,
 }) => {
-  const [selectedCycle, setSelectedCycle] = useState<string>("cycle-8");
+  const [selectedCycle, setSelectedCycle] = useState<string>(ACTIVE_MEETING_CYCLE.id);
   const [copiedText, setCopiedText] = useState(false);
   const [isPresentationMode, setIsPresentationMode] = useState(false);
   const [selectedMediaItem, setSelectedMediaItem] = useState<AppleMediaItem | null>(null);
@@ -194,17 +195,30 @@ export const ThreeDayCadenceRecap: React.FC<ThreeDayCadenceRecapProps> = ({
         badge: isAfterMeetingCycle7 ? "SELESAI RAPAT" : "RAPAT BESOK (6 OKT)",
         category: "recent",
       },
+      "cycle-9": {
+        id: "cycle-9",
+        name: "Siklus 9 (13–19 Okt) · Rapat 20 Okt",
+        shortName: "Siklus 9 (13–19 Okt)",
+        periodLabel: "13 s/d 19 Oktober 2026 (Rapat 20 Okt)",
+        status: "Siklus Evaluasi Utama (Persiapan Rapat Selasa, 20 Oktober 2026)",
+        startDate: "2026-10-13",
+        endDate: "2026-10-19",
+        isLiveInstagram: true,
+        description: "Siklus evaluasi mingguan pekan ke-3 Oktober 2026 untuk persiapan rapat evaluasi hari Selasa, 20 Oktober 2026.",
+        badge: "SIKLUS AKTIF (RAPAT 20 OKT)",
+        category: "active",
+      },
       "cycle-8": {
         id: "cycle-8",
         name: "Siklus 8 (6–12 Okt) · Rapat 13 Okt",
         shortName: "Siklus 8 (6–12 Okt)",
         periodLabel: "6 s/d 12 Oktober 2026 (Rapat 13 Okt)",
-        status: anchorDate >= "2026-10-13" ? "Selesai Evaluasi Rapat 13 Okt" : "Evaluasi Rapat Selasa, 13 Oktober 2026",
+        status: "Selesai Evaluasi Rapat 13 Okt (Arsip)",
         startDate: "2026-10-06",
         endDate: "2026-10-12",
         isLiveInstagram: true,
         description: "Evaluasi berjalan 7 hari penuh (6–12 Oktober 2026) untuk rapat evaluasi mingguan Selasa, 13 Oktober 2026.",
-        badge: anchorDate >= "2026-10-13" ? "SELESAI RAPAT" : "RAPAT 13 OKT",
+        badge: "SELESAI RAPAT (ARSIP)",
         category: "recent",
       },
       "full-week": {
@@ -233,25 +247,12 @@ export const ThreeDayCadenceRecap: React.FC<ThreeDayCadenceRecapProps> = ({
         badge: "BULAN PENUH",
         category: "realtime",
       },
-      "cycle-9": {
-        id: "cycle-9",
-        name: "Siklus 9 (13–19 Okt) — Rapat 20 Okt",
-        shortName: "Siklus 9 (13–19 Okt)",
-        periodLabel: "13 s/d 19 Oktober 2026",
-        status: anchorDate >= "2026-10-13" ? "Siklus Berjalan (Rapat Selasa 20 Okt)" : "Siklus Rapat Mendatang (20 Okt)",
-        startDate: "2026-10-13",
-        endDate: "2026-10-19",
-        isLiveInstagram: true,
-        description: "Siklus evaluasi mingguan pekan ke-3 Oktober 2026 untuk persiapan rapat evaluasi hari Selasa, 20 Oktober 2026.",
-        badge: anchorDate >= "2026-10-13" ? "SIKLUS AKTIF" : "MENDATANG",
-        category: "upcoming",
-      },
     };
 
     return map;
   }, [anchorDate, rolling7StartIso]);
 
-  const activeCycle = cycles[selectedCycle] || cycles["cycle-8"] || cycles["cycle-7"] || cycles["cycle-1"];
+  const activeCycle = cycles[selectedCycle] || cycles[ACTIVE_MEETING_CYCLE.id] || cycles["cycle-9"] || cycles["cycle-8"] || cycles["cycle-7"] || cycles["cycle-1"];
 
   // Index live Instagram cache by shortcode
   const liveMap = useMemo(() => {
@@ -274,7 +275,10 @@ export const ThreeDayCadenceRecap: React.FC<ThreeDayCadenceRecapProps> = ({
   // Calculate Story Stats
   const totalStoriesUploaded = filteredStories.reduce((acc, s) => acc + (s.storiesUploaded || 0), 0);
   const maxStoryViewers = Math.max(...filteredStories.map((s) => s.maxViewers || 0), 0);
-  const minStoryViewers = Math.min(...filteredStories.map((s) => s.minViewers || 99999).filter((v) => v > 0), 0);
+  const validMinViewers = filteredStories
+    .map((s) => s.minViewers)
+    .filter((v): v is number => typeof v === "number" && !isNaN(v) && v > 0);
+  const minStoryViewers = validMinViewers.length > 0 ? Math.min(...validMinViewers) : 0;
   const totalDMs = filteredStories.reduce((acc, s) => acc + (s.dmInquiries || 0), 0);
 
   // Group DM Inquiries
@@ -388,6 +392,11 @@ export const ThreeDayCadenceRecap: React.FC<ThreeDayCadenceRecapProps> = ({
 
   // Copy WhatsApp summary for boss / management meeting
   const handleCopyWhatsApp = () => {
+    const csNotes = filteredStories
+      .map((s) => s.csResponseSpeed)
+      .filter((v) => v && v !== "-" && v.toLowerCase() !== "tidak ada");
+    const csSummary = csNotes.length > 0 ? csNotes[csNotes.length - 1] : "Sesuai Standar SOP";
+
     const waText = `*LAPORAN REKAP MARKETING INTELLIGENCE — OPTIK I SEE YOU & LUNAR*
 Agenda: ${activeCycle.name}
 Periode: ${activeCycle.periodLabel}
@@ -401,7 +410,7 @@ Status: ${activeCycle.status}
 • Total DM Masuk: ${totalDMs} DM
 • Topik DM Paling Sering Ditanyakan:
 ${dmInquiriesList.slice(0, 4).map((q) => `  - ${q.topic} (${q.count} hari ditanyakan)`).join("\n") || "  - Tidak ada data DM khusus"}
-• Pemantauan CS: Fast respon
+• Pemantauan CS: ${csSummary}
 
 =============================
 *2. REKAP KONTEN REELS INSTAGRAM 5 CABANG*
@@ -423,7 +432,7 @@ ${allReelsInCycle.slice(0, 3).map((r, i) => `${i + 1}. [${r.branch || r.branchKe
 *4. STATUS KEPATUHAN PIC SPREADSHEET*
 ${picTracker.map((p) => `• ${p.pic} (${p.role}): ${p.isUpToDate ? "[Lengkap]" : `[Tertunda - ${p.latestDate}]`}`).join("\n")}
 
-Akses Dashboard Lengkap: https://iseeyou-intelligence.vercel.app/spreadsheet`;
+Akses Dashboard Lengkap: ${PRODUCTION_BASE_URL}/spreadsheet`;
 
     navigator.clipboard.writeText(waText);
     setCopiedText(true);
@@ -520,7 +529,26 @@ Akses Dashboard Lengkap: https://iseeyou-intelligence.vercel.app/spreadsheet`;
 
         {/* Horizontal Scrollable Quick Pill Bar (Single Clean Line, Zero Wrapping on Mobile) */}
         <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-none py-0.5 -mx-1 px-1 flex-nowrap whitespace-nowrap text-xs">
-          {/* 1. Siklus 8 (Aktif Pekan Ini) */}
+          {/* 1. Siklus 9 (Aktif Rapat 20 Okt) */}
+          <button
+            type="button"
+            onClick={() => setSelectedCycle("cycle-9")}
+            className={`px-3 py-1.5 rounded-control text-xs font-semibold transition-all shrink-0 flex items-center gap-1.5 border ${
+              selectedCycle === "cycle-9"
+                ? "bg-brand text-white border-brand shadow-subtle ring-1 ring-brand"
+                : "bg-surface-secondary/70 hover:bg-surface border-border text-foreground hover:border-brand/30"
+            }`}
+          >
+            <span className={`w-1.5 h-1.5 rounded-full ${selectedCycle === "cycle-9" ? "bg-white" : "bg-emerald-500 animate-pulse"}`} />
+            <span>Siklus 9 (13–19 Okt)</span>
+            <span className={`text-[9px] uppercase px-1.5 py-0.2 rounded font-bold ${
+              selectedCycle === "cycle-9" ? "bg-white/20 text-white" : "bg-emerald-500/15 text-emerald-700 dark:text-emerald-400"
+            }`}>
+              Aktif
+            </span>
+          </button>
+
+          {/* 2. Siklus 8 (Rapat 13 Okt - Arsip) */}
           <button
             type="button"
             onClick={() => setSelectedCycle("cycle-8")}
@@ -530,16 +558,16 @@ Akses Dashboard Lengkap: https://iseeyou-intelligence.vercel.app/spreadsheet`;
                 : "bg-surface-secondary/70 hover:bg-surface border-border text-foreground hover:border-brand/30"
             }`}
           >
-            <span className={`w-1.5 h-1.5 rounded-full ${selectedCycle === "cycle-8" ? "bg-white" : "bg-emerald-500"}`} />
+            <Calendar className="w-3 h-3 text-foreground-muted" />
             <span>Siklus 8 (6–12 Okt)</span>
             <span className={`text-[9px] uppercase px-1.5 py-0.2 rounded font-bold ${
-              selectedCycle === "cycle-8" ? "bg-white/20 text-white" : "bg-emerald-500/15 text-emerald-700 dark:text-emerald-400"
+              selectedCycle === "cycle-8" ? "bg-white/20 text-white" : "bg-surface text-foreground-secondary border border-border/80"
             }`}>
-              Aktif
+              Rapat Lalu
             </span>
           </button>
 
-          {/* 2. Siklus 7 (Rapat 6 Okt Selesai) */}
+          {/* 3. Siklus 7 (Rapat 6 Okt - Arsip) */}
           <button
             type="button"
             onClick={() => setSelectedCycle("cycle-7")}
@@ -549,16 +577,16 @@ Akses Dashboard Lengkap: https://iseeyou-intelligence.vercel.app/spreadsheet`;
                 : "bg-surface-secondary/70 hover:bg-surface border-border text-foreground hover:border-brand/30"
             }`}
           >
-            <Calendar className="w-3 h-3" />
+            <Calendar className="w-3 h-3 text-foreground-muted" />
             <span>Siklus 7 (29 Sep–5 Okt)</span>
             <span className={`text-[9px] uppercase px-1.5 py-0.2 rounded font-bold ${
               selectedCycle === "cycle-7" ? "bg-white/20 text-white" : "bg-surface text-foreground-secondary border border-border/80"
             }`}>
-              Rapat Lalu
+              Arsip
             </span>
           </button>
 
-          {/* 3. Rolling 7 Hari Realtime */}
+          {/* 4. Rolling 7 Hari Realtime */}
           <button
             type="button"
             onClick={() => setSelectedCycle("full-week")}
@@ -577,7 +605,7 @@ Akses Dashboard Lengkap: https://iseeyou-intelligence.vercel.app/spreadsheet`;
             </span>
           </button>
 
-          {/* 4. 1 Bulan Penuh (Sep - Okt) */}
+          {/* 5. 1 Bulan Penuh (Sep - Okt) */}
           <button
             type="button"
             onClick={() => setSelectedCycle("full-month")}
@@ -589,25 +617,6 @@ Akses Dashboard Lengkap: https://iseeyou-intelligence.vercel.app/spreadsheet`;
           >
             <Layers className="w-3 h-3" />
             <span>1 Bulan Penuh</span>
-          </button>
-
-          {/* 5. Siklus 9 (Mendatang) */}
-          <button
-            type="button"
-            onClick={() => setSelectedCycle("cycle-9")}
-            className={`px-3 py-1.5 rounded-control text-xs font-semibold transition-all shrink-0 flex items-center gap-1.5 border ${
-              selectedCycle === "cycle-9"
-                ? "bg-brand text-white border-brand shadow-subtle ring-1 ring-brand"
-                : "bg-surface-secondary/70 hover:bg-surface border-border text-foreground hover:border-brand/30"
-            }`}
-          >
-            <Calendar className="w-3 h-3 text-foreground-muted" />
-            <span>Siklus 9 (13–19 Okt)</span>
-            <span className={`text-[9px] uppercase px-1.5 py-0.2 rounded font-bold ${
-              selectedCycle === "cycle-9" ? "bg-white/20 text-white" : "bg-surface text-foreground-muted border border-border/80"
-            }`}>
-              Mendatang
-            </span>
           </button>
 
           {/* Dynamic Pill: If selectedCycle is from archive (cycles 1-6) */}
@@ -709,9 +718,9 @@ Akses Dashboard Lengkap: https://iseeyou-intelligence.vercel.app/spreadsheet`;
               <div>
                 <span className="text-[10px] uppercase font-bold tracking-wider text-emerald-700 dark:text-emerald-400 mb-1.5 flex items-center gap-1.5">
                   <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                  Siklus Berjalan (Aktif Pekan Ini)
+                  Siklus Berjalan (Aktif Pekan Ini — Rapat Selasa, 20 Oktober 2026)
                 </span>
-                {["cycle-8"].map((k) => {
+                {["cycle-9"].map((k) => {
                   const c = cycles[k];
                   if (!c) return null;
                   const isSel = selectedCycle === k;
@@ -733,7 +742,7 @@ Akses Dashboard Lengkap: https://iseeyou-intelligence.vercel.app/spreadsheet`;
                         <div className="flex items-center gap-2 flex-wrap">
                           <span className="text-xs font-bold text-foreground">{c.name}</span>
                           <span className="text-[9px] uppercase px-1.5 py-0.2 rounded bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 font-bold border border-emerald-500/25">
-                            Aktif
+                            Siklus Aktif
                           </span>
                           <span className="text-[9px] uppercase px-1.5 py-0.2 rounded bg-brand/10 text-brand font-bold border border-brand/20">
                             Live IG
@@ -791,43 +800,45 @@ Akses Dashboard Lengkap: https://iseeyou-intelligence.vercel.app/spreadsheet`;
                 </div>
               </div>
 
-              {/* Group 3: Siklus Rapat Baru Selesai */}
+              {/* Group 3: Arsip Rapat Sebelumnya */}
               <div>
                 <span className="text-[10px] uppercase font-bold tracking-wider text-foreground-muted mb-1.5 flex items-center gap-1">
                   <Calendar className="w-3 h-3 text-foreground-muted" />
-                  Siklus Rapat Baru Selesai
+                  Arsip Rapat Sebelumnya (Oktober 2026)
                 </span>
-                {["cycle-8", "cycle-7"].map((k) => {
-                  const c = cycles[k];
-                  if (!c) return null;
-                  const isSel = selectedCycle === k;
-                  return (
-                    <button
-                      key={k}
-                      type="button"
-                      onClick={() => {
-                        setSelectedCycle(k);
-                        setIsCycleModalOpen(false);
-                      }}
-                      className={`w-full text-left p-2.5 rounded-control border transition-all flex items-start justify-between gap-3 ${
-                        isSel
-                          ? "bg-brand/5 border-brand ring-1 ring-brand text-foreground"
-                          : "bg-surface hover:bg-surface-secondary border-border text-foreground hover:border-brand/40"
-                      }`}
-                    >
-                      <div className="space-y-0.5 min-w-0">
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <span className="text-xs font-bold text-foreground">{c.name}</span>
-                          <span className="text-[9px] uppercase px-1.5 py-0.2 rounded bg-surface-secondary text-foreground-secondary font-bold border border-border">
-                            {k === "cycle-8" ? "Rapat 13 Okt (Aktif)" : "Selesai Rapat 6 Okt"}
-                          </span>
+                <div className="space-y-1.5">
+                  {["cycle-8", "cycle-7"].map((k) => {
+                    const c = cycles[k];
+                    if (!c) return null;
+                    const isSel = selectedCycle === k;
+                    return (
+                      <button
+                        key={k}
+                        type="button"
+                        onClick={() => {
+                          setSelectedCycle(k);
+                          setIsCycleModalOpen(false);
+                        }}
+                        className={`w-full text-left p-2.5 rounded-control border transition-all flex items-start justify-between gap-3 ${
+                          isSel
+                            ? "bg-brand/5 border-brand ring-1 ring-brand text-foreground"
+                            : "bg-surface hover:bg-surface-secondary border-border text-foreground hover:border-brand/40"
+                        }`}
+                      >
+                        <div className="space-y-0.5 min-w-0">
+                          <div className="flex items-center gap-2 flex-wrap">
+                            <span className="text-xs font-bold text-foreground">{c.name}</span>
+                            <span className="text-[9px] uppercase px-1.5 py-0.2 rounded bg-surface-secondary text-foreground-secondary font-bold border border-border">
+                              {k === "cycle-8" ? "Selesai Rapat 13 Okt (Arsip)" : "Selesai Rapat 6 Okt (Arsip)"}
+                            </span>
+                          </div>
+                          <p className="text-[11px] text-foreground-secondary">{c.periodLabel}</p>
                         </div>
-                        <p className="text-[11px] text-foreground-secondary">{c.periodLabel}</p>
-                      </div>
-                      {isSel && <Check className="w-4 h-4 text-brand shrink-0 mt-0.5" />}
-                    </button>
-                  );
-                })}
+                        {isSel && <Check className="w-4 h-4 text-brand shrink-0 mt-0.5" />}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
 
               {/* Group 4: Arsip Siklus Rapat Lalu (September 2026) */}
@@ -864,45 +875,6 @@ Akses Dashboard Lengkap: https://iseeyou-intelligence.vercel.app/spreadsheet`;
                     );
                   })}
                 </div>
-              </div>
-
-              {/* Group 5: Siklus Mendatang */}
-              <div>
-                <span className="text-[10px] uppercase font-bold tracking-wider text-foreground-muted mb-1.5 flex items-center gap-1">
-                  <Calendar className="w-3 h-3 text-foreground-muted" />
-                  Siklus Rapat Mendatang
-                </span>
-                {["cycle-9"].map((k) => {
-                  const c = cycles[k];
-                  if (!c) return null;
-                  const isSel = selectedCycle === k;
-                  return (
-                    <button
-                      key={k}
-                      type="button"
-                      onClick={() => {
-                        setSelectedCycle(k);
-                        setIsCycleModalOpen(false);
-                      }}
-                      className={`w-full text-left p-2.5 rounded-control border transition-all flex items-start justify-between gap-3 ${
-                        isSel
-                          ? "bg-brand/5 border-brand ring-1 ring-brand text-foreground"
-                          : "bg-surface hover:bg-surface-secondary border-border text-foreground hover:border-brand/40"
-                      }`}
-                    >
-                      <div className="space-y-0.5 min-w-0">
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <span className="text-xs font-bold text-foreground">{c.name}</span>
-                          <span className="text-[9px] uppercase px-1.5 py-0.2 rounded bg-surface-secondary text-foreground-muted font-bold border border-border">
-                            Mendatang (20 Okt)
-                          </span>
-                        </div>
-                        <p className="text-[11px] text-foreground-secondary">{c.periodLabel}</p>
-                      </div>
-                      {isSel && <Check className="w-4 h-4 text-brand shrink-0 mt-0.5" />}
-                    </button>
-                  );
-                })}
               </div>
             </div>
 

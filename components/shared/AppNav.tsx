@@ -27,6 +27,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { ThemeToggle } from "@/components/shared/ThemeToggle";
+import { ACTIVE_MEETING_CYCLE } from "@/lib/cadence-config";
 
 import { useBranch } from "@/context/BranchContext";
 
@@ -362,7 +363,7 @@ export const AppNav: React.FC = () => {
               {/* Period & Live Sync Status (Desktop) */}
               <div className="hidden 2xl:flex items-center gap-1.5 pl-2 border-l border-[#124734]/15 text-right">
                 <span className="text-[11px] font-semibold text-[#183C30] dark:text-emerald-100">
-                  Siklus 8 · 2026
+                  {ACTIVE_MEETING_CYCLE.shortLabel}
                 </span>
                 <span className="text-[10px] text-[#16A34A] font-semibold inline-flex items-center gap-1 bg-[#16A34A]/10 px-2 py-0.5 rounded-full">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#16A34A] animate-pulse" />
@@ -506,7 +507,7 @@ export const AppNav: React.FC = () => {
 
             {/* Drawer Bottom Status */}
             <div className="pt-4 border-t border-[#124734]/15 text-[11px] text-[#5C6B64] flex items-center justify-between">
-              <span>Siklus 8 · Optik I See You</span>
+              <span>{ACTIVE_MEETING_CYCLE.shortLabel} · Optik I See You</span>
               <button
                 type="button"
                 onClick={() => {

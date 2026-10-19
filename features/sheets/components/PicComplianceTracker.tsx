@@ -13,6 +13,7 @@ import {
   Building2,
   ArrowUpRight,
 } from "lucide-react";
+import { ACTIVE_MEETING_CYCLE, formatShortIndo } from "@/lib/cadence-config";
 
 export interface PicStatus {
   pic: string;
@@ -57,7 +58,7 @@ export const PicComplianceTracker: React.FC<PicComplianceTrackerProps> = ({
               Status Pengisian Laporan 6 PIC Cabang
             </h3>
             <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-surface-secondary text-foreground-secondary border border-border">
-              Cutoff: 12 Oktober 2026 (Siklus 8)
+              Cutoff: {formatShortIndo(ACTIVE_MEETING_CYCLE.endDate)} 2026 ({ACTIVE_MEETING_CYCLE.shortLabel})
             </span>
           </div>
           <p className="text-xs text-foreground-secondary mt-1">

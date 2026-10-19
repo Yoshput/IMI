@@ -83,8 +83,12 @@ export const RawSheetsTable: React.FC<RawSheetsTableProps> = ({
       });
     });
 
-    // Sort by date descending
-    return list.sort((a, b) => (b.date > a.date ? 1 : -1));
+    // Sort by date descending (null-safe and stable)
+    return list.sort((a, b) => {
+      const dateA = a.date || "";
+      const dateB = b.date || "";
+      return dateB.localeCompare(dateA);
+    });
   }, [storyData, branchReels]);
 
   // Filtered rows

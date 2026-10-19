@@ -17,6 +17,7 @@ import {
   FileSpreadsheet,
 } from "lucide-react";
 import { OFFICIAL_BRANCH_ACCOUNTS } from "@/lib/branch-accounts";
+import { PRODUCTION_BASE_URL } from "@/lib/cadence-config";
 
 interface MeetingReportModalProps {
   isOpen: boolean;
@@ -118,7 +119,7 @@ ${currentStories.slice(0, 4).map((q: any) => `• ${q.topic} (${q.count} hari di
 • Finance: Efisiensi jangkauan organik setara Rp 8,4jt belanja iklan (detail finansial di modul Finance).
 • Owner: Pantauan live harian menuju evaluasi berikutnya.
 
-_Laporan otomatis digenerate via I See You Marketing Intelligence._`;
+_Laporan otomatis digenerate via I See You Marketing Intelligence (${PRODUCTION_BASE_URL}/spreadsheet)._`;
 
     navigator.clipboard.writeText(text);
     setCopiedWa(true);

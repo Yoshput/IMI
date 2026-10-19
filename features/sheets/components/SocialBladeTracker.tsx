@@ -31,7 +31,9 @@ interface SocialBladeTrackerProps {
   dailyFollowersTracker?: Record<string, any[]>;
 }
 
-export const SocialBladeTracker: React.FC<SocialBladeTrackerProps> = () => {
+export const SocialBladeTracker: React.FC<SocialBladeTrackerProps> = ({
+  dailyFollowersTracker = {},
+}) => {
   const [selectedBranchKey, setSelectedBranchKey] = useState<string>("PWT");
   const [timeRange, setTimeRange] = useState<"14d" | "30d">("30d");
   const [realtimeAntrianClicks, setRealtimeAntrianClicks] = useState<number>(305);
@@ -41,6 +43,10 @@ export const SocialBladeTracker: React.FC<SocialBladeTrackerProps> = () => {
 
   const activeProfile: BranchSocialBladeProfile =
     SOCIAL_BLADE_DATA[selectedBranchKey] || SOCIAL_BLADE_DATA.PWT;
+
+  const branchSheetFollowers = useMemo(() => {
+    return dailyFollowersTracker?.[selectedBranchKey] || [];
+  }, [dailyFollowersTracker, selectedBranchKey]);
 
   // Fetch live tracking telemetry for antrian & web traffic
   const fetchLiveTelemetry = async () => {
@@ -125,7 +131,7 @@ export const SocialBladeTracker: React.FC<SocialBladeTrackerProps> = () => {
         <div className="flex items-center gap-2.5">
           <Info className="w-4 h-4 text-red-700 dark:text-red-400 shrink-0" />
           <div className="text-xs text-red-950 dark:text-red-200">
-            <b>Modul Intelligence Terpisah:</b> Data ini ditarik langsung dari metadata real-time Instagram &amp; Social Blade resmi, terpisah dari tabel manual Google Sheets PIC.
+            <b>Modul Intelligence &amp; Validasi Silang:</b> Data profil dan histori harian di bawah bersumber dari benchmark snapshot Social Blade resmi (14 Okt 2026), dipadukan dengan telemetri web realtime dan log input harian PIC dari Google Sheets.
           </div>
         </div>
         <Link
@@ -140,12 +146,15 @@ export const SocialBladeTracker: React.FC<SocialBladeTrackerProps> = () => {
       {/* Header & Branch Switcher */}
       <div className="bg-surface border border-border rounded-container p-5 shadow-subtle flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-wrap">
             <h3 className="text-sm font-bold text-foreground">
-              Social Blade Tracker: Pertumbuhan Harian Follower Real-Time
+              Social Blade Tracker: Pertumbuhan Harian Follower
             </h3>
-            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-red-100 text-red-800 dark:bg-red-950/60 dark:text-red-300 border border-red-200 dark:border-red-900">
-              Live Meta Graph &amp; SocialBlade API
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-200 dark:border-amber-900">
+              Snapshot Social Blade (14 Okt 2026)
+            </span>
+            <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 dark:bg-blue-950/60 dark:text-blue-300 border border-blue-200 dark:border-blue-900">
+              Telemetri Web Realtime
             </span>
           </div>
           <p className="text-xs text-foreground-secondary mt-1">
@@ -384,6 +393,72 @@ export const SocialBladeTracker: React.FC<SocialBladeTrackerProps> = () => {
           </table>
         </div>
       </div>
+
+      {/* PIC Daily Followers from Spreadsheet (if available) */}
+      {branchSheetFollowers.length > 0 && (
+        <div className="bg-surface border border-border rounded-container overflow-hidden shadow-subtle">
+          <div className="p-4 border-b border-border flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-surface-secondary/40">
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold text-foreground">
+                  Laporan Harian Follower dari Input PIC Cabang ({branchList.find((b) => b.key === selectedBranchKey)?.name})
+                </span>
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-950/40 dark:text-emerald-400">
+                  Live Google Sheets Sync
+                </span>
+              </div>
+              <p className="text-[11px] text-foreground-muted mt-0.5">
+                Log pencatatan followers harian yang diisi langsung oleh PIC cabang di lembar kerja Google Sheets.
+              </p>
+            </div>
+            <span className="text-[11px] font-mono text-foreground-muted shrink-0">
+              {branchSheetFollowers.length} baris tercatat
+            </span>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs border-collapse">
+              <thead>
+                <tr className="bg-surface-secondary text-foreground-secondary font-semibold border-b border-border">
+                  <th className="py-2.5 px-3">Tanggal Laporan</th>
+                  <th className="py-2.5 px-3 text-right">Followers IG</th>
+                  <th className="py-2.5 px-3 text-right">Perubahan IG</th>
+                  <th className="py-2.5 px-3 text-right">Followers TikTok</th>
+                  <th className="py-2.5 px-3 text-right">Perubahan TikTok</th>
+                  <th className="py-2.5 px-3">Konten Terkait</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-border/70 font-mono">
+                {branchSheetFollowers
+                  .slice(-14)
+                  .reverse()
+                  .map((row: any) => (
+                    <tr key={row.date} className="hover:bg-surface-secondary/40 transition-colors">
+                      <td className="py-2 px-3 font-sans font-medium text-foreground">
+                        {row.date}
+                      </td>
+                      <td className="py-2 px-3 text-right font-bold text-foreground">
+                        {row.igFollowers ? row.igFollowers.toLocaleString("id-ID") : "-"}
+                      </td>
+                      <td className="py-2 px-3 text-right">
+                        {row.igDelta !== 0 ? renderDeltaBadge(row.igDelta) : <span className="text-foreground-muted">--</span>}
+                      </td>
+                      <td className="py-2 px-3 text-right font-medium text-foreground">
+                        {row.tiktokFollowers ? row.tiktokFollowers.toLocaleString("id-ID") : "-"}
+                      </td>
+                      <td className="py-2 px-3 text-right">
+                        {row.ttDelta !== 0 ? renderDeltaBadge(row.ttDelta) : <span className="text-foreground-muted">--</span>}
+                      </td>
+                      <td className="py-2 px-3 font-sans text-foreground-secondary truncate max-w-xs">
+                        {row.reelsTitle || "-"}
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

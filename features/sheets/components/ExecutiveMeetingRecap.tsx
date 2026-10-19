@@ -23,6 +23,7 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import { OFFICIAL_BRANCH_ACCOUNTS } from "@/lib/branch-accounts";
+import { ACTIVE_MEETING_CYCLE, PRODUCTION_BASE_URL } from "@/lib/cadence-config";
 import { MeetingReportModal } from "./MeetingReportModal";
 import { BranchFollowersBreakdown } from "./BranchFollowersBreakdown";
 
@@ -39,6 +40,9 @@ interface ExecutiveMeetingRecapProps {
       currentMeeting?: any;
       lastTuesday: any;
       nextTuesday: any;
+      cycle9?: any;
+      cycle8?: any;
+      cycle7?: any;
     };
     topViralReels?: any[];
     frequentStoryInquiries?: { topic: string; count: number }[];
@@ -66,8 +70,8 @@ export const ExecutiveMeetingRecap: React.FC<ExecutiveMeetingRecapProps> = ({
   executiveRecap,
   picTracker,
 }) => {
-  const [selectedPeriodKey, setSelectedPeriodKey] = useState<"currentMeeting" | "nextTuesday" | "lastTuesday">(
-    (executiveRecap.activePeriodKey as any) || "currentMeeting"
+  const [selectedPeriodKey, setSelectedPeriodKey] = useState<string>(
+    executiveRecap.activePeriodKey || "currentMeeting"
   );
   const [activeAudienceTab, setActiveAudienceTab] = useState<"all" | "hrd" | "head" | "owner">("all");
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
@@ -75,11 +79,24 @@ export const ExecutiveMeetingRecap: React.FC<ExecutiveMeetingRecapProps> = ({
 
   const periods = executiveRecap.periods || {
     currentMeeting: {
+      periodKey: "2026-10-13_to_2026-10-19",
+      startDate: "2026-10-13",
+      endDate: "2026-10-19",
+      meetingDateTitle: "Selasa, 20 Oktober 2026 (Periode 13–19 Okt)",
+      meetingStatus: "Evaluasi Rapat Terkini (Siklus 9 · 20 Okt 2026)",
+      totalReelsUploaded: 15,
+      totalStoriesRecorded: 4,
+      totalDmInquiries: 18,
+      topViralReels: [],
+      frequentStoryInquiries: [],
+      obstacleLogs: [],
+    },
+    lastTuesday: {
       periodKey: "2026-10-06_to_2026-10-12",
       startDate: "2026-10-06",
       endDate: "2026-10-12",
       meetingDateTitle: "Selasa, 13 Oktober 2026 (Periode 6–12 Okt)",
-      meetingStatus: "Evaluasi Rapat Terkini (13 Okt 2026)",
+      meetingStatus: "Evaluasi Rapat Minggu Lalu (Siklus 8 · 13 Okt 2026)",
       totalReelsUploaded: 18,
       totalStoriesRecorded: 92,
       totalDmInquiries: 27,
@@ -87,12 +104,12 @@ export const ExecutiveMeetingRecap: React.FC<ExecutiveMeetingRecapProps> = ({
       frequentStoryInquiries: [],
       obstacleLogs: [],
     },
-    lastTuesday: {
+    nextTuesday: {
       periodKey: "2026-09-29_to_2026-10-05",
       startDate: "2026-09-29",
       endDate: "2026-10-05",
       meetingDateTitle: "Selasa, 6 Oktober 2026 (Periode 29 Sep – 5 Okt)",
-      meetingStatus: "Evaluasi Rapat Minggu Lalu (6 Okt 2026)",
+      meetingStatus: "Evaluasi Historis (Siklus 7 · 6 Okt 2026)",
       totalReelsUploaded: 38,
       totalStoriesRecorded: 7,
       totalDmInquiries: 31,
@@ -100,39 +117,32 @@ export const ExecutiveMeetingRecap: React.FC<ExecutiveMeetingRecapProps> = ({
       frequentStoryInquiries: [],
       obstacleLogs: [],
     },
-    nextTuesday: {
-      periodKey: "2026-09-22_to_2026-09-28",
-      startDate: "2026-09-22",
-      endDate: "2026-09-28",
-      meetingDateTitle: "Selasa, 29 September 2026 (Periode 22–28 Sep)",
-      meetingStatus: "Evaluasi Historis (29 Sep 2026)",
-      totalReelsUploaded: 36,
-      totalStoriesRecorded: 7,
-      totalDmInquiries: 27,
-      topViralReels: [],
-      frequentStoryInquiries: [],
-      obstacleLogs: [],
-    },
   };
 
-  const activePeriod = (periods as any)[selectedPeriodKey] || (periods as any).currentMeeting || (periods as any).lastTuesday || (periods as any).nextTuesday;
+  const activePeriod =
+    (periods as any)[selectedPeriodKey] ||
+    (periods as any).currentMeeting ||
+    (periods as any).cycle9 ||
+    (periods as any).lastTuesday ||
+    (periods as any).cycle8 ||
+    (periods as any).nextTuesday;
   const pendingPics = picTracker.filter((p) => !p.isUpToDate);
 
   const periodOptions = [
     {
       key: "currentMeeting",
+      label: "Siklus 9 (Rapat 20 Okt 2026)",
+      dateRange: "13–19 Okt 2026",
+    },
+    {
+      key: "lastTuesday",
       label: "Siklus 8 (Rapat 13 Okt 2026)",
       dateRange: "6–12 Okt 2026",
     },
     {
-      key: "lastTuesday",
+      key: "nextTuesday",
       label: "Siklus 7 (Rapat 6 Okt 2026)",
       dateRange: "29 Sep – 5 Okt 2026",
-    },
-    {
-      key: "nextTuesday",
-      label: "Siklus 6 (Rapat 29 Sep 2026)",
-      dateRange: "22–28 Sep 2026",
     },
   ];
 
@@ -142,7 +152,7 @@ Agenda: ${activePeriod.meetingDateTitle}
 Total Followers: ${executiveRecap.latestTotalNetworkFollowers.instagram.toLocaleString("id-ID")} IG · ${executiveRecap.latestTotalNetworkFollowers.tiktok.toLocaleString("id-ID")} TikTok
 Top Content: ${activePeriod.topViralReels[0]?.title || "-"} (${activePeriod.topViralReels[0]?.viewers?.toLocaleString("id-ID") || 0} viewers)
 Kepatuhan PIC: ${picTracker.length - pendingPics.length}/${picTracker.length} PIC Up-to-date
-Link Akses Web: https://imi-puce.vercel.app/spreadsheet`;
+Link Akses Web: ${PRODUCTION_BASE_URL}/spreadsheet`;
 
     navigator.clipboard.writeText(text);
     setQuickCopied(true);
