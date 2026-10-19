@@ -27,6 +27,8 @@ import {
   SlidersHorizontal,
 } from 'lucide-react';
 
+import { ACTIVE_MEETING_CYCLE } from '@/lib/cadence-config';
+
 interface BranchData {
   id: string;
   name: string;
@@ -43,20 +45,20 @@ interface BranchData {
   focus: string;
 }
 
-const BRANCHES: BranchData[] = [
+const INITIAL_BRANCHES: BranchData[] = [
   {
     id: 'all',
     name: 'Semua Jaringan',
     subtitle: 'Optik I See You & Lunar Eyewear',
     handle: '@iseeyou.glasses + 4 cabang',
-    followers: 244587,
-    followersFormatted: '244.587',
+    followers: 344100,
+    followersFormatted: '344.100',
     reelsCount: 40,
     storyPace: '100% On Schedule',
     picName: '6/6 PIC Aktif',
     picCount: 6,
-    engagementRate: '8.4%',
-    growth: '+1.482 minggu ini',
+    engagementRate: '8.5%',
+    growth: '+2.512 minggu ini',
     focus: 'Sentralisasi strategi konten & kolaborasi B2B lintas 5 wilayah',
   },
   {
@@ -64,14 +66,14 @@ const BRANCHES: BranchData[] = [
     name: 'Purwokerto',
     subtitle: 'Optik I See You · Flagship Pusat',
     handle: '@iseeyou.glasses',
-    followers: 132800,
-    followersFormatted: '132.8K',
+    followers: 232400,
+    followersFormatted: '232.4K',
     reelsCount: 18,
     storyPace: '4-6 Story/Hari',
     picName: 'Rian & Nabila',
     picCount: 2,
     engagementRate: '9.2%',
-    growth: '+820 minggu ini',
+    growth: '+1.850 minggu ini',
     focus: 'Edukasi lensa premium, fashion frame titanium, & event kampus',
   },
   {
