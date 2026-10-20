@@ -63,15 +63,15 @@ export const INITIAL_SPONSOR_LEADS: SponsorLead[] = [
   },
   {
     id: "sp-05",
-    brandName: "B2B Clinic",
-    contactPerson: "Tim Manajemen B2B Clinic",
+    brandName: "Merayu Spa Purbalingga",
+    contactPerson: "Kak Nisrina Khoirunnisa S (Account Executive)",
     phone: "+62 896-7447-1692",
     cleanPhone: "6289674471692",
-    category: "Skincare & Clinic",
-    recommendedPackage: "Gold (Rp 3.000.000)",
-    status: "Belum Dihubungi",
-    notes: "Klinik estetika & perawatan kulit modern. Demografi usia 18-35 tahun aktif berkonten.",
-    specificAngle: "Penempatan stand konsultasi estetika mini di venue event & voucher diskon treatment untuk seluruh peserta.",
+    category: "Wellness & Spa",
+    recommendedPackage: "Barter Produk & Voucher",
+    status: "Deal Disetujui",
+    notes: "MoU Barter Voucher aktif (6 Okt 2026 - 6 Jan 2027) senilai Rp 120.000 dengan I See You Purbalingga. Lanjutan koordinasi kemitraan sponsorship event Optik I See You.",
+    specificAngle: "Sinergi barter voucher spa Rp 120.000 untuk VIP goodie bag/doorprize peserta event dan aktivasi display/promosi bersama di gerai & media sosial.",
   },
   {
     id: "sp-06",
@@ -135,14 +135,14 @@ export const INITIAL_SPONSOR_LEADS: SponsorLead[] = [
   },
   {
     id: "sp-11",
-    brandName: "Merayu Spa",
-    contactPerson: "Tim Manajemen Merayu Spa",
+    brandName: "Merayu Spa (Official CS Line)",
+    contactPerson: "Tim Hotline Merayu Spa",
     phone: "+62 821-3682-0064",
     cleanPhone: "6282136820064",
     category: "Wellness & Spa",
     recommendedPackage: "Barter Produk & Voucher",
     status: "Belum Dihubungi",
-    notes: "Boutique spa & relaksasi premium Purwokerto. Sangat digemari kreator konten untuk self-care.",
+    notes: "Hotline resmi Merayu Spa (sesuai dokumen MoU). Saluran direct Account Executive ditangani oleh Kak Nisrina (+62 896-7447-1692).",
     specificAngle: "Voucher relaksasi spa untuk VIP hamper pembicara narasumber dan doorprize penutupan kelas konten.",
   },
 ];
@@ -173,6 +173,8 @@ export function buildSponsorPitchText(lead: SponsorLead, senderName = "Yoshput")
     addresseeLine = `Yth. Pimpinan dan Tim Promosi Rita Supermall Purwokerto`;
   } else if (lead.brandName.toLowerCase().includes("reta")) {
     addresseeLine = `Yth. Pimpinan dan Tim Sponsorship Reta Beauty Clinic`;
+  } else if (lead.brandName.toLowerCase().includes("merayu")) {
+    addresseeLine = `Yth. Kak Nisrina Khoirunnisa S & Tim Manajemen Merayu Spa Purbalingga`;
   } else if (lead.brandName.toLowerCase().includes("nuha")) {
     addresseeLine = `Yth. Pimpinan dan Tim Manajemen PT Nuha Cosmetindo`;
   } else {
@@ -187,7 +189,7 @@ export function buildSponsorPitchText(lead: SponsorLead, senderName = "Yoshput")
     ``,
     `Perkenalkan, saya *${senderName}* dari Divisi Strategic Partnership & Marketing Optik I See You.`,
     ``,
-    `Sehubungan dengan agenda program pengembangan kreator konten dan sinergi industri kreatif di wilayah Banyumas Raya, Optik I See You bersama Lunar Eyewear akan menyelenggarakan program unggulan:`,
+    `Sehubungan dengan agenda program pengembangan kreator konten dan sinergi industri kreatif di wilayah Banyumas Raya, Optik I See You akan menyelenggarakan program unggulan:`,
     ``,
     `*"CREATIVE CONTENT MASTERCLASS 2026: Buka Kelas Konten & Digital Brand Collaboration"*`,
     ``,
@@ -215,7 +217,7 @@ export function buildSponsorPitchText(lead: SponsorLead, senderName = "Yoshput")
     `Hormat kami,`,
     `*${senderName}*`,
     `Divisi Strategic Partnership & Marketing`,
-    `Optik I See You & Lunar Eyewear`,
+    `Optik I See You`,
     `Kontak WhatsApp: 0877-7868-3766`,
     `Situs Resmi: optikiseeyou.com`,
   ];

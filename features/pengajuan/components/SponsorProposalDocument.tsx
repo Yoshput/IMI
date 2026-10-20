@@ -59,7 +59,8 @@ interface ProposalData {
   packages: PackageTier[];
 }
 
-const STORAGE_KEY = "isy_proposal_sponsor_formal_v4";
+const STORAGE_KEY = "isy_proposal_sponsor_formal_v5";
+const LEGACY_STORAGE_KEY = "isy_proposal_sponsor_formal_v4";
 
 const DEFAULT_DATA: ProposalData = {
   docNo: "024/MKT-ISY/PROP-SPONSOR/X/2026",
@@ -77,7 +78,7 @@ const DEFAULT_DATA: ProposalData = {
   eventName: "CREATIVE CONTENT MASTERCLASS 2026",
   eventSubtitle: "Buka Kelas Konten: Masterclass Kreator Digital & Kolaborasi Brand Masa Kini",
   eventTheme: "Elevate Your Visuals, Scale Your Impact: Strategi Produksi Konten Komersial, Estetika Ritel & Kolaborasi Brand Masa Kini",
-  eventOrganizer: "Divisi Marketing & Strategic Partnership, Optik I See You & Lunar Eyewear",
+  eventOrganizer: "Divisi Marketing & Strategic Partnership, Optik I See You",
   eventDate: "Sabtu, 14 November 2026",
   eventTime: "09.00 – 15.00 WIB",
   eventVenue: "Creative Hall & Event Space Banyumas Raya",
@@ -86,7 +87,7 @@ const DEFAULT_DATA: ProposalData = {
   backgroundText1:
     "Perkembangan lanskap digital saat ini menuntut brand dan pelaku bisnis untuk terus hadir dengan konten visual yang otentik, estetis, dan bernilai komersial tinggi. Bagi brand lokal dan regional di wilayah Banyumas Raya dan sekitarnya, kolaborasi terpadu bersama kreator konten aktif merupakan strategi pemasaran yang paling efektif dalam menjangkau audiens muda, mahasiswa, hingga segmen keluarga modern.",
   backgroundText2:
-    "Optik I See You bersama Lunar Eyewear menginisiasi program 'Creative Content Masterclass 2026: Buka Kelas Konten'. Program ini dirancang bukan sekadar seminar teori satu arah, melainkan inkubator praktik di mana 50 peserta kreator terpilih langsung memproduksi konten video promosi dan ulasan produk mitra sponsor secara riil di lokasi.",
+    "Optik I See You menginisiasi program penawaran kemitraan strategis ini guna membuka ruang kolaborasi sinergis antara brand mitra dan ekosistem kreatif. Program ini dirancang bukan sekadar sarana promosi satu arah, melainkan wadah interaktif di mana target audiens dan pelaku kreatif dapat langsung berinteraksi serta memproduksi ulasan produk mitra sponsor secara riil di lokasi.",
   backgroundText3:
     "Melalui kemitraan B2B ini, brand mitra memperoleh aktivasi multi-kanal: tatap muka langsung dan sampling produk kepada kreator, penempatan materi promosi (brosur/voucher) di meja kasir 4 gerai ritel, penayangan video di TV Showroom, serta publikasi digital melalui media sosial resmi @iseeyou.glasses (244.000+ followers).",
   picName: "Yoshput",
@@ -157,6 +158,43 @@ const DEFAULT_DATA: ProposalData = {
 
 const fmt = (n: number) => n.toLocaleString("id-ID");
 
+function sanitizeProposalData(d: ProposalData): ProposalData {
+  const cleanStr = (s: string) =>
+    (s || "")
+      .replace(/OPTIK I SEE YOU & LUNAR EYEWEAR/gi, "OPTIK I SEE YOU")
+      .replace(/Optik I See You & Lunar Eyewear/gi, "Optik I See You")
+      .replace(/Optik I See You bersama Lunar Eyewear/gi, "Optik I See You")
+      .replace(/,\s*serta didukung second brand Lunar Eyewear Tegal/gi, "")
+      .replace(/serta didukung second brand Lunar Eyewear Tegal\.?/gi, "")
+      .replace(/·\s*Lunar Eyewear Tegal/gi, "")
+      .replace(/\s*& Lunar Eyewear/gi, "")
+      .replace(/Lunar Eyewear Tegal/gi, "Optik I See You");
+
+  return {
+    ...d,
+    docSubject: cleanStr(d.docSubject),
+    letterIntro: cleanStr(d.letterIntro),
+    letterClosing: cleanStr(d.letterClosing),
+    eventName: cleanStr(d.eventName),
+    eventSubtitle: cleanStr(d.eventSubtitle),
+    eventTheme: cleanStr(d.eventTheme),
+    eventOrganizer: cleanStr(d.eventOrganizer),
+    backgroundText1: cleanStr(d.backgroundText1),
+    backgroundText2: cleanStr(d.backgroundText2),
+    backgroundText3: cleanStr(d.backgroundText3),
+    packages: (d.packages || []).map((p) => ({
+      ...p,
+      name: cleanStr(p.name),
+      tagline: cleanStr(p.tagline),
+      benefits: (p.benefits || []).map((b) => cleanStr(b)),
+    })),
+  };
+}
+
+function checkHasLunar(d: ProposalData): boolean {
+  return /lunar/i.test(JSON.stringify(d));
+}
+
 export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
   const [data, setData] = useState<ProposalData>(DEFAULT_DATA);
   const [isEditing, setIsEditing] = useState<boolean>(false);
@@ -165,13 +203,19 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
   const [isSavedNotice, setIsSavedNotice] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<"document" | "quickForm">("document");
 
-  // Load from local storage on mount
+  // Load from local storage on mount with migration and sanitization
   useEffect(() => {
     try {
-      const raw = localStorage.getItem(STORAGE_KEY);
+      let raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) {
+        raw = localStorage.getItem(LEGACY_STORAGE_KEY);
+      }
       if (raw) {
         const parsed = JSON.parse(raw);
-        setData({ ...DEFAULT_DATA, ...parsed });
+        const merged = { ...DEFAULT_DATA, ...parsed };
+        const sanitized = sanitizeProposalData(merged);
+        setData(sanitized);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(sanitized));
       }
     } catch (e) {
       console.error("Gagal membaca storage proposal:", e);
@@ -189,12 +233,36 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
     }
   };
 
+  const hasLunar = checkHasLunar(data);
+
   const handleReset = () => {
-    if (confirm("Kembalikan seluruh isi proposal ke draf formal default?")) {
+    if (confirm("Kembalikan seluruh isi proposal ke draf formal default Optik I See You?")) {
       setData(DEFAULT_DATA);
       localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem(LEGACY_STORAGE_KEY);
       setIsSavedNotice(true);
       setTimeout(() => setIsSavedNotice(false), 2500);
+    }
+  };
+
+  const handlePrint = () => {
+    if (hasLunar) {
+      alert(
+        "Peringatan: Proposal masih memuat nama atau atribusi 'Lunar'. Sesuai ketentuan, Optik I See You merupakan satu-satunya pihak penyelenggara proposal ini. Silakan bersihkan atribusi Lunar terlebih dahulu sebelum mencetak dokumen final."
+      );
+      return;
+    }
+    window.print();
+  };
+
+  const handleCleanLunar = () => {
+    setData((prev) => sanitizeProposalData(prev));
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(sanitizeProposalData(data)));
+      setIsSavedNotice(true);
+      setTimeout(() => setIsSavedNotice(false), 2500);
+    } catch (e) {
+      console.error("Gagal menyimpan ke storage:", e);
     }
   };
 
@@ -314,13 +382,13 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
         {/* Center: Official Entity Info */}
         <div className="text-center flex-1 px-2">
           <h2 className="text-[13pt] font-bold tracking-wider uppercase text-black">
-            OPTIK I SEE YOU &amp; LUNAR EYEWEAR
+            OPTIK I SEE YOU
           </h2>
           <p className="text-[8.5pt] text-gray-800 tracking-wide font-medium">
             Jaringan Ritel Kacamata &amp; Layanan Pemeriksaan Mata Terpadu
           </p>
           <p className="text-[7.5pt] text-gray-700 mt-0.5">
-            Gerai: Purwokerto (Pusat) · Purbalingga · Cilacap · Wonosobo · Lunar Eyewear Tegal
+            Gerai: Purwokerto (Pusat) · Purbalingga · Cilacap · Wonosobo
           </p>
           <p className="text-[7.5pt] text-gray-700">
             Website: www.optikiseeyou.com · Layanan Kemitraan: 0877-7868-3766 · Email: marketing@optikiseeyou.com
@@ -332,7 +400,7 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
           <img
             src="/brand/logo-for-every-you.png"
             alt="for every you"
-            className="h-8 w-auto object-contain opacity-90"
+            className="h-6 sm:h-7 w-auto object-contain opacity-85"
           />
         </div>
       </div>
@@ -392,7 +460,7 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
               Reset
             </button>
             <button
-              onClick={() => window.print()}
+              onClick={handlePrint}
               className="px-4 py-1.5 rounded-lg text-xs font-bold bg-emerald-800 text-white hover:bg-emerald-900 shadow-sm transition-all flex items-center gap-1.5"
             >
               <span>Cetak / Simpan PDF (A4)</span>
@@ -417,15 +485,14 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
             <span className="text-[11px] text-neutral-500 font-medium mr-1">Isi Cepat:</span>
             {[
               { label: "Umum / Universal", company: "[Nama Perusahaan / Brand Mitra]", title: "Pimpinan / Brand & Marketing Manager" },
+              { label: "Merayu Spa", company: "Merayu Spa Purbalingga", title: "Kak Nisrina Khoirunnisa S (Account Executive)" },
               { label: "Baby Glows", company: "Baby Glows", title: "Pimpinan & Tim Manajemen" },
               { label: "Nuha Cosmetindo", company: "PT Nuha Cosmetindo", title: "Pimpinan & Tim Marketing" },
               { label: "Taylor De Virdis", company: "Taylor De Virdis", title: "Pimpinan & Tim Manajemen" },
               { label: "Inul Vista", company: "Inul Vista Purwokerto", title: "Mas Wahyu & Tim Marketing" },
-              { label: "B2B Clinic", company: "B2B Clinic", title: "Pimpinan & Tim Marketing" },
               { label: "Navagreen", company: "Navagreen Purwokerto", title: "Tim Marketing & Kemitraan" },
               { label: "Reta Clinic", company: "Reta Beauty Clinic", title: "Tim Sponsorship & Promosi" },
               { label: "Rita Group", company: "Rita Supermall Purwokerto", title: "Tim Promosi & Partnership" },
-              { label: "Merayu Spa", company: "Merayu Spa Purwokerto", title: "Pimpinan & Tim Manajemen" },
             ].map((p) => (
               <button
                 key={p.label}
@@ -445,6 +512,25 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
             ))}
           </div>
         </div>
+
+        {/* Warning Banner if Lunar Attribution is Present */}
+        {hasLunar && (
+          <div className="no-print mt-3 p-3 bg-amber-50 border border-amber-300 rounded-lg flex flex-wrap items-center justify-between gap-2 text-xs text-amber-900">
+            <div className="flex items-center gap-2">
+              <span className="font-bold text-amber-800">⚠️ Perhatian:</span>
+              <span>
+                Draf ini memuat atribusi <b>&quot;Lunar&quot;</b>. Sesuai ketentuan, Optik I See You merupakan satu-satunya penyelenggara. Bersihkan atribusi sebelum cetak/simpan PDF final.
+              </span>
+            </div>
+            <button
+              type="button"
+              onClick={handleCleanLunar}
+              className="px-3 py-1 bg-amber-800 hover:bg-amber-900 text-white rounded font-bold shadow-sm transition-all"
+            >
+              Bersihkan Otomatis Atribusi Lunar
+            </button>
+          </div>
+        )}
 
         {/* Third Row: Typography & Style Controls */}
         <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-neutral-200 text-xs">
@@ -513,7 +599,7 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
               <img
                 src="/brand/logo-for-every-you.png"
                 alt="for every you"
-                className="h-9 w-auto object-contain ml-auto"
+                className="h-7 w-auto object-contain ml-auto opacity-90"
               />
               <p className="text-[8pt] text-gray-700 mt-1 uppercase tracking-wider font-semibold">
                 Marketing Intelligence &amp; Event Initiative
@@ -582,11 +668,11 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
                 <p className="font-bold text-[10.5pt] text-black">
                   DIVISI MARKETING &amp; KEMITRAAN
                 </p>
-                <p className="text-[9.5pt] text-gray-800">
-                  Optik I See You &amp; Lunar Eyewear
+                <p className="text-[9.5pt] text-gray-800 font-semibold">
+                  Optik I See You
                 </p>
                 <p className="text-[8.5pt] text-gray-600 mt-1">
-                  Purwokerto · Purbalingga · Cilacap · Wonosobo · Tegal
+                  Purwokerto (Pusat) · Purbalingga · Cilacap · Wonosobo
                 </p>
               </div>
             </div>
@@ -697,9 +783,9 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
             </p>
             <p>
               Optik I See You saat ini mengoperasikan 4 gerai ritel di Purwokerto (Pusat), Purbalingga,
-              Cilacap, dan Wonosobo, serta didukung second brand Lunar Eyewear Tegal. Dalam rangka
-              membangun sinergi industri kreatif lokal, kami menginisiasi kelas konten terapan yang
-              mempertemukan kreator muda dengan brand rekanan.
+              Cilacap, dan Wonosobo. Dalam rangka membangun sinergi industri dan komunitas, kami
+              menginisiasi program kolaborasi kemitraan terapan yang mempertemukan target audiens dengan
+              brand rekanan.
             </p>
             <p>
               Melalui program ini, pihak sponsor akan memperoleh hak eksposur terpadu: aktivasi booth di
@@ -984,15 +1070,10 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
                 <td className="py-2 px-3 border-r border-black">Kawasan residensial &amp; industri aktif</td>
                 <td className="py-2 px-3">Layar TV Showroom, Meja Display Kasir</td>
               </tr>
-              <tr className="border-b border-black">
+              <tr>
                 <td className="py-2 px-3 border-r border-black font-semibold">Wonosobo</td>
                 <td className="py-2 px-3 border-r border-black">Pusat kota &amp; jalur pariwisata Dieng</td>
                 <td className="py-2 px-3">Layar TV Showroom, Display Flyer</td>
-              </tr>
-              <tr>
-                <td className="py-2 px-3 border-r border-black font-semibold">Lunar Eyewear Tegal</td>
-                <td className="py-2 px-3 border-r border-black">Second brand optik modern Gen-Z</td>
-                <td className="py-2 px-3">Layar TV Showroom &amp; Cross-Promotion</td>
               </tr>
             </tbody>
           </table>
@@ -1275,7 +1356,7 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
             <p className="text-justify text-[10pt] mb-4 leading-relaxed">
               Yang bertanda tangan di bawah ini, menyatakan bersedia berpartisipasi sebagai Mitra Sponsor
               dalam penyelenggaraan program <b>&quot;{data.eventName}&quot;</b> yang diselenggarakan oleh
-              Optik I See You &amp; Lunar Eyewear:
+              Optik I See You:
             </p>
 
             <table className="w-full border-collapse border border-black text-[9.5pt] mb-5">
@@ -1406,6 +1487,46 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
           </div>
         </section>
       </div>
+      {/* Global Print Stylesheet */}
+      <style jsx global>{`
+        @media print {
+          nav, header, footer, .no-print, [data-no-print="true"] {
+            display: none !important;
+          }
+          body, html {
+            background: white !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            color: black !important;
+            font-size: 10pt !important;
+          }
+          @page {
+            size: A4 portrait;
+            margin: 16mm 15mm 16mm 15mm;
+          }
+          .proposal-page {
+            box-shadow: none !important;
+            border: none !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            min-height: auto !important;
+            page-break-after: always;
+            break-after: page;
+          }
+          .proposal-page:last-child {
+            page-break-after: avoid;
+            break-after: avoid;
+          }
+          table {
+            page-break-inside: avoid;
+            break-inside: avoid;
+          }
+          tr {
+            page-break-inside: avoid;
+            break-inside: avoid;
+          }
+        }
+      `}</style>
     </div>
   );
 };
