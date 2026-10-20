@@ -279,7 +279,7 @@ export const ContentView: React.FC = () => {
               <span>
                 Daftar Seluruh Konten &amp; Ranking Bukti (
                 {period === "weekly"
-                  ? "Mingguan · Konten Minggu Ini (6 - 16 Okt 2026)"
+                  ? "Mingguan · Konten Minggu Ini (10 - 20 Okt 2026)"
                   : period === "monthly"
                   ? "Bulanan · Rekap September - Oktober 2026"
                   : "Semua Waktu · All-Time & Rekor Viral"}

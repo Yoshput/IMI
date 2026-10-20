@@ -17,11 +17,11 @@ export interface SponsorSubmissionItem {
   notes?: string;
 }
 
-// Marketing staff Yoshput WA phone number
+// Marketing staff Yossika Putra WA phone number
 export const MARKETING_STAFF_PHONE = "087778683766";
 
 /**
- * Format direct WhatsApp template text for Mas Yoshput (Marketing Staff)
+ * Format direct WhatsApp template text for Mas Yossika Putra (Marketing Staff)
  */
 export function buildSponsorWhatsAppMessage(item: {
   applicantName: string;
@@ -35,7 +35,7 @@ export function buildSponsorWhatsAppMessage(item: {
   offeredBenefits?: string;
 }): string {
   const lines = [
-    `Halo Mas Yoshput / Tim Marketing Optik I See You,`,
+    `Halo Mas Yossika Putra / Tim Marketing Optik I See You,`,
     ``,
     `Perkenalkan saya *${(item.applicantName || "Pemohon").trim()}* dari *${(item.institution || "Panitia Acara").trim()}*.`,
     `Kami bermaksud mengajukan penawaran proposal kerja sama sponsorship melalui web portal optikiseeyou.com:`,
@@ -50,7 +50,7 @@ export function buildSponsorWhatsAppMessage(item: {
     ``,
     item.offeredBenefits ? `*Benefit untuk Optik I See You:*\n"${item.offeredBenefits.trim()}"\n` : "",
     item.proposalUrl ? `*Link Proposal:*\n${item.proposalUrl.trim()}\n` : "",
-    `Besar harapan kami untuk dapat berkolaborasi bersama Optik I See You. Mohon kesediaan Mas Yoshput untuk meninjau penawaran ini.`,
+    `Besar harapan kami untuk dapat berkolaborasi bersama Optik I See You. Mohon kesediaan Mas Yossika Putra untuk meninjau penawaran ini.`,
     ``,
     `Terima kasih.`,
   ];
@@ -59,7 +59,7 @@ export function buildSponsorWhatsAppMessage(item: {
 }
 
 /**
- * Format outbound pitching template for Marketing Staff (Yoshput) reaching out to external brands
+ * Format outbound pitching template for Marketing Staff (Yossika Putra) reaching out to external brands
  */
 export function buildBrandPitchWhatsAppMessage(params: {
   brandName: string;
@@ -75,7 +75,7 @@ export function buildBrandPitchWhatsAppMessage(params: {
     ``,
     `Dengan hormat,`,
     ``,
-    `Perkenalkan, saya *Yoshput* dari Divisi Strategic Partnership & Marketing Optik I See You.`,
+    `Perkenalkan, saya *Yossika Putra* dari Divisi Strategic Partnership & Marketing Optik I See You.`,
     ``,
     `Sebagai sesama pelaku usaha dan brand di wilayah ini, kami bermaksud mengajak *${brand}* berkolaborasi melalui kemitraan strategis Business-to-Business (B2B) dalam program unggulan kami:`,
     ``,
@@ -100,7 +100,7 @@ export function buildBrandPitchWhatsAppMessage(params: {
     `Demikian penawaran ini kami sampaikan. Atas perhatian dan kesediaan Bapak/Ibu, kami ucapkan terima kasih.`,
     ``,
     `Hormat kami,`,
-    `*Yoshput*`,
+    `*Yossika Putra*`,
     `Divisi Strategic Partnership & Marketing`,
     `Optik I See You & Lunar Eyewear`,
     `Kontak WhatsApp: 0877-7868-3766`,

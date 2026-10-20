@@ -81,7 +81,7 @@ const CATEGORY_COLORS: Record<string, string> = {
 export const SponsorOutreachView: React.FC = () => {
   const [leads, setLeads] = useState<SponsorLead[]>(INITIAL_SPONSOR_LEADS);
   const [selectedLeadId, setSelectedLeadId] = useState<string>(INITIAL_SPONSOR_LEADS[0].id);
-  const [senderName, setSenderName] = useState("Yoshput");
+  const [senderName, setSenderName] = useState("Yossika Putra");
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");

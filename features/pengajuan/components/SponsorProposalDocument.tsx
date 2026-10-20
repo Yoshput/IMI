@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState, useRef } from "react";
+import Link from "next/link";
 
 export interface ProposalFollowerRow {
   account: string;
@@ -89,12 +90,12 @@ const DEFAULT_DATA: ProposalData = {
   backgroundText2:
     "Optik I See You menginisiasi program penawaran kemitraan strategis ini guna membuka ruang kolaborasi sinergis antara brand mitra dan ekosistem kreatif. Program ini dirancang bukan sekadar sarana promosi satu arah, melainkan wadah interaktif di mana target audiens dan pelaku kreatif dapat langsung berinteraksi serta memproduksi ulasan produk mitra sponsor secara riil di lokasi.",
   backgroundText3:
-    "Melalui kemitraan B2B ini, brand mitra memperoleh aktivasi multi-kanal: tatap muka langsung dan sampling produk kepada kreator, penempatan materi promosi (brosur/voucher) di meja kasir 4 gerai ritel, penayangan video di TV Showroom, serta publikasi digital melalui media sosial resmi @iseeyou.glasses (244.000+ followers).",
-  picName: "Yoshput",
+    "Melalui kemitraan B2B ini, brand mitra memperoleh aktivasi multi-kanal: tatap muka langsung dan sampling produk kepada kreator, penempatan materi promosi (brosur/voucher) di meja kasir 4 gerai ritel, penayangan video di TV Showroom Purwokerto (Pusat) serta display materi promosi (brosur/voucher) di meja kasir seluruh cabang gerai ritel, dan publikasi digital melalui media sosial resmi @iseeyou.glasses (244.000+ followers).",
+  picName: "Yossika Putra",
   picRole: "Staff Kemitraan & Sponsorship Marketing",
   picWa: "0877-7868-3766",
   picEmail: "marketing@optikiseeyou.com",
-  headName: "Mas Raja",
+  headName: "Raja Satria",
   headRole: "Head of Marketing & Strategic Communication",
   bankName: "Bank Central Asia (BCA) KCU Purwokerto",
   bankAccountNo: "046-189-2231",
@@ -106,8 +107,8 @@ const DEFAULT_DATA: ProposalData = {
       tagline: "Eksklusivitas On-Site & Jaringan Ritel 4 Kota",
       price: "Rp 5.000.000,-",
       benefits: [
-        "Hak pembukaan 1 (satu) booth/stand promosi interaktif eksklusif di lokasi acara.",
-        "Penayangan video profil / iklan komersial di layar TV Showroom 4 cabang ritel selama 1 (satu) bulan penuh.",
+        "Hak pembukaan 1 (satu) booth/stand promosi interaktif eksklusif di lokasi acara (Kuota Terbatas / First-Come First-Served).",
+        "Penayangan video profil / iklan komersial di layar TV Showroom Purwokerto (Pusat) selama 1 (satu) bulan penuh & display brosur di seluruh cabang.",
         "Sesi presentasi / product demo di panggung utama selama 15 menit.",
         "Pencantuman logo ukuran BESAR pada backdrop panggung, x-banner, flyer cetak, dan frame photobooth.",
         "Penyertaan produk sampling / voucher resmi di dalam goodie bag seluruh peserta dan narasumber.",
@@ -121,7 +122,7 @@ const DEFAULT_DATA: ProposalData = {
       tagline: "Visibilitas Ritel & Digital Kampanye",
       price: "Rp 3.000.000,-",
       benefits: [
-        "Penayangan video profil / iklan produk di layar TV Showroom 4 cabang ritel selama 2 (dua) minggu.",
+        "Penayangan video profil / iklan di layar TV Showroom Purwokerto (Pusat) selama 2 (dua) minggu & display materi promosi (flyer/voucher) di meja kasir seluruh gerai.",
         "Pencantuman logo ukuran SEDANG pada backdrop panggung, banner kegiatan, dan materi publikasi digital.",
         "Display materi promosi (flyer/voucher) di meja kasir 4 gerai cabang Optik I See You.",
         "Hak menyertakan voucher belanja / materi promosi dalam goodie bag peserta.",
@@ -135,7 +136,7 @@ const DEFAULT_DATA: ProposalData = {
       tagline: "Eksposur Event & Media Sosial",
       price: "Rp 1.500.000,-",
       benefits: [
-        "Penayangan slide poster promosi di layar TV Showroom 4 cabang ritel selama 1 (satu) minggu.",
+        "Display poster & flyer promosi di meja kasir seluruh cabang gerai Optik I See You.",
         "Pencantuman logo ukuran STANDAR pada banner utama dan e-flyer publikasi.",
         "Penyertaan flyer / voucher promosi ke dalam goodie bag peserta.",
         "Mention dan tag apresiasi sponsorship di Instagram Story resmi Optik I See You.",
@@ -418,6 +419,12 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-neutral-200 pb-3">
           <div>
             <div className="flex items-center gap-2">
+            <Link
+              href="/proposal-merchant"
+              className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-300 transition-all flex items-center gap-1"
+            >
+              <span>Buka Proposal Merchant B2B →</span>
+            </Link>
               <span className="font-bold text-sm tracking-wide text-neutral-950 uppercase">
                 Proposal Sponsorship Resmi
               </span>
@@ -1058,22 +1065,22 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
               <tr className="border-b border-black">
                 <td className="py-2 px-3 border-r border-black font-semibold">Purwokerto (Pusat)</td>
                 <td className="py-2 px-3 border-r border-black">Pusat kota, dekat kawasan kampus &amp; kantor</td>
-                <td className="py-2 px-3">Layar TV Showroom, Meja Display Kasir</td>
+                <td className="py-2 px-3">Layar TV Showroom &amp; Meja Display Kasir</td>
               </tr>
               <tr className="border-b border-black">
                 <td className="py-2 px-3 border-r border-black font-semibold">Purbalingga</td>
                 <td className="py-2 px-3 border-r border-black">Area sentra niaga &amp; keluarga muda</td>
-                <td className="py-2 px-3">Layar TV Showroom, Display Flyer</td>
+                <td className="py-2 px-3">Meja Display Kasir &amp; Display Brosur / Flyer</td>
               </tr>
               <tr className="border-b border-black">
                 <td className="py-2 px-3 border-r border-black font-semibold">Cilacap</td>
                 <td className="py-2 px-3 border-r border-black">Kawasan residensial &amp; industri aktif</td>
-                <td className="py-2 px-3">Layar TV Showroom, Meja Display Kasir</td>
+                <td className="py-2 px-3">Meja Display Kasir &amp; Display Brosur / Flyer</td>
               </tr>
               <tr>
                 <td className="py-2 px-3 border-r border-black font-semibold">Wonosobo</td>
                 <td className="py-2 px-3 border-r border-black">Pusat kota &amp; jalur pariwisata Dieng</td>
-                <td className="py-2 px-3">Layar TV Showroom, Display Flyer</td>
+                <td className="py-2 px-3">Meja Display Kasir &amp; Display Brosur / Flyer</td>
               </tr>
             </tbody>
           </table>

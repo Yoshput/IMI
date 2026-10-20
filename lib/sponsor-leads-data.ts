@@ -160,7 +160,7 @@ function cleanBrandForLetter(raw: string): string {
  * Format teks outreach WhatsApp resmi, formal korporat, tanpa emotikon / simbol AI slop.
  * Mengikuti tata naskah korespondensi bisnis formal Indonesia.
  */
-export function buildSponsorPitchText(lead: SponsorLead, senderName = "Yoshput"): string {
+export function buildSponsorPitchText(lead: SponsorLead, senderName = "Yossika Putra"): string {
   const brand = cleanBrandForLetter(lead.brandName);
 
   // Susun baris tujuan surat secara formal dan spesifik per entitas mitra
@@ -231,7 +231,7 @@ export function buildSponsorPitchText(lead: SponsorLead, senderName = "Yoshput")
  * Menawarkan alokasi 50 lembar voucher kacamata per bulan dari Optik I See You dan
  * menanyakan kebutuhan kuota serta skema voucher dari pihak mitra secara profesional.
  */
-export function buildB2BVoucherPitchText(lead: SponsorLead, senderName = "Yoshput"): string {
+export function buildB2BVoucherPitchText(lead: SponsorLead, senderName = "Yossika Putra"): string {
   const brand = cleanBrandForLetter(lead.brandName);
 
   // Penanganan khusus untuk Merayu Spa yang sudah memiliki MoU aktif
@@ -310,6 +310,9 @@ export function buildB2BVoucherPitchText(lead: SponsorLead, senderName = "Yoshpu
     `3. Bagaimana ketentuan atau skema voucher promosi yang saat ini biasa berjalan di pihak *${brand}*?`,
     ``,
     `Program ini murni skema kemitraan barter sinergi tanpa dikenakan biaya administrasi apa pun. Kami siap menyiapkan draf kesepakatan kerja sama (MoU ringkas) setelah format dan kuota voucher disepakati bersama.`,
+    ``,
+    `Dokumen Proposal Kemitraan Merchant B2B resmi dapat ditinjau melalui tautan:`,
+    `https://iseeyou-marketing-intelligence.vercel.app/proposal-merchant`,
     ``,
     `Apabila Bapak/Ibu berkenan, kami sangat terbuka untuk berdiskusi santai sejenak via WhatsApp guna membahas teknis kolaborasi ini.`,
     ``,

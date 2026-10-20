@@ -1,5 +1,109 @@
 [
   {
+    "id": "kol-wsb-hanna",
+    "branchId": "wsb",
+    "branchName": "Wonosobo",
+    "brand": "Optik I See You",
+    "name": "Hanna",
+    "handle": "hanna_nalaya",
+    "platform": "TikTok & Instagram",
+    "profileImg": null,
+    "instagramUrl": "https://www.tiktok.com/@hanna_nalaya",
+    "tiktokUrl": "https://www.tiktok.com/@hanna_nalaya",
+    "socialBladeUrl": "https://socialblade.com/tiktok/user/hanna_nalaya",
+    "socialBladeGrade": "A-",
+    "followers": 45000,
+    "followersFormatted": "45.0K",
+    "engagementRate": 8.5,
+    "niche": "Hijab Fashion, Daily Vlog & Aesthetic Lifestyle Wonosobo",
+    "audienceFit": "Remaja & Dewasa Muda Wonosobo & Sekitarnya",
+    "rateCard": {
+      "story": "Include paket (1x Story)",
+      "reels": "Tawar Rp 300.000 Barter (Ratecard awal Rp 700.000)",
+      "feeds": "-",
+      "visitStore": "Bisa visit store Optik I See You Wonosobo",
+      "bundled": "Rp 300.000 + Barter Produk Kacamata"
+    },
+    "benefits": [
+      "Audience lokal Wonosobo sangat kuat dan engagement tinggi",
+      "Visual rapi, ramah, dan cocok untuk edukasi frame kacamata kekinian",
+      "Dapat mempromosikan layanan periksa refraksi mata cabang Wonosobo"
+    ],
+    "owningRights": {
+      "canOwnRaw": true,
+      "terms": "Video mentahan 4K untuk Meta Ads cabang Wonosobo",
+      "extraFeeEstimate": "Include negosiasi barter",
+      "adsUsageDays": 60,
+      "statusNote": "Bisa Owning (Siap Ads)"
+    },
+    "status": "Negosiasi (Tawar 300K Barter)",
+    "notes": "KOL Utama Wonosobo: Mengajukan ratecard awal 700k, sedang dalam proses penawaran di 300k barter produk. Jika tidak sepakat, beralih ke @ericall__.",
+    "contactWa": "-",
+    "pitchTemplate": "Hai kak Hanna.. ✨👋\n\nPerkenalkan kami dari tim Marketing Optik I See You Wonosobo 👓\nSebelumnya terima kasih banyak atas info ratecardnya kak (700k). Untuk kolaborasi awal ini, apakah memungkinkan di angka 300k include barter produk frame + lensa komplit I See You? 🥰\n\nTerimakasih banyak ditunggu kabar baiknya ya kak! Have a wonderful day 🌸✨",
+    "barterStrategy": {
+      "standardFee": "Rp 700.000 (Ratecard Awal)",
+      "barterOption": "Tawar Rp 300.000 + Barter Frame & Lensa Kacamata",
+      "followerVoucher": "Voucher Diskon Followers Wonosobo",
+      "recommendedApproach": "Tawar di Rp 300.000 barter produk kacamata. Jika Hanna tidak sepakat, segera alihkan ke kandidat pria @ericall__ di 300k barter produk."
+    },
+    "contentFocus": "Aesthetic OOTD Kacamata & Store Visit Wonosobo",
+    "rateCardImage": null,
+    "rateCardPdf": null,
+    "rateCardNote": "Rate card awal diajukan Rp 700.000, posisi saat ini ditawar Rp 300.000 barter produk kacamata."
+  },
+  {
+    "id": "kol-wsb-eric",
+    "branchId": "wsb",
+    "branchName": "Wonosobo",
+    "brand": "Optik I See You",
+    "name": "Eric",
+    "handle": "ericall__",
+    "platform": "TikTok",
+    "profileImg": null,
+    "instagramUrl": "https://www.tiktok.com/@ericall__",
+    "tiktokUrl": "https://www.tiktok.com/@ericall__",
+    "socialBladeUrl": "https://socialblade.com/tiktok/user/ericall__",
+    "socialBladeGrade": "B+",
+    "followers": 28000,
+    "followersFormatted": "28.0K",
+    "engagementRate": 7.2,
+    "niche": "Lifestyle Pria, Daily Vibe & Casual Wonosobo",
+    "audienceFit": "Audiens Pria & Komunitas Muda Wonosobo",
+    "rateCard": {
+      "story": "Include barter (1-2x Story)",
+      "reels": "Rp 300.000 (Khusus Barter Produk)",
+      "feeds": "-",
+      "visitStore": "Visit Store Wonosobo",
+      "bundled": "Rp 300.000 (Khusus Barter Produk)"
+    },
+    "benefits": [
+      "KOL Pria untuk menjangkau segmen pria dan anak muda Wonosobo",
+      "Sangat cocok mempromosikan frame kacamata pria/unisex bergaya casual & sporty",
+      "Biaya sangat efisien dengan skema khusus barter produk senilai 300k"
+    ],
+    "owningRights": {
+      "canOwnRaw": true,
+      "terms": "Video mentahan tanpa watermark untuk konten promosi",
+      "extraFeeEstimate": "Include barter produk",
+      "adsUsageDays": 60,
+      "statusNote": "Bisa Owning"
+    },
+    "status": "Kandidat Alternatif (Barter Produk)",
+    "notes": "KOL Alternatif Pria Wonosobo: Skema 300k khusus barter produk kacamata. Digunakan sebagai opsi pengganti jika negosiasi dengan Hanna tidak deal.",
+    "contactWa": "-",
+    "pitchTemplate": "Hai bro Eric.. ✨👋\n\nPerkenalkan saya dari tim Marketing Optik I See You Wonosobo 👓\nKami tertarik untuk mengajak kolaborasi bareng lo dengan skema barter produk kacamata senilai 300k di store kami Wonosobo 🔥\n\nKira-kira tertarik ga bro untuk coba fitting frame dan review kacamata kece? Ditunggu kabarnya ya!",
+    "barterStrategy": {
+      "standardFee": "Rp 300.000",
+      "barterOption": "Khusus Barter Produk Kacamata",
+      "followerVoucher": "Voucher Belanja Followers Wonosobo",
+      "recommendedApproach": "Langsung ajukan skema Rp 300.000 khusus barter produk frame kacamata + lensa untuk konten review di store Wonosobo."
+    },
+    "contentFocus": "Men Eyewear Styling & Casual Review",
+    "rateCardImage": null,
+    "rateCardPdf": null,
+    "rateCardNote": "Paket Rp 300.000 khusus barter produk kacamata."
+  },
+  {
     "id": "kol-pwt-justnnayyaa",
     "branchId": "pwt",
     "branchName": "Purwokerto",

@@ -54,7 +54,7 @@ export interface PengajuanHubViewProps {
 export const PengajuanHubView: React.FC<PengajuanHubViewProps> = ({ initialTab = "sponsor_leads" }) => {
   const [activeTab, setActiveTab] = useState<"sponsor_leads" | "proposal" | "homeservice" | "database">(initialTab);
 
-  // Pitching Generator State (For Yoshput reaching out to external brands)
+  // Pitching Generator State (For Yossika Putra reaching out to external brands)
   const [pitchBrandName, setPitchBrandName] = useState("Somethinc");
   const [pitchPicName, setPitchPicName] = useState("Brand Manager");
   const [pitchCategory, setPitchCategory] = useState("Skincare & Beauty");
@@ -127,7 +127,7 @@ export const PengajuanHubView: React.FC<PengajuanHubViewProps> = ({ initialTab =
                 Marketing Intelligence · Kemitraan &amp; Layanan
               </span>
               <span className="text-[11px] font-medium text-foreground-muted">
-                PIC Staff Marketing: <strong>Yoshput ({MARKETING_STAFF_PHONE})</strong>
+                PIC Staff Marketing: <strong>Yossika Putra ({MARKETING_STAFF_PHONE})</strong>
               </span>
             </div>
             <h1 className="text-xl sm:text-2xl font-black text-foreground mt-1.5 tracking-tight">
@@ -139,13 +139,20 @@ export const PengajuanHubView: React.FC<PengajuanHubViewProps> = ({ initialTab =
             </p>
           </div>
 
-          <div className="flex items-center gap-2.5 shrink-0">
+          <div className="flex flex-wrap items-center gap-2 shrink-0">
+            <Link
+              href="/proposal-merchant"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-800 hover:bg-emerald-900 text-white font-bold text-xs shadow-xs transition-all active:scale-95"
+            >
+              <FileText className="w-3.5 h-3.5 text-emerald-200" />
+              <span>1. Proposal Merchant B2B</span>
+            </Link>
             <Link
               href="/proposal-sponsor"
-              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-800 hover:bg-emerald-900 text-white font-bold text-xs shadow-xs transition-all active:scale-95"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-neutral-800 hover:bg-black text-white font-bold text-xs shadow-xs transition-all active:scale-95"
             >
-              <FileText className="w-4 h-4 text-emerald-200" />
-              <span>Buka Proposal Sponsor (A4)</span>
+              <FileText className="w-3.5 h-3.5 text-neutral-300" />
+              <span>2. Proposal Sponsor Event</span>
             </Link>
           </div>
         </div>
@@ -337,7 +344,7 @@ export const PengajuanHubView: React.FC<PengajuanHubViewProps> = ({ initialTab =
           <div className="rounded-2xl border border-border bg-surface p-5 sm:p-6 shadow-subtle space-y-5">
             <div className="border-b border-border pb-3">
               <span className="text-[10px] uppercase font-black text-emerald-700 dark:text-emerald-400 tracking-wider block">
-                Alat Kerja Staff Marketing (Mas Yoshput)
+                Alat Kerja Staff Marketing (Mas Yossika Putra)
               </span>
               <h3 className="text-base font-black text-foreground mt-0.5 flex items-center gap-2">
                 <MessageSquare className="w-4 h-4 text-emerald-600" />
@@ -413,7 +420,7 @@ export const PengajuanHubView: React.FC<PengajuanHubViewProps> = ({ initialTab =
 
                 <div className="p-3 rounded-xl bg-surface-secondary border border-border/80 text-[11px] text-foreground-secondary space-y-1">
                   <span className="font-bold text-foreground block">Pesan dikirim dari:</span>
-                  <p>Yoshput · Staff Marketing &amp; Kemitraan Optik I See You</p>
+                  <p>Yossika Putra · Staff Marketing &amp; Kemitraan Optik I See You</p>
                   <p className="font-semibold text-emerald-700 dark:text-emerald-400">Nomor WhatsApp Resmi: {MARKETING_STAFF_PHONE}</p>
                 </div>
               </div>
