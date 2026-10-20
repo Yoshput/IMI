@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState, useRef } from "react";
 import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 import { ProposalFollowerRow } from "./SponsorProposalDocument";
 
 interface Props {
@@ -270,48 +271,62 @@ export const MerchantProposalDocument: React.FC<Props> = ({ followers }) => {
       {/* FLOATING ACTION TOOLBAR */}
       <div className="no-print max-w-[210mm] mx-auto mb-6 bg-white border border-neutral-300 rounded-xl p-4 shadow-md sticky top-4 z-50">
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-neutral-200 pb-3">
-          <div className="flex items-center gap-2">
-            <span className="font-bold text-sm tracking-wide text-neutral-950 uppercase">
-              Proposal Merchant B2B
-            </span>
-            <span className="px-2 py-0.5 text-[10px] font-semibold bg-emerald-100 text-emerald-800 border border-emerald-300 rounded">
-              Kerja Sama Jangka Panjang
-            </span>
+          <div className="flex items-center gap-2.5 flex-wrap">
+            {/* Tombol Kembali ke Portal Pengajuan */}
+            <Link
+              href="/pengajuan"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-neutral-100 hover:bg-neutral-200 text-neutral-800 border border-neutral-300 transition-all shadow-2xs hover:border-neutral-400"
+              title="Kembali ke Portal Pengajuan & Outreach CRM"
+            >
+              <ArrowLeft className="w-3.5 h-3.5 text-neutral-700" />
+              <span>Kembali</span>
+            </Link>
+
+            <div className="h-4 w-px bg-neutral-300 mx-0.5 hidden sm:block" />
+
+            {/* Segmented Switcher antar 2 Proposal */}
+            <div className="inline-flex items-center p-0.5 bg-neutral-100 border border-neutral-300 rounded-lg text-xs">
+              <Link
+                href="/proposal-sponsor"
+                className="px-2.5 py-1 rounded-md font-semibold text-neutral-600 hover:text-neutral-900 hover:bg-white/60 transition-all flex items-center gap-1"
+                title="Buka Proposal Sponsor Event (Kelas Konten)"
+              >
+                <span className="text-[10px]">←</span>
+                <span>1. Proposal Sponsor Event</span>
+              </Link>
+              <span className="px-2.5 py-1 rounded-md font-bold bg-white text-emerald-900 shadow-2xs">
+                2. Proposal Merchant B2B
+              </span>
+            </div>
+
             {isSavedNotice && (
-              <span className="px-2 py-0.5 text-[10px] font-bold bg-green-100 text-green-800 border border-green-300 rounded">
-                Tersimpan di Browser
+              <span className="px-2 py-0.5 text-[10px] font-bold bg-green-100 text-green-800 border border-green-300 rounded animate-fade-in">
+                ✓ Tersimpan
               </span>
             )}
           </div>
 
           <div className="flex items-center gap-2">
-            {/* Tab switch between 2 proposals */}
-            <Link
-              href="/proposal-sponsor"
-              className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-neutral-100 hover:bg-neutral-200 text-neutral-800 border border-neutral-300 transition-all"
-            >
-              ← Buka Proposal Sponsor Event
-            </Link>
-
             <button
               onClick={() => setIsEditing(!isEditing)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all border ${
                 isEditing
-                  ? "bg-amber-500 text-white shadow-sm"
-                  : "bg-neutral-200 hover:bg-neutral-300 text-neutral-800"
+                  ? "bg-amber-500 text-white border-amber-600 shadow-sm"
+                  : "bg-neutral-100 text-neutral-800 hover:bg-neutral-200 border-neutral-300"
               }`}
             >
-              {isEditing ? "Selesai Edit" : "Mode Edit"}
+              {isEditing ? "✎ Selesai Edit" : "Mode Edit"}
             </button>
             <button
               onClick={handleSave}
-              className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-neutral-800 hover:bg-black text-white shadow-sm transition-all"
+              className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-neutral-800 text-white hover:bg-black transition-colors"
             >
               Simpan
             </button>
             <button
               onClick={handleReset}
-              className="px-2.5 py-1.5 rounded-lg text-xs font-medium text-neutral-600 hover:text-red-700 hover:bg-red-50 transition-all border border-transparent hover:border-red-200"
+              className="px-2.5 py-1.5 rounded-lg text-xs font-medium text-neutral-600 hover:text-red-700 hover:bg-red-50 border border-transparent hover:border-red-200 transition-colors"
+              title="Reset ke template default"
             >
               Reset
             </button>

@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState, useRef } from "react";
 import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 
 export interface ProposalFollowerRow {
   account: string;
@@ -417,29 +418,39 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
       {/* ======================================================== */}
       <div className="no-print max-w-[210mm] mx-auto mb-6 bg-white border border-neutral-300 rounded-xl p-4 shadow-md sticky top-4 z-50">
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-neutral-200 pb-3">
-          <div>
-            <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5 flex-wrap">
+            {/* Tombol Kembali ke Portal Pengajuan */}
             <Link
-              href="/proposal-merchant"
-              className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-300 transition-all flex items-center gap-1"
+              href="/pengajuan"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-neutral-100 hover:bg-neutral-200 text-neutral-800 border border-neutral-300 transition-all shadow-2xs hover:border-neutral-400"
+              title="Kembali ke Portal Pengajuan & Outreach CRM"
             >
-              <span>Buka Proposal Merchant B2B →</span>
+              <ArrowLeft className="w-3.5 h-3.5 text-neutral-700" />
+              <span>Kembali</span>
             </Link>
-              <span className="font-bold text-sm tracking-wide text-neutral-950 uppercase">
-                Proposal Sponsorship Resmi
+
+            <div className="h-4 w-px bg-neutral-300 mx-0.5 hidden sm:block" />
+
+            {/* Segmented Switcher antar 2 Proposal */}
+            <div className="inline-flex items-center p-0.5 bg-neutral-100 border border-neutral-300 rounded-lg text-xs">
+              <span className="px-2.5 py-1 rounded-md font-bold bg-white text-neutral-950 shadow-2xs">
+                1. Proposal Sponsor Event
               </span>
-              <span className="px-2 py-0.5 text-[10px] font-semibold bg-neutral-200 text-neutral-800 rounded">
-                Standar Formal Korporat
-              </span>
-              {isSavedNotice && (
-                <span className="px-2 py-0.5 text-[10px] font-bold bg-green-100 text-green-800 border border-green-300 rounded">
-                  ✓ Tersimpan
-                </span>
-              )}
+              <Link
+                href="/proposal-merchant"
+                className="px-2.5 py-1 rounded-md font-semibold text-neutral-600 hover:text-emerald-800 hover:bg-white/60 transition-all flex items-center gap-1"
+                title="Buka Proposal Kemitraan Merchant B2B Jangka Panjang"
+              >
+                <span>2. Proposal Merchant B2B</span>
+                <span className="text-[10px]">→</span>
+              </Link>
             </div>
-            <p className="text-xs text-neutral-600 mt-0.5">
-              Format baku persuratan korporat bebas ikon/ornamen AI. Dilengkapi KOP resmi Optik I See You &amp; slogan &quot;for every you&quot;.
-            </p>
+
+            {isSavedNotice && (
+              <span className="px-2 py-0.5 text-[10px] font-bold bg-green-100 text-green-800 border border-green-300 rounded animate-fade-in">
+                ✓ Tersimpan
+              </span>
+            )}
           </div>
 
           <div className="flex items-center gap-2">
@@ -451,7 +462,7 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
                   : "bg-neutral-100 text-neutral-800 hover:bg-neutral-200 border-neutral-300"
               }`}
             >
-              {isEditing ? "✎ Mode Edit Aktif" : "Mode Edit"}
+              {isEditing ? "✎ Selesai Edit" : "Mode Edit"}
             </button>
             <button
               onClick={handleSave}
