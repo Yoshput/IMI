@@ -27,6 +27,7 @@ import {
   SponsorLead,
   INITIAL_SPONSOR_LEADS,
   buildSponsorPitchText,
+  buildB2BVoucherPitchText,
   buildWhatsAppLink,
 } from "@/lib/sponsor-leads-data";
 
@@ -86,6 +87,7 @@ export const SponsorOutreachView: React.FC = () => {
   const [statusFilter, setStatusFilter] = useState("all");
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [copiedPreview, setCopiedPreview] = useState(false);
+  const [pitchMode, setPitchMode] = useState<"voucher" | "event">("voucher");
 
   // Load persisted leads state from localStorage
   useEffect(() => {
@@ -125,10 +127,17 @@ export const SponsorOutreachView: React.FC = () => {
   };
 
   const selectedLead = leads.find((l) => l.id === selectedLeadId) || leads[0];
-  const activePitchText = selectedLead ? buildSponsorPitchText(selectedLead, senderName) : "";
+  const activePitchText = selectedLead
+    ? pitchMode === "voucher"
+      ? buildB2BVoucherPitchText(selectedLead, senderName)
+      : buildSponsorPitchText(selectedLead, senderName)
+    : "";
 
   const handleCopyPitch = (lead: SponsorLead) => {
-    const text = buildSponsorPitchText(lead, senderName);
+    const text =
+      pitchMode === "voucher"
+        ? buildB2BVoucherPitchText(lead, senderName)
+        : buildSponsorPitchText(lead, senderName);
     navigator.clipboard.writeText(text);
     setCopiedId(lead.id);
     setTimeout(() => setCopiedId(null), 2500);
@@ -177,7 +186,7 @@ export const SponsorOutreachView: React.FC = () => {
             </h2>
             <p className="text-xs sm:text-sm text-foreground-secondary max-w-2xl">
               11 target brand mitra bisnis lokal dan regional untuk sinergi kemitraan B2B (tukar voucher, display brosur kasir 4 cabang, dan sponsorship event)
-              bersama Optik I See You & Lunar Eyewear.
+              bersama Optik I See You (Purwokerto, Purbalingga, Cilacap, Wonosobo).
             </p>
           </div>
 
@@ -407,6 +416,36 @@ export const SponsorOutreachView: React.FC = () => {
         {/* Right Column: Live Chat WhatsApp Pitch Preview (5 Cols) */}
         <div className="lg:col-span-5 sticky top-20 space-y-4">
           <div className="rounded-2xl border border-border bg-surface shadow-md overflow-hidden">
+            {/* Mode Switcher: Penjajakan Barter Voucher vs Proposal Event */}
+            <div className="p-2 bg-surface-secondary border-b border-border">
+              <div className="grid grid-cols-2 gap-1.5 p-1 bg-surface rounded-xl border border-border">
+                <button
+                  type="button"
+                  onClick={() => setPitchMode("voucher")}
+                  className={`py-2 px-2.5 rounded-lg text-xs font-bold transition-all text-center flex flex-col items-center justify-center gap-0.5 ${
+                    pitchMode === "voucher"
+                      ? "bg-brand text-white shadow-xs"
+                      : "text-foreground-secondary hover:text-foreground hover:bg-surface-secondary"
+                  }`}
+                >
+                  <span>1. Barter Voucher B2B</span>
+                  <span className="text-[10px] font-normal opacity-90">Penjajakan Awal (50 Pcs/Bln)</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setPitchMode("event")}
+                  className={`py-2 px-2.5 rounded-lg text-xs font-bold transition-all text-center flex flex-col items-center justify-center gap-0.5 ${
+                    pitchMode === "event"
+                      ? "bg-brand text-white shadow-xs"
+                      : "text-foreground-secondary hover:text-foreground hover:bg-surface-secondary"
+                  }`}
+                >
+                  <span>2. Proposal Event</span>
+                  <span className="text-[10px] font-normal opacity-90">Sponsorship Masterclass</span>
+                </button>
+              </div>
+            </div>
+
             {/* Header chat mockup */}
             <div className="p-4 bg-emerald-700 text-white flex items-center justify-between">
               <div className="flex items-center gap-2.5">

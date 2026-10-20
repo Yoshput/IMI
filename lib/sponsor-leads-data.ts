@@ -225,6 +225,105 @@ export function buildSponsorPitchText(lead: SponsorLead, senderName = "Yoshput")
   return lines.filter((l): l is string => typeof l === "string").join("\n");
 }
 
+
+/**
+ * Format teks penjajakan awal kemitraan B2B: Barter Voucher & Cross-Display Meja Kasir.
+ * Menawarkan alokasi 50 lembar voucher kacamata per bulan dari Optik I See You dan
+ * menanyakan kebutuhan kuota serta skema voucher dari pihak mitra secara profesional.
+ */
+export function buildB2BVoucherPitchText(lead: SponsorLead, senderName = "Yoshput"): string {
+  const brand = cleanBrandForLetter(lead.brandName);
+
+  // Penanganan khusus untuk Merayu Spa yang sudah memiliki MoU aktif
+  if (lead.brandName.toLowerCase().includes("merayu") && !lead.brandName.toLowerCase().includes("official cs")) {
+    return [
+      `Yth. Kak Nisrina Khoirunnisa S`,
+      `Account Executive Merayu Spa Purbalingga`,
+      `di Tempat`,
+      ``,
+      `Dengan hormat,`,
+      ``,
+      `Perkenalkan, saya *${senderName}* dari Divisi Strategic Partnership & Marketing Optik I See You. Semoga Kak Nisrina dan segenap tim Merayu Spa senantiasa sehat dan sukses dalam beraktivitas.`,
+      ``,
+      `Melanjutkan kesepakatan kemitraan barter voucher yang telah terjalin aktif antara Merayu Spa dan I See You Purbalingga (MoU periode 6 Oktober 2026 s/d 6 Januari 2027), kami ingin berkoordinasi terkait realisasi dan ketersediaan alokasi voucher.`,
+      ``,
+      `Dari pihak Optik I See You, kami memiliki alokasi standar *50 lembar voucher belanja/pemeriksaan kacamata per bulan* untuk dibagikan secara eksklusif kepada customer loyal Merayu Spa.`,
+      ``,
+      `Sehubungan dengan hal tersebut, kami ingin mengonfirmasi dua hal teknis:`,
+      `1. Berapa kuota voucher Merayu Spa (nominal Rp 120.000,-) yang dapat kami distribusikan kepada customer kami di gerai I See You untuk alokasi bulan ini?`,
+      `2. Apakah materi promosi berupa flyer/tent card Merayu Spa sudah siap untuk kami display di meja kasir gerai kami, dan sebaliknya untuk materi promosi Optik I See You di meja kasir Merayu Spa?`,
+      ``,
+      `Selain itu, dalam waktu dekat Optik I See You juga sedang menyiapkan agenda kolaborasi event kreatif di Banyumas Raya yang nantinya akan kami koordinasikan lebih lanjut setelah proposal difiksasi.`,
+      ``,
+      `Apabila Kak Nisrina berkenan, kita dapat berdiskusi singkat via WhatsApp untuk menyelaraskan teknis alokasi voucher ini.`,
+      ``,
+      `Atas perhatian dan kerja sama baik yang terjalin, kami ucapkan terima kasih.`,
+      ``,
+      `Hormat kami,`,
+      `*${senderName}*`,
+      `Divisi Strategic Partnership & Marketing`,
+      `Optik I See You`,
+      `Kontak WhatsApp: 0877-7868-3766`,
+      `Situs Resmi: optikiseeyou.com`,
+    ].join("\n");
+  }
+
+  // Brand mitra umum baru
+  let addresseeLine: string;
+  if (lead.brandName.toLowerCase().includes("inul vista")) {
+    addresseeLine = `Yth. Mas Wahyu & Tim Marketing Inul Vista Purwokerto`;
+  } else if (lead.brandName.toLowerCase().includes("navagreen")) {
+    addresseeLine = `Yth. Pimpinan dan Tim Marketing Navagreen Purwokerto`;
+  } else if (lead.brandName.toLowerCase().includes("rita supermall")) {
+    addresseeLine = `Yth. Pimpinan dan Tim Promosi Rita Supermall Purwokerto`;
+  } else if (lead.brandName.toLowerCase().includes("reta")) {
+    addresseeLine = `Yth. Pimpinan dan Tim Sponsorship Reta Beauty Clinic`;
+  } else if (lead.brandName.toLowerCase().includes("nuha")) {
+    addresseeLine = `Yth. Pimpinan dan Tim Manajemen PT Nuha Cosmetindo`;
+  } else if (lead.brandName.toLowerCase().includes("padel")) {
+    addresseeLine = `Yth. Pimpinan dan Tim Manajemen Rita Padel Club`;
+  } else if (lead.brandName.toLowerCase().includes("taylor")) {
+    addresseeLine = `Yth. Pimpinan dan Tim Manajemen Taylor De Virdis`;
+  } else {
+    addresseeLine = `Yth. Pimpinan dan Tim Manajemen ${brand}`;
+  }
+
+  return [
+    addresseeLine,
+    `di Tempat`,
+    ``,
+    `Dengan hormat,`,
+    ``,
+    `Perkenalkan, saya *${senderName}* dari Divisi Strategic Partnership & Marketing Optik I See You.`,
+    ``,
+    `Optik I See You merupakan jaringan ritel kacamata & layanan pemeriksaan refraksi terpadu dengan 4 cabang operasional di Purwokerto (Pusat), Purbalingga, Cilacap, dan Wonosobo, serta komunitas audiens media sosial lebih dari 244.000 pengikut.`,
+    ``,
+    `Saat ini kami sedang menginisiasi program *B2B Customer Privilege & Store-to-Store Cross Promotion*, yaitu kolaborasi kemitraan strategis saling bertukar benefit loyalitas pelanggan antar-brand ritel di wilayah Banyumas Raya dan sekitarnya.`,
+    ``,
+    `Melalui program kemitraan ini:`,
+    `• Dari pihak Optik I See You siap mengalokasikan *50 lembar voucher belanja/pemeriksaan kacamata per bulan* untuk dibagikan secara eksklusif sebagai nilai tambah (loyalty reward) bagi customer ${brand}.`,
+    `• Saling menempatkan media promosi (display flyer / brosur / tent card) di meja kasir gerai masing-masing guna meningkatkan traffic pengunjung baru (store traffic) kedua belah pihak.`,
+    ``,
+    `Sehubungan dengan penjajakan kerja sama ini, kami ingin menanyakan secara singkat:`,
+    `1. Apakah pihak *${brand}* terbuka untuk program sinergi barter voucher dan cross-display meja kasir ini?`,
+    `2. Berapa estimasi kuota kebutuhan voucher per bulan yang ideal dari pihak *${brand}* yang dapat diserap/didistribusikan kepada customer Bapak/Ibu?`,
+    `3. Bagaimana ketentuan atau skema voucher promosi yang saat ini biasa berjalan di pihak *${brand}*?`,
+    ``,
+    `Program ini murni skema kemitraan barter sinergi tanpa dikenakan biaya administrasi apa pun. Kami siap menyiapkan draf kesepakatan kerja sama (MoU ringkas) setelah format dan kuota voucher disepakati bersama.`,
+    ``,
+    `Apabila Bapak/Ibu berkenan, kami sangat terbuka untuk berdiskusi santai sejenak via WhatsApp guna membahas teknis kolaborasi ini.`,
+    ``,
+    `Demikian penyampaian penjajakan kemitraan B2B ini kami sampaikan. Atas perhatian dan kesempatan yang diberikan, kami ucapkan terima kasih.`,
+    ``,
+    `Hormat kami,`,
+    `*${senderName}*`,
+    `Divisi Strategic Partnership & Marketing`,
+    `Optik I See You`,
+    `Kontak WhatsApp: 0877-7868-3766`,
+    `Situs Resmi: optikiseeyou.com`,
+  ].join("\n");
+}
+
 export function buildWhatsAppLink(cleanPhone: string, message: string): string {
   const encoded = encodeURIComponent(message);
   return `https://wa.me/${cleanPhone}?text=${encoded}`;
