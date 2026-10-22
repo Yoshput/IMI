@@ -497,11 +497,11 @@ export const MerchantProposalDocument: React.FC<Props> = ({ followers }) => {
         <section className="proposal-page bg-white p-[20mm] min-h-[297mm] shadow-lg print:shadow-none border border-neutral-200 print:border-none print:break-after-page text-[10.5pt]">
           <FormalKopSurat />
 
-          <div className="flex justify-between items-start mb-6 text-[10pt]">
-            <table className="text-[10pt]">
+          <div className="flex justify-between items-start mb-6 text-[10pt] gap-6">
+            <table className="text-[10pt] flex-1 max-w-[65%]">
               <tbody>
                 <tr>
-                  <td className="w-24 font-bold align-top">Nomor</td>
+                  <td className="w-20 font-bold align-top">Nomor</td>
                   <td className="w-4 align-top">:</td>
                   <td><EditSpan value={data.docNo} onChange={(v) => updateField("docNo", v)} tag="span" /></td>
                 </tr>
@@ -513,14 +513,14 @@ export const MerchantProposalDocument: React.FC<Props> = ({ followers }) => {
                 <tr>
                   <td className="font-bold align-top">Perihal</td>
                   <td className="align-top">:</td>
-                  <td className="font-bold"><EditSpan value={data.docSubject} onChange={(v) => updateField("docSubject", v)} tag="span" /></td>
+                  <td className="font-bold leading-snug"><EditSpan value={data.docSubject} onChange={(v) => updateField("docSubject", v)} tag="span" /></td>
                 </tr>
               </tbody>
             </table>
-            <div className="text-right">
-              <p>
-                <EditSpan value={data.letterCity} onChange={(v) => updateField("letterCity", v)} tag="span" />
-                , <EditSpan value={data.letterDate} onChange={(v) => updateField("letterDate", v)} tag="span" />
+            <div className="text-right shrink-0 whitespace-nowrap pt-0.5">
+              <p className="whitespace-nowrap font-medium text-[10pt]">
+                <EditSpan value={data.letterCity} onChange={(v) => updateField("letterCity", v)} tag="span" />{", "}
+                <EditSpan value={data.letterDate} onChange={(v) => updateField("letterDate", v)} tag="span" />
               </p>
             </div>
           </div>

@@ -69,7 +69,7 @@ const DEFAULT_DATA: ProposalData = {
   docAttachment: "1 (Satu) Berkas Proposal Kerjasama",
   docSubject: "Permohonan Kerjasama Sponsorship & Sinergi Kemitraan B2B 'Creative Content Masterclass 2026'",
   letterCity: "Purwokerto",
-  letterDate: "15 Oktober 2026",
+  letterDate: "20 Oktober 2026",
   recipientTitle: "Pimpinan / Brand & Marketing Manager",
   recipientCompany: "[Nama Perusahaan / Brand Mitra]",
   recipientCity: "di Tempat",
@@ -708,11 +708,11 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
           <FormalKopSurat />
 
           {/* Surat Metadata */}
-          <div className="flex justify-between items-start mb-6 text-[10pt]">
-            <table className="text-[10pt]">
+          <div className="flex justify-between items-start mb-6 text-[10pt] gap-6">
+            <table className="text-[10pt] flex-1 max-w-[65%]">
               <tbody>
                 <tr>
-                  <td className="w-24 font-bold align-top">Nomor</td>
+                  <td className="w-20 font-bold align-top">Nomor</td>
                   <td className="w-4 align-top">:</td>
                   <td>
                     <EditSpan
@@ -736,7 +736,7 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
                 <tr>
                   <td className="font-bold align-top">Perihal</td>
                   <td className="align-top">:</td>
-                  <td className="font-bold">
+                  <td className="font-bold leading-snug">
                     <EditSpan
                       value={data.docSubject}
                       onChange={(v) => updateField("docSubject", v)}
@@ -746,14 +746,13 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
                 </tr>
               </tbody>
             </table>
-            <div className="text-right">
-              <p>
+            <div className="text-right shrink-0 whitespace-nowrap pt-0.5">
+              <p className="whitespace-nowrap font-medium text-[10pt]">
                 <EditSpan
                   value={data.letterCity}
                   onChange={(v) => updateField("letterCity", v)}
                   tag="span"
-                />
-                ,{" "}
+                />{", "}
                 <EditSpan
                   value={data.letterDate}
                   onChange={(v) => updateField("letterDate", v)}
