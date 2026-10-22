@@ -265,7 +265,7 @@ export const MerchantProposalDocument: React.FC<Props> = ({ followers }) => {
   );
 
   return (
-    <div className="min-h-screen bg-neutral-100 text-neutral-900 py-6 px-2 sm:px-4 print:p-0 print:bg-white">
+    <div className="min-h-screen bg-neutral-100 text-neutral-900 py-6 px-2 sm:px-4 print:p-0 print:m-0 print:bg-white print:w-full print:min-h-0">
       {/* FLOATING ACTION TOOLBAR */}
       <div className="no-print max-w-[210mm] mx-auto mb-6 bg-white border border-neutral-300 rounded-xl p-4 shadow-md sticky top-4 z-50">
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-neutral-200 pb-3">
@@ -422,12 +422,12 @@ export const MerchantProposalDocument: React.FC<Props> = ({ followers }) => {
       </div>
 
       {/* DOCUMENT PAGES (A4 FORMAL SHEETS) */}
-      <div className="proposal-doc max-w-[210mm] mx-auto space-y-8 print:space-y-0 text-black" style={fontStyle}>
+      <div className="proposal-doc max-w-[210mm] mx-auto space-y-8 print:space-y-0 text-black print:w-full print:max-w-none print:m-0 print:p-0" style={fontStyle}>
         
         {/* ==================================================== */}
         {/* HALAMAN 1: COVER FORMAL                             */}
         {/* ==================================================== */}
-        <section className="proposal-page bg-white p-[20mm] min-h-[297mm] shadow-lg print:shadow-none border border-neutral-200 print:border-none relative flex flex-col justify-between print:break-after-page">
+        <section className="proposal-page bg-white p-[20mm] min-h-[297mm] shadow-lg print:shadow-none border border-neutral-200 print:border-none relative flex flex-col justify-between print:justify-start print:min-h-0 print:h-auto print:break-after-page">
           <div className="flex items-center justify-between border-b-[2px] border-black pb-4">
             <img src="/brand/logo-isy-dark.png" alt="Optik I See You" className="h-11 w-auto object-contain" />
             <div className="text-right">
@@ -438,7 +438,7 @@ export const MerchantProposalDocument: React.FC<Props> = ({ followers }) => {
             </div>
           </div>
 
-          <div className="my-auto py-10 text-center">
+          <div className="my-auto py-10 text-center print:my-4 print:py-4">
             <p className="text-[11pt] tracking-[0.2em] font-bold text-gray-700 uppercase mb-3">
               PENAWARAN KEMITRAAN STRATEGIS B2B (MERCHANT)
             </p>
@@ -822,7 +822,7 @@ export const MerchantProposalDocument: React.FC<Props> = ({ followers }) => {
         {/* ==================================================== */}
         {/* HALAMAN 7: LEMBAR KESEPAKATAN MOU MERCHANT B2B      */}
         {/* ==================================================== */}
-        <section className="proposal-page bg-white p-[20mm] min-h-[297mm] shadow-lg print:shadow-none border border-neutral-200 print:border-none print:break-after-page text-[10.5pt] flex flex-col justify-between">
+        <section className="proposal-page bg-white p-[20mm] min-h-[297mm] shadow-lg print:shadow-none border border-neutral-200 print:border-none print:break-after-page text-[10.5pt] flex flex-col justify-between print:justify-start print:min-h-0 print:h-auto">
           <div>
             <FormalKopSurat />
 
@@ -919,31 +919,53 @@ export const MerchantProposalDocument: React.FC<Props> = ({ followers }) => {
             padding: 0 !important;
             color: black !important;
             font-size: 10pt !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
           }
           @page {
             size: A4 portrait;
-            margin: 16mm 15mm 16mm 15mm;
+            margin: 12mm 14mm 12mm 14mm;
+          }
+          .proposal-doc {
+            width: 100% !important;
+            max-width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            box-sizing: border-box !important;
           }
           .proposal-page {
             box-shadow: none !important;
             border: none !important;
             padding: 0 !important;
             margin: 0 !important;
-            min-height: auto !important;
-            page-break-after: always;
-            break-after: page;
+            width: 100% !important;
+            max-width: 100% !important;
+            min-height: 0 !important;
+            height: auto !important;
+            page-break-after: always !important;
+            break-after: page !important;
+            box-sizing: border-box !important;
+            display: block !important;
           }
           .proposal-page:last-child {
-            page-break-after: avoid;
-            break-after: avoid;
+            page-break-after: avoid !important;
+            break-after: avoid !important;
           }
           table {
-            page-break-inside: avoid;
-            break-inside: avoid;
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            box-sizing: border-box !important;
           }
           tr {
-            page-break-inside: avoid;
-            break-inside: avoid;
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+          }
+          img {
+            max-width: 100% !important;
           }
         }
       `}</style>

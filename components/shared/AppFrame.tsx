@@ -34,8 +34,9 @@ export function AppFrame({ children }: { children: React.ReactNode }) {
     );
   }
 
-  // Public Proposal Sponsor page ('/proposal-sponsor') is accessible without internal gate
-  if (pathname === '/proposal-sponsor') {
+  // Standalone Printable Proposal pages ('/proposal', '/proposal-sponsor', '/proposal-merchant')
+  // Rendered without app chrome (no AppNav, no fixed bottom bar, no extra padding, no footer)
+  if (pathname?.startsWith('/proposal')) {
     return (
       <BranchProvider>
         {children}

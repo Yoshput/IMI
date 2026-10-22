@@ -412,7 +412,7 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
   );
 
   return (
-    <div className="min-h-screen bg-neutral-100 text-neutral-900 py-6 px-2 sm:px-4 print:p-0 print:bg-white">
+    <div className="min-h-screen bg-neutral-100 text-neutral-900 py-6 px-2 sm:px-4 print:p-0 print:m-0 print:bg-white print:w-full print:min-h-0">
       {/* ======================================================== */}
       {/* FLOATING ACTION TOOLBAR (NO PRINT)                      */}
       {/* ======================================================== */}
@@ -1516,31 +1516,53 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
             padding: 0 !important;
             color: black !important;
             font-size: 10pt !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
           }
           @page {
             size: A4 portrait;
-            margin: 16mm 15mm 16mm 15mm;
+            margin: 12mm 14mm 12mm 14mm;
+          }
+          .proposal-doc {
+            width: 100% !important;
+            max-width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            box-sizing: border-box !important;
           }
           .proposal-page {
             box-shadow: none !important;
             border: none !important;
             padding: 0 !important;
             margin: 0 !important;
-            min-height: auto !important;
-            page-break-after: always;
-            break-after: page;
+            width: 100% !important;
+            max-width: 100% !important;
+            min-height: 0 !important;
+            height: auto !important;
+            page-break-after: always !important;
+            break-after: page !important;
+            box-sizing: border-box !important;
+            display: block !important;
           }
           .proposal-page:last-child {
-            page-break-after: avoid;
-            break-after: avoid;
+            page-break-after: avoid !important;
+            break-after: avoid !important;
           }
           table {
-            page-break-inside: avoid;
-            break-inside: avoid;
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            box-sizing: border-box !important;
           }
           tr {
-            page-break-inside: avoid;
-            break-inside: avoid;
+            page-break-inside: avoid !important;
+            break-inside: avoid !important;
+          }
+          img {
+            max-width: 100% !important;
           }
         }
       `}</style>

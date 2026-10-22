@@ -163,7 +163,7 @@ export const AppNav: React.FC = () => {
       {/* ========================================================================= */}
       {/* 1. STICKY DESKTOP & TABLET TOP HEADER                                      */}
       {/* ========================================================================= */}
-      <header className="sticky top-0 z-30 w-full bg-[#F8F5ED]/95 dark:bg-[#0D1612]/95 backdrop-blur-md border-b border-[#124734]/15 dark:border-[#124734]/30 transition-colors">
+      <header className="sticky top-0 z-30 w-full bg-[#F8F5ED]/95 dark:bg-[#0D1612]/95 backdrop-blur-md border-b border-[#124734]/15 dark:border-[#124734]/30 transition-colors print:hidden">
         <div className="max-w-[1600px] mx-auto px-3 sm:px-4 lg:px-6">
           <div className="flex items-center justify-between h-16 gap-3">
             {/* Brand Logo & Tagline */}
@@ -526,7 +526,7 @@ export const AppNav: React.FC = () => {
       {/* ========================================================================= */}
       {/* 3. MOBILE BOTTOM QUICK-BAR (< md)                                         */}
       {/* ========================================================================= */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#F8F5ED]/95 dark:bg-[#0D1612]/95 backdrop-blur-lg border-t border-[#124734]/15 dark:border-[#124734]/30 px-2 py-1.5 shadow-[0_-4px_20px_rgba(0,0,0,0.06)]">
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#F8F5ED]/95 dark:bg-[#0D1612]/95 backdrop-blur-lg border-t border-[#124734]/15 dark:border-[#124734]/30 px-2 py-1.5 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] print:hidden">
         <div className="grid grid-cols-5 gap-1 text-center">
           {[
             { label: "Dashboard", href: "/dashboard", icon: LayoutGrid },
