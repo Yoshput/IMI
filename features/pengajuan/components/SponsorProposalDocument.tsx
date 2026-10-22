@@ -91,11 +91,11 @@ const DEFAULT_DATA: ProposalData = {
   backgroundText2:
     "Optik I See You menginisiasi program penawaran kemitraan strategis ini guna membuka ruang kolaborasi sinergis antara brand mitra dan ekosistem kreatif. Program ini dirancang bukan sekadar sarana promosi satu arah, melainkan wadah interaktif di mana target audiens dan pelaku kreatif dapat langsung berinteraksi serta memproduksi ulasan produk mitra sponsor secara riil di lokasi.",
   backgroundText3:
-    "Melalui kemitraan B2B ini, brand mitra memperoleh aktivasi multi-kanal: tatap muka langsung dan sampling produk kepada kreator, penempatan materi promosi (brosur/voucher) di meja kasir 4 gerai ritel, penayangan video di TV Showroom Purwokerto (Pusat) serta display materi promosi (brosur/voucher) di meja kasir seluruh cabang gerai ritel, dan publikasi digital melalui media sosial resmi @iseeyou.glasses (244.000+ followers).",
+    "Melalui kemitraan B2B ini, brand mitra memperoleh aktivasi multi-kanal: tatap muka langsung dan sampling produk kepada kreator, penempatan materi promosi (brosur/voucher) di meja kasir 4 gerai ritel, penayangan video di TV Showroom Purwokerto serta display materi promosi (brosur/voucher) di meja kasir 4 lokasi cabang ritel, dan publikasi digital melalui media sosial resmi @iseeyou.glasses (244.000+ followers).",
   picName: "Yossika Putra",
   picRole: "Staff Kemitraan & Sponsorship Marketing",
   picWa: "0877-7868-3766",
-  picEmail: "marketing@optikiseeyou.com",
+  picEmail: "",
   headName: "Raja Satria",
   headRole: "Head of Marketing & Strategic Communication",
   bankName: "Bank Central Asia (BCA) KCU Purwokerto",
@@ -109,7 +109,7 @@ const DEFAULT_DATA: ProposalData = {
       price: "Rp 5.000.000,-",
       benefits: [
         "Hak pembukaan 1 (satu) booth/stand promosi interaktif eksklusif di lokasi acara (Kuota Terbatas / First-Come First-Served).",
-        "Penayangan video profil / iklan komersial di layar TV Showroom Purwokerto (Pusat) selama 1 (satu) bulan penuh & display brosur di seluruh cabang.",
+        "Penayangan video profil / iklan komersial di layar TV Showroom Purwokerto selama 1 (satu) bulan penuh & display brosur di seluruh lokasi cabang.",
         "Sesi presentasi / product demo di panggung utama selama 15 menit.",
         "Pencantuman logo ukuran BESAR pada backdrop panggung, x-banner, flyer cetak, dan frame photobooth.",
         "Penyertaan produk sampling / voucher resmi di dalam goodie bag seluruh peserta dan narasumber.",
@@ -123,9 +123,9 @@ const DEFAULT_DATA: ProposalData = {
       tagline: "Visibilitas Ritel & Digital Kampanye",
       price: "Rp 3.000.000,-",
       benefits: [
-        "Penayangan video profil / iklan di layar TV Showroom Purwokerto (Pusat) selama 2 (dua) minggu & display materi promosi (flyer/voucher) di meja kasir seluruh gerai.",
+        "Penayangan video profil / iklan di layar TV Showroom Purwokerto selama 2 (dua) minggu & display materi promosi (flyer/voucher) di meja kasir seluruh lokasi cabang.",
         "Pencantuman logo ukuran SEDANG pada backdrop panggung, banner kegiatan, dan materi publikasi digital.",
-        "Display materi promosi (flyer/voucher) di meja kasir 4 gerai cabang Optik I See You.",
+        "Display materi promosi (flyer/voucher) di meja kasir 4 lokasi cabang Optik I See You.",
         "Hak menyertakan voucher belanja / materi promosi dalam goodie bag peserta.",
         "Penyebutan (ad-lips) nama brand oleh MC sebanyak 5 kali selama acara.",
         "Joint feed post kolaborasi di media sosial resmi Optik I See You.",
@@ -137,7 +137,7 @@ const DEFAULT_DATA: ProposalData = {
       tagline: "Eksposur Event & Media Sosial",
       price: "Rp 1.500.000,-",
       benefits: [
-        "Display poster & flyer promosi di meja kasir seluruh cabang gerai Optik I See You.",
+        "Display poster & flyer promosi di meja kasir 4 lokasi cabang Optik I See You.",
         "Pencantuman logo ukuran STANDAR pada banner utama dan e-flyer publikasi.",
         "Penyertaan flyer / voucher promosi ke dalam goodie bag peserta.",
         "Mention dan tag apresiasi sponsorship di Instagram Story resmi Optik I See You.",
@@ -149,9 +149,9 @@ const DEFAULT_DATA: ProposalData = {
       tagline: "Sinergi Ritel Store-to-Store: Tukar Voucher, Display Meja Kasir & Goodie Bag",
       price: "Non-Tunai / Barter Ekuivalen",
       benefits: [
-        "Skema Tukar Voucher (Cross-Voucher): Penyertaan 50 pcs voucher diskon / treatment mitra ke dalam Official Goodie Bag peserta & penukaran voucher belanja kacamata Optik I See You untuk pelanggan setia mitra.",
-        "Skema Tukar Display Meja Kasir (Cross-Brochure): Penempatan brosur, flyer, atau tent card promosi mitra di area kasir 4 gerai cabang ritel Optik I See You (Purwokerto, Purbalingga, Cilacap, Wonosobo).",
-        "Penayangan materi promosi / slide produk mitra pada layar TV Showroom seluruh gerai cabang selama periode kegiatan.",
+        "Skema Tukar Voucher (Cross-Voucher): Penyertaan voucher diskon / treatment mitra (kuota disepakati melalui diskusi bersama) ke dalam Official Goodie Bag peserta & penukaran voucher belanja kacamata Optik I See You untuk pelanggan setia mitra.",
+        "Skema Tukar Display Meja Kasir (Cross-Brochure): Penempatan brosur, flyer, atau tent card promosi mitra di area kasir 4 lokasi cabang ritel Optik I See You (Purwokerto, Purbalingga, Cilacap, Wonosobo).",
+        "Penayangan materi promosi / slide produk mitra pada layar TV Showroom Purwokerto selama periode kegiatan.",
         "Hak penyediaan tester produk / sampling di area venue event serta apresiasi kemitraan di Instagram Story @iseeyou.glasses (244.000+ followers).",
       ],
     },
@@ -390,10 +390,10 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
             Jaringan Ritel Kacamata &amp; Layanan Pemeriksaan Mata Terpadu
           </p>
           <p className="text-[7.5pt] text-gray-700 mt-0.5">
-            Gerai: Purwokerto (Pusat) · Purbalingga · Cilacap · Wonosobo
+            Lokasi Cabang: Purwokerto · Purbalingga · Cilacap · Wonosobo
           </p>
           <p className="text-[7.5pt] text-gray-700">
-            Website: www.optikiseeyou.com · Layanan Kemitraan: 0877-7868-3766 · Email: marketing@optikiseeyou.com
+            Website: www.optikiseeyou.com · Layanan Kemitraan: 0877-7868-3766
           </p>
         </div>
 
@@ -605,7 +605,7 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
         {/* ==================================================== */}
         {/* HALAMAN 1: COVER FORMAL                             */}
         {/* ==================================================== */}
-        <section className="proposal-page bg-white p-[20mm] min-h-[297mm] shadow-lg print:shadow-none border border-neutral-200 print:border-none relative flex flex-col justify-between print:break-after-page">
+        <section className="proposal-page proposal-cover-page bg-white p-[20mm] min-h-[297mm] shadow-lg print:shadow-none border border-neutral-200 print:border-none relative flex flex-col justify-between print:break-after-page">
           {/* Header Logos */}
           <div className="flex items-center justify-between border-b-[2px] border-black pb-4">
             <img
@@ -626,7 +626,7 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
           </div>
 
           {/* Title Area */}
-          <div className="my-auto py-10 text-center">
+          <div className="my-auto py-10 text-center print:my-auto print:py-0">
             <p className="text-[11pt] tracking-[0.2em] font-bold text-gray-700 uppercase mb-3">
               PROPOSAL PENAWARAN KERJASAMA SPONSORSHIP
             </p>
@@ -690,7 +690,7 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
                   Optik I See You
                 </p>
                 <p className="text-[8.5pt] text-gray-600 mt-1">
-                  Purwokerto (Pusat) · Purbalingga · Cilacap · Wonosobo
+                  Lokasi Cabang: Purwokerto · Purbalingga · Cilacap · Wonosobo
                 </p>
               </div>
             </div>
@@ -799,17 +799,10 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
               />
             </p>
             <p>
-              Optik I See You saat ini mengoperasikan 4 gerai ritel di Purwokerto (Pusat), Purbalingga,
-              Cilacap, dan Wonosobo. Dalam rangka membangun sinergi industri dan komunitas, kami
-              menginisiasi program kolaborasi kemitraan terapan yang mempertemukan target audiens dengan
-              brand rekanan.
+              Optik I See You merupakan jaringan ritel kacamata terkemuka yang mengoperasikan 4 lokasi cabang di Purwokerto, Purbalingga, Cilacap, dan Wonosobo. Kami memiliki basis pasar terdata lebih dari <b>1.000.000 (satu juta) pembeli dan pelanggan loyal</b> dengan beragam segmentasi grade konsumen (Grade A &amp; B profesional, dokter, ASN, keluarga mapan, serta segmen muda produktif &amp; mahasiswa), serta diperkuat jejaring digital dengan lebih dari <b>{fmt(totalAll)} pengikut</b> di media sosial.
             </p>
             <p>
-              Melalui program ini, pihak sponsor akan memperoleh hak eksposur terpadu: aktivasi booth di
-              lokasi acara, penayangan materi video/poster promosi di seluruh layar TV showroom gerai
-              resmi, hak penyertaan voucher/sample produk di goodie bag peserta, serta publikasi digital
-              di jejaring media sosial kami yang menjangkau lebih dari{" "}
-              <b>{fmt(totalAll)} pengikut</b>.
+              Melalui program &quot;Creative Content Masterclass 2026&quot; ini, pihak sponsor akan memperoleh hak eksposur terpadu: aktivasi booth di lokasi acara, penayangan video promosi di layar TV Showroom Purwokerto, display media meja kasir di 4 lokasi cabang, hak penyertaan voucher/sample produk di goodie bag peserta, serta publikasi digital di jejaring media sosial kami.
             </p>
             <p>
               Bersama surat ini, kami lampirkan rincian kegiatan, pilihan paket sponsorship, serta
@@ -1066,14 +1059,14 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
           <table className="w-full border-collapse border border-black text-[9.5pt] mb-5">
             <thead>
               <tr className="bg-neutral-100 border-b border-black">
-                <th className="py-2 px-3 text-left border-r border-black font-bold">Cabang Gerai</th>
+                <th className="py-2 px-3 text-left border-r border-black font-bold">Lokasi Cabang</th>
                 <th className="py-2 px-3 text-left border-r border-black font-bold">Wilayah &amp; Karakteristik</th>
                 <th className="py-2 px-3 text-left font-bold">Fasilitas Tayang Sponsor</th>
               </tr>
             </thead>
             <tbody>
               <tr className="border-b border-black">
-                <td className="py-2 px-3 border-r border-black font-semibold">Purwokerto (Pusat)</td>
+                <td className="py-2 px-3 border-r border-black font-semibold">Purwokerto</td>
                 <td className="py-2 px-3 border-r border-black">Pusat kota, dekat kawasan kampus &amp; kantor</td>
                 <td className="py-2 px-3">Layar TV Showroom &amp; Meja Display Kasir</td>
               </tr>
@@ -1100,7 +1093,7 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
             <thead>
               <tr className="bg-neutral-100 border-b border-black">
                 <th className="py-2 px-3 text-left border-r border-black font-bold">Akun Resmi</th>
-                <th className="py-2 px-3 text-left border-r border-black font-bold">Gerai Wilayah</th>
+                <th className="py-2 px-3 text-left border-r border-black font-bold">Lokasi Cabang</th>
                 <th className="py-2 px-3 text-right border-r border-black font-bold">Followers IG</th>
                 <th className="py-2 px-3 text-right font-bold">Followers TikTok</th>
               </tr>
@@ -1132,6 +1125,33 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
           <p className="text-[8.5pt] text-gray-600 italic">
             * Data tercatat berdasarkan rekapitulasi audit PIC resmi per Oktober 2026.
           </p>
+
+          {/* 3.3 Profil Basis Pasar Pelanggan & Grade Konsumen */}
+          <div className="border border-black p-3 bg-neutral-50 text-[9pt] mt-3">
+            <p className="font-bold text-black uppercase mb-1 flex items-center justify-between">
+              <span>3.3 Basis Pasar Pelanggan (1.000.000+ Pembeli) &amp; Segmentasi Grade Konsumen</span>
+              <span className="text-[7.5pt] font-semibold text-emerald-900 bg-emerald-100 px-2 py-0.5 rounded border border-emerald-300">
+                Database Ritel Terintegrasi
+              </span>
+            </p>
+            <p className="text-gray-800 text-justify mb-2 leading-relaxed text-[8.5pt]">
+              Optik I See You didukung basis pasar riil lebih dari <b>1.000.000 (satu juta) transaksi pembeli dan rekam medis kacamata</b> di 4 kabupaten. Profil konsumen terbagi dalam segmentasi grade yang matang:
+            </p>
+            <div className="grid grid-cols-2 gap-2 text-[8pt]">
+              <div className="border border-neutral-300 bg-white p-2 rounded">
+                <p className="font-bold text-black text-[8.5pt] mb-0.5">Grade A &amp; B (Purchasing Power Tinggi)</p>
+                <p className="text-gray-700 leading-snug">
+                  Segmen eksekutif, dokter, tenaga medis, ASN/BUMN, pengusaha, dan keluarga mapan. Sangat potensial untuk sponsor perbankan, otomotif, klinik kesehatan, dan brand gaya hidup premium.
+                </p>
+              </div>
+              <div className="border border-neutral-300 bg-white p-2 rounded">
+                <p className="font-bold text-black text-[8.5pt] mb-0.5">Grade C+ &amp; Generasi Produktif / Gen-Z</p>
+                <p className="text-gray-700 leading-snug">
+                  Segmen mahasiswa (Unsoed, UMP, Telkom), kreator konten, dan komunitas muda aktif. Sangat responsif terhadap tren konten digital, teknologi, dan aktivasi booth interaktif.
+                </p>
+              </div>
+            </div>
+          </div>
         </section>
 
         {/* ==================================================== */}
@@ -1149,64 +1169,66 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
             serta target anggaran pemasaran instansi/brand Bapak/Ibu:
           </p>
 
-          <div className="space-y-4">
+          <div className="grid grid-cols-2 gap-3 text-[9pt]">
             {data.packages.map((pkg, pIdx) => (
-              <div key={pkg.id} className="border border-black p-3.5">
-                <div className="flex justify-between items-baseline border-b border-black pb-1.5 mb-2">
-                  <div>
-                    <h4 className="font-bold text-[11pt] tracking-wide text-black">
-                      <EditSpan
-                        value={pkg.name}
-                        onChange={(v) => updatePackage(pIdx, { name: v })}
-                        tag="span"
-                      />
-                    </h4>
-                    <p className="text-[8.5pt] text-gray-700 italic">
-                      <EditSpan
-                        value={pkg.tagline}
-                        onChange={(v) => updatePackage(pIdx, { tagline: v })}
-                        tag="span"
-                      />
-                    </p>
+              <div key={pkg.id} className="border border-black p-2.5 flex flex-col justify-between bg-neutral-50/40">
+                <div>
+                  <div className="flex justify-between items-baseline border-b border-black pb-1 mb-1.5">
+                    <div>
+                      <h4 className="font-bold text-[9.5pt] tracking-wide text-black">
+                        <EditSpan
+                          value={pkg.name}
+                          onChange={(v) => updatePackage(pIdx, { name: v })}
+                          tag="span"
+                        />
+                      </h4>
+                      <p className="text-[7.5pt] text-gray-700 italic">
+                        <EditSpan
+                          value={pkg.tagline}
+                          onChange={(v) => updatePackage(pIdx, { tagline: v })}
+                          tag="span"
+                        />
+                      </p>
+                    </div>
+                    <div className="text-right shrink-0 ml-1.5">
+                      <span className="font-bold text-[10pt] text-black whitespace-nowrap">
+                        <EditSpan
+                          value={pkg.price}
+                          onChange={(v) => updatePackage(pIdx, { price: v })}
+                          tag="span"
+                        />
+                      </span>
+                    </div>
                   </div>
-                  <div className="text-right">
-                    <span className="font-bold text-[11.5pt] text-black">
-                      <EditSpan
-                        value={pkg.price}
-                        onChange={(v) => updatePackage(pIdx, { price: v })}
-                        tag="span"
-                      />
-                    </span>
-                  </div>
-                </div>
 
-                <ul className="list-disc pl-5 space-y-1 text-[9.5pt]">
-                  {pkg.benefits.map((b, bIdx) => (
-                    <li key={bIdx} className="leading-snug">
-                      <EditSpan
-                        value={b}
-                        onChange={(v) => updateBenefit(pIdx, bIdx, v)}
-                        tag="span"
-                      />
-                      {isEditing && (
-                        <button
-                          type="button"
-                          onClick={() => removeBenefit(pIdx, bIdx)}
-                          className="ml-2 text-red-600 hover:underline text-[8pt] no-print"
-                          title="Hapus butir ini"
-                        >
-                          [Hapus]
-                        </button>
-                      )}
-                    </li>
-                  ))}
-                </ul>
+                  <ul className="list-disc pl-4 space-y-0.5 text-[8pt] text-gray-800">
+                    {pkg.benefits.map((b, bIdx) => (
+                      <li key={bIdx} className="leading-tight">
+                        <EditSpan
+                          value={b}
+                          onChange={(v) => updateBenefit(pIdx, bIdx, v)}
+                          tag="span"
+                        />
+                        {isEditing && (
+                          <button
+                            type="button"
+                            onClick={() => removeBenefit(pIdx, bIdx)}
+                            className="ml-1 text-red-600 hover:underline text-[7.5pt] no-print"
+                            title="Hapus butir ini"
+                          >
+                            [x]
+                          </button>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
 
                 {isEditing && (
                   <button
                     type="button"
                     onClick={() => addBenefit(pIdx)}
-                    className="mt-2 text-blue-700 hover:underline text-[8.5pt] font-semibold no-print"
+                    className="mt-1.5 text-blue-700 hover:underline text-[7.5pt] font-semibold no-print"
                   >
                     + Tambah Fasilitas Paket
                   </button>
@@ -1338,21 +1360,15 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
                   </span>
                 </div>
                 <div>
-                  <span className="text-gray-600 block text-[8.5pt]">WhatsApp Resmi:</span>
-                  <span className="font-bold">
+                  <span className="text-gray-600 block text-[8.5pt]">WhatsApp Resmi Kemitraan:</span>
+                  <span className="font-bold text-[11pt]">
                     <EditSpan
                       value={data.picWa}
                       onChange={(v) => updateField("picWa", v)}
                       tag="span"
                     />
                   </span>
-                  <span className="text-gray-700 block text-[9pt]">
-                    <EditSpan
-                      value={data.picEmail}
-                      onChange={(v) => updateField("picEmail", v)}
-                      tag="span"
-                    />
-                  </span>
+                  <span className="text-gray-600 block text-[8pt] mt-0.5">Layanan Senin – Minggu (09.00 – 21.00 WIB)</span>
                 </div>
               </div>
             </div>
@@ -1545,6 +1561,18 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
             break-after: page !important;
             box-sizing: border-box !important;
             display: block !important;
+          }
+          /* Cover Page: Perfectly vertically balanced and centered */
+          .proposal-cover-page {
+            height: 268mm !important;
+            min-height: 268mm !important;
+            max-height: 268mm !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: space-between !important;
+            box-sizing: border-box !important;
+            page-break-after: always !important;
+            break-after: page !important;
           }
           .proposal-page:last-child {
             page-break-after: avoid !important;

@@ -427,7 +427,7 @@ export const MerchantProposalDocument: React.FC<Props> = ({ followers }) => {
         {/* ==================================================== */}
         {/* HALAMAN 1: COVER FORMAL                             */}
         {/* ==================================================== */}
-        <section className="proposal-page bg-white p-[20mm] min-h-[297mm] shadow-lg print:shadow-none border border-neutral-200 print:border-none relative flex flex-col justify-between print:justify-start print:min-h-0 print:h-auto print:break-after-page">
+        <section className="proposal-page proposal-cover-page bg-white p-[20mm] min-h-[297mm] shadow-lg print:shadow-none border border-neutral-200 print:border-none relative flex flex-col justify-between print:break-after-page">
           <div className="flex items-center justify-between border-b-[2px] border-black pb-4">
             <img src="/brand/logo-isy-dark.png" alt="Optik I See You" className="h-11 w-auto object-contain" />
             <div className="text-right">
@@ -438,7 +438,7 @@ export const MerchantProposalDocument: React.FC<Props> = ({ followers }) => {
             </div>
           </div>
 
-          <div className="my-auto py-10 text-center print:my-4 print:py-4">
+          <div className="my-auto py-10 text-center print:my-auto print:py-0">
             <p className="text-[11pt] tracking-[0.2em] font-bold text-gray-700 uppercase mb-3">
               PENAWARAN KEMITRAAN STRATEGIS B2B (MERCHANT)
             </p>
@@ -948,6 +948,18 @@ export const MerchantProposalDocument: React.FC<Props> = ({ followers }) => {
             break-after: page !important;
             box-sizing: border-box !important;
             display: block !important;
+          }
+          /* Cover Page: Perfectly vertically balanced and centered */
+          .proposal-cover-page {
+            height: 268mm !important;
+            min-height: 268mm !important;
+            max-height: 268mm !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: space-between !important;
+            box-sizing: border-box !important;
+            page-break-after: always !important;
+            break-after: page !important;
           }
           .proposal-page:last-child {
             page-break-after: avoid !important;
