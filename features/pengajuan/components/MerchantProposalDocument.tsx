@@ -40,13 +40,12 @@ interface MerchantProposalData {
   picName: string;
   picRole: string;
   picWa: string;
-  picEmail: string;
   headName: string;
   headRole: string;
   packages: MerchantPackage[];
 }
 
-const STORAGE_KEY = "isy_proposal_merchant_b2b_v1";
+const STORAGE_KEY = "isy_proposal_merchant_b2b_v2";
 
 const DEFAULT_MERCHANT_DATA: MerchantProposalData = {
   docNo: "018/MKT-ISY/PROP-B2B/X/2026",
@@ -66,29 +65,28 @@ const DEFAULT_MERCHANT_DATA: MerchantProposalData = {
   proposalTheme: "Kolaborasi Lintas-Industri Tanpa Biaya Tunai: Memaksimalkan Nilai Tambah Pelanggan & Pertukaran Trafik Gerai Ritel Fisik",
   organizerName: "Divisi Marketing & Strategic Partnership, Optik I See You",
   partnershipTerm: "Kemitraan Berkelanjutan (Evaluasi Berkala per 3 / 6 Bulan)",
-  voucherQuotaInfo: "Alokasi Bebas (Fleksibel / Boleh Sebanyak-Banyaknya sesuai kapasitas penyerapan)",
+  voucherQuotaInfo: "Alokasi Fleksibel (Disesuaikan Melalui Diskusi Bersama Sesuai Kapasitas Penyerapan)",
   backgroundText1:
-    "Dinamika perilaku konsumen ritel modern saat ini sangat dipengaruhi oleh program apresiasi dan nilai tambah (privilege) yang mereka dapatkan saat bertransaksi. Kolaborasi antar-brand lokal terkemuka melalui pertukaran voucher belanja dan display promosi terbukti menjadi strategi paling efektif dan efisien (zero cash fee) dalam mendorong retensi pelanggan sekaligus mendatangkan pelanggan baru (store traffic).",
+    "Dinamika perilaku konsumen ritel modern saat ini sangat dipengaruhi oleh program apresiasi dan nilai tambah (privilege) saat bertransaksi. Optik I See You telah dipercaya oleh lebih dari 1.000.000 (satu juta) pembeli dan pelanggan kacamata di 4 cabang, mencakup beragam tingkatan grade konsumen: mulai dari kalangan profesional, dokter, ASN, dan pengusaha (Grade A & B) yang membutuhkan lensa kacamata berkualitas, hingga segmen keluarga mapan dan mahasiswa/generasi muda yang aktif berbelanja. Kolaborasi kemitraan B2B melalui pertukaran voucher belanja dan display kasir terbukti menjadi strategi paling efektif (zero cash fee) dalam mempertemukan kedua basis konsumen yang berdaya beli tinggi.",
   backgroundText2:
-    "Optik I See You menginisiasi Program Kemitraan Merchant B2B ini secara inklusif. Kami membuka peluang kolaborasi seluas-luasnya bagi sesama klinik kecantikan, salon & spa, pusat kebugaran/olahraga, kuliner, fesyen, maupun industri jasa lainnya untuk tumbuh bersama. Kuota pertukaran voucher dapat disesuaikan secara fleksibel (sebanyak-banyaknya) guna menjamin ketersediaan benefit bagi seluruh pelanggan.",
+    "Optik I See You menginisiasi Program Kemitraan Merchant B2B ini secara inklusif. Kami membuka peluang kolaborasi seluas-luasnya bagi sesama klinik kecantikan, salon & spa, pusat kebugaran/olahraga, kuliner, Fashion, maupun industri jasa lainnya untuk tumbuh bersama, serta terbuka bekerja sama dengan perusahaan-perusahaan Bapak/Ibu demi memperkaya pilihan bagi pelanggan kita bersama. Kuota penawaran voucher dapat disesuaikan dengan diskusi bersama guna menjalin benefit bagi seluruh pelanggan.",
   backgroundText3:
-    "Melalui sinergi jangka panjang ini, mitra merchant memperoleh fasilitas terpadu: penyaluran voucher promo ke tangan pembeli kacamata Optik I See You, display tent card/brosur di meja kasir 4 cabang (Purwokerto, Purbalingga, Cilacap, Wonosobo), penayangan video promosi di TV Showroom Purwokerto (Pusat), serta eksposur publikasi digital melalui Instagram Story resmi @iseeyou.glasses (244.000+ followers).",
+    "Melalui sinergi jangka panjang ini, mitra merchant memperoleh fasilitas terpadu: penyaluran voucher promo ke tangan pembeli kacamata Optik I See You, display tent card/brosur di meja kasir 4 cabang (Purwokerto, Purbalingga, Cilacap, Wonosobo), penayangan video promosi di TV Showroom Purwokerto, serta eksposur publikasi digital melalui Instagram Story resmi @iseeyou.glasses (244.000+ followers).",
   picName: "Yossika Putra",
   picRole: "Staff Kemitraan & Sponsorship Marketing",
   picWa: "0877-7868-3766",
-  picEmail: "marketing@optikiseeyou.com",
   headName: "Raja Satria",
   headRole: "Head of Marketing & Strategic Communication",
   packages: [
     {
       id: "cross-voucher",
       name: "1. SKEMA PERTUKARAN VOUCHER (CROSS-VOUCHER PRIVILEGE)",
-      tagline: "Pertukaran Kuota Voucher Tanpa Batasan (Boleh Sebanyak-Banyaknya)",
+      tagline: "Pertukaran Kuota Voucher Fleksibel (Disesuaikan Melalui Diskusi Bersama)",
       benefits: [
         "Optik I See You mengalokasikan voucher resmi belanja/pemeriksaan kacamata (nominal Rp 50.000 - Rp 100.000) untuk dibagikan secara eksklusif kepada customer mitra.",
         "Mitra Merchant menyediakan voucher potongan harga / diskon treatment / free service untuk dibagikan kepada pelanggan Optik I See You saat transaksi di kasir.",
-        "Jumlah kuota voucher bersifat fleksibel (boleh sebanyak-banyaknya) dan dapat di-restock berkala tiap bulan sesuai kapasitas penyerapan transaksi.",
-        "Terbuka untuk berbagai brand dan klinik tanpa batasan kuota merchant (inklusif & kolaboratif).",
+        "Jumlah kuota voucher disepakati melalui diskusi bersama dan dapat di-restock berkala tiap bulan sesuai kapasitas penyerapan transaksi.",
+        "Terbuka untuk perusahaan-perusahaan Bapak/Ibu, berbagai klinik kecantikan, salon & spa, hingga brand gaya hidup lainnya demi memperkaya pilihan bagi pelanggan kita bersama.",
       ],
     },
     {
@@ -96,27 +94,27 @@ const DEFAULT_MERCHANT_DATA: MerchantProposalData = {
       name: "2. SKEMA DISPLAY BROSUR & FLYER MEJA KASIR (STORE-TO-STORE)",
       tagline: "Penempatan Media Promosi Fisik di Titik Pembayaran 4 Cabang",
       benefits: [
-        "Penempatan materi promosi fisik (tent card, brosur, atau flyer) mitra di area meja kasir 4 gerai ritel resmi Optik I See You (Purwokerto Pusat, Purbalingga, Cilacap, dan Wonosobo).",
+        "Penempatan materi promosi fisik (tent card, brosur, atau flyer) mitra di area meja kasir 4 lokasi cabang resmi Optik I See You (Purwokerto, Purbalingga, Cilacap, dan Wonosobo).",
         "Mitra merchant menempatkan tent card / flyer resmi Optik I See You di area meja kasir/resepsionis outlet mitra.",
         "Materi display menjangkau ribuan pengunjung harian yang datang untuk pemeriksaan refraksi mata, fitting kacamata, dan transaksi optik.",
       ],
     },
     {
       id: "digital-story",
-      name: "3. SKEMA PROMOSI DIGITAL & INSTAGRAM STORY COLLABORATION",
-      tagline: "Eksposur Audiens Digital ke 244.000+ Followers Resmi",
+      name: "3. SKEMA PROMOSI DIGITAL & KOLABORASI MEDIA SOSIAL",
+      tagline: "Eksposur Audiens Digital ke 244.000+ Followers Resmi & Giveaway Bersama",
       benefits: [
         "Penayangan video promosi bersama / ulasan layanan merchant di Instagram Story resmi @iseeyou.glasses (244.000+ followers) secara terjadwal.",
-        "Pencantuman mention dan direct link ke akun Instagram resmi mitra merchant.",
-        "Kolaborasi konten interaktif (Q&A, polling, atau kuis berhadiah voucher) untuk meningkatkan interaksi antar-pengikut.",
+        "Pencantuman mention akun resmi dan link tautan langsung ke platform mitra merchant.",
+        "Kolaborasi konten interaktif media sosial, program Giveaway kacamata & voucher merchant bersama, serta promosi silang (cross-promotion) untuk melipatgandakan interaksi audiens.",
       ],
     },
     {
       id: "tv-showroom",
-      name: "4. SKEMA TAYANG TV SHOWROOM (PURWOKERTO PUSAT)",
+      name: "4. SKEMA TAYANG TV SHOWROOM (PURWOKERTO)",
       tagline: "Eksposur Video Komersial di Layar TV Showroom Utama",
       benefits: [
-        "Penayangan video profil atau video promosi komersial mitra merchant pada layar TV Showroom gerai pusat Optik I See You Purwokerto.",
+        "Penayangan video profil atau video promosi komersial mitra merchant pada layar TV Showroom Optik I See You Purwokerto.",
         "Video diputar berulang setiap hari di area tunggu pemeriksaan mata yang selalu ramai pengunjung.",
         "Menegaskan citra prestisius mitra di hadapan audiens keluarga, profesional, dan mahasiswa di pusat kota Purwokerto.",
       ],
@@ -246,10 +244,10 @@ export const MerchantProposalDocument: React.FC<Props> = ({ followers }) => {
             Jaringan Ritel Kacamata &amp; Layanan Pemeriksaan Mata Terpadu
           </p>
           <p className="text-[7.5pt] text-gray-700 mt-0.5">
-            Gerai: Purwokerto (Pusat) · Purbalingga · Cilacap · Wonosobo
+            Lokasi Cabang: Purwokerto · Purbalingga · Cilacap · Wonosobo
           </p>
           <p className="text-[7.5pt] text-gray-700">
-            Website: www.optikiseeyou.com · Layanan Kemitraan B2B: 0877-7868-3766 · Email: marketing@optikiseeyou.com
+            Website: www.optikiseeyou.com · Layanan Kemitraan B2B: 0877-7868-3766
           </p>
         </div>
 
@@ -480,7 +478,7 @@ export const MerchantProposalDocument: React.FC<Props> = ({ followers }) => {
                   Optik I See You
                 </p>
                 <p className="text-[8.5pt] text-gray-600 mt-1">
-                  Purwokerto (Pusat) · Purbalingga · Cilacap · Wonosobo
+                  Lokasi Cabang: Purwokerto · Purbalingga · Cilacap · Wonosobo
                 </p>
               </div>
             </div>
@@ -536,13 +534,13 @@ export const MerchantProposalDocument: React.FC<Props> = ({ followers }) => {
             <p>Dengan hormat,</p>
             <p><EditSpan value={data.letterIntro} onChange={(v) => updateField("letterIntro", v)} tag="span" /></p>
             <p>
-              Optik I See You saat ini mengoperasikan 4 cabang ritel fisik di Purwokerto (Pusat), Purbalingga, Cilacap, dan Wonosobo, serta didukung komunitas digital media sosial dengan lebih dari <b>{fmt(totalAll)} pengikut</b>. Melalui kemitraan merchant B2B ini, kami menawarkan program kolaborasi saling menguntungkan tanpa biaya uang tunai (Zero Cash Fee), di mana kedua pihak saling bertukar benefit voucher loyalitas pelanggan dan menempatkan media promosi meja kasir.
+              Optik I See You merupakan jaringan ritel kacamata terkemuka yang mengoperasikan 4 lokasi cabang di Purwokerto, Purbalingga, Cilacap, dan Wonosobo. Kami memiliki basis pasar terdata lebih dari <b>1.000.000 (satu juta) pembeli dan pelanggan loyal</b> dengan beragam segmentasi grade konsumen (Grade A &amp; B profesional, dokter, ASN, keluarga mapan, hingga kalangan muda produktif), serta diperkuat ekosistem digital dengan lebih dari <b>{fmt(totalAll)} pengikut</b> di media sosial. Melalui kemitraan merchant B2B ini, kami menawarkan program kolaborasi saling menguntungkan tanpa biaya uang tunai (Zero Cash Fee), di mana kedua pihak saling bertukar benefit voucher loyalitas pelanggan dan menempatkan media promosi meja kasir.
             </p>
             <p>
-              Kemitraan ini dirancang fleksibel dan berkelanjutan, di mana penyediaan kuota voucher dapat disesuaikan sebanyak-banyaknya sesuai dengan kebutuhan serapan promosi mitra, serta terbuka bekerja sama dengan berbagai klinik maupun jenama bisnis lokal demi memperkaya pilihan bagi pelanggan kita bersama.
+              Kemitraan ini dirancang fleksibel dan berkelanjutan, di mana kuota penawaran voucher dapat disesuaikan dengan diskusi bersama guna menjalin benefit bagi seluruh pelanggan, serta terbuka bekerja sama dengan perusahaan-perusahaan Bapak/Ibu demi memperkaya pilihan bagi pelanggan kita bersama.
             </p>
             <p>
-              Bersama surat ini, kami sampaikan penjelasan skema fasilitas kemitraan, profil jaringan ritel, dan lembar formulir kesepakatan (MoU) untuk menjadi dasar tindak lanjut kerja sama.
+              Bersama surat ini, kami sampaikan penjelasan skema fasilitas kemitraan, profil jaringan ritel dan basis pasar, serta lembar formulir kesepakatan (MoU) untuk menjadi dasar tindak lanjut kerja sama.
             </p>
             <p><EditSpan value={data.letterClosing} onChange={(v) => updateField("letterClosing", v)} tag="span" /></p>
           </div>
@@ -587,7 +585,7 @@ export const MerchantProposalDocument: React.FC<Props> = ({ followers }) => {
 
           <div className={`space-y-3 text-justify ${lineHeightClass}`}>
             <p>
-              <b>1.1 Latar Belakang Kemitraan B2B</b>
+              <b>1.1 Latar Belakang Kemitraan B2B &amp; Basis Pasar Konsumen</b>
               <br />
               <EditSpan value={data.backgroundText1} onChange={(v) => updateField("backgroundText1", v)} tag="span" />
             </p>
@@ -597,7 +595,7 @@ export const MerchantProposalDocument: React.FC<Props> = ({ followers }) => {
               <EditSpan value={data.backgroundText2} onChange={(v) => updateField("backgroundText2", v)} tag="span" />
             </p>
             <p>
-              <b>1.3 Sinergi Multi-Kanal (Offline &amp; Digital)</b>
+              <b>1.3 Sinergi Multi-Kanal (Offline, Display Kasir &amp; Digital)</b>
               <br />
               <EditSpan value={data.backgroundText3} onChange={(v) => updateField("backgroundText3", v)} tag="span" />
             </p>
@@ -606,8 +604,8 @@ export const MerchantProposalDocument: React.FC<Props> = ({ followers }) => {
               <p className="font-bold text-black uppercase mb-1">Prinsip Pokok Kerja Sama Merchant Optik I See You:</p>
               <ul className="list-disc pl-5 space-y-1 text-gray-800">
                 <li><b>Zero Cash Fee (Murni Barter Sinergi):</b> Tidak ada biaya sewa tempat, biaya pendaftaran, atau potongan komisi uang tunai antar-pihak.</li>
-                <li><b>Alokasi Voucher Bebas:</b> Kuota voucher boleh disediakan sebanyak-banyaknya sesuai kapasitas transaksi dan dapat diisi ulang (restock) secara rutin setiap bulan.</li>
-                <li><b>Inklusif &amp; Kolaboratif:</b> Terbuka untuk seluruh brand, klinik kecantikan, maupun mitra ritel sejenis untuk memperluas pilihan benefit bagi masyarakat.</li>
+                <li><b>Alokasi Voucher Terukur:</b> Kuota voucher disesuaikan melalui diskusi bersama sesuai kapasitas penyerapan transaksi dan dapat diisi ulang (restock) secara rutin setiap bulan.</li>
+                <li><b>Inklusif &amp; Kolaboratif:</b> Terbuka bekerja sama dengan perusahaan-perusahaan Bapak/Ibu demi memperkaya pilihan benefit bagi pelanggan kita bersama.</li>
                 <li><b>Jangka Panjang &amp; Evaluatif:</b> Kemitraan bersifat jangka panjang dengan evaluasi performa penyerapan voucher setiap 3 bulan sekali.</li>
               </ul>
             </div>
@@ -636,8 +634,8 @@ export const MerchantProposalDocument: React.FC<Props> = ({ followers }) => {
                   <td className="py-2 px-3"><EditSpan value={data.voucherQuotaInfo} onChange={(v) => updateField("voucherQuotaInfo", v)} tag="span" /></td>
                 </tr>
                 <tr>
-                  <td className="py-2 px-3 font-bold bg-neutral-100 border-r border-black">Cakupan Wilayah Gerai</td>
-                  <td className="py-2 px-3">Purwokerto (Pusat), Purbalingga, Cilacap, dan Wonosobo</td>
+                  <td className="py-2 px-3 font-bold bg-neutral-100 border-r border-black">Cakupan Lokasi Cabang</td>
+                  <td className="py-2 px-3">Purwokerto, Purbalingga, Cilacap, dan Wonosobo</td>
                 </tr>
               </tbody>
             </table>
@@ -675,7 +673,7 @@ export const MerchantProposalDocument: React.FC<Props> = ({ followers }) => {
           </div>
 
           <div className="mt-4 p-3 border border-dashed border-gray-500 bg-neutral-50 text-[9pt] italic text-gray-700">
-            * Catatan Khusus: Penayangan video komersial TV Showroom tersedia khusus di gerai utama Purwokerto (Pusat), sedangkan untuk gerai Purbalingga, Cilacap, dan Wonosobo difokuskan pada penempatan display brosur / flyer meja kasir dan voucher barter.
+            * Catatan Khusus: Penayangan video komersial TV Showroom tersedia khusus di cabang Purwokerto, sedangkan untuk cabang Purbalingga, Cilacap, dan Wonosobo difokuskan pada penempatan display brosur / flyer meja kasir dan voucher barter.
           </div>
         </section>
 
@@ -686,73 +684,99 @@ export const MerchantProposalDocument: React.FC<Props> = ({ followers }) => {
           <FormalKopSurat />
 
           <h3 className="text-[12pt] font-bold uppercase tracking-wider text-black border-b border-black pb-1 mb-3">
-            BAB IV. JARINGAN RETAIL &amp; PAPARAN MEDIA MERCHANT
+            BAB IV. JARINGAN CABANG, BASIS PASAR &amp; PAPARAN MEDIA MERCHANT
           </h3>
 
-          <p className={`text-justify mb-4 ${lineHeightClass}`}>
-            Sebagai mitra merchant resmi, materi display dan voucher pihak mitra akan terekspos di jaringan 4 toko fisik Optik I See You yang berlokasi strategis di 4 kabupaten utama:
+          <p className={`text-justify mb-3 ${lineHeightClass}`}>
+            Sebagai mitra merchant resmi, materi display dan voucher pihak mitra akan terekspos di jaringan toko fisik Optik I See You yang berlokasi strategis di 4 kabupaten utama:
           </p>
 
-          <p className="font-bold text-[10.5pt] mb-1.5">4.1 Rekapitulasi Jaringan Gerai Ritel Fisik</p>
-          <table className="w-full border-collapse border border-black text-[9.5pt] mb-5">
+          <p className="font-bold text-[10.5pt] mb-1.5">4.1 Rekapitulasi Lokasi Cabang Fisik</p>
+          <table className="w-full border-collapse border border-black text-[9pt] mb-4">
             <thead>
               <tr className="bg-neutral-100 border-b border-black">
-                <th className="py-2 px-3 text-left border-r border-black font-bold">Cabang Gerai</th>
-                <th className="py-2 px-3 text-left border-r border-black font-bold">Wilayah &amp; Karakteristik</th>
-                <th className="py-2 px-3 text-left font-bold">Fasilitas Merchant</th>
+                <th className="py-1.5 px-3 text-left border-r border-black font-bold">Lokasi Cabang</th>
+                <th className="py-1.5 px-3 text-left border-r border-black font-bold">Wilayah &amp; Karakteristik</th>
+                <th className="py-1.5 px-3 text-left font-bold">Fasilitas Merchant</th>
               </tr>
             </thead>
             <tbody>
               <tr className="border-b border-black">
-                <td className="py-2 px-3 border-r border-black font-semibold">Purwokerto (Pusat)</td>
-                <td className="py-2 px-3 border-r border-black">Pusat kota, kawasan kampus &amp; perkantoran</td>
-                <td className="py-2 px-3">Layar TV Showroom &amp; Meja Display Kasir</td>
+                <td className="py-1.5 px-3 border-r border-black font-semibold">Purwokerto</td>
+                <td className="py-1.5 px-3 border-r border-black">Pusat kota, kawasan kampus &amp; perkantoran</td>
+                <td className="py-1.5 px-3">Layar TV Showroom &amp; Meja Display Kasir</td>
               </tr>
               <tr className="border-b border-black">
-                <td className="py-2 px-3 border-r border-black font-semibold">Purbalingga</td>
-                <td className="py-2 px-3 border-r border-black">Sentra niaga, perkantoran &amp; keluarga muda</td>
-                <td className="py-2 px-3">Meja Display Kasir &amp; Display Brosur / Flyer</td>
+                <td className="py-1.5 px-3 border-r border-black font-semibold">Purbalingga</td>
+                <td className="py-1.5 px-3 border-r border-black">Sentra niaga, perkantoran &amp; keluarga muda</td>
+                <td className="py-1.5 px-3">Meja Display Kasir &amp; Display Brosur / Flyer</td>
               </tr>
               <tr className="border-b border-black">
-                <td className="py-2 px-3 border-r border-black font-semibold">Cilacap</td>
-                <td className="py-2 px-3 border-r border-black">Kawasan residensial &amp; industri aktif</td>
-                <td className="py-2 px-3">Meja Display Kasir &amp; Display Brosur / Flyer</td>
+                <td className="py-1.5 px-3 border-r border-black font-semibold">Cilacap</td>
+                <td className="py-1.5 px-3 border-r border-black">Kawasan residensial &amp; industri aktif</td>
+                <td className="py-1.5 px-3">Meja Display Kasir &amp; Display Brosur / Flyer</td>
               </tr>
               <tr>
-                <td className="py-2 px-3 border-r border-black font-semibold">Wonosobo</td>
-                <td className="py-2 px-3 border-r border-black">Pusat kota &amp; jalur pariwisata Dieng</td>
-                <td className="py-2 px-3">Meja Display Kasir &amp; Display Brosur / Flyer</td>
+                <td className="py-1.5 px-3 border-r border-black font-semibold">Wonosobo</td>
+                <td className="py-1.5 px-3 border-r border-black">Pusat kota &amp; jalur pariwisata Dieng</td>
+                <td className="py-1.5 px-3">Meja Display Kasir &amp; Display Brosur / Flyer</td>
               </tr>
             </tbody>
           </table>
 
           <p className="font-bold text-[10.5pt] mb-1.5">4.2 Jangkauan Media Sosial Terintegrasi</p>
-          <table className="w-full border-collapse border border-black text-[9.5pt] mb-2">
+          <table className="w-full border-collapse border border-black text-[9pt] mb-3">
             <thead>
               <tr className="bg-neutral-100 border-b border-black">
-                <th className="py-2 px-3 text-left border-r border-black font-bold">Akun Resmi</th>
-                <th className="py-2 px-3 text-left border-r border-black font-bold">Gerai Wilayah</th>
-                <th className="py-2 px-3 text-right border-r border-black font-bold">Followers IG</th>
-                <th className="py-2 px-3 text-right font-bold">Followers TikTok</th>
+                <th className="py-1.5 px-3 text-left border-r border-black font-bold">Akun Resmi</th>
+                <th className="py-1.5 px-3 text-left border-r border-black font-bold">Lokasi Cabang</th>
+                <th className="py-1.5 px-3 text-right border-r border-black font-bold">Followers IG</th>
+                <th className="py-1.5 px-3 text-right font-bold">Followers TikTok</th>
               </tr>
             </thead>
             <tbody>
               {followers.map((fRow) => (
                 <tr key={fRow.account} className="border-b border-black">
-                  <td className="py-1.5 px-3 border-r border-black font-semibold">{fRow.account}</td>
-                  <td className="py-1.5 px-3 border-r border-black text-gray-800">{fRow.label}</td>
-                  <td className="py-1.5 px-3 border-r border-black text-right tabular-nums">{fmt(fRow.igFollowers)}</td>
-                  <td className="py-1.5 px-3 text-right tabular-nums">{fRow.tiktokFollowers ? fmt(fRow.tiktokFollowers) : "-"}</td>
+                  <td className="py-1 px-3 border-r border-black font-semibold">{fRow.account}</td>
+                  <td className="py-1 px-3 border-r border-black text-gray-800">{fRow.label}</td>
+                  <td className="py-1 px-3 border-r border-black text-right tabular-nums">{fmt(fRow.igFollowers)}</td>
+                  <td className="py-1 px-3 text-right tabular-nums">{fRow.tiktokFollowers ? fmt(fRow.tiktokFollowers) : "-"}</td>
                 </tr>
               ))}
               <tr className="bg-neutral-100 font-bold border-t-2 border-black">
-                <td colSpan={2} className="py-2 px-3 border-r border-black uppercase">Total Jangkauan Komulatif</td>
-                <td className="py-2 px-3 border-r border-black text-right tabular-nums">{fmt(totalIg)}</td>
-                <td className="py-2 px-3 text-right tabular-nums">{fmt(totalTt)}</td>
+                <td colSpan={2} className="py-1.5 px-3 border-r border-black uppercase">Total Jangkauan Komulatif</td>
+                <td className="py-1.5 px-3 border-r border-black text-right tabular-nums">{fmt(totalIg)}</td>
+                <td className="py-1.5 px-3 text-right tabular-nums">{fmt(totalTt)}</td>
               </tr>
             </tbody>
           </table>
-          <p className="text-[8.5pt] text-gray-600 italic">* Audit data analitik akun resmi Optik I See You per Oktober 2026.</p>
+
+          {/* 4.3 Profil Basis Pasar Pelanggan & Grade Konsumen */}
+          <div className="border border-black p-3 bg-neutral-50 text-[9pt]">
+            <p className="font-bold text-black uppercase mb-1 flex items-center justify-between">
+              <span>4.3 Basis Pasar Pelanggan (1.000.000+ Pembeli) &amp; Segmentasi Grade Konsumen</span>
+              <span className="text-[7.5pt] font-semibold text-emerald-900 bg-emerald-100 px-2 py-0.5 rounded border border-emerald-300">
+                Database Ritel Terintegrasi
+              </span>
+            </p>
+            <p className="text-gray-800 text-justify mb-2 leading-relaxed text-[8.5pt]">
+              Optik I See You tidak hanya didukung oleh komunitas digital yang kuat, melainkan memiliki rekam jejak pasar riil lebih dari <b>1.000.000 (satu juta) transaksi pembeli dan rekam medis kacamata</b> di 4 kabupaten. Profil konsumen terbagi dalam segmentasi grade yang matang:
+            </p>
+            <div className="grid grid-cols-2 gap-2 text-[8pt]">
+              <div className="border border-neutral-300 bg-white p-2 rounded">
+                <p className="font-bold text-black text-[8.5pt] mb-0.5">Grade A &amp; B (Purchasing Power Tinggi)</p>
+                <p className="text-gray-700 leading-snug">
+                  Segmen eksekutif, dokter, tenaga medis, ASN/BUMN, pengusaha, dan keluarga mapan. Mengutamakan lensa premium dan layanan berkelas; audiens primer untuk penukaran voucher klinik estetika, spa, gaya hidup, dan kuliner.
+                </p>
+              </div>
+              <div className="border border-neutral-300 bg-white p-2 rounded">
+                <p className="font-bold text-black text-[8.5pt] mb-0.5">Grade C+ &amp; Generasi Produktif / Gen-Z</p>
+                <p className="text-gray-700 leading-snug">
+                  Segmen mahasiswa (Unsoed, UMP, Telkom), pelajar, kreator konten, dan keluarga muda aktif. Sangat responsif terhadap tren Fashion kacamata kekinian, program giveaway, dan voucher diskon belanja langsung.
+                </p>
+              </div>
+            </div>
+          </div>
         </section>
 
         {/* ==================================================== */}
@@ -770,7 +794,7 @@ export const MerchantProposalDocument: React.FC<Props> = ({ followers }) => {
               <p className="font-bold mb-1">5.1 Alur Konfirmasi &amp; Aktivasi Kemitraan</p>
               <ol className="list-decimal pl-6 space-y-1.5 text-[10pt]">
                 <li>Calon mitra merchant menyepakati rincian skema voucher dan menandatangani lembar kesepakatan MoU pada halaman lampiran.</li>
-                <li>Kedua belah pihak saling menyerahkan lembar voucher fisik (kuota fleksibel/sebanyak-banyaknya) dan materi display meja kasir.</li>
+                <li>Kedua belah pihak saling menyerahkan lembar voucher fisik (kuota disepakati melalui diskusi bersama) dan materi display meja kasir.</li>
                 <li>Tim Optik I See You mendistribusikan voucher mitra ke 4 gerai kasir dan menjadwalkan penayangan Instagram Story / TV Showroom.</li>
                 <li>Kedua belah pihak melakukan monitoring berkala atas penyerapan voucher dan dapat melakukan restock voucher kapan saja.</li>
               </ol>
@@ -786,9 +810,9 @@ export const MerchantProposalDocument: React.FC<Props> = ({ followers }) => {
                   <span className="text-gray-700 block text-[9pt]"><EditSpan value={data.picRole} onChange={(v) => updateField("picRole", v)} tag="span" /></span>
                 </div>
                 <div>
-                  <span className="text-gray-600 block text-[8.5pt]">WhatsApp &amp; Email Resmi:</span>
-                  <span className="font-bold"><EditSpan value={data.picWa} onChange={(v) => updateField("picWa", v)} tag="span" /></span>
-                  <span className="text-gray-700 block text-[9pt]"><EditSpan value={data.picEmail} onChange={(v) => updateField("picEmail", v)} tag="span" /></span>
+                  <span className="text-gray-600 block text-[8.5pt]">WhatsApp Resmi Kemitraan:</span>
+                  <span className="font-bold text-[11pt]"><EditSpan value={data.picWa} onChange={(v) => updateField("picWa", v)} tag="span" /></span>
+                  <span className="text-gray-600 block text-[8pt] mt-0.5">Layanan Senin – Minggu (09.00 – 21.00 WIB)</span>
                 </div>
               </div>
             </div>
@@ -830,7 +854,7 @@ export const MerchantProposalDocument: React.FC<Props> = ({ followers }) => {
                 </tr>
                 <tr className="border-b border-black">
                   <td className="py-2 px-3 font-semibold bg-neutral-100 border-r border-black">Alokasi Jumlah Voucher per Bulan</td>
-                  <td className="py-2 px-3 font-semibold">[Contoh: 50 lembar / 100 lembar (Fleksibel / Sesuai Kebutuhan)]</td>
+                  <td className="py-2 px-3 font-semibold">[Contoh: 50 lembar / 100 lembar (Disesuaikan Melalui Diskusi Bersama)]</td>
                 </tr>
                 <tr>
                   <td className="py-2 px-3 font-semibold bg-neutral-100 border-r border-black">Durasi Awal Kesepakatan</td>
