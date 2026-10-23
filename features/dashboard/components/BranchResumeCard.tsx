@@ -131,7 +131,7 @@ export const BranchResumeCard: React.FC<BranchResumeCardProps> = ({
   }, []);
 
   return (
-    <div className="rounded-xl border border-border bg-surface p-5 shadow-subtle space-y-5">
+    <div data-tour="campaign-table" className="rounded-xl border border-border bg-surface p-5 shadow-subtle space-y-5">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border pb-4">
         <div>

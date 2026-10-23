@@ -25,11 +25,13 @@ import {
   Building2,
   Layers,
   Sparkles,
+  HelpCircle,
 } from "lucide-react";
 import { ThemeToggle } from "@/components/shared/ThemeToggle";
 import { ACTIVE_MEETING_CYCLE } from "@/lib/cadence-config";
 
 import { useBranch } from "@/context/BranchContext";
+import { useDashboardTour } from "@/components/tour/DashboardTourProvider";
 
 interface NavItem {
   label: string;
@@ -83,6 +85,7 @@ export const AppNav: React.FC = () => {
   const pathname = usePathname();
   const router = useRouter();
   const { selectedBranchId, setSelectedBranchId, branches } = useBranch();
+  const { startTour } = useDashboardTour();
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [openCategory, setOpenCategory] = useState<string | null>(null);
@@ -201,11 +204,26 @@ export const AppNav: React.FC = () => {
               </Link>
 
               {/* Global Branch Selector Pill (Desktop / Tablet) */}
-              <div className="hidden sm:flex items-center gap-1.5 ml-2 bg-[#F3EFE6] dark:bg-[#14221C] px-2.5 py-1 rounded-full border border-[#124734]/15">
+              <div data-tour="branch-filter" className="hidden sm:flex items-center gap-1.5 ml-2 bg-[#F3EFE6] dark:bg-[#14221C] px-2.5 py-1 rounded-full border border-[#124734]/15">
                 <Building2 className="w-3.5 h-3.5 text-[#124734] dark:text-emerald-400" />
                 <select
                   value={selectedBranchId}
-                  onChange={(e) => setSelectedBranchId(e.target.value)}
+                  onChange={(e) => {
+                    const bId = e.target.value;
+                    setSelectedBranchId(bId);
+                    const bObj = branches.find((b) => b.id === bId);
+                    if (typeof window !== "undefined") {
+                      window.dispatchEvent(
+                        new CustomEvent("app-toast", {
+                          detail: {
+                            title: "Fokus Cabang Diperbarui",
+                            message: `Menampilkan analitik untuk ${bObj?.label || bId}`,
+                            type: "success",
+                          },
+                        })
+                      );
+                    }
+                  }}
                   className="bg-transparent text-xs font-bold text-[#183C30] dark:text-emerald-200 focus:outline-none cursor-pointer pr-1"
                 >
                   {branches.map((b) => (
@@ -357,6 +375,19 @@ export const AppNav: React.FC = () => {
                 </kbd>
               </button>
 
+              {/* Tour Replay Button (? Panduan) */}
+              <button
+                type="button"
+                data-tour="tour-help-button"
+                onClick={() => startTour(true)}
+                className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-full bg-[#124734]/10 dark:bg-emerald-500/15 text-[#124734] dark:text-emerald-300 hover:bg-[#124734]/20 text-xs font-bold border border-[#124734]/20 dark:border-emerald-500/30 transition-all cursor-pointer"
+                title="Buka Panduan Interaktif Dashboard"
+              >
+                <HelpCircle className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+                <span className="hidden sm:inline">Panduan</span>
+                <span className="sm:hidden">?</span>
+              </button>
+
               {/* Theme Toggle Button */}
               <ThemeToggle variant="icon" />
 
@@ -418,7 +449,7 @@ export const AppNav: React.FC = () => {
               </div>
 
               {/* Branch Selector in Mobile Drawer */}
-              <div className="my-4 p-3 bg-white dark:bg-[#14221C] rounded-2xl border border-[#124734]/15">
+              <div data-tour="branch-filter-mobile" className="my-4 p-3 bg-white dark:bg-[#14221C] rounded-2xl border border-[#124734]/15">
                 <label className="text-[10px] font-bold uppercase tracking-wider text-[#5C6B64] block mb-1.5">
                   Fokus Cabang Aktif:
                 </label>
@@ -443,6 +474,20 @@ export const AppNav: React.FC = () => {
                   ))}
                 </div>
               </div>
+
+              {/* Mobile Dedicated Tour Button */}
+              <button
+                type="button"
+                data-tour="tour-help-button-mobile"
+                onClick={() => {
+                  setIsDrawerOpen(false);
+                  startTour(true);
+                }}
+                className="w-full flex items-center justify-center gap-2 p-2.5 rounded-xl bg-emerald-600/10 dark:bg-emerald-500/20 text-[#124734] dark:text-emerald-300 font-bold text-xs border border-emerald-600/20 hover:bg-emerald-600/20 transition-colors mb-3 cursor-pointer"
+              >
+                <HelpCircle className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                <span>Panduan Interaktif Dashboard</span>
+              </button>
 
               {/* Grouped Category Navigation Links */}
               <div className="space-y-4">

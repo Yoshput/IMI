@@ -22,7 +22,7 @@ export const KpiMetricGroup: React.FC<KpiMetricGroupProps> = ({
   const engagementMetric = metrics.find((m) => m.key === "engagement" || m.key === "dm_inquiries") || metrics[3] || metrics[2];
 
   return (
-    <div className="space-y-4 mb-10">
+    <div data-tour="kpi-metrics" className="space-y-4 mb-10">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
         <h2 className="text-xs font-bold uppercase tracking-wider text-foreground-secondary">
           {cycleTitle}

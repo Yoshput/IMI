@@ -26,7 +26,7 @@ export const PerformanceHeader: React.FC<PerformanceHeaderProps> = ({
   branchTitle,
 }) => {
   return (
-    <div className="border-b border-border pb-6 mb-8">
+    <div data-tour="date-range" className="border-b border-border pb-6 mb-8">
       {/* Small Context Line (DESIGN.md §13) */}
       <div className="flex flex-wrap items-center gap-2 text-caption font-medium uppercase tracking-wider mb-2 text-foreground-secondary">
         <span>{contextSubtitle}</span>

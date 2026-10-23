@@ -57,7 +57,7 @@ export const GscClickReport: React.FC = () => {
   }, [timeframe]);
 
   return (
-    <div className="rounded-xl border border-border bg-surface p-5 shadow-subtle space-y-5">
+    <div data-tour="performance-chart" className="rounded-xl border border-border bg-surface p-5 shadow-subtle space-y-5">
       {/* Header with Title & Timeframe Toggle */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border pb-4">
         <div>
