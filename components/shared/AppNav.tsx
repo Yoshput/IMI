@@ -245,9 +245,16 @@ export const AppNav: React.FC = () => {
                 const hasActiveChild = cat.items.some((item) => isCurrentActive(item.href));
                 const isOpen = openCategory === cat.title;
 
+                let tourId = "";
+                if (cat.title === "Eksekutif & Rekap") tourId = "nav-category-eksekutif";
+                else if (cat.title === "Sosial & Konten") tourId = "nav-category-sosial";
+                else if (cat.title === "Riset & Pertumbuhan") tourId = "nav-category-riset";
+                else if (cat.title === "Kemitraan & Pelanggan") tourId = "nav-category-kemitraan";
+
                 return (
                   <div
                     key={cat.title}
+                    data-tour={tourId}
                     className="relative"
                     onMouseEnter={() => handleCategoryMouseEnter(cat.title)}
                     onMouseLeave={handleCategoryMouseLeave}
@@ -333,6 +340,7 @@ export const AppNav: React.FC = () => {
 
               {/* Dedicated Finance & Report Quick Pill (🔒) */}
               <Link
+                data-tour="nav-pill-finance"
                 href={`/finance${selectedBranchId !== "all" ? `?branch=${selectedBranchId}` : ""}`}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition-colors ${
                   pathname === "/finance" || pathname === "/reports" || pathname === "/report"
@@ -347,6 +355,7 @@ export const AppNav: React.FC = () => {
 
               {/* Proposal Sponsor Direct Link */}
               <Link
+                data-tour="nav-pill-proposal"
                 href="/proposal-sponsor"
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition-colors ${
                   pathname === "/proposal-sponsor"
@@ -364,6 +373,7 @@ export const AppNav: React.FC = () => {
               {/* Command Palette Button (⌘K) */}
               <button
                 type="button"
+                data-tour="nav-button-search"
                 onClick={openCommandPalette}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#F3EFE6] dark:bg-[#14221C] text-[#2D3A34] dark:text-emerald-100 hover:bg-[#E5E0D5] text-xs font-medium border border-[#124734]/15 transition-all cursor-pointer"
                 title="Buka Command Palette (Ctrl+K)"
@@ -491,8 +501,15 @@ export const AppNav: React.FC = () => {
 
               {/* Grouped Category Navigation Links */}
               <div className="space-y-4">
-                {NAV_CATEGORIES.map((cat) => (
-                  <div key={cat.title}>
+                {NAV_CATEGORIES.map((cat) => {
+                  let mobileTourId = "";
+                  if (cat.title === "Eksekutif & Rekap") mobileTourId = "nav-mobile-eksekutif";
+                  else if (cat.title === "Sosial & Konten") mobileTourId = "nav-mobile-sosial";
+                  else if (cat.title === "Riset & Pertumbuhan") mobileTourId = "nav-mobile-riset";
+                  else if (cat.title === "Kemitraan & Pelanggan") mobileTourId = "nav-mobile-kemitraan";
+
+                  return (
+                    <div key={cat.title} data-tour={mobileTourId}>
                     <span className="text-[10px] font-bold uppercase tracking-wider text-[#5C6B64] block mb-1.5 px-2">
                       {cat.title}
                     </span>
@@ -523,7 +540,8 @@ export const AppNav: React.FC = () => {
                       })}
                     </div>
                   </div>
-                ))}
+                  );
+                })}
 
                 {/* Additional Links in Drawer */}
                 <div className="pt-2 border-t border-[#124734]/15 space-y-1.5">

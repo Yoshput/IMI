@@ -16,6 +16,12 @@ import {
   Table2,
   HelpCircle,
   CheckCircle2,
+  LayoutGrid,
+  Target,
+  Briefcase,
+  Lock,
+  FileText,
+  Search,
 } from "lucide-react";
 import gsap from "gsap";
 
@@ -83,8 +89,9 @@ export function InteractiveTourModal() {
     setTargetRect(computedRect);
 
     // Calculate optimal tooltip position
-    const tooltipWidth = Math.min(380, window.innerWidth - 32);
-    const tooltipHeight = 240; // estimated max height
+    const tooltipWidth = Math.min(420, window.innerWidth - 32);
+    const estimatedHeight = currentStep.subItems && currentStep.subItems.length > 0 ? 360 : 220;
+    const tooltipHeight = tooltipRef.current ? tooltipRef.current.offsetHeight : estimatedHeight;
     const viewportHeight = window.innerHeight;
     const viewportWidth = window.innerWidth;
 
@@ -96,13 +103,13 @@ export function InteractiveTourModal() {
     const spaceBelow = viewportHeight - computedRect.bottom;
     const spaceAbove = computedRect.top;
 
-    if (spaceBelow >= tooltipHeight + 20) {
+    if (spaceBelow >= tooltipHeight + 16) {
       // Place below target
       top = computedRect.bottom + 12;
       placement = "bottom";
-    } else if (spaceAbove >= tooltipHeight + 20) {
+    } else if (spaceAbove >= tooltipHeight + 16) {
       // Place above target
-      top = computedRect.top - tooltipHeight - 12;
+      top = Math.max(16, computedRect.top - tooltipHeight - 12);
       placement = "top";
     } else {
       // Screen too small or target fills view; center vertically below target or at bottom
@@ -170,9 +177,23 @@ export function InteractiveTourModal() {
   const renderStepIcon = () => {
     switch (currentStep.id) {
       case "welcome":
-        return <Sparkles className="w-6 h-6 text-emerald-500" />;
+        return <Sparkles className="w-5 h-5 text-emerald-500" />;
       case "branch-filter":
         return <Building2 className="w-5 h-5 text-emerald-500" />;
+      case "nav-category-eksekutif":
+        return <LayoutGrid className="w-5 h-5 text-emerald-500" />;
+      case "nav-category-sosial":
+        return <TrendingUp className="w-5 h-5 text-emerald-500" />;
+      case "nav-category-riset":
+        return <Target className="w-5 h-5 text-emerald-500" />;
+      case "nav-category-kemitraan":
+        return <Briefcase className="w-5 h-5 text-emerald-500" />;
+      case "nav-pill-finance":
+        return <Lock className="w-5 h-5 text-amber-500" />;
+      case "nav-pill-proposal":
+        return <FileText className="w-5 h-5 text-emerald-500" />;
+      case "nav-button-search":
+        return <Search className="w-5 h-5 text-emerald-500" />;
       case "date-range":
         return <Calendar className="w-5 h-5 text-emerald-500" />;
       case "kpi-metrics":
@@ -207,7 +228,7 @@ export function InteractiveTourModal() {
           <button
             type="button"
             onClick={skipTour}
-            className="absolute top-4 right-4 p-2 rounded-full text-foreground-muted hover:text-foreground hover:bg-muted/50 transition-colors"
+            className="absolute top-4 right-4 p-2 rounded-full text-foreground-muted hover:text-foreground hover:bg-muted/50 transition-colors cursor-pointer"
             title="Lewati panduan (Esc)"
           >
             <X className="w-4 h-4" />
@@ -248,31 +269,26 @@ export function InteractiveTourModal() {
             </div>
             <div className="p-2.5 rounded-lg bg-muted/40 border border-border/60 flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
-              <span>100% Data Riil Terverifikasi</span>
+              <span>Navigasi Seluruh Menu Navbar</span>
             </div>
           </div>
 
-          {/* Tip */}
-          <div className="p-3 rounded-xl bg-emerald-500/8 dark:bg-emerald-950/40 border border-emerald-500/20 flex items-start gap-2.5 mb-6 text-xs text-foreground-secondary">
-            <Lightbulb className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
-            <span>{currentStep.tip}</span>
-          </div>
-
           {/* Actions */}
-          <div className="flex items-center justify-between gap-3 pt-2">
+          <div className="flex items-center justify-between pt-4 border-t border-border">
             <button
               type="button"
               onClick={skipTour}
-              className="px-4 py-2 text-xs font-semibold text-foreground-muted hover:text-foreground transition-colors"
+              className="text-xs font-semibold text-foreground-muted hover:text-foreground transition-colors cursor-pointer"
             >
-              Lewati Sekarang
+              Lewati Panduan
             </button>
+
             <button
               type="button"
               onClick={nextStep}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#124734] hover:bg-[#185c44] text-white text-xs font-bold shadow-md hover:shadow-lg transition-all"
+              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#124734] hover:bg-[#185c44] text-white text-xs font-bold shadow-md hover:shadow-lg transition-all cursor-pointer"
             >
-              <span>Mulai Panduan (1 Menit)</span>
+              <span>Mulai Panduan Seluruh Halaman</span>
               <ChevronRight className="w-4 h-4" />
             </button>
           </div>
@@ -282,7 +298,7 @@ export function InteractiveTourModal() {
   }
 
   // =========================================================================
-  // CASE 2: SPOTLIGHT GUIDED WALKTHROUGH (STEPS 1 to 6)
+  // CASE 2: SPOTLIGHT GUIDED WALKTHROUGH
   // =========================================================================
   return (
     <div
@@ -339,7 +355,7 @@ export function InteractiveTourModal() {
       {/* Floating Tooltip Card */}
       <div
         ref={tooltipRef}
-        className="fixed z-[99995] w-full max-w-[380px] bg-surface dark:bg-[#121E19] border border-[#124734]/25 dark:border-emerald-500/40 rounded-2xl shadow-2xl p-5 text-foreground transition-all duration-200"
+        className="fixed z-[99995] w-full max-w-[420px] bg-surface dark:bg-[#121E19] border border-[#124734]/25 dark:border-emerald-500/40 rounded-2xl shadow-2xl p-5 text-foreground transition-all duration-200"
         style={{
           top: targetRect ? `${tooltipPos.top}px` : "50%",
           left: targetRect ? `${tooltipPos.left}px` : "50%",
@@ -360,7 +376,7 @@ export function InteractiveTourModal() {
           <button
             type="button"
             onClick={skipTour}
-            className="p-1 rounded-full text-foreground-muted hover:text-foreground hover:bg-muted/50 transition-colors"
+            className="p-1 rounded-full text-foreground-muted hover:text-foreground hover:bg-muted/50 transition-colors cursor-pointer"
             title="Tutup panduan (Esc)"
           >
             <X className="w-4 h-4" />
@@ -382,6 +398,28 @@ export function InteractiveTourModal() {
           {currentStep.description}
         </p>
 
+        {/* Optional Sub-Items List (for Navbar Menus & Modules) */}
+        {currentStep.subItems && currentStep.subItems.length > 0 && (
+          <div className="space-y-1.5 my-3 max-h-52 overflow-y-auto pr-1">
+            {currentStep.subItems.map((item, idx) => (
+              <div
+                key={idx}
+                className="p-2 rounded-xl bg-muted/40 dark:bg-white/5 border border-border/60 flex items-start gap-2"
+              >
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1.5 shrink-0" />
+                <div className="min-w-0 flex-1">
+                  <span className="text-[11px] font-bold text-foreground block">
+                    {item.label}
+                  </span>
+                  <span className="text-[10px] text-foreground-secondary leading-tight block">
+                    {item.desc}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
         {/* Tip Box */}
         {currentStep.tip && (
           <div className="p-2.5 rounded-xl bg-emerald-500/8 dark:bg-emerald-950/40 border border-emerald-500/20 flex items-start gap-2 mb-4 text-[11px] text-foreground-secondary">
@@ -393,11 +431,11 @@ export function InteractiveTourModal() {
         {/* Progress Bar & Actions */}
         <div className="pt-2 border-t border-border flex items-center justify-between gap-2">
           {/* Dots Indicator */}
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1 overflow-x-auto max-w-[140px] py-1">
             {Array.from({ length: totalSteps }).map((_, idx) => (
               <span
                 key={idx}
-                className={`h-1.5 rounded-full transition-all duration-200 ${
+                className={`h-1.5 rounded-full transition-all duration-200 shrink-0 ${
                   idx === currentStepIndex
                     ? "w-4 bg-emerald-600 dark:bg-emerald-400"
                     : idx < currentStepIndex
@@ -414,7 +452,7 @@ export function InteractiveTourModal() {
               <button
                 type="button"
                 onClick={prevStep}
-                className="p-1.5 rounded-lg border border-border text-foreground-secondary hover:text-foreground hover:bg-muted/50 text-xs transition-colors"
+                className="p-1.5 rounded-lg border border-border text-foreground-secondary hover:text-foreground hover:bg-muted/50 text-xs transition-colors cursor-pointer"
                 title="Langkah sebelumnya (Panah Kiri)"
               >
                 <ChevronLeft className="w-4 h-4" />
