@@ -188,7 +188,7 @@ export const DashboardView: React.FC = () => {
       case "cilacap":
         return {
           branchTitle: "Optik I See You Cilacap",
-          contextSubtitle: "Optik I See You Cilacap · PIC: Arum (Reels & TikTok)",
+          contextSubtitle: "Optik I See You Cilacap · PIC: Intan (Reels & TikTok)",
           totalPublished: 0,
           targetQuota: 2,
           achieved: false,
@@ -211,7 +211,7 @@ export const DashboardView: React.FC = () => {
             {
               id: "m-reach-clp",
               key: "weekly_reach",
-              label: "Produksi Reels CLP (Arum)",
+              label: "Produksi Reels CLP (Intan)",
               value: 0,
               unit: "video tercatat",
               previousValue: 4,

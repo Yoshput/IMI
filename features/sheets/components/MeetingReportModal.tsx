@@ -82,7 +82,7 @@ Target Audiens: HRD, Head of Marketing, Finance, Owner
   - Spreadsheet H+3: ${getBranchFollower("PWT", "225.6K")} (PIC: Ilya & Nuha)
 • Cilacap [@iseeyou.cilacap]: 
   - Live IG: ${getBranchFollower("CLP", "7.408")} followers
-  - Spreadsheet H+3: ${getBranchFollower("CLP", "7.408")} (PIC: Arum)
+  - Spreadsheet H+3: ${getBranchFollower("CLP", "7.408")} (PIC: Intan)
 • Purbalingga [@iseeyou.purbalingga]: 
   - Live IG: ${getBranchFollower("PBG", "6.232")} followers
   - Spreadsheet H+3: ${getBranchFollower("PBG", "6.232")} (PIC: Ajun)

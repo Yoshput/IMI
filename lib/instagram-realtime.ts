@@ -243,7 +243,7 @@ export function getCachedInstagramData(): IgLiveCache {
         handle: "@iseeyou.cilacap",
         url: "https://www.instagram.com/iseeyou.cilacap/",
         city: "Cilacap",
-        picName: "Arum",
+        picName: "Intan",
         followers: 7425,
         followersFormatted: "7,425",
         following: 6,

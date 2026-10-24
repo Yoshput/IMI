@@ -279,7 +279,7 @@ async function syncSpreadsheetData() {
     { sheetName: "Rekap PWT", picDefault: "Ilya", branchName: "Purwokerto (Pusat)", city: "Purwokerto", branchKey: "PWT", isKFollowers: true, isPWT: true },
     { sheetName: "Rekap PBG", picDefault: "Ajun", branchName: "Purbalingga", city: "Purbalingga", branchKey: "PBG", isKFollowers: false },
     { sheetName: "Rekap TGL", picDefault: "Amanda", branchName: "Lunar Eyewear Tegal (Second Brand)", city: "Tegal", branchKey: "TGL", isKFollowers: false },
-    { sheetName: "Rekap CLP", picDefault: "Arum", branchName: "Cilacap", city: "Cilacap", branchKey: "CLP", isKFollowers: false },
+    { sheetName: "Rekap CLP", picDefault: "Intan", branchName: "Cilacap", city: "Cilacap", branchKey: "CLP", isKFollowers: false },
     { sheetName: "Rekap WNS", picDefault: "Febi", branchName: "Wonosobo", city: "Wonosobo", branchKey: "WNS", isKFollowers: false },
   ];
 
@@ -583,7 +583,7 @@ async function syncSpreadsheetData() {
     { pic: "Ilya", role: "Rekap Reels PWT", branch: "Purwokerto (Pusat)", sheetKey: "Rekap PWT", data: allBranchReels["Rekap PWT"] || [] },
     { pic: "Ajun", role: "Rekap Reels PBG", branch: "Purbalingga", sheetKey: "Rekap PBG", data: allBranchReels["Rekap PBG"] || [] },
     { pic: "Amanda", role: "Rekap Reels TGL", branch: "Lunar Eyewear Tegal (Second Brand)", sheetKey: "Rekap TGL", data: allBranchReels["Rekap TGL"] || [] },
-    { pic: "Arum", role: "Rekap Reels CLP", branch: "Cilacap", sheetKey: "Rekap CLP", data: allBranchReels["Rekap CLP"] || [] },
+    { pic: "Intan", role: "Rekap Reels CLP", branch: "Cilacap", sheetKey: "Rekap CLP", data: allBranchReels["Rekap CLP"] || [] },
     { pic: "Febi", role: "Rekap Reels WNS", branch: "Wonosobo", sheetKey: "Rekap WNS", data: allBranchReels["Rekap WNS"] || [] },
   ].map((p) => {
     const dates = p.data
@@ -984,7 +984,7 @@ async function syncSpreadsheetData() {
       officialAccounts: [
         { name: "Optik I See You Purwokerto (Pusat)", handle: "@iseeyou.glasses", url: "https://www.instagram.com/iseeyou.glasses/", city: "Purwokerto", pic: "Ilya & Nuha" },
         { name: "Optik I See You Purbalingga", handle: "@iseeyou.purbalingga", url: "https://www.instagram.com/iseeyou.purbalingga/", city: "Purbalingga", pic: "Ajun" },
-        { name: "Optik I See You Cilacap", handle: "@iseeyou.cilacap", url: "https://www.instagram.com/iseeyou.cilacap/", city: "Cilacap", pic: "Arum" },
+        { name: "Optik I See You Cilacap", handle: "@iseeyou.cilacap", url: "https://www.instagram.com/iseeyou.cilacap/", city: "Cilacap", pic: "Intan" },
         { name: "Optik I See You Wonosobo", handle: "@iseeyou.wonosobo", url: "https://www.instagram.com/iseeyou.wonosobo/", city: "Wonosobo", pic: "Febi" },
         { name: "Lunar Eyewear Tegal (Second Brand)", handle: "@lunareyewear.co", url: "https://www.instagram.com/lunareyewear.co", city: "Tegal", pic: "Amanda" },
       ],

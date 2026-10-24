@@ -100,11 +100,11 @@ export const ACTUAL_PRIORITY_ISSUES: PriorityIssue[] = [
   {
     id: "p-2",
     type: "concern",
-    title: "Pengisian Rekap CLP (Arum) Tertunda Sejak 22 September 2026 (Tertunda 20 Hari)",
+    title: "Pengisian Rekap CLP (Intan) Tertunda Sejak 22 September 2026 (Tertunda 20 Hari)",
     description:
       "PIC Cilacap tertunda pengisian spreadsheet sejak 22 September 2026, sementara 5 PIC lainnya (Nuha, Ilya, Ajun, Amanda, Febi) mencatat laporan harian up-to-date per 11–12 Oktober 2026.",
     impactMetric: "Tertunda 20 Hari",
-    suggestedAction: "Manajer Marketing / HRD segera menghubungi Arum via reminder WhatsApp untuk menginput data keterlambatan atau verifikasi kendala store.",
+    suggestedAction: "Manajer Marketing / HRD segera menghubungi Intan via reminder WhatsApp untuk menginput data keterlambatan atau verifikasi kendala store.",
   },
   {
     id: "p-3",
@@ -143,7 +143,7 @@ export const ACTUAL_WEEKLY_REPORT: WeeklyReport = {
   endDate: "2026-10-12",
   status: "final",
   executiveSummary:
-    "Evaluasi performa marketing mingguan 5 cabang Optik I See You (Purwokerto, Purbalingga, Cilacap, Wonosobo) dan Lunar Eyewear Tegal untuk Rapat Evaluasi Selasa 13 Oktober 2026. Total produksi video Reels aktif mencapai 18 video (128.6% dari kuota target 14 video). Story Purwokerto mencapai 92 konten dalam 6 hari kerja dengan 27 pesan DM konsultasi masuk. Total audiens media sosial jaringan tercatat 244.587 pengikut Instagram dan 91.560 pengikut TikTok di 5 cabang. Kepatuhan pelaporan 5 PIC aktif dan up-to-date, dengan catatan khusus PIC Cilacap (Arum) masih tertunda sejak 22 September. Kendala teknis utama tercatat pada tripod rusak di store Purbalingga (Ajun).",
+    "Evaluasi performa marketing mingguan 5 cabang Optik I See You (Purwokerto, Purbalingga, Cilacap, Wonosobo) dan Lunar Eyewear Tegal untuk Rapat Evaluasi Selasa 13 Oktober 2026. Total produksi video Reels aktif mencapai 18 video (128.6% dari kuota target 14 video). Story Purwokerto mencapai 92 konten dalam 6 hari kerja dengan 27 pesan DM konsultasi masuk. Total audiens media sosial jaringan tercatat 244.587 pengikut Instagram dan 91.560 pengikut TikTok di 5 cabang. Kepatuhan pelaporan 5 PIC aktif dan up-to-date, dengan catatan khusus PIC Cilacap (Intan) masih tertunda sejak 22 September. Kendala teknis utama tercatat pada tripod rusak di store Purbalingga (Ajun).",
   headlineMetrics: {
     totalFollowers: ACTUAL_HEADLINE_METRICS[0],
     weeklyReach: ACTUAL_HEADLINE_METRICS[1],
@@ -160,7 +160,7 @@ export const ACTUAL_WEEKLY_REPORT: WeeklyReport = {
   ],
   kendala: [
     "Kerusakan alat penunjang: Ajun (PBG) mencatat 'Tripod rusak' sebanyak 4 kali pada laporan harian 6–11 Oktober.",
-    "Keterlambatan input: Rekap CLP (Arum) belum diisi sejak 22 September 2026 (tertunda 20 hari).",
+    "Keterlambatan input: Rekap CLP (Intan) belum diisi sejak 22 September 2026 (tertunda 20 hari).",
     "Fluktuasi engagement: Nuha (Story PWT) mencatat penurunan viewers pada story dan membutuhkan referensi konten edukasi pemeriksaan mata baru.",
   ],
   planStrategi: [

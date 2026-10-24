@@ -161,7 +161,7 @@ export const PicDetailModal: React.FC<PicDetailModalProps> = ({
     };
   }, [isNuha, nuhaStory]);
 
-  // Data processing for Reels Creators (Ilya, Ajun, Amanda, Arum, Febi)
+  // Data processing for Reels Creators (Ilya, Ajun, Amanda, Intan, Febi)
   const creatorAnalytics = useMemo(() => {
     if (isNuha || !branchReels.length) return null;
 

@@ -74,7 +74,7 @@ export const CANONICAL_BRANCHES: CanonicalBranchMeta[] = [
     code: "CLP",
     handle: "@iseeyou.cilacap",
     url: "https://www.instagram.com/iseeyou.cilacap/",
-    picName: "Arum",
+    picName: "Intan",
   },
   {
     id: "wonosobo",
@@ -139,7 +139,7 @@ export const OFFICIAL_BRANCH_ACCOUNTS: BranchAccount[] = [
     handle: "@iseeyou.cilacap",
     url: "https://www.instagram.com/iseeyou.cilacap/",
     city: "Cilacap",
-    picName: "Arum",
+    picName: "Intan",
     picRole: "PIC Reels Instagram & TikTok",
     sheetKey: "Rekap CLP",
     tag: "Cabang",

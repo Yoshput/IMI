@@ -5,7 +5,7 @@ const path = require('path');
 const OFFICIAL_BRANCH_ACCOUNTS = [
   { id: 'pwt-pusat', name: 'Optik I See You Purwokerto (Pusat)', handle: '@iseeyou.glasses', url: 'https://www.instagram.com/iseeyou.glasses/', city: 'Purwokerto', picName: 'Mba Ilya & Mba Nuha' },
   { id: 'pbg', name: 'Optik I See You Purbalingga', handle: '@iseeyou.purbalingga', url: 'https://www.instagram.com/iseeyou.purbalingga/', city: 'Purbalingga', picName: 'Mba Ajun' },
-  { id: 'clp', name: 'Optik I See You Cilacap', handle: '@iseeyou.cilacap', url: 'https://www.instagram.com/iseeyou.cilacap/', city: 'Cilacap', picName: 'Mba Arum' },
+  { id: 'clp', name: 'Optik I See You Cilacap', handle: '@iseeyou.cilacap', url: 'https://www.instagram.com/iseeyou.cilacap/', city: 'Cilacap', picName: 'Mba Intan' },
   { id: 'wns', name: 'Optik I See You Wonosobo', handle: '@iseeyou.wonosobo', url: 'https://www.instagram.com/iseeyou.wonosobo/', city: 'Wonosobo', picName: 'Mba Febi' },
   { id: 'tgl', name: 'Lunar Eyewear Tegal (Second Brand)', handle: '@lunareyewear.co', url: 'https://www.instagram.com/lunareyewear.co', city: 'Tegal', picName: 'Mba Amanda' }
 ];

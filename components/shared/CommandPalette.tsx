@@ -61,7 +61,7 @@ const SEARCHABLE_PICS = [
   { name: 'Nuha', branch: 'Purwokerto (Pusat)', role: 'PIC Konten Story IG', path: '/dashboard?branch=purwokerto' },
   { name: 'Ajun', branch: 'Purbalingga', role: 'PIC Konten Reels & TikTok', path: '/content?branch=purbalingga' },
   { name: 'Amanda', branch: 'Lunar Eyewear Tegal', role: 'PIC Konten Reels & TikTok', path: '/content?branch=lunar_tegal' },
-  { name: 'Arum', branch: 'Cilacap', role: 'PIC Konten Reels & TikTok', path: '/content?branch=cilacap' },
+  { name: 'Intan', branch: 'Cilacap', role: 'PIC Konten Reels & TikTok', path: '/content?branch=cilacap' },
   { name: 'Febi', branch: 'Wonosobo', role: 'PIC Konten Reels & TikTok', path: '/content?branch=wonosobo' },
 ];
 

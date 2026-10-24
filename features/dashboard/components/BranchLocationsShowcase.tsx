@@ -70,7 +70,7 @@ export const BRANCH_LOCATIONS: BranchData[] = [
     activeCampaign: "Edukasi Lensa Bluechromic Pesisir Pantai",
     operationalHours: "09.00 – 21.00 WIB",
     services: ["Lensa Bluechromic Pesisir", "Pemeriksaan Visus Lengkap", "Kacamata Anti Silau"],
-    picName: "Arum (Reels CLP)",
+    picName: "Intan (Reels CLP)",
     highlightNotes:
       "Fasade hijau signature Optik I See You. Konten demo transisi lensa di bawah matahari pesisir menghasilkan interaksi tinggi.",
   },

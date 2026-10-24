@@ -12,7 +12,7 @@
  *   1. Nuha (Story PWT)
  *   2. Ilya (Reels PWT)
  *   3. Ajun (PBG - Purbalingga)
- *   4. Arum (CLP - Cilacap)
+ *   4. Intan (CLP - Cilacap)
  *   5. Febi (WNS - Wonosobo)
  *   6. Amanda (TGL - Lunar Eyewear Tegal / Second Brand)
  */
@@ -75,8 +75,8 @@ export const PIC_DEFINITIONS: PicDefinition[] = [
     sheetTab: "Rekap PBG",
   },
   {
-    id: "pic-arum",
-    name: "Arum",
+    id: "pic-intan",
+    name: "Intan",
     role: "PIC Cilacap",
     branchKey: "CLP",
     branchName: "Cilacap",

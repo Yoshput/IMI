@@ -659,7 +659,7 @@ Link Akses Web: ${PRODUCTION_BASE_URL}/spreadsheet`;
             {[
               {
                 target: "Cabang Cilacap & Purwokerto",
-                action: "Follow up pengisian lembar kerja Arum dan Ilya agar update tidak tertunda sebelum meeting evaluasi.",
+                action: "Follow up pengisian lembar kerja Intan dan Ilya agar update tidak tertunda sebelum meeting evaluasi.",
                 pic: "HRD",
               },
               {

@@ -319,7 +319,7 @@ export const ThreeDayCadenceRecap: React.FC<ThreeDayCadenceRecapProps> = ({
     PWT: { name: "Purwokerto (Pusat)", city: "Purwokerto", pic: "Ilya" },
     PBG: { name: "Purbalingga", city: "Purbalingga", pic: "Ajun" },
     TGL: { name: "Lunar Eyewear Tegal", city: "Tegal", pic: "Amanda" },
-    CLP: { name: "Cilacap", city: "Cilacap", pic: "Arum" },
+    CLP: { name: "Cilacap", city: "Cilacap", pic: "Intan" },
     WNS: { name: "Wonosobo", city: "Wonosobo", pic: "Febi" },
   };
 
@@ -449,7 +449,7 @@ Akses Dashboard Lengkap: ${PRODUCTION_BASE_URL}/spreadsheet`;
               Rekap Atasan / 3 Hari & 1 Minggu
             </span>
             <span className="text-xs text-foreground-secondary font-medium">
-              Khusus Konten Story (Nuha) & Reels (Ilya, Ajun, Amanda, Arum, Febi)
+              Khusus Konten Story (Nuha) & Reels (Ilya, Ajun, Amanda, Intan, Febi)
             </span>
           </div>
           <h2 className="text-lg sm:text-xl font-bold text-foreground mt-1 tracking-tight">
@@ -1029,7 +1029,7 @@ Akses Dashboard Lengkap: ${PRODUCTION_BASE_URL}/spreadsheet`;
           </div>
         </div>
 
-        {/* RIGHT COLUMN: KONTEN REELS 5 CABANG (ILYA, AJUN, AMANDA, ARUM, FEBI) */}
+        {/* RIGHT COLUMN: KONTEN REELS 5 CABANG (ILYA, AJUN, AMANDA, INTAN, FEBI) */}
         <div className="lg:col-span-7 space-y-4">
           <div className="bg-surface border border-border rounded-container p-5 shadow-subtle space-y-4">
             <div className="flex items-center justify-between pb-3 border-b border-border">
@@ -1042,7 +1042,7 @@ Akses Dashboard Lengkap: ${PRODUCTION_BASE_URL}/spreadsheet`;
                     Konten Reels Instagram 5 Cabang (Evaluasi H+3)
                   </h3>
                   <span className="text-[11px] text-foreground-secondary">
-                    Ilya (PWT) · Ajun (PBG) · Amanda (TGL) · Arum (CLP) · Febi (WNS)
+                    Ilya (PWT) · Ajun (PBG) · Amanda (TGL) · Intan (CLP) · Febi (WNS)
                   </span>
                 </div>
               </div>

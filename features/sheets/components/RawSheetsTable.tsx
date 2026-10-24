@@ -176,7 +176,7 @@ export const RawSheetsTable: React.FC<RawSheetsTableProps> = ({
     { key: "pwt", label: "Ilya (Reels PWT)", count: (branchReels["Rekap PWT"] || []).length },
     { key: "pbg", label: "Ajun (Reels PBG)", count: (branchReels["Rekap PBG"] || []).length },
     { key: "tgl", label: "Amanda (Lunar TGL)", count: (branchReels["Rekap TGL"] || []).length },
-    { key: "clp", label: "Arum (Reels CLP)", count: (branchReels["Rekap CLP"] || []).length },
+    { key: "clp", label: "Intan (Reels CLP)", count: (branchReels["Rekap CLP"] || []).length },
     { key: "wns", label: "Febi (Reels WNS)", count: (branchReels["Rekap WNS"] || []).length },
   ];
 

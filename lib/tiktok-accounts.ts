@@ -109,7 +109,7 @@ export const TIKTOK_BRANCH_REGISTRY: TikTokBranchData[] = [
     city: "Cilacap",
     handle: "@i.see.you.cilacap",
     profileUrl: "https://www.tiktok.com/@i.see.you.cilacap",
-    picName: "Arum",
+    picName: "Intan",
     isNewAccount: true,
     followers: 3031,
     followersGrowth: 285,
