@@ -168,9 +168,9 @@ export const PengajuanHubView: React.FC<PengajuanHubViewProps> = ({ initialTab =
             }`}
           >
             <Send className="w-3.5 h-3.5 text-emerald-400" />
-            <span>Target Sponsor WA (11 Brand)</span>
+            <span>Direktori Mitra B2B &amp; Sponsor</span>
             <span className="text-[10px] px-1.5 py-0.2 rounded-full bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 font-black">
-              11
+              44
             </span>
           </button>
 
