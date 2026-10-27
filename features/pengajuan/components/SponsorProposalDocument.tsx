@@ -18,7 +18,34 @@ interface Props {
   sourceUrl: string;
 }
 
-interface PackageTier {
+export interface SpeakerItem {
+  name: string;
+  role: string;
+  topic: string;
+  highlight: string;
+}
+
+export interface RundownItem {
+  time: string;
+  activity: string;
+  picOrSpeaker: string;
+  notes: string;
+}
+
+export interface BudgetItem {
+  item: string;
+  qty: string;
+  unitCost: string;
+  totalCost: string;
+}
+
+export interface RevenueItem {
+  source: string;
+  description: string;
+  projection: string;
+}
+
+export interface PackageTier {
   id: string;
   name: string;
   tagline: string;
@@ -26,7 +53,7 @@ interface PackageTier {
   benefits: string[];
 }
 
-interface ProposalData {
+export interface ProposalData {
   docNo: string;
   docAttachment: string;
   docSubject: string;
@@ -49,6 +76,10 @@ interface ProposalData {
   backgroundText1: string;
   backgroundText2: string;
   backgroundText3: string;
+  speakers: SpeakerItem[];
+  rundown: RundownItem[];
+  budgetExpenses: BudgetItem[];
+  revenueProjections: RevenueItem[];
   picName: string;
   picRole: string;
   picWa: string;
@@ -61,37 +92,188 @@ interface ProposalData {
   packages: PackageTier[];
 }
 
-const STORAGE_KEY = "isy_proposal_sponsor_formal_v5";
-const LEGACY_STORAGE_KEY = "isy_proposal_sponsor_formal_v4";
+const STORAGE_KEY = "isy_proposal_sponsor_formal_v6";
+const LEGACY_STORAGE_KEY = "isy_proposal_sponsor_formal_v5";
 
 const DEFAULT_DATA: ProposalData = {
   docNo: "024/MKT-ISY/PROP-SPONSOR/X/2026",
   docAttachment: "1 (Satu) Berkas Proposal Kerjasama",
-  docSubject: "Permohonan Kerjasama Sponsorship & Sinergi Kemitraan B2B 'Creative Content Masterclass 2026'",
+  docSubject:
+    "Permohonan Kerjasama Sponsorship & Kolaborasi Mitra 'Fun Workshop: Unlock Your Influence'",
   letterCity: "Purwokerto",
-  letterDate: "20 Oktober 2026",
+  letterDate: "27 Oktober 2026",
   recipientTitle: "Pimpinan / Brand & Marketing Manager",
   recipientCompany: "[Nama Perusahaan / Brand Mitra]",
   recipientCity: "di Tempat",
   letterIntro:
-    "Sehubungan dengan rencana pelaksanaan program pengembangan kreator konten digital dan sinergi industri kreatif bertajuk 'Creative Content Masterclass 2026: Buka Kelas Konten', kami dari Divisi Strategic Partnership & Marketing Optik I See You bermaksud mengajukan penawaran kerjasama sponsorship serta kolaborasi bisnis Business-to-Business (B2B) kepada perusahaan/brand yang Bapak/Ibu pimpin.",
+    "Sehubungan dengan rencana pelaksanaan program workshop kreatif dan sinergi branding bertajuk 'Fun Workshop: Unlock Your Influence — Buka Kelas Konten & Digital Brand Collaboration', kami dari Divisi Marketing & Strategic Partnership Optik I See You bermaksud mengajukan penawaran kerjasama sponsorship serta sinergi kemitraan Business-to-Business (B2B) kepada instansi / brand yang Bapak/Ibu pimpin.",
   letterClosing:
     "Demikian surat penawaran kerjasama sponsorship ini kami sampaikan. Besar harapan kami agar terjalin kolaborasi B2B yang saling menguntungkan (win-win synergy) dan berdampak nyata bagi pertumbuhan kedua belah pihak. Atas perhatian dan kesempatan yang diberikan, kami ucapkan terima kasih.",
-  eventName: "CREATIVE CONTENT MASTERCLASS 2026",
-  eventSubtitle: "Buka Kelas Konten: Masterclass Kreator Digital & Kolaborasi Brand Masa Kini",
-  eventTheme: "Elevate Your Visuals, Scale Your Impact: Strategi Produksi Konten Komersial, Estetika Ritel & Kolaborasi Brand Masa Kini",
+  eventName: "FUN WORKSHOP: UNLOCK YOUR INFLUENCE",
+  eventSubtitle: "Buka Kelas Konten & Digital Brand Collaboration",
+  eventTheme:
+    "Personal Branding in This Economy: How to Branding Brand by ISY (Story, Feed, Reels) & Personal Branding di Era Digital",
   eventOrganizer: "Divisi Marketing & Strategic Partnership, Optik I See You",
   eventDate: "Sabtu, 14 November 2026",
-  eventTime: "09.00 – 15.00 WIB",
-  eventVenue: "Creative Hall & Event Space Banyumas Raya",
-  eventParticipants: "50 Peserta Terpilih (Kreator konten, influencer lokal, pegiat media sosial, dan tim kreatif brand)",
-  eventFormat: "Workshop intensif pembuatan konten, bedah studi kasus komersial, unboxing produk sponsor, mini booth expo, dan sesi B2B networking",
+  eventTime: "08.00 – 13.00 WIB",
+  eventVenue: "Gedung FISIP UNSOED / Balai Soetdja / Gedung Hetero Space Purwokerto",
+  eventParticipants:
+    "50 – 80 Peserta Terpilih (Kreator konten, pegiat media sosial, mahasiswa, UMKM, dan perwakilan tim kreatif brand)",
+  eventFormat:
+    "Workshop edukasi interaktif, bedah formula visual ritel, live demo produk brand sponsor, showcase booth & B2B networking",
   backgroundText1:
-    "Perkembangan lanskap digital saat ini menuntut brand dan pelaku bisnis untuk terus hadir dengan konten visual yang otentik, estetis, dan bernilai komersial tinggi. Bagi brand lokal dan regional di wilayah Banyumas Raya dan sekitarnya, kolaborasi terpadu bersama kreator konten aktif merupakan strategi pemasaran yang paling efektif dalam menjangkau audiens muda, mahasiswa, hingga segmen keluarga modern.",
+    "Di tengah dinamika lanskap digital dan kondisi ekonomi saat ini, kemampuan membangun personal branding dan citra merek (brand identity) yang relevan, otentik, dan berdampak merupakan kunci utama bagi kreator maupun pelaku bisnis untuk tetap tumbuh dan bersaing.",
   backgroundText2:
-    "Optik I See You menginisiasi program penawaran kemitraan strategis ini guna membuka ruang kolaborasi sinergis antara brand mitra dan ekosistem kreatif. Program ini dirancang bukan sekadar sarana promosi satu arah, melainkan wadah interaktif di mana target audiens dan pelaku kreatif dapat langsung berinteraksi serta memproduksi ulasan produk mitra sponsor secara riil di lokasi.",
+    "Optik I See You menginisiasi 'Fun Workshop: Unlock Your Influence' sebagai ruang kolaboratif yang mempertemukan talenta kreator lokal dengan brand-brand unggulan di wilayah Banyumas Raya dan sekitarnya. Acara ini bukan sekadar seminar satu arah, melainkan kelas praktik langsung pembuatan konten (Story, Feed, Reels) yang membedah bagaimana Optik I See You membangun citra brand hingga memiliki lebih dari 1.000.000 basis pelanggan ritel.",
   backgroundText3:
-    "Melalui kemitraan B2B ini, brand mitra memperoleh aktivasi multi-kanal: tatap muka langsung dan sampling produk kepada kreator, penempatan materi promosi (brosur/voucher) di meja kasir 4 gerai ritel, penayangan video di TV Showroom Purwokerto serta display materi promosi (brosur/voucher) di meja kasir 4 lokasi cabang ritel, dan publikasi digital melalui media sosial resmi @iseeyou.glasses (244.000+ followers).",
+    "Bagi mitra sponsor, kegiatan ini memberikan eksposur multi-dimensi: live demo produk dan interaksi langsung dengan audiens potensial di panggung workshop, aktivasi sampling di lokasi, penayangan materi video/iklan di layar TV Showroom Purwokerto selama periode kemitraan, penempatan media promosi di meja kasir 4 gerai ritel (Purwokerto, Purbalingga, Cilacap, Wonosobo), serta publikasi digital melalui kanal resmi @iseeyou.glasses (244.000+ followers).",
+  speakers: [
+    {
+      name: "Ilya / Ilyaken (@ilyaken)",
+      role: "Creative & Brand Content Lead, Optik I See You",
+      topic: "How to Branding Brand by ISY (Story, Feed, Reels)",
+      highlight:
+        "Menceritakan pengalaman nyata sebagai crew ISY dalam membranding Optik I See You: menyusun formula visual estetis ritel, rahasia storytelling komersial yang engage, hingga mengonversi interaksi konten media sosial menjadi 1.000.000+ transaksi pelanggan.",
+    },
+    {
+      name: "Bekti N",
+      role: "Digital Content Creator & Influencer Strategist",
+      topic: "Personal Branding in This Economy: Unlock Your Influence",
+      highlight:
+        "Strategi membangun persona digital yang kredibel dan bernilai komersial tinggi, taktik monetisasi audiens di tengah pergeseran ekonomi digital, serta kiat menarik kolaborasi brand papan atas.",
+    },
+    {
+      name: "Syahrul",
+      role: "Digital Marketer & Co-Speaker",
+      topic: "Personal Branding di Era Digital & Content Ecosystem",
+      highlight:
+        "Optimalisasi algoritma multi-platform (Instagram, TikTok), ekosistem distribusi konten video vertikal, dan sinergi mutualisme antara kreator independen dan industri ritel modern.",
+    },
+    {
+      name: "Nuha & Yos",
+      role: "Master of Ceremony (MC & Interactive Lead)",
+      topic: "Moderator Workshop, Live Product Demo & Games",
+      highlight:
+        "Memandu interaktivitas workshop, memfasilitasi live try-on & unboxing produk mitra sponsor, serta mengawal penyerahan doorprize kolaboratif.",
+    },
+  ],
+  rundown: [
+    {
+      time: "08.00 – 08.30 WIB",
+      activity: "Registrasi Peserta & Check-In Mandiri",
+      picOrSpeaker: "PIC: Nuha & Tim Registrasi",
+      notes: "Pemeriksaan tiket, pembagian Official Workshop Starter Kit & Goodie Bag sponsor",
+    },
+    {
+      time: "08.30 – 09.00 WIB",
+      activity: "Booth Exploration & Interactive Showcase",
+      picOrSpeaker: "Tim Panitia & Mitra Sponsor",
+      notes: "Peserta bebas berinteraksi di stand sponsor, mencoba produk, & networking santai",
+    },
+    {
+      time: "09.00 – 09.10 WIB",
+      activity: "Pembukaan Acara, Sambutan & Ice Breaking",
+      picOrSpeaker: "MC: Nuha & Yos",
+      notes: "Opening speech, perkenalan jajaran narasumber & pemanasan mini games interaktif",
+    },
+    {
+      time: "09.10 – 10.30 WIB",
+      activity: "Acara Inti 1: 'How to Branding Brand by ISY' + Q&A",
+      picOrSpeaker: "Narasumber: Ilya (@ilyaken)",
+      notes: "Bedah formula konten ritel ISY (Story, Feed, Reels), tips visual & sharing crew ISY",
+    },
+    {
+      time: "10.30 – 11.00 WIB",
+      activity: "Sesi Eksklusif: Live Demo Produk Brand Sponsor & Sampling",
+      picOrSpeaker: "MC + Perwakilan Brand Sponsor",
+      notes: "Live demo produk sponsor di panggung, sesi unboxing, try-on & sampling ke peserta",
+    },
+    {
+      time: "11.00 – 12.30 WIB",
+      activity: "Acara Inti 2: 'Unlock Your Influence: Personal Branding' + Q&A",
+      picOrSpeaker: "Narasumber: Bekti N & Syahrul",
+      notes: "Membangun personal branding di era digital, monetisasi pengaruh & kolaborasi brand",
+    },
+    {
+      time: "12.30 – 13.00 WIB",
+      activity: "Interactive Games, Doorprize Sponsor & Foto Bersama",
+      picOrSpeaker: "MC: Nuha & Yos",
+      notes: "Penyerahan plakat apresiasi, pembagian hadiah/voucher sponsor & dokumentasi",
+    },
+  ],
+  budgetExpenses: [
+    {
+      item: "Sewa Tempat / Ruangan Acara",
+      qty: "1 Paket",
+      unitCost: "Rp 2.000.000,-",
+      totalCost: "Rp 2.000.000,-",
+    },
+    {
+      item: "Konsumsi Peserta & Panitia (Snack Box + Lunch Box 110 Pax)",
+      qty: "110 Pax",
+      unitCost: "Rp 15.500,- (avg)",
+      totalCost: "Rp 1.700.000,-",
+    },
+    {
+      item: "Cetak Backdrop Panggung & Banner Utama (5x5 m)",
+      qty: "1 Paket",
+      unitCost: "Rp 200.000,-",
+      totalCost: "Rp 200.000,-",
+    },
+    {
+      item: "Merchandise & Starter Kit Peserta (Tote Bag, Notebook, ID Card)",
+      qty: "100 Paket",
+      unitCost: "Rp 15.000,-",
+      totalCost: "Rp 1.500.000,-",
+    },
+    {
+      item: "Cetak Brosur, Booklet Workshop & Voucher Cetak",
+      qty: "1 Paket",
+      unitCost: "Rp 100.000,-",
+      totalCost: "Rp 100.000,-",
+    },
+    {
+      item: "Hadiah Games, Kuis Interaktif & Doorprize",
+      qty: "1 Paket",
+      unitCost: "Rp 600.000,-",
+      totalCost: "Rp 600.000,-",
+    },
+    {
+      item: "Honorarium Bintang Tamu (Bekti N)",
+      qty: "1 Orang",
+      unitCost: "Rp 1.000.000,-",
+      totalCost: "Rp 1.000.000,-",
+    },
+    {
+      item: "Honorarium & Akomodasi KOL Partner",
+      qty: "1 Paket",
+      unitCost: "Rp 500.000,-",
+      totalCost: "Rp 500.000,-",
+    },
+    {
+      item: "Dana Taktis & Cadangan Operasional Panitia",
+      qty: "1 Paket",
+      unitCost: "Rp 500.000,-",
+      totalCost: "Rp 500.000,-",
+    },
+  ],
+  revenueProjections: [
+    {
+      source: "Registrasi Tiket Peserta (50 – 80 Peserta)",
+      description: "Tiket reguler workshop @ Rp 30.000 (atau opsi bundling Florasea @ Rp 65.000)",
+      projection: "Rp 1.500.000 – Rp 2.400.000",
+    },
+    {
+      source: "Biaya Registrasi Booth Sponsor On-Site",
+      description: "4 Stand / Booth showcase komersial di venue acara @ Rp 300.000",
+      projection: "Rp 1.200.000,-",
+    },
+    {
+      source: "Target Sponsorship & Barter Sinergi Mitra",
+      description: "Paket Platinum, Gold, Bronze, serta In-Kind / In-Keep barter ekuivalen",
+      projection: "Rp 3.900.000 – Rp 4.500.000",
+    },
+  ],
   picName: "Yossika Putra",
   picRole: "Staff Kemitraan & Sponsorship Marketing",
   picWa: "0877-7868-3766",
@@ -105,54 +287,59 @@ const DEFAULT_DATA: ProposalData = {
     {
       id: "platinum",
       name: "PAKET PLATINUM (SPONSOR UTAMA)",
-      tagline: "Eksklusivitas On-Site & Jaringan Ritel 4 Kota",
+      tagline: "Eksklusivitas On-Site, Panggung Utama & Jaringan Ritel 4 Cabang",
       price: "Rp 5.000.000,-",
       benefits: [
-        "Hak pembukaan 1 (satu) booth/stand promosi interaktif eksklusif di lokasi acara (Kuota Terbatas / First-Come First-Served).",
-        "Penayangan video profil / iklan komersial di layar TV Showroom Purwokerto selama 1 (satu) bulan penuh & display brosur di seluruh lokasi cabang.",
-        "Sesi presentasi / product demo di panggung utama selama 15 menit.",
-        "Pencantuman logo ukuran BESAR pada backdrop panggung, x-banner, flyer cetak, dan frame photobooth.",
+        "Hak membuka 1 (satu) booth / stand promosi interaktif eksklusif di lokasi acara (Area Utama / Foyer).",
+        "Sesi presentasi & demo produk brand di panggung utama selama 15 menit.",
+        "Penayangan video profil / iklan komersial di layar TV Showroom Purwokerto selama 1 (satu) bulan penuh.",
+        "Display materi promosi (flyer / voucher) di meja kasir seluruh lokasi 4 cabang (Purwokerto, Purbalingga, Cilacap, Wonosobo).",
+        "Pencantuman logo ukuran BESAR pada backdrop panggung, x-banner, flyer cetak, sertifikat, dan frame photobooth.",
         "Penyertaan produk sampling / voucher resmi di dalam goodie bag seluruh peserta dan narasumber.",
         "Penyebutan (ad-lips) nama brand oleh Master of Ceremony (MC) sebanyak 10 kali selama acara.",
-        "1 (satu) kali penayangan video Reels/Feed dedicated di akun Instagram resmi @iseeyou.glasses.",
+        "1 (satu) kali penayangan video Reels/Feed dedicated di akun Instagram resmi @iseeyou.glasses (244.000+ followers).",
       ],
     },
     {
       id: "gold",
       name: "PAKET GOLD (SPONSOR MADYA)",
-      tagline: "Visibilitas Ritel & Digital Kampanye",
+      tagline: "Visibilitas Panggung, Ritel Display & Kampanye Digital",
       price: "Rp 3.000.000,-",
       benefits: [
-        "Penayangan video profil / iklan di layar TV Showroom Purwokerto selama 2 (dua) minggu & display materi promosi (flyer/voucher) di meja kasir seluruh lokasi cabang.",
+        "Sesi presentasi & demo produk brand di panggung utama selama 10 menit.",
+        "Penayangan video profil / iklan di layar TV Showroom Purwokerto selama 2 (dua) minggu.",
+        "Display materi promosi (flyer/voucher) di meja kasir seluruh 4 lokasi cabang Optik I See You.",
         "Pencantuman logo ukuran SEDANG pada backdrop panggung, banner kegiatan, dan materi publikasi digital.",
-        "Display materi promosi (flyer/voucher) di meja kasir 4 lokasi cabang Optik I See You.",
-        "Hak menyertakan voucher belanja / materi promosi dalam goodie bag peserta.",
-        "Penyebutan (ad-lips) nama brand oleh MC sebanyak 5 kali selama acara.",
+        "Hak menyertakan voucher belanja / sample produk dalam goodie bag seluruh peserta.",
+        "Penyebutan (ad-lips) nama brand oleh MC sebanyak 5 kali selama workshop berlangsung.",
         "Joint feed post kolaborasi di media sosial resmi Optik I See You.",
       ],
     },
     {
-      id: "silver",
-      name: "PAKET SILVER (SPONSOR PENDAMPING)",
-      tagline: "Eksposur Event & Media Sosial",
+      id: "bronze",
+      name: "PAKET BRONZE (SPONSOR PENDAMPING)",
+      tagline: "Eksposur Acara, Sesi Demo Produk & Display Gerai",
       price: "Rp 1.500.000,-",
       benefits: [
-        "Display poster & flyer promosi di meja kasir 4 lokasi cabang Optik I See You.",
-        "Pencantuman logo ukuran STANDAR pada banner utama dan e-flyer publikasi.",
-        "Penyertaan flyer / voucher promosi ke dalam goodie bag peserta.",
-        "Mention dan tag apresiasi sponsorship di Instagram Story resmi Optik I See You.",
+        "Sesi Demo Produk dari brand sponsor (5–7 menit) pada slot khusus demo produk panggung & live trial peserta.",
+        "Hak membuka mini showcase / stand display sample produk di area interactive showcase venue.",
+        "Display poster & brosur materi promosi di meja kasir 4 lokasi cabang Optik I See You.",
+        "Pencantuman logo ukuran STANDAR pada backdrop panggung utama dan e-flyer resmi kegiatan.",
+        "Hak menyertakan flyer / voucher promosi resmi ke dalam goodie bag peserta workshop.",
+        "Mention dan tag apresiasi sponsorship di Instagram Story resmi Optik I See You (@iseeyou.glasses).",
       ],
     },
     {
-      id: "barter",
-      name: "PAKET KEMITRAAN B2B & BARTER SINERGI (CROSS-PROMOTION)",
-      tagline: "Sinergi Ritel Store-to-Store: Tukar Voucher, Display Meja Kasir & Goodie Bag",
-      price: "Non-Tunai / Barter Ekuivalen",
+      id: "in_kind",
+      name: "PAKET IN-KIND / IN-KEEP & CUSTOM COLLABORATION",
+      tagline: "Sinergi Fleksibel, Barter Fasilitas, Demo Produk & Custom Kemitraan",
+      price: "Barter Ekuivalen / Custom Offer",
       benefits: [
-        "Skema Tukar Voucher (Cross-Voucher): Penyertaan voucher diskon / treatment mitra (kuota disepakati melalui diskusi bersama) ke dalam Official Goodie Bag peserta & penukaran voucher belanja kacamata Optik I See You untuk pelanggan setia mitra.",
-        "Skema Tukar Display Meja Kasir (Cross-Brochure): Penempatan brosur, flyer, atau tent card promosi mitra di area kasir 4 lokasi cabang ritel Optik I See You (Purwokerto, Purbalingga, Cilacap, Wonosobo).",
-        "Penayangan materi promosi / slide produk mitra pada layar TV Showroom Purwokerto selama periode kegiatan.",
-        "Hak penyediaan tester produk / sampling di area venue event serta apresiasi kemitraan di Instagram Story @iseeyou.glasses (244.000+ followers).",
+        "Sesi Demo Produk dari brand sponsor pada slot khusus demo produk (10.30 – 11.00 WIB) & tester showcase di lokasi.",
+        "Opsi Penawaran Custom Mandiri: Mitra leluasa merumuskan skema kolaborasi sesuai kapabilitas brand (seperti penyediaan konsumsi, merchandise, tote bag, goodie bag kit, make-up & hair styling, atau fasilitas venue).",
+        "Skema Tukar Voucher (Cross-Voucher): Penyertaan voucher diskon / treatment mitra ke dalam Official Goodie Bag peserta & penukaran voucher belanja kacamata Optik I See You untuk pelanggan setia mitra.",
+        "Skema Tukar Display Meja Kasir (Cross-Brochure): Penempatan brosur, flyer, atau tent card promosi mitra di area kasir 4 lokasi cabang ritel Optik I See You.",
+        "Display produk tester / sampling di area venue event serta publikasi apresiasi kemitraan di Instagram Story @iseeyou.glasses (244.000+ followers).",
       ],
     },
   ],
@@ -181,10 +368,41 @@ function sanitizeProposalData(d: ProposalData): ProposalData {
     eventSubtitle: cleanStr(d.eventSubtitle),
     eventTheme: cleanStr(d.eventTheme),
     eventOrganizer: cleanStr(d.eventOrganizer),
+    eventVenue: cleanStr(d.eventVenue),
+    eventParticipants: cleanStr(d.eventParticipants),
+    eventFormat: cleanStr(d.eventFormat),
     backgroundText1: cleanStr(d.backgroundText1),
     backgroundText2: cleanStr(d.backgroundText2),
     backgroundText3: cleanStr(d.backgroundText3),
-    packages: (d.packages || []).map((p) => ({
+    speakers: (d.speakers && d.speakers.length > 0 ? d.speakers : DEFAULT_DATA.speakers).map((sp) => ({
+      name: cleanStr(sp.name),
+      role: cleanStr(sp.role),
+      topic: cleanStr(sp.topic),
+      highlight: cleanStr(sp.highlight),
+    })),
+    rundown: (d.rundown && d.rundown.length > 0 ? d.rundown : DEFAULT_DATA.rundown).map((rd) => ({
+      time: cleanStr(rd.time),
+      activity: cleanStr(rd.activity),
+      picOrSpeaker: cleanStr(rd.picOrSpeaker),
+      notes: cleanStr(rd.notes),
+    })),
+    budgetExpenses: (d.budgetExpenses && d.budgetExpenses.length > 0 ? d.budgetExpenses : DEFAULT_DATA.budgetExpenses).map(
+      (bg) => ({
+        item: cleanStr(bg.item),
+        qty: cleanStr(bg.qty),
+        unitCost: cleanStr(bg.unitCost),
+        totalCost: cleanStr(bg.totalCost),
+      })
+    ),
+    revenueProjections: (d.revenueProjections && d.revenueProjections.length > 0
+      ? d.revenueProjections
+      : DEFAULT_DATA.revenueProjections
+    ).map((rv) => ({
+      source: cleanStr(rv.source),
+      description: cleanStr(rv.description),
+      projection: cleanStr(rv.projection),
+    })),
+    packages: (d.packages && d.packages.length > 0 ? d.packages : DEFAULT_DATA.packages).map((p) => ({
       ...p,
       name: cleanStr(p.name),
       tagline: cleanStr(p.tagline),
@@ -203,24 +421,25 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
   const [fontFamily, setFontFamily] = useState<"times" | "georgia" | "garamond" | "arial">("times");
   const [lineSpacing, setLineSpacing] = useState<"1.2" | "1.35" | "1.5">("1.35");
   const [isSavedNotice, setIsSavedNotice] = useState<boolean>(false);
-  const [activeTab, setActiveTab] = useState<"document" | "quickForm">("document");
 
   // Load from local storage on mount with migration and sanitization
   useEffect(() => {
     try {
-      let raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) {
-        raw = localStorage.getItem(LEGACY_STORAGE_KEY);
-      }
+      const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) {
         const parsed = JSON.parse(raw);
         const merged = { ...DEFAULT_DATA, ...parsed };
         const sanitized = sanitizeProposalData(merged);
         setData(sanitized);
         localStorage.setItem(STORAGE_KEY, JSON.stringify(sanitized));
+      } else {
+        // First initialization of v6 schema
+        setData(DEFAULT_DATA);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT_DATA));
       }
     } catch (e) {
       console.error("Gagal membaca storage proposal:", e);
+      setData(DEFAULT_DATA);
     }
   }, []);
 
@@ -238,10 +457,11 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
   const hasLunar = checkHasLunar(data);
 
   const handleReset = () => {
-    if (confirm("Kembalikan seluruh isi proposal ke draf formal default Optik I See You?")) {
+    if (confirm("Kembalikan seluruh isi proposal ke draf formal default Fun Workshop Optik I See You?")) {
       setData(DEFAULT_DATA);
       localStorage.removeItem(STORAGE_KEY);
       localStorage.removeItem(LEGACY_STORAGE_KEY);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT_DATA));
       setIsSavedNotice(true);
       setTimeout(() => setIsSavedNotice(false), 2500);
     }
@@ -270,6 +490,38 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
 
   const updateField = (field: keyof ProposalData, val: any) => {
     setData((prev) => ({ ...prev, [field]: val }));
+  };
+
+  const updateSpeaker = (idx: number, patch: Partial<SpeakerItem>) => {
+    setData((prev) => {
+      const copy = [...prev.speakers];
+      copy[idx] = { ...copy[idx], ...patch };
+      return { ...prev, speakers: copy };
+    });
+  };
+
+  const updateRundown = (idx: number, patch: Partial<RundownItem>) => {
+    setData((prev) => {
+      const copy = [...prev.rundown];
+      copy[idx] = { ...copy[idx], ...patch };
+      return { ...prev, rundown: copy };
+    });
+  };
+
+  const updateBudgetExpense = (idx: number, patch: Partial<BudgetItem>) => {
+    setData((prev) => {
+      const copy = [...prev.budgetExpenses];
+      copy[idx] = { ...copy[idx], ...patch };
+      return { ...prev, budgetExpenses: copy };
+    });
+  };
+
+  const updateRevenueProjection = (idx: number, patch: Partial<RevenueItem>) => {
+    setData((prev) => {
+      const copy = [...prev.revenueProjections];
+      copy[idx] = { ...copy[idx], ...patch };
+      return { ...prev, revenueProjections: copy };
+    });
   };
 
   const updatePackage = (idx: number, patch: Partial<PackageTier>) => {
@@ -336,7 +588,6 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
     onChange: (val: string) => void;
     className?: string;
     placeholder?: string;
-    isBlock?: boolean;
     tag?: "span" | "p" | "h1" | "h2" | "h3" | "div";
   }> = ({ value, onChange, className = "", placeholder = "", tag = "span" }) => {
     const ref = useRef<HTMLSpanElement>(null);
@@ -370,7 +621,7 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
 
   // Formal Kop Surat / Letterhead Component
   const FormalKopSurat = () => (
-    <div className="border-b-[2.5px] border-black pb-3 mb-6">
+    <div className="border-b-[2.5px] border-black pb-3 mb-5">
       <div className="flex items-center justify-between gap-4">
         {/* Left: Official ISY Logo */}
         <div className="flex items-center gap-3">
@@ -473,7 +724,7 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
             <button
               onClick={handleReset}
               className="px-2.5 py-1.5 rounded-lg text-xs font-medium text-neutral-600 hover:text-red-700 hover:bg-red-50 border border-transparent hover:border-red-200 transition-colors"
-              title="Reset ke template default"
+              title="Reset ke template default workshop"
             >
               Reset
             </button>
@@ -486,7 +737,7 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
           </div>
         </div>
 
-        {/* Second Row: Target Recipient Customizer (Universal for Any Brand) */}
+        {/* Second Row: Target Recipient Customizer (Universal + Verified Leads) */}
         <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-neutral-200 text-xs">
           <div className="flex items-center gap-2 flex-1 min-w-[280px]">
             <span className="font-semibold text-neutral-700 whitespace-nowrap">Target Mitra / Perusahaan:</span>
@@ -494,7 +745,7 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
               type="text"
               value={data.recipientCompany}
               onChange={(e) => updateField("recipientCompany", e.target.value)}
-              placeholder="Contoh: PT Nuha Cosmetindo / Baby Glows"
+              placeholder="Contoh: Lumino Deluna Purwokerto / Ma-Ri Matcha"
               className="flex-1 max-w-[320px] px-2.5 py-1 bg-neutral-50 border border-neutral-300 rounded text-xs font-semibold text-neutral-900 focus:outline-none focus:ring-1 focus:ring-black"
             />
           </div>
@@ -503,10 +754,12 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
             <span className="text-[11px] text-neutral-500 font-medium mr-1">Isi Cepat:</span>
             {[
               { label: "Umum / Universal", company: "[Nama Perusahaan / Brand Mitra]", title: "Pimpinan / Brand & Marketing Manager" },
-              { label: "Merayu Spa", company: "Merayu Spa Purbalingga", title: "Kak Nisrina Khoirunnisa S (Account Executive)" },
-              { label: "Baby Glows", company: "Baby Glows", title: "Pimpinan & Tim Manajemen" },
+              { label: "Lumino Deluna", company: "Lumino Deluna Purwokerto", title: "Pimpinan & Tim Manajemen Kafe" },
+              { label: "Ma-Ri Matcha", company: "Ma-Ri Matcha & Cake by Mimosa Patisserie", title: "Owner & Tim Brand Partnership" },
               { label: "Nuha Cosmetindo", company: "PT Nuha Cosmetindo", title: "Pimpinan & Tim Marketing" },
-              { label: "Taylor De Virdis", company: "Taylor De Virdis", title: "Pimpinan & Tim Manajemen" },
+              { label: "Baby Glows", company: "Baby Glows Purwokerto", title: "Pimpinan & Tim Manajemen" },
+              { label: "Merayu Spa", company: "Merayu Spa Purbalingga", title: "Kak Nisrina Khoirunnisa S (Account Executive)" },
+              { label: "Taylor De Virdis", company: "Taylor De Virdis Purwokerto", title: "Pimpinan & Tim Manajemen" },
               { label: "Inul Vista", company: "Inul Vista Purwokerto", title: "Mas Wahyu & Tim Marketing" },
               { label: "Navagreen", company: "Navagreen Purwokerto", title: "Tim Marketing & Kemitraan" },
               { label: "Reta Clinic", company: "Reta Beauty Clinic", title: "Tim Sponsorship & Promosi" },
@@ -585,7 +838,7 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
             <span className="text-[11px] text-neutral-500">
               {isEditing ? (
                 <span className="text-amber-700 font-semibold">
-                  Klik langsung pada teks bergaris bawah kuning di dokumen untuk mengedit
+                  Klik langsung pada teks bergaris bawah kuning di lembar proposal untuk mengedit
                 </span>
               ) : (
                 "Aktifkan 'Mode Edit' untuk mengubah teks langsung di lembar dokumen"
@@ -605,7 +858,7 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
         {/* ==================================================== */}
         {/* HALAMAN 1: COVER FORMAL                             */}
         {/* ==================================================== */}
-        <section className="proposal-page proposal-cover-page bg-white p-[20mm] min-h-[297mm] shadow-lg print:shadow-none border border-neutral-200 print:border-none relative flex flex-col justify-between print:break-after-page">
+        <section className="proposal-page proposal-cover-page bg-white p-[18mm] sm:p-[20mm] min-h-[297mm] shadow-lg print:shadow-none border border-neutral-200 print:border-none relative flex flex-col justify-between print:break-after-page">
           {/* Header Logos */}
           <div className="flex items-center justify-between border-b-[2px] border-black pb-4">
             <img
@@ -626,11 +879,11 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
           </div>
 
           {/* Title Area */}
-          <div className="my-auto py-10 text-center print:my-auto print:py-0">
+          <div className="my-auto py-8 text-center print:my-auto print:py-0">
             <p className="text-[11pt] tracking-[0.2em] font-bold text-gray-700 uppercase mb-3">
               PROPOSAL PENAWARAN KERJASAMA SPONSORSHIP
             </p>
-            <h1 className="text-[26pt] font-extrabold uppercase tracking-tight text-black leading-tight border-y-2 border-black py-4 my-2">
+            <h1 className="text-[25pt] font-extrabold uppercase tracking-tight text-black leading-tight border-y-2 border-black py-4 my-2">
               <EditSpan
                 value={data.eventName}
                 onChange={(v) => updateField("eventName", v)}
@@ -644,21 +897,26 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
                 tag="span"
               />
             </p>
-            <p className="text-[10pt] italic text-gray-700 mt-2 max-w-[150mm] mx-auto">
-              &quot;
-              <EditSpan
-                value={data.eventTheme}
-                onChange={(v) => updateField("eventTheme", v)}
-                tag="span"
-              />
-              &quot;
-            </p>
+            <div className="mt-3 max-w-[160mm] mx-auto text-left border-l-2 border-black pl-3 py-1 bg-neutral-50/60">
+              <p className="text-[8.5pt] uppercase tracking-wider font-bold text-gray-600 mb-0.5">
+                Tema Utama &amp; Fokus Pembahasan:
+              </p>
+              <p className="text-[9.5pt] italic text-gray-800 leading-snug">
+                &quot;
+                <EditSpan
+                  value={data.eventTheme}
+                  onChange={(v) => updateField("eventTheme", v)}
+                  tag="span"
+                />
+                &quot;
+              </p>
+            </div>
           </div>
 
           {/* Submission Info Box */}
-          <div className="space-y-6 pt-4 border-t border-gray-400">
+          <div className="space-y-5 pt-4 border-t border-gray-400">
             <div className="grid grid-cols-2 gap-6 text-[10pt]">
-              <div className="border border-black p-4">
+              <div className="border border-black p-4 bg-neutral-50/30">
                 <span className="text-[8pt] uppercase font-bold tracking-widest text-gray-600 block mb-1">
                   Diajukan Kepada:
                 </span>
@@ -679,7 +937,7 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
                 </p>
               </div>
 
-              <div className="border border-black p-4">
+              <div className="border border-black p-4 bg-neutral-50/30">
                 <span className="text-[8pt] uppercase font-bold tracking-widest text-gray-600 block mb-1">
                   Penyelenggara Resmi:
                 </span>
@@ -704,11 +962,11 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
         {/* ==================================================== */}
         {/* HALAMAN 2: SURAT PENGANTAR FORMAL                   */}
         {/* ==================================================== */}
-        <section className="proposal-page bg-white p-[20mm] min-h-[297mm] shadow-lg print:shadow-none border border-neutral-200 print:border-none print:break-after-page text-[10.5pt]">
+        <section className="proposal-page bg-white p-[18mm] sm:p-[20mm] min-h-[297mm] shadow-lg print:shadow-none border border-neutral-200 print:border-none print:break-after-page text-[10.5pt]">
           <FormalKopSurat />
 
           {/* Surat Metadata */}
-          <div className="flex justify-between items-start mb-6 text-[10pt] gap-6">
+          <div className="flex justify-between items-start mb-5 text-[10pt] gap-6">
             <table className="text-[10pt] flex-1 max-w-[65%]">
               <tbody>
                 <tr>
@@ -752,7 +1010,8 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
                   value={data.letterCity}
                   onChange={(v) => updateField("letterCity", v)}
                   tag="span"
-                />{", "}
+                />
+                {", "}
                 <EditSpan
                   value={data.letterDate}
                   onChange={(v) => updateField("letterDate", v)}
@@ -799,14 +1058,13 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
               />
             </p>
             <p>
-              Optik I See You merupakan jaringan ritel kacamata terkemuka yang mengoperasikan 4 lokasi cabang di Purwokerto, Purbalingga, Cilacap, dan Wonosobo. Kami memiliki basis pasar terdata lebih dari <b>1.000.000 (satu juta) pembeli dan pelanggan loyal</b> dengan beragam segmentasi grade konsumen (Grade A &amp; B profesional, dokter, ASN, keluarga mapan, serta segmen muda produktif &amp; mahasiswa), serta diperkuat jejaring digital dengan lebih dari <b>{fmt(totalAll)} pengikut</b> di media sosial.
+              Optik I See You merupakan jaringan ritel kacamata terkemuka yang mengoperasikan 4 lokasi cabang di Purwokerto, Purbalingga, Cilacap, dan Wonosobo. Kami memiliki basis pasar terdata lebih dari <b>1.000.000 (satu juta) pembeli dan pelanggan loyal</b> dengan segmentasi daya beli matang (profesional muda, ASN, pengusaha, keluarga modern, serta komunitas mahasiswa produktif), serta diperkuat jejaring media sosial terintegrasi dengan lebih dari <b>{fmt(totalAll)} pengikut</b>.
             </p>
             <p>
-              Melalui program &quot;Creative Content Masterclass 2026&quot; ini, pihak sponsor akan memperoleh hak eksposur terpadu: aktivasi booth di lokasi acara, penayangan video promosi di layar TV Showroom Purwokerto, display media meja kasir di 4 lokasi cabang, hak penyertaan voucher/sample produk di goodie bag peserta, serta publikasi digital di jejaring media sosial kami.
+              Melalui program &quot;{data.eventName}&quot;, pihak mitra sponsor akan memperoleh hak eksposur menyeluruh: slot presentasi &amp; demo produk di hadapan puluhan kreator aktif, penayangan video promosi di layar TV Showroom Purwokerto, display media promosi di meja kasir 4 gerai ritel, hak pembagian produk sampling / voucher ke dalam goodie bag peserta, serta publikasi promosi digital di jejaring media sosial kami.
             </p>
             <p>
-              Bersama surat ini, kami lampirkan rincian kegiatan, pilihan paket sponsorship, serta
-              ketentuan kerjasama untuk menjadi pertimbangan Bapak/Ibu.
+              Bersama surat ini, kami lampirkan rincian kegiatan, susunan rundown, profil narasumber, rencana anggaran biaya (RAB), pilihan paket sponsorship, serta lembar kesepakatan kerjasama untuk menjadi pertimbangan Bapak/Ibu.
             </p>
             <p>
               <EditSpan
@@ -818,7 +1076,7 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
           </div>
 
           {/* Tanda Tangan Formal Surat Pengantar */}
-          <div className="mt-8 pt-4 flex justify-between items-end text-[10pt]">
+          <div className="mt-7 pt-3 flex justify-between items-end text-[10pt]">
             <div>
               <p>Hormat kami,</p>
               <p className="font-semibold text-gray-800">Divisi Kemitraan &amp; Sponsorship</p>
@@ -866,17 +1124,18 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
         </section>
 
         {/* ==================================================== */}
-        {/* HALAMAN 3: LATAR BELAKANG & DETAIL KEGIATAN         */}
+        {/* HALAMAN 3: BAB I & BAB II (DESKRIPSI & PEMBICARA)   */}
         {/* ==================================================== */}
-        <section className="proposal-page bg-white p-[20mm] min-h-[297mm] shadow-lg print:shadow-none border border-neutral-200 print:border-none print:break-after-page text-[10.5pt]">
+        <section className="proposal-page bg-white p-[18mm] sm:p-[20mm] min-h-[297mm] shadow-lg print:shadow-none border border-neutral-200 print:border-none print:break-after-page text-[10pt]">
           <FormalKopSurat />
 
-          <div className="mb-6">
-            <h3 className="text-[12pt] font-bold uppercase tracking-wider text-black border-b border-black pb-1 mb-3">
+          {/* BAB I */}
+          <div className="mb-4">
+            <h3 className="text-[11.5pt] font-bold uppercase tracking-wider text-black border-b border-black pb-1 mb-2">
               BAB I. LATAR BELAKANG &amp; TUJUAN KEGIATAN
             </h3>
 
-            <div className={`space-y-2.5 text-justify ${lineHeightClass}`}>
+            <div className={`space-y-2 text-justify ${lineHeightClass}`}>
               <p>
                 <b>1.1 Latar Belakang</b>
                 <br />
@@ -901,38 +1160,37 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
                 />
               </p>
 
-              <p className="pt-1">
+              <p className="pt-0.5">
                 <b>1.2 Tujuan Kegiatan</b>
               </p>
-              <ol className="list-decimal pl-6 space-y-1">
+              <ol className="list-decimal pl-5 space-y-0.5">
                 <li>
-                  Memberikan pelatihan teknis produksi konten video dan foto yang berkarakter komersial
-                  kepada 50 peserta terpilih.
+                  Memberikan edukasi praktis mengenai personal branding dan strategi produksi konten visual komersial (Story, Feed, Reels) yang mampu menaikkan nilai tawar kreator maupun brand.
                 </li>
                 <li>
-                  Membuka ruang kolaborasi langsung antara brand mitra sponsor dengan audiens Gen-Z dan
-                  kreator lokal melalui sesi unboxing, demonstrasi produk, dan live try-on.
+                  Membuka wadah interaksi riil antara brand mitra sponsor dengan audiens Gen-Z, kreator konten, dan UMKM melalui demo produk langsung, live trial, dan booth showcase.
                 </li>
                 <li>
-                  Memberikan eksposur berkelanjutan bagi mitra di 4 showroom cabang Optik I See You serta
-                  kanal media sosial resmi.
+                  Memberikan sarana eksposur multi-kanal berkelanjutan bagi mitra di jaringan toko ritel Optik I See You (Purwokerto, Purbalingga, Cilacap, Wonosobo) dan media sosial.
                 </li>
               </ol>
             </div>
           </div>
 
+          {/* BAB II */}
           <div>
-            <h3 className="text-[12pt] font-bold uppercase tracking-wider text-black border-b border-black pb-1 mb-3">
-              BAB II. DESKRIPSI &amp; PELAKSANAAN KEGIATAN
+            <h3 className="text-[11.5pt] font-bold uppercase tracking-wider text-black border-b border-black pb-1 mb-2">
+              BAB II. DESKRIPSI ACARA &amp; PROFIL PEMBICARA
             </h3>
 
-            <table className="w-full border-collapse border border-black text-[10pt] mb-4">
+            {/* Event Data Table */}
+            <table className="w-full border-collapse border border-black text-[9pt] mb-3">
               <tbody>
                 <tr className="border-b border-black">
-                  <td className="w-[32%] py-2 px-3 font-bold bg-neutral-100 border-r border-black">
+                  <td className="w-[28%] py-1 px-2.5 font-bold bg-neutral-100 border-r border-black">
                     Nama Kegiatan
                   </td>
-                  <td className="py-2 px-3 font-semibold">
+                  <td className="py-1 px-2.5 font-semibold">
                     <EditSpan
                       value={data.eventName}
                       onChange={(v) => updateField("eventName", v)}
@@ -947,10 +1205,10 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
                   </td>
                 </tr>
                 <tr className="border-b border-black">
-                  <td className="py-2 px-3 font-bold bg-neutral-100 border-r border-black">
-                    Tema Acara
+                  <td className="py-1 px-2.5 font-bold bg-neutral-100 border-r border-black">
+                    Tema &amp; Subtema
                   </td>
-                  <td className="py-2 px-3 italic">
+                  <td className="py-1 px-2.5 italic">
                     &quot;
                     <EditSpan
                       value={data.eventTheme}
@@ -961,10 +1219,10 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
                   </td>
                 </tr>
                 <tr className="border-b border-black">
-                  <td className="py-2 px-3 font-bold bg-neutral-100 border-r border-black">
+                  <td className="py-1 px-2.5 font-bold bg-neutral-100 border-r border-black">
                     Penyelenggara
                   </td>
-                  <td className="py-2 px-3">
+                  <td className="py-1 px-2.5">
                     <EditSpan
                       value={data.eventOrganizer}
                       onChange={(v) => updateField("eventOrganizer", v)}
@@ -973,22 +1231,16 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
                   </td>
                 </tr>
                 <tr className="border-b border-black">
-                  <td className="py-2 px-3 font-bold bg-neutral-100 border-r border-black">
-                    Hari, Tanggal
+                  <td className="py-1 px-2.5 font-bold bg-neutral-100 border-r border-black">
+                    Hari, Tanggal &amp; Waktu
                   </td>
-                  <td className="py-2 px-3 font-semibold">
+                  <td className="py-1 px-2.5 font-semibold">
                     <EditSpan
                       value={data.eventDate}
                       onChange={(v) => updateField("eventDate", v)}
                       tag="span"
                     />
-                  </td>
-                </tr>
-                <tr className="border-b border-black">
-                  <td className="py-2 px-3 font-bold bg-neutral-100 border-r border-black">
-                    Waktu Pelaksanaan
-                  </td>
-                  <td className="py-2 px-3">
+                    {" · "}
                     <EditSpan
                       value={data.eventTime}
                       onChange={(v) => updateField("eventTime", v)}
@@ -997,10 +1249,10 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
                   </td>
                 </tr>
                 <tr className="border-b border-black">
-                  <td className="py-2 px-3 font-bold bg-neutral-100 border-r border-black">
-                    Tempat / Lokasi
+                  <td className="py-1 px-2.5 font-bold bg-neutral-100 border-r border-black">
+                    Lokasi / Venue
                   </td>
-                  <td className="py-2 px-3 font-semibold">
+                  <td className="py-1 px-2.5 font-semibold">
                     <EditSpan
                       value={data.eventVenue}
                       onChange={(v) => updateField("eventVenue", v)}
@@ -1009,10 +1261,10 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
                   </td>
                 </tr>
                 <tr className="border-b border-black">
-                  <td className="py-2 px-3 font-bold bg-neutral-100 border-r border-black">
+                  <td className="py-1 px-2.5 font-bold bg-neutral-100 border-r border-black">
                     Target Peserta
                   </td>
-                  <td className="py-2 px-3">
+                  <td className="py-1 px-2.5">
                     <EditSpan
                       value={data.eventParticipants}
                       onChange={(v) => updateField("eventParticipants", v)}
@@ -1021,10 +1273,10 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
                   </td>
                 </tr>
                 <tr>
-                  <td className="py-2 px-3 font-bold bg-neutral-100 border-r border-black">
+                  <td className="py-1 px-2.5 font-bold bg-neutral-100 border-r border-black">
                     Format Kegiatan
                   </td>
-                  <td className="py-2 px-3">
+                  <td className="py-1 px-2.5">
                     <EditSpan
                       value={data.eventFormat}
                       onChange={(v) => updateField("eventFormat", v)}
@@ -1034,20 +1286,167 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
                 </tr>
               </tbody>
             </table>
+
+            {/* Speakers List Section */}
+            <p className="font-bold text-[9.5pt] mb-1.5 uppercase tracking-wide">
+              2.2 Jajaran Narasumber &amp; Master of Ceremony (MC)
+            </p>
+            <div className="grid grid-cols-2 gap-2 text-[8.5pt]">
+              {data.speakers.map((sp, sIdx) => (
+                <div
+                  key={sIdx}
+                  className="border border-black p-2 bg-neutral-50/50 flex flex-col justify-between"
+                >
+                  <div>
+                    <div className="border-b border-gray-300 pb-1 mb-1">
+                      <p className="font-bold text-[9.5pt] text-black">
+                        <EditSpan
+                          value={sp.name}
+                          onChange={(v) => updateSpeaker(sIdx, { name: v })}
+                          tag="span"
+                        />
+                      </p>
+                      <p className="text-[8pt] text-gray-700 font-medium">
+                        <EditSpan
+                          value={sp.role}
+                          onChange={(v) => updateSpeaker(sIdx, { role: v })}
+                          tag="span"
+                        />
+                      </p>
+                    </div>
+                    <p className="font-semibold text-emerald-950 text-[8pt] mb-0.5">
+                      Topik: &quot;
+                      <EditSpan
+                        value={sp.topic}
+                        onChange={(v) => updateSpeaker(sIdx, { topic: v })}
+                        tag="span"
+                      />
+                      &quot;
+                    </p>
+                    <p className="text-gray-700 text-[8pt] leading-tight text-justify">
+                      <EditSpan
+                        value={sp.highlight}
+                        onChange={(v) => updateSpeaker(sIdx, { highlight: v })}
+                        tag="span"
+                      />
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </section>
 
         {/* ==================================================== */}
-        {/* HALAMAN 4: PROFIL JARINGAN & AUDIENS RETAIL         */}
+        {/* HALAMAN 4: BAB III (SUSUNAN ACARA & RUNDOWN)        */}
         {/* ==================================================== */}
-        <section className="proposal-page bg-white p-[20mm] min-h-[297mm] shadow-lg print:shadow-none border border-neutral-200 print:border-none print:break-after-page text-[10.5pt]">
+        <section className="proposal-page bg-white p-[18mm] sm:p-[20mm] min-h-[297mm] shadow-lg print:shadow-none border border-neutral-200 print:border-none print:break-after-page text-[10pt]">
           <FormalKopSurat />
 
-          <h3 className="text-[12pt] font-bold uppercase tracking-wider text-black border-b border-black pb-1 mb-3">
-            BAB III. JARINGAN RETAIL &amp; PAPARAN MEDIA SPONSOR
+          <h3 className="text-[11.5pt] font-bold uppercase tracking-wider text-black border-b border-black pb-1 mb-3">
+            BAB III. SUSUNAN ACARA &amp; RUNDOWN PELAKSANAAN
           </h3>
 
-          <p className={`text-justify mb-4 ${lineHeightClass}`}>
+          <p className={`text-justify mb-3 text-[9.5pt] ${lineHeightClass}`}>
+            Rangkaian acara disusun secara terstruktur untuk menjamin kenyamanan peserta, kedalaman materi workshop, serta memberikan alokasi waktu eksklusif bagi mitra sponsor dalam memperkenalkan produk dan berinteraksi langsung dengan audiens:
+          </p>
+
+          <p className="font-bold text-[9.5pt] mb-1.5 uppercase">3.1 Rundown Acara Workshop (Peserta &amp; Panggung)</p>
+          <table className="w-full border-collapse border border-black text-[8.5pt] mb-4">
+            <thead>
+              <tr className="bg-neutral-100 border-b border-black">
+                <th className="w-[18%] py-1.5 px-2 text-left border-r border-black font-bold">Waktu</th>
+                <th className="w-[32%] py-1.5 px-2 text-left border-r border-black font-bold">Agenda Kegiatan</th>
+                <th className="w-[24%] py-1.5 px-2 text-left border-r border-black font-bold">PIC / Pembicara</th>
+                <th className="py-1.5 px-2 text-left font-bold">Keterangan Teknis</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.rundown.map((rd, rIdx) => (
+                <tr
+                  key={rIdx}
+                  className={`border-b border-black ${
+                    rd.activity.includes("Demo Produk") ? "bg-amber-50/60 font-semibold" : ""
+                  }`}
+                >
+                  <td className="py-1.5 px-2 border-r border-black font-semibold whitespace-nowrap align-top">
+                    <EditSpan
+                      value={rd.time}
+                      onChange={(v) => updateRundown(rIdx, { time: v })}
+                      tag="span"
+                    />
+                  </td>
+                  <td className="py-1.5 px-2 border-r border-black align-top">
+                    <EditSpan
+                      value={rd.activity}
+                      onChange={(v) => updateRundown(rIdx, { activity: v })}
+                      tag="span"
+                    />
+                  </td>
+                  <td className="py-1.5 px-2 border-r border-black text-gray-800 align-top">
+                    <EditSpan
+                      value={rd.picOrSpeaker}
+                      onChange={(v) => updateRundown(rIdx, { picOrSpeaker: v })}
+                      tag="span"
+                    />
+                  </td>
+                  <td className="py-1.5 px-2 text-gray-700 align-top">
+                    <EditSpan
+                      value={rd.notes}
+                      onChange={(v) => updateRundown(rIdx, { notes: v })}
+                      tag="span"
+                    />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
+          {/* Rundown Teknis Loading & Persiapan Mitra */}
+          <div className="border border-black p-3 bg-neutral-50 text-[8.5pt] space-y-2">
+            <p className="font-bold text-black uppercase flex items-center justify-between border-b border-black pb-1">
+              <span>3.2 Rundown Teknis Persiapan &amp; Loading Mitra Sponsor (H-1 s.d. Hari H)</span>
+              <span className="text-[7.5pt] font-semibold text-neutral-800 bg-neutral-200 px-2 py-0.5 rounded">
+                Panduan Operasional Mitra
+              </span>
+            </p>
+            <div className="grid grid-cols-3 gap-2 pt-0.5 text-[8pt]">
+              <div className="border border-neutral-300 bg-white p-2 rounded">
+                <p className="font-bold text-black mb-0.5">07.00 – 07.45 WIB</p>
+                <p className="text-gray-700 leading-snug">
+                  <b>Loading In &amp; Setting Booth:</b> Pemasangan roll banner, tata display sample produk, flyer di stand, serta penyerahan tester/voucher ke meja registrasi.
+                </p>
+              </div>
+              <div className="border border-neutral-300 bg-white p-2 rounded">
+                <p className="font-bold text-black mb-0.5">07.45 – 08.00 WIB</p>
+                <p className="text-gray-700 leading-snug">
+                  <b>Technical Briefing MC:</b> Koordinasi MC (Nuha &amp; Yos) bersama PIC brand untuk persiapan alur sesi Live Demo Produk panggung (10.30 WIB).
+                </p>
+              </div>
+              <div className="border border-neutral-300 bg-white p-2 rounded">
+                <p className="font-bold text-black mb-0.5">13.00 – 13.30 WIB</p>
+                <p className="text-gray-700 leading-snug">
+                  <b>Loading Out &amp; Serah Terima:</b> Penutupan booth, rekapitulasi data prospek/audiens, dan serah terima dokumentasi publikasi kemitraan oleh panitia.
+                </p>
+              </div>
+            </div>
+            <p className="text-[7.5pt] text-gray-600 italic">
+              * Panitia menyediakan tim pendamping khusus untuk membantu setup materi display, kelistrikan booth, dan kelancaran live trial produk sponsor.
+            </p>
+          </div>
+        </section>
+
+        {/* ==================================================== */}
+        {/* HALAMAN 5: BAB IV (JARINGAN RETAIL & PAPARAN MEDIA) */}
+        {/* ==================================================== */}
+        <section className="proposal-page bg-white p-[18mm] sm:p-[20mm] min-h-[297mm] shadow-lg print:shadow-none border border-neutral-200 print:border-none print:break-after-page text-[10pt]">
+          <FormalKopSurat />
+
+          <h3 className="text-[11.5pt] font-bold uppercase tracking-wider text-black border-b border-black pb-1 mb-3">
+            BAB IV. JARINGAN RETAIL &amp; PAPARAN MEDIA SPONSOR
+          </h3>
+
+          <p className={`text-justify mb-3 text-[9.5pt] ${lineHeightClass}`}>
             Optik I See You memberikan nilai tambah unik yang tidak dimiliki event konvensional:{" "}
             <b>eksposur berkelanjutan di jaringan toko ritel fisik</b>. Setiap materi video dan poster
             sponsor berkesempatan tayang di layar TV showroom 4 cabang selama periode kerjasama,
@@ -1055,99 +1454,99 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
             mata harian.
           </p>
 
-          <p className="font-bold text-[10.5pt] mb-1.5">3.1 Rekapitulasi Jaringan Cabang Ritel</p>
-          <table className="w-full border-collapse border border-black text-[9.5pt] mb-5">
+          <p className="font-bold text-[9.5pt] mb-1">4.1 Rekapitulasi Jaringan Cabang Ritel</p>
+          <table className="w-full border-collapse border border-black text-[8.5pt] mb-4">
             <thead>
               <tr className="bg-neutral-100 border-b border-black">
-                <th className="py-2 px-3 text-left border-r border-black font-bold">Lokasi Cabang</th>
-                <th className="py-2 px-3 text-left border-r border-black font-bold">Wilayah &amp; Karakteristik</th>
-                <th className="py-2 px-3 text-left font-bold">Fasilitas Tayang Sponsor</th>
+                <th className="py-1.5 px-2.5 text-left border-r border-black font-bold">Lokasi Cabang</th>
+                <th className="py-1.5 px-2.5 text-left border-r border-black font-bold">Wilayah &amp; Karakteristik</th>
+                <th className="py-1.5 px-2.5 text-left font-bold">Fasilitas Tayang Sponsor</th>
               </tr>
             </thead>
             <tbody>
               <tr className="border-b border-black">
-                <td className="py-2 px-3 border-r border-black font-semibold">Purwokerto</td>
-                <td className="py-2 px-3 border-r border-black">Pusat kota, dekat kawasan kampus &amp; kantor</td>
-                <td className="py-2 px-3">Layar TV Showroom &amp; Meja Display Kasir</td>
+                <td className="py-1.5 px-2.5 border-r border-black font-semibold">Purwokerto</td>
+                <td className="py-1.5 px-2.5 border-r border-black">Pusat kota, kawasan pendidikan tinggi &amp; pusat bisnis</td>
+                <td className="py-1.5 px-2.5">Layar TV Showroom &amp; Meja Display Kasir</td>
               </tr>
               <tr className="border-b border-black">
-                <td className="py-2 px-3 border-r border-black font-semibold">Purbalingga</td>
-                <td className="py-2 px-3 border-r border-black">Area sentra niaga &amp; keluarga muda</td>
-                <td className="py-2 px-3">Meja Display Kasir &amp; Display Brosur / Flyer</td>
+                <td className="py-1.5 px-2.5 border-r border-black font-semibold">Purbalingga</td>
+                <td className="py-1.5 px-2.5 border-r border-black">Area sentra niaga aktif &amp; segmen keluarga muda</td>
+                <td className="py-1.5 px-2.5">Meja Display Kasir &amp; Display Brosur / Flyer</td>
               </tr>
               <tr className="border-b border-black">
-                <td className="py-2 px-3 border-r border-black font-semibold">Cilacap</td>
-                <td className="py-2 px-3 border-r border-black">Kawasan residensial &amp; industri aktif</td>
-                <td className="py-2 px-3">Meja Display Kasir &amp; Display Brosur / Flyer</td>
+                <td className="py-1.5 px-2.5 border-r border-black font-semibold">Cilacap</td>
+                <td className="py-1.5 px-2.5 border-r border-black">Kawasan residensial berkembang &amp; sentra industri</td>
+                <td className="py-1.5 px-2.5">Meja Display Kasir &amp; Display Brosur / Flyer</td>
               </tr>
               <tr>
-                <td className="py-2 px-3 border-r border-black font-semibold">Wonosobo</td>
-                <td className="py-2 px-3 border-r border-black">Pusat kota &amp; jalur pariwisata Dieng</td>
-                <td className="py-2 px-3">Meja Display Kasir &amp; Display Brosur / Flyer</td>
+                <td className="py-1.5 px-2.5 border-r border-black font-semibold">Wonosobo</td>
+                <td className="py-1.5 px-2.5 border-r border-black">Pusat kota &amp; koridor strategis pariwisata Dieng</td>
+                <td className="py-1.5 px-2.5">Meja Display Kasir &amp; Display Brosur / Flyer</td>
               </tr>
             </tbody>
           </table>
 
-          <p className="font-bold text-[10.5pt] mb-1.5">3.2 Jangkauan Media Sosial Terintegrasi</p>
-          <table className="w-full border-collapse border border-black text-[9.5pt] mb-2">
+          <p className="font-bold text-[9.5pt] mb-1">4.2 Jangkauan Media Sosial Terintegrasi</p>
+          <table className="w-full border-collapse border border-black text-[8.5pt] mb-2">
             <thead>
               <tr className="bg-neutral-100 border-b border-black">
-                <th className="py-2 px-3 text-left border-r border-black font-bold">Akun Resmi</th>
-                <th className="py-2 px-3 text-left border-r border-black font-bold">Lokasi Cabang</th>
-                <th className="py-2 px-3 text-right border-r border-black font-bold">Followers IG</th>
-                <th className="py-2 px-3 text-right font-bold">Followers TikTok</th>
+                <th className="py-1.5 px-2.5 text-left border-r border-black font-bold">Akun Resmi</th>
+                <th className="py-1.5 px-2.5 text-left border-r border-black font-bold">Lokasi Cabang</th>
+                <th className="py-1.5 px-2.5 text-right border-r border-black font-bold">Followers IG</th>
+                <th className="py-1.5 px-2.5 text-right font-bold">Followers TikTok</th>
               </tr>
             </thead>
             <tbody>
-              {followers.map((fRow, idx) => (
+              {followers.map((fRow) => (
                 <tr key={fRow.account} className="border-b border-black">
-                  <td className="py-1.5 px-3 border-r border-black font-semibold">{fRow.account}</td>
-                  <td className="py-1.5 px-3 border-r border-black text-gray-800">{fRow.label}</td>
-                  <td className="py-1.5 px-3 border-r border-black text-right tabular-nums">
+                  <td className="py-1 px-2.5 border-r border-black font-semibold">{fRow.account}</td>
+                  <td className="py-1 px-2.5 border-r border-black text-gray-800">{fRow.label}</td>
+                  <td className="py-1 px-2.5 border-r border-black text-right tabular-nums">
                     {fmt(fRow.igFollowers)}
                   </td>
-                  <td className="py-1.5 px-3 text-right tabular-nums">
+                  <td className="py-1 px-2.5 text-right tabular-nums">
                     {fRow.tiktokFollowers ? fmt(fRow.tiktokFollowers) : "-"}
                   </td>
                 </tr>
               ))}
               <tr className="bg-neutral-100 font-bold border-t-2 border-black">
-                <td colSpan={2} className="py-2 px-3 border-r border-black uppercase">
+                <td colSpan={2} className="py-1.5 px-2.5 border-r border-black uppercase">
                   Total Jangkauan Komulatif Jaringan
                 </td>
-                <td className="py-2 px-3 border-r border-black text-right tabular-nums">
+                <td className="py-1.5 px-2.5 border-r border-black text-right tabular-nums">
                   {fmt(totalIg)}
                 </td>
-                <td className="py-2 px-3 text-right tabular-nums">{fmt(totalTt)}</td>
+                <td className="py-1.5 px-2.5 text-right tabular-nums">{fmt(totalTt)}</td>
               </tr>
             </tbody>
           </table>
-          <p className="text-[8.5pt] text-gray-600 italic">
+          <p className="text-[8pt] text-gray-600 italic mb-3">
             * Data tercatat berdasarkan rekapitulasi audit PIC resmi per Oktober 2026.
           </p>
 
-          {/* 3.3 Profil Basis Pasar Pelanggan & Grade Konsumen */}
-          <div className="border border-black p-3 bg-neutral-50 text-[9pt] mt-3">
-            <p className="font-bold text-black uppercase mb-1 flex items-center justify-between">
-              <span>3.3 Basis Pasar Pelanggan (1.000.000+ Pembeli) &amp; Segmentasi Grade Konsumen</span>
+          {/* 4.3 Profil Basis Pasar Pelanggan */}
+          <div className="border border-black p-3 bg-neutral-50 text-[8.5pt]">
+            <p className="font-bold text-black uppercase mb-1 flex items-center justify-between border-b border-black pb-1">
+              <span>4.3 Basis Pasar Pelanggan (1.000.000+ Pembeli) &amp; Segmentasi Grade Konsumen</span>
               <span className="text-[7.5pt] font-semibold text-emerald-900 bg-emerald-100 px-2 py-0.5 rounded border border-emerald-300">
                 Database Ritel Terintegrasi
               </span>
             </p>
-            <p className="text-gray-800 text-justify mb-2 leading-relaxed text-[8.5pt]">
+            <p className="text-gray-800 text-justify mb-2 leading-relaxed text-[8pt]">
               Optik I See You didukung basis pasar riil lebih dari <b>1.000.000 (satu juta) transaksi pembeli dan rekam medis kacamata</b> di 4 kabupaten. Profil konsumen terbagi dalam segmentasi grade yang matang:
             </p>
             <div className="grid grid-cols-2 gap-2 text-[8pt]">
               <div className="border border-neutral-300 bg-white p-2 rounded">
                 <p className="font-bold text-black text-[8.5pt] mb-0.5">Grade A &amp; B (Purchasing Power Tinggi)</p>
                 <p className="text-gray-700 leading-snug">
-                  Segmen eksekutif, dokter, tenaga medis, ASN/BUMN, pengusaha, dan keluarga mapan. Sangat potensial untuk sponsor perbankan, otomotif, klinik kesehatan, dan brand gaya hidup premium.
+                  Segmen eksekutif, dokter, tenaga medis, ASN/BUMN, pengusaha, dan keluarga mapan. Sangat potensial untuk sponsor perbankan, otomotif, klinik estetika, f&amp;b lifestyle, dan brand gaya hidup premium.
                 </p>
               </div>
               <div className="border border-neutral-300 bg-white p-2 rounded">
                 <p className="font-bold text-black text-[8.5pt] mb-0.5">Grade C+ &amp; Generasi Produktif / Gen-Z</p>
                 <p className="text-gray-700 leading-snug">
-                  Segmen mahasiswa (Unsoed, UMP, Telkom), kreator konten, dan komunitas muda aktif. Sangat responsif terhadap tren konten digital, teknologi, dan aktivasi booth interaktif.
+                  Segmen mahasiswa (Unsoed, UMP, Telkom), kreator konten digital, dan komunitas muda aktif. Sangat responsif terhadap tren konten digital, teknologi, kafe kekinian, dan aktivasi booth interaktif.
                 </p>
               </div>
             </div>
@@ -1155,43 +1554,165 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
         </section>
 
         {/* ==================================================== */}
-        {/* HALAMAN 5: PAKET SPONSORSHIP RESMI                  */}
+        {/* HALAMAN 6: BAB V (RENCANA ANGGARAN BIAYA - RAB)     */}
         {/* ==================================================== */}
-        <section className="proposal-page bg-white p-[20mm] min-h-[297mm] shadow-lg print:shadow-none border border-neutral-200 print:border-none print:break-after-page text-[10.5pt]">
+        <section className="proposal-page bg-white p-[18mm] sm:p-[20mm] min-h-[297mm] shadow-lg print:shadow-none border border-neutral-200 print:border-none print:break-after-page text-[10pt]">
           <FormalKopSurat />
 
-          <h3 className="text-[12pt] font-bold uppercase tracking-wider text-black border-b border-black pb-1 mb-4">
-            BAB IV. BENTUK KERJASAMA &amp; PAKET SPONSORSHIP
+          <h3 className="text-[11.5pt] font-bold uppercase tracking-wider text-black border-b border-black pb-1 mb-3">
+            BAB V. RENCANA ANGGARAN BIAYA (RAB) KEGIATAN
           </h3>
 
-          <p className={`text-justify mb-5 ${lineHeightClass}`}>
-            Kami menyediakan 4 (empat) opsi kemitraan yang dapat disesuaikan dengan kebutuhan promosi
-            serta target anggaran pemasaran instansi/brand Bapak/Ibu:
+          <p className={`text-justify mb-3 text-[9.5pt] ${lineHeightClass}`}>
+            Penyusunan anggaran dirancang secara transparan dan efisien guna memastikan terselenggaranya kegiatan berkualitas tinggi dengan alokasi operasional yang terukur:
           </p>
 
-          <div className="grid grid-cols-2 gap-3 text-[9pt]">
+          <p className="font-bold text-[9.5pt] mb-1.5 uppercase">5.1 Rincian Rencana Anggaran Pengeluaran (RAB Operasional)</p>
+          <table className="w-full border-collapse border border-black text-[8.5pt] mb-4">
+            <thead>
+              <tr className="bg-neutral-100 border-b border-black">
+                <th className="w-8 py-1.5 px-2 text-center border-r border-black font-bold">No</th>
+                <th className="py-1.5 px-2.5 text-left border-r border-black font-bold">Komponen / Item Kebutuhan</th>
+                <th className="w-24 py-1.5 px-2 text-center border-r border-black font-bold">Volume / Qty</th>
+                <th className="w-32 py-1.5 px-2 text-right border-r border-black font-bold">Biaya Satuan</th>
+                <th className="w-32 py-1.5 px-2 text-right font-bold">Total Biaya</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.budgetExpenses.map((bItem, bIdx) => (
+                <tr key={bIdx} className="border-b border-black">
+                  <td className="py-1.5 px-2 text-center border-r border-black">{bIdx + 1}</td>
+                  <td className="py-1.5 px-2.5 border-r border-black font-medium">
+                    <EditSpan
+                      value={bItem.item}
+                      onChange={(v) => updateBudgetExpense(bIdx, { item: v })}
+                      tag="span"
+                    />
+                  </td>
+                  <td className="py-1.5 px-2 text-center border-r border-black text-gray-800">
+                    <EditSpan
+                      value={bItem.qty}
+                      onChange={(v) => updateBudgetExpense(bIdx, { qty: v })}
+                      tag="span"
+                    />
+                  </td>
+                  <td className="py-1.5 px-2 text-right border-r border-black text-gray-800 tabular-nums">
+                    <EditSpan
+                      value={bItem.unitCost}
+                      onChange={(v) => updateBudgetExpense(bIdx, { unitCost: v })}
+                      tag="span"
+                    />
+                  </td>
+                  <td className="py-1.5 px-2 text-right font-bold tabular-nums">
+                    <EditSpan
+                      value={bItem.totalCost}
+                      onChange={(v) => updateBudgetExpense(bIdx, { totalCost: v })}
+                      tag="span"
+                    />
+                  </td>
+                </tr>
+              ))}
+              <tr className="bg-neutral-100 font-bold border-t-2 border-black">
+                <td colSpan={4} className="py-1.5 px-2.5 border-r border-black text-right uppercase">
+                  TOTAL KEBUTUHAN ANGGARAN PENGELUARAN
+                </td>
+                <td className="py-1.5 px-2 text-right text-[9.5pt] text-black tabular-nums">
+                  Rp 8.100.000,-
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p className="font-bold text-[9.5pt] mb-1.5 uppercase">5.2 Rencana &amp; Target Sumber Pemasukan</p>
+          <table className="w-full border-collapse border border-black text-[8.5pt] mb-3">
+            <thead>
+              <tr className="bg-neutral-100 border-b border-black">
+                <th className="w-8 py-1.5 px-2 text-center border-r border-black font-bold">No</th>
+                <th className="w-48 py-1.5 px-2.5 text-left border-r border-black font-bold">Sumber Pemasukan</th>
+                <th className="py-1.5 px-2.5 text-left border-r border-black font-bold">Deskripsi / Skema</th>
+                <th className="w-44 py-1.5 px-2 text-right font-bold">Proyeksi Nominal</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.revenueProjections.map((rItem, rIdx) => (
+                <tr key={rIdx} className="border-b border-black">
+                  <td className="py-1.5 px-2 text-center border-r border-black">{rIdx + 1}</td>
+                  <td className="py-1.5 px-2.5 border-r border-black font-semibold">
+                    <EditSpan
+                      value={rItem.source}
+                      onChange={(v) => updateRevenueProjection(rIdx, { source: v })}
+                      tag="span"
+                    />
+                  </td>
+                  <td className="py-1.5 px-2.5 border-r border-black text-gray-800">
+                    <EditSpan
+                      value={rItem.description}
+                      onChange={(v) => updateRevenueProjection(rIdx, { description: v })}
+                      tag="span"
+                    />
+                  </td>
+                  <td className="py-1.5 px-2 text-right font-bold tabular-nums">
+                    <EditSpan
+                      value={rItem.projection}
+                      onChange={(v) => updateRevenueProjection(rIdx, { projection: v })}
+                      tag="span"
+                    />
+                  </td>
+                </tr>
+              ))}
+              <tr className="bg-neutral-100 font-bold border-t-2 border-black">
+                <td colSpan={3} className="py-1.5 px-2.5 border-r border-black text-right uppercase">
+                  ESTIMASI TOTAL PEMASUKAN &amp; DUKUNGAN MITRA
+                </td>
+                <td className="py-1.5 px-2 text-right text-[9pt] text-black tabular-nums">
+                  Rp 6.600.000 – Rp 8.100.000,-
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          {/* Catatan Finansial Penjaminan */}
+          <div className="border border-black p-3 bg-neutral-50 text-[8.5pt]">
+            <p className="font-bold text-black uppercase mb-0.5">
+              5.3 Kebijakan Finansial &amp; Jaminan Kepastian Kegiatan
+            </p>
+            <p className="text-gray-800 text-justify leading-relaxed text-[8pt]">
+              Setiap selisih kebutuhan anggaran operasional dijamin dan disubsidi penuh oleh alokasi anggaran kemitraan Divisi Marketing Optik I See You. Hal ini memberikan kepastian 100% terselenggaranya kegiatan secara profesional tanpa risiko pembatalan, sehingga memberikan jaminan ROI dan ketercapaian deliverables promosi yang maksimal bagi seluruh mitra sponsor yang berpartisipasi.
+            </p>
+          </div>
+        </section>
+
+        {/* ==================================================== */}
+        {/* HALAMAN 7: BAB VI (4 PAKET SPONSORSHIP RESMI)       */}
+        {/* ==================================================== */}
+        <section className="proposal-page bg-white p-[18mm] sm:p-[20mm] min-h-[297mm] shadow-lg print:shadow-none border border-neutral-200 print:border-none print:break-after-page text-[10pt]">
+          <FormalKopSurat />
+
+          <h3 className="text-[11.5pt] font-bold uppercase tracking-wider text-black border-b border-black pb-1 mb-3">
+            BAB VI. BENTUK KERJASAMA &amp; PAKET SPONSORSHIP
+          </h3>
+
+          <p className={`text-justify mb-3 text-[9.5pt] ${lineHeightClass}`}>
+            Kami menyediakan 4 (empat) pilihan paket sponsorship yang dirancang fleksibel, terjangkau, dan berdampak nyata bagi pertumbuhan brand mitra:
+          </p>
+
+          <div className="grid grid-cols-2 gap-2.5 text-[8.5pt]">
             {data.packages.map((pkg, pIdx) => (
-              <div key={pkg.id} className="border border-black p-2.5 flex flex-col justify-between bg-neutral-50/40">
+              <div
+                key={pkg.id}
+                className="border border-black p-2.5 flex flex-col justify-between bg-neutral-50/40"
+              >
                 <div>
-                  <div className="flex justify-between items-baseline border-b border-black pb-1 mb-1.5">
-                    <div>
-                      <h4 className="font-bold text-[9.5pt] tracking-wide text-black">
+                  <div className="border-b border-black pb-1 mb-1.5">
+                    <div className="flex justify-between items-baseline gap-2">
+                      <h4 className="font-bold text-[9pt] tracking-wide text-black leading-snug">
                         <EditSpan
                           value={pkg.name}
                           onChange={(v) => updatePackage(pIdx, { name: v })}
                           tag="span"
                         />
                       </h4>
-                      <p className="text-[7.5pt] text-gray-700 italic">
-                        <EditSpan
-                          value={pkg.tagline}
-                          onChange={(v) => updatePackage(pIdx, { tagline: v })}
-                          tag="span"
-                        />
-                      </p>
-                    </div>
-                    <div className="text-right shrink-0 ml-1.5">
-                      <span className="font-bold text-[10pt] text-black whitespace-nowrap">
+                      <span className="font-bold text-[9.5pt] text-black whitespace-nowrap">
                         <EditSpan
                           value={pkg.price}
                           onChange={(v) => updatePackage(pIdx, { price: v })}
@@ -1199,9 +1720,16 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
                         />
                       </span>
                     </div>
+                    <p className="text-[7.5pt] text-gray-700 italic mt-0.5">
+                      <EditSpan
+                        value={pkg.tagline}
+                        onChange={(v) => updatePackage(pIdx, { tagline: v })}
+                        tag="span"
+                      />
+                    </p>
                   </div>
 
-                  <ul className="list-disc pl-4 space-y-0.5 text-[8pt] text-gray-800">
+                  <ul className="list-disc pl-3.5 space-y-1 text-[7.5pt] text-gray-800">
                     {pkg.benefits.map((b, bIdx) => (
                       <li key={bIdx} className="leading-tight">
                         <EditSpan
@@ -1213,7 +1741,7 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
                           <button
                             type="button"
                             onClick={() => removeBenefit(pIdx, bIdx)}
-                            className="ml-1 text-red-600 hover:underline text-[7.5pt] no-print"
+                            className="ml-1 text-red-600 hover:underline text-[7pt] no-print"
                             title="Hapus butir ini"
                           >
                             [x]
@@ -1228,7 +1756,7 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
                   <button
                     type="button"
                     onClick={() => addBenefit(pIdx)}
-                    className="mt-1.5 text-blue-700 hover:underline text-[7.5pt] font-semibold no-print"
+                    className="mt-1.5 text-blue-700 hover:underline text-[7pt] font-semibold no-print"
                   >
                     + Tambah Fasilitas Paket
                   </button>
@@ -1236,58 +1764,58 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
               </div>
             ))}
           </div>
+
+          <p className="text-[8pt] text-gray-600 italic mt-3">
+            * Khusus Kategori 3 (Bronze) dan Kategori 4 (In-Kind / Custom), seluruh mitra mendapatkan hak istimewa <b>Sesi Live Demo Produk</b> dan trial langsung oleh audiens.
+          </p>
         </section>
 
         {/* ==================================================== */}
-        {/* HALAMAN 6: PROSEDUR, KONTRAK, & NARAHUBUNG          */}
+        {/* HALAMAN 8: BAB VII (PROSEDUR, PEMBAYARAN & KONTAK)  */}
         {/* ==================================================== */}
-        <section className="proposal-page bg-white p-[20mm] min-h-[297mm] shadow-lg print:shadow-none border border-neutral-200 print:border-none print:break-after-page text-[10.5pt]">
+        <section className="proposal-page bg-white p-[18mm] sm:p-[20mm] min-h-[297mm] shadow-lg print:shadow-none border border-neutral-200 print:border-none print:break-after-page text-[10pt]">
           <FormalKopSurat />
 
-          <h3 className="text-[12pt] font-bold uppercase tracking-wider text-black border-b border-black pb-1 mb-4">
-            BAB V. KETENTUAN, PEMBAYARAN, &amp; NARAHUBUNG
+          <h3 className="text-[11.5pt] font-bold uppercase tracking-wider text-black border-b border-black pb-1 mb-4">
+            BAB VII. KETENTUAN, PEMBAYARAN, &amp; NARAHUBUNG
           </h3>
 
           <div className={`space-y-4 text-justify ${lineHeightClass}`}>
             <div>
-              <p className="font-bold mb-1">5.1 Alur Konfirmasi &amp; Pelaksanaan</p>
-              <ol className="list-decimal pl-6 space-y-1.5 text-[10pt]">
+              <p className="font-bold mb-1 text-[9.5pt]">7.1 Alur Konfirmasi &amp; Pelaksanaan Kerjasama</p>
+              <ol className="list-decimal pl-5 space-y-1 text-[9pt]">
                 <li>
-                  Calon mitra sponsor memilih paket kerjasama yang diminati dan mengisi Lembar
-                  Kesepakatan Sponsor pada halaman lampiran proposal ini.
+                  Calon mitra sponsor memilih paket kerjasama (Platinum, Gold, Bronze, atau In-Kind / Custom) dan menandatangani Lembar Kesepakatan Sponsor pada halaman lampiran.
                 </li>
                 <li>
-                  Tim Kemitraan Optik I See You menerbitkan Surat Perjanjian Kerjasama (MoU) resmi
-                  beserta invoice penagihan resmi.
+                  Tim Kemitraan Optik I See You menerbitkan invoice penagihan resmi serta Surat Perjanjian Kerjasama (MoU) definitif.
                 </li>
                 <li>
-                  Mitra menyerahkan materi promosi (file logo resolusi tinggi vektor/PNG, file video/iklan
-                  format MP4 1080p, dan materi cetak) paling lambat <b>H-7</b> sebelum tanggal kegiatan.
+                  Mitra menyerahkan materi publikasi (file logo resolusi tinggi, materi iklan video MP4 1080p, dan flyer cetak) paling lambat <b>H-5</b> sebelum tanggal kegiatan.
                 </li>
                 <li>
-                  Pihak penyelenggara menyampaikan laporan bukti tayang (foto &amp; video dokumentasi
-                  kegiatan serta penayangan di gerai) maksimal H+7 setelah acara berakhir.
+                  Penyelenggara menyampaikan laporan bukti tayang (foto &amp; video dokumentasi kegiatan, live demo produk panggung, serta display gerai ritel) maksimal H+7 setelah acara berakhir.
                 </li>
               </ol>
             </div>
 
             <div>
-              <p className="font-bold mb-1">5.2 Mekanisme Pembayaran</p>
-              <p className="text-[10pt] mb-2">
-                Pembayaran biaya sponsorship dilakukan dalam 2 (dua) tahap sebagai berikut:
+              <p className="font-bold mb-1 text-[9.5pt]">7.2 Mekanisme Pembayaran Sponsorship</p>
+              <p className="text-[9pt] mb-2">
+                Pembayaran paket tunai dilakukan dalam 2 (dua) termin transfer resmi sebagai berikut:
               </p>
-              <table className="w-full border-collapse border border-black text-[9.5pt] mb-3">
+              <table className="w-full border-collapse border border-black text-[8.5pt] mb-2.5">
                 <thead>
                   <tr className="bg-neutral-100 border-b border-black">
-                    <th className="py-1.5 px-3 text-left border-r border-black font-bold">Tahap</th>
-                    <th className="py-1.5 px-3 text-left border-r border-black font-bold">Jatuh Tempo</th>
-                    <th className="py-1.5 px-3 text-right font-bold">Nominal Pembayaran</th>
+                    <th className="py-1 px-3 text-left border-r border-black font-bold">Tahap</th>
+                    <th className="py-1 px-3 text-left border-r border-black font-bold">Jatuh Tempo Pembayaran</th>
+                    <th className="py-1 px-3 text-right font-bold">Nominal Pembayaran</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr className="border-b border-black">
-                    <td className="py-1.5 px-3 border-r border-black font-semibold">Tahap I (DP)</td>
-                    <td className="py-1.5 px-3 border-r border-black">Saat penandatanganan MoU kerjasama</td>
+                    <td className="py-1.5 px-3 border-r border-black font-semibold">Tahap I (Uang Muka / DP)</td>
+                    <td className="py-1.5 px-3 border-r border-black">Saat penandatanganan Lembar Kesepakatan MoU</td>
                     <td className="py-1.5 px-3 text-right font-bold">50% dari total nilai paket</td>
                   </tr>
                   <tr>
@@ -1298,10 +1826,10 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
                 </tbody>
               </table>
 
-              <p className="text-[10pt]">
+              <p className="text-[8.5pt] mb-1">
                 Seluruh pembayaran disalurkan via transfer ke rekening resmi penyelenggara:
               </p>
-              <div className="border border-black p-3 bg-neutral-50 mt-1.5 text-[9.5pt]">
+              <div className="border border-black p-2.5 bg-neutral-50 text-[9pt]">
                 <p>
                   Nama Bank:{" "}
                   <b>
@@ -1336,22 +1864,21 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
             </div>
 
             <div>
-              <p className="font-bold mb-1">5.3 Layanan Narahubung Resmi</p>
-              <p className="text-[10pt] mb-2">
-                Untuk koordinasi teknis, pertanyaan paket, dan penyerahan materi kerjasama, silakan
-                menghubungi kontak resmi panitia:
+              <p className="font-bold mb-1 text-[9.5pt]">7.3 Layanan Narahubung Resmi</p>
+              <p className="text-[9pt] mb-2">
+                Untuk diskusi paket, kustomisasi skema barter in-kind, atau serah terima materi, silakan hubungi kontak panitia:
               </p>
-              <div className="border border-black p-3 text-[10pt] grid grid-cols-2 gap-2">
+              <div className="border border-black p-3 text-[9pt] grid grid-cols-2 gap-3">
                 <div>
-                  <span className="text-gray-600 block text-[8.5pt]">PIC Kemitraan:</span>
-                  <span className="font-bold">
+                  <span className="text-gray-600 block text-[8pt]">PIC Kemitraan &amp; Sponsorship:</span>
+                  <span className="font-bold text-[9.5pt]">
                     <EditSpan
                       value={data.picName}
                       onChange={(v) => updateField("picName", v)}
                       tag="span"
                     />
                   </span>
-                  <span className="text-gray-700 block text-[9pt]">
+                  <span className="text-gray-700 block text-[8.5pt]">
                     <EditSpan
                       value={data.picRole}
                       onChange={(v) => updateField("picRole", v)}
@@ -1360,15 +1887,15 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
                   </span>
                 </div>
                 <div>
-                  <span className="text-gray-600 block text-[8.5pt]">WhatsApp Resmi Kemitraan:</span>
-                  <span className="font-bold text-[11pt]">
+                  <span className="text-gray-600 block text-[8pt]">WhatsApp Resmi Kemitraan:</span>
+                  <span className="font-bold text-[10.5pt]">
                     <EditSpan
                       value={data.picWa}
                       onChange={(v) => updateField("picWa", v)}
                       tag="span"
                     />
                   </span>
-                  <span className="text-gray-600 block text-[8pt] mt-0.5">Layanan Senin – Minggu (09.00 – 21.00 WIB)</span>
+                  <span className="text-gray-600 block text-[7.5pt] mt-0.5">Layanan Senin – Minggu (08.00 – 21.00 WIB)</span>
                 </div>
               </div>
             </div>
@@ -1376,29 +1903,27 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
         </section>
 
         {/* ==================================================== */}
-        {/* HALAMAN 7: LEMBAR KESEPAKATAN SPONSOR (FORMULIR MOU)*/}
+        {/* HALAMAN 9: LEMBAR KESEPAKATAN SPONSOR (FORMULIR MOU)*/}
         {/* ==================================================== */}
-        <section className="proposal-page bg-white p-[20mm] min-h-[297mm] shadow-lg print:shadow-none border border-neutral-200 print:border-none print:break-after-page text-[10.5pt] flex flex-col justify-between">
+        <section className="proposal-page bg-white p-[18mm] sm:p-[20mm] min-h-[297mm] shadow-lg print:shadow-none border border-neutral-200 print:border-none print:break-after-page text-[10pt] flex flex-col justify-between">
           <div>
             <FormalKopSurat />
 
-            <h3 className="text-[12pt] font-bold uppercase tracking-wider text-black text-center border-b-2 border-black pb-1 mb-4">
-              LEMBAR KESEPAKATAN KERJASAMA SPONSORSHIP
+            <h3 className="text-[11.5pt] font-bold uppercase tracking-wider text-black text-center border-b-2 border-black pb-1 mb-3">
+              LEMBAR KESEPAKATAN KERJASAMA SPONSORSHIP (MoU)
             </h3>
 
-            <p className="text-justify text-[10pt] mb-4 leading-relaxed">
-              Yang bertanda tangan di bawah ini, menyatakan bersedia berpartisipasi sebagai Mitra Sponsor
-              dalam penyelenggaraan program <b>&quot;{data.eventName}&quot;</b> yang diselenggarakan oleh
-              Optik I See You:
+            <p className="text-justify text-[9.5pt] mb-3 leading-relaxed">
+              Yang bertanda tangan di bawah ini, menyatakan persetujuan untuk berpartisipasi dan bersinergi sebagai Mitra Sponsor dalam program <b>&quot;{data.eventName}&quot;</b> yang diselenggarakan oleh Optik I See You:
             </p>
 
-            <table className="w-full border-collapse border border-black text-[9.5pt] mb-5">
+            <table className="w-full border-collapse border border-black text-[9pt] mb-3">
               <tbody>
                 <tr className="border-b border-black">
-                  <td className="w-[35%] py-2 px-3 font-semibold bg-neutral-100 border-r border-black">
+                  <td className="w-[32%] py-1.5 px-3 font-semibold bg-neutral-100 border-r border-black">
                     Nama Perusahaan / Brand
                   </td>
-                  <td className="py-2 px-3">
+                  <td className="py-1.5 px-3">
                     <EditSpan
                       value={data.recipientCompany}
                       onChange={(v) => updateField("recipientCompany", v)}
@@ -1407,18 +1932,18 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
                   </td>
                 </tr>
                 <tr className="border-b border-black">
-                  <td className="py-2 px-3 font-semibold bg-neutral-100 border-r border-black">
-                    Alamat Lengkap Perusahaan
+                  <td className="py-1.5 px-3 font-semibold bg-neutral-100 border-r border-black">
+                    Alamat Domisili Kantor / Brand
                   </td>
-                  <td className="py-2 px-3 text-gray-500 italic">
-                    [Tuliskan alamat domisili kantor / brand mitra]
+                  <td className="py-1.5 px-3 text-gray-500 italic">
+                    [Tuliskan alamat domisili kantor / gerai mitra]
                   </td>
                 </tr>
                 <tr className="border-b border-black">
-                  <td className="py-2 px-3 font-semibold bg-neutral-100 border-r border-black">
-                    Nama Penanggung Jawab
+                  <td className="py-1.5 px-3 font-semibold bg-neutral-100 border-r border-black">
+                    Nama Penanggung Jawab &amp; Jabatan
                   </td>
-                  <td className="py-2 px-3">
+                  <td className="py-1.5 px-3">
                     <EditSpan
                       value={data.recipientTitle}
                       onChange={(v) => updateField("recipientTitle", v)}
@@ -1427,16 +1952,16 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
                   </td>
                 </tr>
                 <tr className="border-b border-black">
-                  <td className="py-2 px-3 font-semibold bg-neutral-100 border-r border-black">
-                    Nomor Telepon / WhatsApp
+                  <td className="py-1.5 px-3 font-semibold bg-neutral-100 border-r border-black">
+                    Nomor WhatsApp / Telepon Aktif
                   </td>
-                  <td className="py-2 px-3 text-gray-500 italic">[Nomor kontak aktif penanggung jawab]</td>
+                  <td className="py-1.5 px-3 text-gray-500 italic">[Nomor telepon / kontak aktif PIC mitra]</td>
                 </tr>
                 <tr className="border-b border-black">
-                  <td className="py-2 px-3 font-semibold bg-neutral-100 border-r border-black align-top">
-                    Paket Kerjasama yang Dipilih
+                  <td className="py-1.5 px-3 font-semibold bg-neutral-100 border-r border-black align-top">
+                    Pilihan Paket Kemitraan
                   </td>
-                  <td className="py-2 px-3 space-y-1">
+                  <td className="py-1.5 px-3 space-y-1">
                     <div className="flex items-center gap-2">
                       <span className="w-3.5 h-3.5 border border-black inline-block" />
                       <span>Paket Platinum (Rp 5.000.000,-)</span>
@@ -1447,34 +1972,34 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
                     </div>
                     <div className="flex items-center gap-2">
                       <span className="w-3.5 h-3.5 border border-black inline-block" />
-                      <span>Paket Silver (Rp 1.500.000,-)</span>
+                      <span>Paket Bronze (Rp 1.500.000,-) — Termasuk Sesi Live Demo Produk</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <span className="w-3.5 h-3.5 border border-black inline-block" />
-                      <span>Paket Barter / In-Kind (Nilai Produk / Goodie Bag)</span>
+                      <span>Paket In-Kind / In-Keep &amp; Custom Collaboration (Barter Produk / Fasilitas)</span>
                     </div>
                   </td>
                 </tr>
                 <tr>
-                  <td className="py-2 px-3 font-semibold bg-neutral-100 border-r border-black align-top">
-                    Catatan Khusus Kemitraan
+                  <td className="py-1.5 px-3 font-semibold bg-neutral-100 border-r border-black align-top">
+                    Catatan Khusus Kemitraan / Barter
                   </td>
-                  <td className="py-2 px-3 text-gray-500 italic">
-                    [Kebutuhan khusus atau penyesuaian deliverables bila ada]
+                  <td className="py-1.5 px-3 text-gray-500 italic">
+                    [Tuliskan rincian barang barter konsumsi, merchandise, goodie bag, atau penawaran custom brand]
                   </td>
                 </tr>
               </tbody>
             </table>
 
-            <p className="text-[9.5pt] text-gray-800 italic text-justify leading-relaxed">
+            <p className="text-[8.5pt] text-gray-800 italic text-justify leading-relaxed">
               Surat kesepakatan ini dibuat dalam keadaan sadar dan ditandatangani oleh pejabat yang
               berwenang untuk dijadikan dasar penerbitan Surat Perjanjian Kerjasama (MoU) resmi.
             </p>
           </div>
 
           {/* Kolom Tanda Tangan Formal 2 Pihak */}
-          <div className="pt-6 border-t border-gray-400 mt-6 text-[10pt]">
-            <div className="text-right mb-4">
+          <div className="pt-4 border-t border-gray-400 mt-4 text-[9.5pt]">
+            <div className="text-right mb-3">
               <p>
                 Disepakati pada tanggal: ....................................... 2026
               </p>
@@ -1482,20 +2007,20 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
 
             <div className="grid grid-cols-2 gap-8">
               {/* Pihak Pertama */}
-              <div className="text-center border border-black p-4">
-                <p className="font-bold uppercase text-[9.5pt]">PIHAK PERTAMA</p>
-                <p className="text-[8.5pt] text-gray-700">Penyelenggara (Optik I See You)</p>
-                <div className="h-20 flex items-center justify-center text-gray-400 text-xs italic">
+              <div className="text-center border border-black p-3">
+                <p className="font-bold uppercase text-[9pt]">PIHAK PERTAMA</p>
+                <p className="text-[8pt] text-gray-700">Penyelenggara (Optik I See You)</p>
+                <div className="h-16 flex items-center justify-center text-gray-400 text-xs italic">
                   [Tanda Tangan &amp; Stempel]
                 </div>
-                <p className="font-bold underline text-[10pt]">
+                <p className="font-bold underline text-[9.5pt]">
                   <EditSpan
                     value={data.picName}
                     onChange={(v) => updateField("picName", v)}
                     tag="span"
                   />
                 </p>
-                <p className="text-gray-700 text-[8.5pt]">
+                <p className="text-gray-700 text-[8pt]">
                   <EditSpan
                     value={data.picRole}
                     onChange={(v) => updateField("picRole", v)}
@@ -1505,28 +2030,34 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
               </div>
 
               {/* Pihak Kedua */}
-              <div className="text-center border border-black p-4">
-                <p className="font-bold uppercase text-[9.5pt]">PIHAK KEDUA</p>
-                <p className="text-[8.5pt] text-gray-700">Mitra Sponsor</p>
-                <div className="h-20 flex items-center justify-center text-gray-400 text-xs border border-dashed border-gray-300 w-24 mx-auto my-1">
+              <div className="text-center border border-black p-3">
+                <p className="font-bold uppercase text-[9pt]">PIHAK KEDUA</p>
+                <p className="text-[8pt] text-gray-700">Mitra Sponsor</p>
+                <div className="h-16 flex items-center justify-center text-gray-400 text-xs border border-dashed border-gray-300 w-24 mx-auto my-0.5">
                   Materai Rp 10.000
                 </div>
-                <p className="font-bold underline text-[10pt]">
+                <p className="font-bold underline text-[9.5pt]">
                   ( ................................................. )
                 </p>
-                <p className="text-gray-700 text-[8.5pt]">Nama Terang &amp; Jabatan</p>
+                <p className="text-gray-700 text-[8pt]">Nama Terang &amp; Jabatan</p>
               </div>
             </div>
           </div>
         </section>
       </div>
+
       {/* Global Print Stylesheet */}
       <style jsx global>{`
         @media print {
-          nav, header, footer, .no-print, [data-no-print="true"] {
+          nav,
+          header,
+          footer,
+          .no-print,
+          [data-no-print="true"] {
             display: none !important;
           }
-          body, html {
+          body,
+          html {
             background: white !important;
             margin: 0 !important;
             padding: 0 !important;
@@ -1539,7 +2070,7 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
           }
           @page {
             size: A4 portrait;
-            margin: 12mm 14mm 12mm 14mm;
+            margin: 10mm 12mm 10mm 12mm;
           }
           .proposal-doc {
             width: 100% !important;
@@ -1562,11 +2093,10 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
             box-sizing: border-box !important;
             display: block !important;
           }
-          /* Cover Page: Perfectly vertically balanced and centered */
           .proposal-cover-page {
-            height: 268mm !important;
-            min-height: 268mm !important;
-            max-height: 268mm !important;
+            height: 275mm !important;
+            min-height: 275mm !important;
+            max-height: 275mm !important;
             display: flex !important;
             flex-direction: column !important;
             justify-content: space-between !important;
