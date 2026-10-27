@@ -92,8 +92,8 @@ export interface ProposalData {
   packages: PackageTier[];
 }
 
-const STORAGE_KEY = "isy_proposal_sponsor_formal_v6";
-const LEGACY_STORAGE_KEY = "isy_proposal_sponsor_formal_v5";
+const STORAGE_KEY = "isy_proposal_sponsor_formal_v7";
+const LEGACY_STORAGE_KEY = "isy_proposal_sponsor_formal_v6";
 
 const DEFAULT_DATA: ProposalData = {
   docNo: "024/MKT-ISY/PROP-SPONSOR/X/2026",
@@ -114,7 +114,7 @@ const DEFAULT_DATA: ProposalData = {
   eventTheme:
     "Personal Branding in This Economy: How to Branding Brand by ISY (Story, Feed, Reels) & Personal Branding di Era Digital",
   eventOrganizer: "Divisi Marketing & Strategic Partnership, Optik I See You",
-  eventDate: "Sabtu, 14 November 2026",
+  eventDate: "[ ........................................................... ]",
   eventTime: "08.00 – 13.00 WIB",
   eventVenue: "Gedung FISIP UNSOED / Balai Soetdja / Gedung Hetero Space Purwokerto",
   eventParticipants:
@@ -1232,15 +1232,22 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
                 </tr>
                 <tr className="border-b border-black">
                   <td className="py-1 px-2.5 font-bold bg-neutral-100 border-r border-black">
-                    Hari, Tanggal &amp; Waktu
+                    Hari, Tanggal
                   </td>
-                  <td className="py-1 px-2.5 font-semibold">
+                  <td className="py-1 px-2.5 font-semibold text-gray-800">
                     <EditSpan
                       value={data.eventDate}
                       onChange={(v) => updateField("eventDate", v)}
+                      placeholder="[ ........................................................... ]"
                       tag="span"
                     />
-                    {" · "}
+                  </td>
+                </tr>
+                <tr className="border-b border-black">
+                  <td className="py-1 px-2.5 font-bold bg-neutral-100 border-r border-black">
+                    Waktu Pelaksanaan
+                  </td>
+                  <td className="py-1 px-2.5">
                     <EditSpan
                       value={data.eventTime}
                       onChange={(v) => updateField("eventTime", v)}
@@ -1559,9 +1566,27 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
         <section className="proposal-page bg-white p-[18mm] sm:p-[20mm] min-h-[297mm] shadow-lg print:shadow-none border border-neutral-200 print:border-none print:break-after-page text-[10pt]">
           <FormalKopSurat />
 
-          <h3 className="text-[11.5pt] font-bold uppercase tracking-wider text-black border-b border-black pb-1 mb-3">
+          <h3 className="text-[11.5pt] font-bold uppercase tracking-wider text-black border-b border-black pb-1 mb-2.5">
             BAB V. RENCANA ANGGARAN BIAYA (RAB) KEGIATAN
           </h3>
+
+          <div className="flex flex-wrap items-center justify-between text-[8.5pt] border border-black px-3 py-1.5 bg-neutral-50 mb-2.5">
+            <div>
+              <span className="font-bold text-gray-700">Program Kegiatan: </span>
+              <span className="font-semibold text-black">{data.eventName}</span>
+            </div>
+            <div>
+              <span className="font-bold text-gray-700">Hari, Tanggal Pelaksanaan: </span>
+              <span className="font-semibold text-gray-900">
+                <EditSpan
+                  value={data.eventDate}
+                  onChange={(v) => updateField("eventDate", v)}
+                  placeholder="[ ........................................................... ]"
+                  tag="span"
+                />
+              </span>
+            </div>
+          </div>
 
           <p className={`text-justify mb-3 text-[9.5pt] ${lineHeightClass}`}>
             Penyusunan anggaran dirancang secara transparan dan efisien guna memastikan terselenggaranya kegiatan berkualitas tinggi dengan alokasi operasional yang terukur:
