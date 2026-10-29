@@ -13,33 +13,20 @@ export const ProductByBadge: React.FC = () => {
         href="https://yossikaputra.my.id/"
         target="_blank"
         rel="noopener noreferrer"
-        className="group inline-flex items-center gap-2 pl-1.5 pr-2.5 py-1 rounded-full bg-[#0F172A] hover:bg-[#1E293B] text-white border border-slate-700/80 hover:border-slate-500 shadow-sm transition-all duration-200"
-        title="Yossika Putra Erlangga — Fullstack Software Engineer & AI Developer (https://yossikaputra.my.id/)"
+        className="group inline-flex items-center gap-2 pl-1.5 pr-3 py-1 rounded-full bg-[#0F172A] hover:bg-[#1E293B] text-white border border-slate-700/80 hover:border-slate-500 shadow-sm transition-all duration-200"
+        title="Yos Dev (https://yossikaputra.my.id/)"
       >
         <div className="relative w-6 h-6 rounded-full overflow-hidden ring-1 ring-white/25 flex-shrink-0">
           <Image
             src="/yossika-avatar.webp"
-            alt="Yossika Putra"
+            alt="Yos Dev"
             width={24}
             height={24}
             className="w-full h-full object-cover object-top"
           />
         </div>
         <span className="font-semibold text-xs text-white group-hover:text-emerald-300 transition-colors tracking-tight">
-          Yossika Putra
-        </span>
-        <span className="inline-flex items-center gap-1 text-[10px] font-medium px-1.5 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700/80 group-hover:border-slate-600 transition-colors">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-          <span>Portfolio</span>
-          <svg
-            className="w-2.5 h-2.5 opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2.5}
-          >
-            <path strokeLinecap="round" strokeLinejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-          </svg>
+          Yos Dev
         </span>
       </a>
 
