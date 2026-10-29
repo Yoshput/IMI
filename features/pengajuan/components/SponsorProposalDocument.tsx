@@ -92,8 +92,8 @@ export interface ProposalData {
   packages: PackageTier[];
 }
 
-const STORAGE_KEY = "isy_proposal_sponsor_formal_v11";
-const LEGACY_STORAGE_KEY = "isy_proposal_sponsor_formal_v10";
+const STORAGE_KEY = "isy_proposal_sponsor_formal_v12";
+const LEGACY_STORAGE_KEY = "isy_proposal_sponsor_formal_v11";
 
 const DEFAULT_DATA: ProposalData = {
   docNo: "024/MKT-ISY/PROP-SPONSOR/X/2026",
@@ -309,7 +309,8 @@ const DEFAULT_DATA: ProposalData = {
         "Pencantuman logo ukuran BESAR pada backdrop panggung, x-banner, flyer cetak, sertifikat, dan frame photobooth.",
         "Penyertaan produk sampling / voucher resmi di dalam goodie bag seluruh peserta dan narasumber.",
         "Penyebutan (ad-lips) nama brand oleh Master of Ceremony (MC) sebanyak 10 kali selama acara.",
-        "1 (satu) kali penayangan video Reels/Feed dedicated di akun Instagram resmi @iseeyou.glasses (244.000+ followers).",
+        "1 (satu) kali dedicated postingan Reels / Feed kolaborasi & posting bahan materi promosi mitra di Instagram resmi @iseeyou.glasses (244.000+ followers).",
+        "1 (satu) kali penayangan materi promosi di Instagram Story resmi @iseeyou.glasses.",
       ],
     },
     {
@@ -333,10 +334,9 @@ const DEFAULT_DATA: ProposalData = {
       tagline: "Eksposur Acara, Display Gerai Ritel & Media Sosial",
       price: "Rp 1.500.000,-",
       benefits: [
-        "Hak membuka stand mini display / table showcase sample produk di area interactive showcase venue.",
         "Display poster & brosur materi promosi di meja kasir 4 lokasi cabang Optik I See You.",
         "Pencantuman logo ukuran STANDAR pada backdrop panggung utama dan e-flyer resmi kegiatan.",
-        "Hak menyertakan flyer / voucher promosi resmi ke dalam goodie bag peserta workshop.",
+        "Hak menyertakan flyer / voucher promosi resmi ke dalam Official Goodie Bag peserta workshop.",
         "Mention dan tag apresiasi sponsorship di Instagram Story resmi Optik I See You (@iseeyou.glasses).",
       ],
     },
@@ -348,7 +348,9 @@ const DEFAULT_DATA: ProposalData = {
       benefits: [
         "Skema Barter Dukungan: Penyediaan produk konsumsi, merchandise, tote bag, atau fasilitas pendukung kegiatan yang setara dengan nilai promosi.",
         "Penyertaan flyer / voucher diskon mitra ke dalam Official Goodie Bag peserta & display materi promosi di meja kasir gerai Optik I See You.",
-        "Pencantuman logo mitra pada backdrop kegiatan & publikasi apresiasi kemitraan di Instagram Story @iseeyou.glasses.",
+        "Pencantuman logo ukuran KECIL pada backdrop panggung kegiatan & e-flyer publikasi.",
+        "Penyebutan (ad-lips) apresiasi nama brand oleh Master of Ceremony (MC) sebanyak 1 (satu) kali selama acara.",
+        "Publikasi apresiasi kemitraan di Instagram Story resmi @iseeyou.glasses.",
       ],
     },
   ],
