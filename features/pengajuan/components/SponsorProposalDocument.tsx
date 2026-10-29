@@ -92,8 +92,8 @@ export interface ProposalData {
   packages: PackageTier[];
 }
 
-const STORAGE_KEY = "isy_proposal_sponsor_formal_v12";
-const LEGACY_STORAGE_KEY = "isy_proposal_sponsor_formal_v11";
+const STORAGE_KEY = "isy_proposal_sponsor_formal_v13";
+const LEGACY_STORAGE_KEY = "isy_proposal_sponsor_formal_v12";
 
 const DEFAULT_DATA: ProposalData = {
   docNo: "024/MKT-ISY/PROP-SPONSOR/X/2026",
@@ -106,11 +106,11 @@ const DEFAULT_DATA: ProposalData = {
   recipientCompany: "[Nama Perusahaan / Brand Mitra]",
   recipientCity: "di Tempat",
   letterIntro:
-    "Sehubungan dengan rencana pelaksanaan program workshop kolaboratif bertajuk 'Fun Workshop: Unlock Your Influence — Buka Kelas Konten & Belajar Bareng Membangun Brand by Optik I See You', kami dari Divisi Marketing & Strategic Partnership Optik I See You bermaksud mengajukan penawaran kerjasama sponsorship serta sinergi kemitraan Business-to-Business (B2B) kepada instansi / brand yang Bapak/Ibu pimpin.",
+    "Sehubungan dengan rencana pelaksanaan program workshop kolaboratif bertajuk 'Fun Workshop: Unlock Your Influence — Collaborative Workshop: Belajar Bareng Membangun Brand by Optik I See You', kami dari Divisi Marketing & Strategic Partnership Optik I See You bermaksud mengajukan penawaran kerjasama sponsorship serta sinergi kemitraan Business-to-Business (B2B) kepada instansi / brand yang Bapak/Ibu pimpin.",
   letterClosing:
     "Demikian surat penawaran kerjasama sponsorship ini kami sampaikan. Besar harapan kami agar terjalin kolaborasi B2B yang saling menguntungkan (win-win synergy) dan berdampak nyata bagi pertumbuhan kedua belah pihak. Atas perhatian dan kesempatan yang diberikan, kami ucapkan terima kasih.",
   eventName: "FUN WORKSHOP: UNLOCK YOUR INFLUENCE",
-  eventSubtitle: "Buka Kelas Konten & Collaborative Workshop: Belajar Bareng Membangun Brand & Tumbuh Bersama",
+  eventSubtitle: "Collaborative Workshop: Belajar Bareng Membangun Brand & Tumbuh Bersama",
   eventTheme:
     "Belajar Bareng Membangun Brand: Sharing Perjalanan Nyata Optik I See You dalam Berkreasi Lewat Konten (Story, Feed, Reels) & Bertumbuh Bersama Menjangkau 1.000.000+ Pelanggan di Era Digital",
   eventOrganizer: "Divisi Marketing & Strategic Partnership, Optik I See You",
@@ -1075,7 +1075,7 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
               Melalui program &quot;{data.eventName}&quot;, pihak mitra sponsor akan memperoleh hak eksposur menyeluruh: slot presentasi &amp; demo produk panggung bagi sponsor utama (Platinum &amp; Gold), penayangan video promosi di layar TV Showroom Purwokerto, display media promosi di meja kasir 4 gerai ritel, hak pembagian produk sampling / voucher ke dalam goodie bag peserta, serta publikasi promosi digital di jejaring media sosial kami.
             </p>
             <p>
-              Bersama surat ini, kami lampirkan rincian kegiatan, susunan rundown, profil narasumber, rencana anggaran biaya (RAB), pilihan paket sponsorship, serta lembar kesepakatan kerjasama untuk menjadi pertimbangan Bapak/Ibu.
+              Bersama surat ini, kami lampirkan rincian kegiatan, susunan rundown acara, rencana anggaran biaya (RAB), pilihan paket sponsorship, serta lembar kesepakatan kerjasama untuk menjadi pertimbangan Bapak/Ibu.
             </p>
             <p>
               <EditSpan
@@ -1199,17 +1199,17 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
           {/* BAB II */}
           <div>
             <h3 className="text-[11.5pt] font-bold uppercase tracking-wider text-black border-b border-black pb-1 mb-2">
-              BAB II. DESKRIPSI ACARA &amp; PROFIL PEMBICARA
+              BAB II. DESKRIPSI &amp; INFORMASI KEGIATAN
             </h3>
 
             {/* Event Data Table */}
-            <table className="w-full border-collapse border border-black text-[9pt] mb-3">
+            <table className="w-full border-collapse border border-black text-[9pt]">
               <tbody>
                 <tr className="border-b border-black">
-                  <td className="w-[28%] py-1 px-2.5 font-bold bg-neutral-100 border-r border-black">
+                  <td className="w-[28%] py-1.5 px-2.5 font-bold bg-neutral-100 border-r border-black">
                     Nama Kegiatan
                   </td>
-                  <td className="py-1 px-2.5 font-semibold">
+                  <td className="py-1.5 px-2.5 font-semibold">
                     <EditSpan
                       value={data.eventName}
                       onChange={(v) => updateField("eventName", v)}
@@ -1224,10 +1224,10 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
                   </td>
                 </tr>
                 <tr className="border-b border-black">
-                  <td className="py-1 px-2.5 font-bold bg-neutral-100 border-r border-black">
+                  <td className="py-1.5 px-2.5 font-bold bg-neutral-100 border-r border-black">
                     Tema &amp; Subtema
                   </td>
-                  <td className="py-1 px-2.5 italic">
+                  <td className="py-1.5 px-2.5 italic">
                     &quot;
                     <EditSpan
                       value={data.eventTheme}
@@ -1238,10 +1238,10 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
                   </td>
                 </tr>
                 <tr className="border-b border-black">
-                  <td className="py-1 px-2.5 font-bold bg-neutral-100 border-r border-black">
+                  <td className="py-1.5 px-2.5 font-bold bg-neutral-100 border-r border-black">
                     Penyelenggara
                   </td>
-                  <td className="py-1 px-2.5">
+                  <td className="py-1.5 px-2.5">
                     <EditSpan
                       value={data.eventOrganizer}
                       onChange={(v) => updateField("eventOrganizer", v)}
@@ -1250,10 +1250,10 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
                   </td>
                 </tr>
                 <tr className="border-b border-black">
-                  <td className="py-1 px-2.5 font-bold bg-neutral-100 border-r border-black">
+                  <td className="py-1.5 px-2.5 font-bold bg-neutral-100 border-r border-black">
                     Hari, Tanggal
                   </td>
-                  <td className="py-1 px-2.5 font-semibold text-gray-800">
+                  <td className="py-1.5 px-2.5 font-semibold text-gray-800">
                     <EditSpan
                       value={data.eventDate}
                       onChange={(v) => updateField("eventDate", v)}
@@ -1263,10 +1263,10 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
                   </td>
                 </tr>
                 <tr className="border-b border-black">
-                  <td className="py-1 px-2.5 font-bold bg-neutral-100 border-r border-black">
+                  <td className="py-1.5 px-2.5 font-bold bg-neutral-100 border-r border-black">
                     Waktu Pelaksanaan
                   </td>
-                  <td className="py-1 px-2.5">
+                  <td className="py-1.5 px-2.5">
                     <EditSpan
                       value={data.eventTime}
                       onChange={(v) => updateField("eventTime", v)}
@@ -1275,10 +1275,10 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
                   </td>
                 </tr>
                 <tr className="border-b border-black">
-                  <td className="py-1 px-2.5 font-bold bg-neutral-100 border-r border-black">
+                  <td className="py-1.5 px-2.5 font-bold bg-neutral-100 border-r border-black">
                     Lokasi / Venue
                   </td>
-                  <td className="py-1 px-2.5 font-semibold">
+                  <td className="py-1.5 px-2.5 font-semibold">
                     <EditSpan
                       value={data.eventVenue}
                       onChange={(v) => updateField("eventVenue", v)}
@@ -1287,10 +1287,10 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
                   </td>
                 </tr>
                 <tr className="border-b border-black">
-                  <td className="py-1 px-2.5 font-bold bg-neutral-100 border-r border-black">
+                  <td className="py-1.5 px-2.5 font-bold bg-neutral-100 border-r border-black">
                     Target Peserta
                   </td>
-                  <td className="py-1 px-2.5">
+                  <td className="py-1.5 px-2.5">
                     <EditSpan
                       value={data.eventParticipants}
                       onChange={(v) => updateField("eventParticipants", v)}
@@ -1299,10 +1299,10 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
                   </td>
                 </tr>
                 <tr>
-                  <td className="py-1 px-2.5 font-bold bg-neutral-100 border-r border-black">
+                  <td className="py-1.5 px-2.5 font-bold bg-neutral-100 border-r border-black">
                     Format Kegiatan
                   </td>
-                  <td className="py-1 px-2.5">
+                  <td className="py-1.5 px-2.5">
                     <EditSpan
                       value={data.eventFormat}
                       onChange={(v) => updateField("eventFormat", v)}
@@ -1312,54 +1312,6 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
                 </tr>
               </tbody>
             </table>
-
-            {/* Speakers List Section */}
-            <p className="font-bold text-[9.5pt] mb-1.5 uppercase tracking-wide">
-              2.2 Jajaran Narasumber &amp; Master of Ceremony (MC)
-            </p>
-            <div className="grid grid-cols-2 gap-2 text-[8.5pt]">
-              {data.speakers.map((sp, sIdx) => (
-                <div
-                  key={sIdx}
-                  className="border border-black p-2 bg-neutral-50/50 flex flex-col justify-between"
-                >
-                  <div>
-                    <div className="border-b border-gray-300 pb-1 mb-1">
-                      <p className="font-bold text-[9.5pt] text-black">
-                        <EditSpan
-                          value={sp.name}
-                          onChange={(v) => updateSpeaker(sIdx, { name: v })}
-                          tag="span"
-                        />
-                      </p>
-                      <p className="text-[8pt] text-gray-700 font-medium">
-                        <EditSpan
-                          value={sp.role}
-                          onChange={(v) => updateSpeaker(sIdx, { role: v })}
-                          tag="span"
-                        />
-                      </p>
-                    </div>
-                    <p className="font-semibold text-emerald-950 text-[8pt] mb-0.5">
-                      Topik: &quot;
-                      <EditSpan
-                        value={sp.topic}
-                        onChange={(v) => updateSpeaker(sIdx, { topic: v })}
-                        tag="span"
-                      />
-                      &quot;
-                    </p>
-                    <p className="text-gray-700 text-[8pt] leading-tight text-justify">
-                      <EditSpan
-                        value={sp.highlight}
-                        onChange={(v) => updateSpeaker(sIdx, { highlight: v })}
-                        tag="span"
-                      />
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
           </div>
         </section>
 
@@ -1377,14 +1329,14 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
             Rangkaian acara disusun secara terstruktur untuk menjamin kenyamanan peserta, kedalaman materi workshop, serta memberikan alokasi waktu eksklusif bagi mitra sponsor dalam memperkenalkan produk dan berinteraksi langsung dengan audiens:
           </p>
 
-          <p className="font-bold text-[9.5pt] mb-1.5 uppercase">3.1 Rundown Acara Workshop (Peserta &amp; Panggung)</p>
-          <table className="w-full border-collapse border border-black text-[8.5pt] mb-4">
+          <p className="font-bold text-[9.5pt] mb-2 uppercase">Susunan Rundown Acara Workshop</p>
+          <table className="w-full border-collapse border border-black text-[9pt]">
             <thead>
               <tr className="bg-neutral-100 border-b border-black">
-                <th className="w-[18%] py-1.5 px-2 text-left border-r border-black font-bold">Waktu</th>
-                <th className="w-[32%] py-1.5 px-2 text-left border-r border-black font-bold">Agenda Kegiatan</th>
-                <th className="w-[24%] py-1.5 px-2 text-left border-r border-black font-bold">PIC / Pembicara</th>
-                <th className="py-1.5 px-2 text-left font-bold">Keterangan Teknis</th>
+                <th className="w-[18%] py-2 px-2.5 text-left border-r border-black font-bold">Waktu</th>
+                <th className="w-[32%] py-2 px-2.5 text-left border-r border-black font-bold">Agenda Kegiatan</th>
+                <th className="w-[24%] py-2 px-2.5 text-left border-r border-black font-bold">PIC / Pembicara</th>
+                <th className="py-2 px-2.5 text-left font-bold">Keterangan Teknis</th>
               </tr>
             </thead>
             <tbody>
@@ -1395,28 +1347,28 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
                     rd.activity.includes("Demo Produk") ? "bg-amber-50/60 font-semibold" : ""
                   }`}
                 >
-                  <td className="py-1.5 px-2 border-r border-black font-semibold whitespace-nowrap align-top">
+                  <td className="py-2 px-2.5 border-r border-black font-semibold whitespace-nowrap align-top">
                     <EditSpan
                       value={rd.time}
                       onChange={(v) => updateRundown(rIdx, { time: v })}
                       tag="span"
                     />
                   </td>
-                  <td className="py-1.5 px-2 border-r border-black align-top">
+                  <td className="py-2 px-2.5 border-r border-black align-top">
                     <EditSpan
                       value={rd.activity}
                       onChange={(v) => updateRundown(rIdx, { activity: v })}
                       tag="span"
                     />
                   </td>
-                  <td className="py-1.5 px-2 border-r border-black text-gray-800 align-top">
+                  <td className="py-2 px-2.5 border-r border-black text-gray-800 align-top">
                     <EditSpan
                       value={rd.picOrSpeaker}
                       onChange={(v) => updateRundown(rIdx, { picOrSpeaker: v })}
                       tag="span"
                     />
                   </td>
-                  <td className="py-1.5 px-2 text-gray-700 align-top">
+                  <td className="py-2 px-2.5 text-gray-700 align-top">
                     <EditSpan
                       value={rd.notes}
                       onChange={(v) => updateRundown(rIdx, { notes: v })}
@@ -1427,39 +1379,6 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
               ))}
             </tbody>
           </table>
-
-          {/* Rundown Teknis Loading & Persiapan Mitra */}
-          <div className="border border-black p-3 bg-neutral-50 text-[8.5pt] space-y-2">
-            <p className="font-bold text-black uppercase flex items-center justify-between border-b border-black pb-1">
-              <span>3.2 Rundown Teknis Persiapan &amp; Loading Mitra Sponsor (H-1 s.d. Hari H)</span>
-              <span className="text-[7.5pt] font-semibold text-neutral-800 bg-neutral-200 px-2 py-0.5 rounded">
-                Panduan Operasional Mitra
-              </span>
-            </p>
-            <div className="grid grid-cols-3 gap-2 pt-0.5 text-[8pt]">
-              <div className="border border-neutral-300 bg-white p-2 rounded">
-                <p className="font-bold text-black mb-0.5">07.00 – 07.45 WIB</p>
-                <p className="text-gray-700 leading-snug">
-                  <b>Loading In &amp; Setting Booth:</b> Pemasangan roll banner, tata display sample produk, flyer di stand, serta penyerahan tester/voucher ke meja registrasi.
-                </p>
-              </div>
-              <div className="border border-neutral-300 bg-white p-2 rounded">
-                <p className="font-bold text-black mb-0.5">07.45 – 08.00 WIB</p>
-                <p className="text-gray-700 leading-snug">
-                  <b>Technical Briefing MC:</b> Koordinasi MC (Nuha &amp; Yos) bersama PIC brand sponsor Platinum &amp; Gold untuk alur presentasi &amp; Live Demo Produk panggung (10.30 WIB).
-                </p>
-              </div>
-              <div className="border border-neutral-300 bg-white p-2 rounded">
-                <p className="font-bold text-black mb-0.5">13.00 – 13.30 WIB</p>
-                <p className="text-gray-700 leading-snug">
-                  <b>Loading Out &amp; Serah Terima:</b> Penutupan booth, rekapitulasi data prospek/audiens, dan serah terima dokumentasi publikasi kemitraan oleh panitia.
-                </p>
-              </div>
-            </div>
-            <p className="text-[7.5pt] text-gray-600 italic">
-              * Area showcase menyediakan total 4 stand: <b>3 Stand Showcase untuk Mitra Sponsor</b> dan <b>1 Stand Khusus Optik I See You</b> (Free Eye Exam / Cek Mata Gratis &amp; Try-On Kacamata). Panitia menyediakan tim pendamping teknis untuk setup materi dan kelistrikan booth.
-            </p>
-          </div>
         </section>
 
         {/* ==================================================== */}
@@ -1547,36 +1466,9 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
               </tr>
             </tbody>
           </table>
-          <p className="text-[8pt] text-gray-600 italic mb-3">
+          <p className="text-[8pt] text-gray-600 italic">
             * Data tercatat berdasarkan rekapitulasi audit PIC resmi per Oktober 2026.
           </p>
-
-          {/* 4.3 Profil Basis Pasar Pelanggan */}
-          <div className="border border-black p-3 bg-neutral-50 text-[8.5pt]">
-            <p className="font-bold text-black uppercase mb-1 flex items-center justify-between border-b border-black pb-1">
-              <span>4.3 Basis Pasar Pelanggan (1.000.000+ Pembeli) &amp; Segmentasi Grade Konsumen</span>
-              <span className="text-[7.5pt] font-semibold text-emerald-900 bg-emerald-100 px-2 py-0.5 rounded border border-emerald-300">
-                Database Ritel Terintegrasi
-              </span>
-            </p>
-            <p className="text-gray-800 text-justify mb-2 leading-relaxed text-[8pt]">
-              Optik I See You didukung basis pasar riil lebih dari <b>1.000.000 (satu juta) transaksi pembeli dan rekam medis kacamata</b> di 4 kabupaten. Profil konsumen terbagi dalam segmentasi grade yang matang:
-            </p>
-            <div className="grid grid-cols-2 gap-2 text-[8pt]">
-              <div className="border border-neutral-300 bg-white p-2 rounded">
-                <p className="font-bold text-black text-[8.5pt] mb-0.5">Grade A &amp; B (Purchasing Power Tinggi)</p>
-                <p className="text-gray-700 leading-snug">
-                  Segmen eksekutif, dokter, tenaga medis, ASN/BUMN, pengusaha, dan keluarga mapan. Sangat potensial untuk sponsor perbankan, otomotif, klinik estetika, f&amp;b lifestyle, dan brand gaya hidup premium.
-                </p>
-              </div>
-              <div className="border border-neutral-300 bg-white p-2 rounded">
-                <p className="font-bold text-black text-[8.5pt] mb-0.5">Grade C+ &amp; Generasi Produktif / Gen-Z</p>
-                <p className="text-gray-700 leading-snug">
-                  Segmen mahasiswa (Unsoed, UMP, Telkom), kreator konten digital, dan komunitas muda aktif. Sangat responsif terhadap tren konten digital, teknologi, kafe kekinian, dan aktivasi booth interaktif.
-                </p>
-              </div>
-            </div>
-          </div>
         </section>
 
         {/* ==================================================== */}
@@ -1586,7 +1478,7 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
           <FormalKopSurat />
 
           <h3 className="text-[11.5pt] font-bold uppercase tracking-wider text-black border-b border-black pb-1 mb-2.5">
-            BAB V. RENCANA ANGGARAN BIAYA (RAB) KEGIATAN
+            BAB V. RENCANA ANGGARAN BIAYA (RAB) OPERASIONAL
           </h3>
 
           <div className="flex flex-wrap items-center justify-between text-[8.5pt] border border-black px-3 py-1.5 bg-neutral-50 mb-2.5">
@@ -1611,43 +1503,43 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
             Penyusunan anggaran dirancang secara transparan dan efisien guna memastikan terselenggaranya kegiatan berkualitas tinggi dengan alokasi operasional yang terukur:
           </p>
 
-          <p className="font-bold text-[9.5pt] mb-1.5 uppercase">5.1 Rincian Rencana Anggaran Pengeluaran (RAB Operasional)</p>
-          <table className="w-full border-collapse border border-black text-[8.5pt] mb-4">
+          <p className="font-bold text-[9.5pt] mb-2 uppercase">Rincian Rencana Anggaran Pengeluaran (RAB Operasional)</p>
+          <table className="w-full border-collapse border border-black text-[9pt]">
             <thead>
               <tr className="bg-neutral-100 border-b border-black">
-                <th className="w-8 py-1.5 px-2 text-center border-r border-black font-bold">No</th>
-                <th className="py-1.5 px-2.5 text-left border-r border-black font-bold">Komponen / Item Kebutuhan</th>
-                <th className="w-24 py-1.5 px-2 text-center border-r border-black font-bold">Volume / Qty</th>
-                <th className="w-32 py-1.5 px-2 text-right border-r border-black font-bold">Biaya Satuan</th>
-                <th className="w-32 py-1.5 px-2 text-right font-bold">Total Biaya</th>
+                <th className="w-8 py-2 px-2 text-center border-r border-black font-bold">No</th>
+                <th className="py-2 px-2.5 text-left border-r border-black font-bold">Komponen / Item Kebutuhan</th>
+                <th className="w-24 py-2 px-2 text-center border-r border-black font-bold">Volume / Qty</th>
+                <th className="w-32 py-2 px-2 text-right border-r border-black font-bold">Biaya Satuan</th>
+                <th className="w-32 py-2 px-2 text-right font-bold">Total Biaya</th>
               </tr>
             </thead>
             <tbody>
               {data.budgetExpenses.map((bItem, bIdx) => (
                 <tr key={bIdx} className="border-b border-black">
-                  <td className="py-1.5 px-2 text-center border-r border-black">{bIdx + 1}</td>
-                  <td className="py-1.5 px-2.5 border-r border-black font-medium">
+                  <td className="py-2 px-2 text-center border-r border-black">{bIdx + 1}</td>
+                  <td className="py-2 px-2.5 border-r border-black font-medium">
                     <EditSpan
                       value={bItem.item}
                       onChange={(v) => updateBudgetExpense(bIdx, { item: v })}
                       tag="span"
                     />
                   </td>
-                  <td className="py-1.5 px-2 text-center border-r border-black text-gray-800">
+                  <td className="py-2 px-2 text-center border-r border-black text-gray-800">
                     <EditSpan
                       value={bItem.qty}
                       onChange={(v) => updateBudgetExpense(bIdx, { qty: v })}
                       tag="span"
                     />
                   </td>
-                  <td className="py-1.5 px-2 text-right border-r border-black text-gray-800 tabular-nums">
+                  <td className="py-2 px-2 text-right border-r border-black text-gray-800 tabular-nums">
                     <EditSpan
                       value={bItem.unitCost}
                       onChange={(v) => updateBudgetExpense(bIdx, { unitCost: v })}
                       tag="span"
                     />
                   </td>
-                  <td className="py-1.5 px-2 text-right font-bold tabular-nums">
+                  <td className="py-2 px-2 text-right font-bold tabular-nums">
                     <EditSpan
                       value={bItem.totalCost}
                       onChange={(v) => updateBudgetExpense(bIdx, { totalCost: v })}
@@ -1657,73 +1549,15 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
                 </tr>
               ))}
               <tr className="bg-neutral-100 font-bold border-t-2 border-black">
-                <td colSpan={4} className="py-1.5 px-2.5 border-r border-black text-right uppercase">
+                <td colSpan={4} className="py-2 px-2.5 border-r border-black text-right uppercase">
                   TOTAL KEBUTUHAN ANGGARAN PENGELUARAN
                 </td>
-                <td className="py-1.5 px-2 text-right text-[9.5pt] text-black tabular-nums">
+                <td className="py-2 px-2 text-right text-[9.5pt] text-black tabular-nums">
                   Rp 9.600.000,-
                 </td>
               </tr>
             </tbody>
           </table>
-
-          <p className="font-bold text-[9.5pt] mb-1.5 uppercase">5.2 Rencana &amp; Target Sumber Pemasukan</p>
-          <table className="w-full border-collapse border border-black text-[8.5pt] mb-3">
-            <thead>
-              <tr className="bg-neutral-100 border-b border-black">
-                <th className="w-8 py-1.5 px-2 text-center border-r border-black font-bold">No</th>
-                <th className="w-48 py-1.5 px-2.5 text-left border-r border-black font-bold">Sumber Pemasukan</th>
-                <th className="py-1.5 px-2.5 text-left border-r border-black font-bold">Deskripsi / Skema</th>
-                <th className="w-44 py-1.5 px-2 text-right font-bold">Proyeksi Nominal</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.revenueProjections.map((rItem, rIdx) => (
-                <tr key={rIdx} className="border-b border-black">
-                  <td className="py-1.5 px-2 text-center border-r border-black">{rIdx + 1}</td>
-                  <td className="py-1.5 px-2.5 border-r border-black font-semibold">
-                    <EditSpan
-                      value={rItem.source}
-                      onChange={(v) => updateRevenueProjection(rIdx, { source: v })}
-                      tag="span"
-                    />
-                  </td>
-                  <td className="py-1.5 px-2.5 border-r border-black text-gray-800">
-                    <EditSpan
-                      value={rItem.description}
-                      onChange={(v) => updateRevenueProjection(rIdx, { description: v })}
-                      tag="span"
-                    />
-                  </td>
-                  <td className="py-1.5 px-2 text-right font-bold tabular-nums">
-                    <EditSpan
-                      value={rItem.projection}
-                      onChange={(v) => updateRevenueProjection(rIdx, { projection: v })}
-                      tag="span"
-                    />
-                  </td>
-                </tr>
-              ))}
-              <tr className="bg-neutral-100 font-bold border-t-2 border-black">
-                <td colSpan={3} className="py-1.5 px-2.5 border-r border-black text-right uppercase">
-                  ESTIMASI TOTAL PEMASUKAN &amp; DUKUNGAN MITRA
-                </td>
-                <td className="py-1.5 px-2 text-right text-[9pt] text-black tabular-nums">
-                  Rp 6.900.000 – Rp 9.600.000,-
-                </td>
-              </tr>
-            </tbody>
-          </table>
-
-          {/* Catatan Finansial Penjaminan */}
-          <div className="border border-black p-3 bg-neutral-50 text-[8.5pt]">
-            <p className="font-bold text-black uppercase mb-0.5">
-              5.3 Kebijakan Finansial &amp; Jaminan Kepastian Kegiatan
-            </p>
-            <p className="text-gray-800 text-justify leading-relaxed text-[8pt]">
-              Setiap selisih kebutuhan anggaran operasional dijamin dan disubsidi penuh oleh alokasi anggaran kemitraan Divisi Marketing Optik I See You. Hal ini memberikan kepastian 100% terselenggaranya kegiatan secara profesional tanpa risiko pembatalan, sehingga memberikan jaminan ROI dan ketercapaian deliverables promosi yang maksimal bagi seluruh mitra sponsor yang berpartisipasi.
-            </p>
-          </div>
         </section>
 
         {/* ==================================================== */}
