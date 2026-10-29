@@ -92,69 +92,69 @@ export interface ProposalData {
   packages: PackageTier[];
 }
 
-const STORAGE_KEY = "isy_proposal_sponsor_formal_v10";
-const LEGACY_STORAGE_KEY = "isy_proposal_sponsor_formal_v9";
+const STORAGE_KEY = "isy_proposal_sponsor_formal_v11";
+const LEGACY_STORAGE_KEY = "isy_proposal_sponsor_formal_v10";
 
 const DEFAULT_DATA: ProposalData = {
   docNo: "024/MKT-ISY/PROP-SPONSOR/X/2026",
   docAttachment: "1 (Satu) Berkas Proposal Kerjasama",
   docSubject:
-    "Permohonan Kerjasama Sponsorship & Kolaborasi Mitra 'Fun Workshop: Scale Your Brand by Optik I See You'",
+    "Permohonan Kerjasama Sponsorship & Kolaborasi Mitra 'Fun Workshop: Unlock Your Influence by Optik I See You'",
   letterCity: "Purwokerto",
   letterDate: "29 Oktober 2026",
   recipientTitle: "Pimpinan / Brand & Marketing Manager",
   recipientCompany: "[Nama Perusahaan / Brand Mitra]",
   recipientCity: "di Tempat",
   letterIntro:
-    "Sehubungan dengan rencana pelaksanaan program workshop komersial dan sinergi branding bertajuk 'Fun Workshop: Scale Your Brand — Buka Kelas Konten & Commercial Branding by Optik I See You', kami dari Divisi Marketing & Strategic Partnership Optik I See You bermaksud mengajukan penawaran kerjasama sponsorship serta sinergi kemitraan Business-to-Business (B2B) kepada instansi / brand yang Bapak/Ibu pimpin.",
+    "Sehubungan dengan rencana pelaksanaan program workshop kolaboratif bertajuk 'Fun Workshop: Unlock Your Influence — Buka Kelas Konten & Belajar Bareng Membangun Brand by Optik I See You', kami dari Divisi Marketing & Strategic Partnership Optik I See You bermaksud mengajukan penawaran kerjasama sponsorship serta sinergi kemitraan Business-to-Business (B2B) kepada instansi / brand yang Bapak/Ibu pimpin.",
   letterClosing:
     "Demikian surat penawaran kerjasama sponsorship ini kami sampaikan. Besar harapan kami agar terjalin kolaborasi B2B yang saling menguntungkan (win-win synergy) dan berdampak nyata bagi pertumbuhan kedua belah pihak. Atas perhatian dan kesempatan yang diberikan, kami ucapkan terima kasih.",
-  eventName: "FUN WORKSHOP: SCALE YOUR BRAND",
-  eventSubtitle: "Buka Kelas Konten & Commercial Branding: How Optik I See You Scales to 1.000.000+ Customers",
+  eventName: "FUN WORKSHOP: UNLOCK YOUR INFLUENCE",
+  eventSubtitle: "Buka Kelas Konten & Collaborative Workshop: Belajar Bareng Membangun Brand & Tumbuh Bersama",
   eventTheme:
-    "How to Branding Brand by ISY: Membongkar Rahasia Membranding Brand Ritel dari Nol hingga Menembus 1.000.000+ Pelanggan Lewat Formula Konten (Story, Feed, Reels) & Strategi Kolaborasi Bisnis di Era Digital",
+    "Belajar Bareng Membangun Brand: Sharing Perjalanan Nyata Optik I See You dalam Berkreasi Lewat Konten (Story, Feed, Reels) & Bertumbuh Bersama Menjangkau 1.000.000+ Pelanggan di Era Digital",
   eventOrganizer: "Divisi Marketing & Strategic Partnership, Optik I See You",
   eventDate: "[ ........................................................... ]",
   eventTime: "08.00 – 13.00 WIB",
   eventVenue: "Gedung Hetero Space Purwokerto",
   eventParticipants:
-    "50 – 80 Peserta Terpilih (Pelaku bisnis, brand owner, UMKM, pegiat media sosial, tim kreatif, dan masyarakat umum)",
+    "50 – 80 Peserta Terpilih (Pelaku usaha, brand owner, UMKM, pegiat media sosial, tim kreatif, dan masyarakat umum)",
   eventFormat:
-    "Workshop edukasi interaktif, bedah formula visual & konversi ritel, live demo produk brand sponsor (Platinum & Gold), 4 booth showcase (3 booth mitra & 1 booth interaktif ISY), serta B2B networking",
+    "Workshop edukasi interaktif, ruang belajar bareng & sharing session, live demo produk brand sponsor (Platinum & Gold), 4 booth showcase (3 booth mitra & 1 booth interaktif ISY), serta B2B networking santai",
   backgroundText1:
-    "Di tengah persaingan pasar yang semakin ketat dan pergeseran perilaku konsumen modern, kemampuan membangun citra merek (brand identity) dan daya pikat komersial yang kuat, otentik, serta relevan merupakan kunci utama bagi setiap pelaku bisnis, brand owner, maupun kalangan umum untuk dapat tumbuh dan bersaing secara berkelanjutan.",
+    "Di tengah perkembangan lanskap digital yang dinamis, bertumbuh bersama melalui kolaborasi dan pertukaran wawasan merupakan langkah terbaik bagi setiap pelaku usaha, brand, maupun komunitas kreatif untuk saling menguatkan daya tarik produk di mata publik.",
   backgroundText2:
-    "Optik I See You menginisiasi 'Fun Workshop: Scale Your Brand' sebagai wadah pembelajaran berbobot daging yang membongkar langsung resep nyata bagaimana Optik I See You merintis dan membranding brand ritel dari titik awal hingga bertransformasi menjadi jaringan ritel kacamata terkemuka dengan basis lebih dari 1.000.000 pelanggan aktif. Workshop ini dirancang aplikatif untuk brand, pelaku UMKM, dan kalangan umum agar mampu memproduksi konten visual (Story, Feed, Reels) yang tidak hanya menarik secara visual, tetapi terbukti menghasilkan omzet dan loyalitas pelanggan.",
+    "Optik I See You menginisiasi 'Fun Workshop: Unlock Your Influence' bukan dengan niat menggurui, melainkan sebagai ruang santai untuk belajar bareng dan saling berbagi (sharing session). Melalui workshop ini, kami ingin menceritakan secara jujur dan terbuka mengenai perjalanan, tantangan, serta formula kreasi konten (Story, Feed, Reels) yang kami jalani hingga mampu merangkul lebih dari 1.000.000 pelanggan ritel. Kami percaya, dengan belajar bersama, setiap brand dan peserta dapat saling menginspirasi dan melipatgandakan pengaruh (unlock influence) di ekosistem pasar masing-masing.",
   backgroundText3:
-    "Bagi mitra sponsor, kegiatan ini memberikan eksposur multi-dimensi: live demo produk dan presentasi panggung utama bagi sponsor Platinum & Gold, showcase booth produk (3 booth mitra komersial & 1 booth khusus interaktif Optik I See You untuk Cek Mata Gratis & Try-On), penayangan video di TV Showroom Purwokerto, penempatan media promosi di meja kasir 4 gerai ritel (Purwokerto, Purbalingga, Cilacap, Wonosobo), serta publikasi digital melalui kanal resmi @iseeyou.glasses (244.000+ followers).",
+    "Bagi mitra sponsor, ruang belajar bareng ini menghadirkan suasana interaksi yang hangat dan organik: live demo produk dan presentasi panggung utama bagi sponsor Platinum & Gold, showcase booth produk (3 booth mitra komersial & 1 booth khusus interaktif Optik I See You untuk Cek Mata Gratis & Try-On), penayangan video di TV Showroom Purwokerto, penempatan media promosi di meja kasir 4 gerai ritel (Purwokerto, Purbalingga, Cilacap, Wonosobo), serta publikasi digital melalui kanal resmi @iseeyou.glasses (244.000+ followers).",
   speakers: [
     {
       name: "Ilya / Ilyaken (@ilyaken)",
       role: "Creative & Brand Content Lead, Optik I See You",
-      topic: "How to Branding Brand by ISY (Story, Feed, Reels): Bedah Dapur Kreatif & Formula Visual Konten ISY",
+      topic: "Sharing Dapur Kreatif ISY: Belajar Bareng Eksplorasi Visual, Storytelling & Produksi Konten (Story, Feed, Reels)",
       highlight:
-        "Menceritakan pengalaman nyata sebagai crew ISY dalam membangun brand Optik I See You dari awal hingga sebesar sekarang: menyusun formula visual estetis ritel, rahasia storytelling komersial yang engage, dan mengubah interaksi media sosial menjadi konversi 1.000.000+ transaksi pelanggan.",
+        "Bukan untuk menggurui, melainkan berbagi cerita nyata dan pengalaman di balik layar crew ISY: proses kreatif menyusun visual estetis ritel, eksplorasi storytelling harian, hingga belajar cara berinteraksi hangat dengan lebih dari 1.000.000 pelanggan ritel.",
     },
     {
       name: "Bekti N",
       role: "Brand Growth & Content Strategist / Digital Creator",
-      topic: "Scale Your Brand in This Economy: Membangun Positioning Brand yang Kuat & Menarik Kolaborasi Komersial",
+      topic: "Unlock Your Influence: Belajar Bareng Membangun Daya Tarik Brand & Kolaborasi Saling Menguntungkan",
       highlight:
-        "Strategi merancang positioning merek bisnis yang kredibel, bernilai jual tinggi, taktik monetisasi audiens, serta formula kolaborasi antar-brand di tengah kompetisi pasar modern.",
+        "Sharing santai dan aplikatif mengenai kiat membangun identitas brand yang disukai publik, menjaga konsistensi di tengah tren digital, serta merajut kolaborasi yang saling menguntungkan antar-pelaku usaha.",
     },
     {
       name: "Syahrul",
       role: "Digital Marketer & Co-Speaker",
-      topic: "Retail Branding & Content Ecosystem: Taktik Distribusi Konten Multi-Platform & Ekosistem Bisnis",
+      topic: "Sinergi Konten & Komunitas: Belajar Memaksimalkan Distribusi Multi-Platform secara Organik",
       highlight:
-        "Optimalisasi algoritma video pendek (Reels, TikTok) untuk brand ritel, ekosistem distribusi konten terpadu, dan strategi sinergi kemitraan bisnis modern.",
+        "Eksplorasi bersama seputar dinamika video pendek (Reels, TikTok), tips distribusi konten yang natural dan engage, serta kekuatan ekosistem komunitas lokal.",
     },
     {
       name: "Nuha & Yos",
       role: "Master of Ceremony (MC & Interactive Lead)",
-      topic: "Moderator Workshop, Live Product Demo & Games",
+      topic: "Moderator Belajar Bareng, Live Product Demo & Games",
       highlight:
-        "Memandu interaktivitas workshop, memfasilitasi live demo produk panggung bagi sponsor utama & madya, serta mengawal sesi interactive games & doorprize.",
+        "Memfasilitasi ruang diskusi yang hangat, santai, dan inklusif, memandu sesi live demo produk bagi sponsor utama & madya, serta mengawal sesi interactive games & doorprize.",
     },
   ],
   rundown: [
@@ -174,13 +174,13 @@ const DEFAULT_DATA: ProposalData = {
       time: "09.00 – 09.10 WIB",
       activity: "Pembukaan Acara, Sambutan & Ice Breaking",
       picOrSpeaker: "MC: Nuha & Yos",
-      notes: "Opening speech, perkenalan jajaran narasumber & pemanasan mini games interaktif",
+      notes: "Opening santai, sambutan kekeluargaan perwakilan ISY, perkenalan narasumber & mini games",
     },
     {
       time: "09.10 – 10.30 WIB",
-      activity: "Acara Inti 1: 'How to Branding Brand by ISY' + Q&A",
-      picOrSpeaker: "Narasumber: Ilya (@ilyaken)",
-      notes: "Membongkar resep dapur ISY membranding brand ritel hingga 1.000.000+ pelanggan, formula Story, Feed, Reels",
+      activity: "Acara Inti 1: Sharing Session 'How to Branding Brand by ISY' + Diskusi Interaktif",
+      picOrSpeaker: "Sharing Bersama: Ilya (@ilyaken)",
+      notes: "Belajar bareng formula kreasi visual ISY (Story, Feed, Reels), sharing pengalaman crew ISY, tanya jawab santai",
     },
     {
       time: "10.30 – 11.00 WIB",
@@ -190,15 +190,15 @@ const DEFAULT_DATA: ProposalData = {
     },
     {
       time: "11.00 – 12.30 WIB",
-      activity: "Acara Inti 2: 'Scale Your Brand: Strategi Membesarkan Brand Bisnis' + Q&A",
-      picOrSpeaker: "Narasumber: Bekti N & Syahrul",
-      notes: "Strategi brand positioning yang kuat, monetisasi konten, dan ekosistem kolaborasi bisnis modern",
+      activity: "Acara Inti 2: 'Unlock Your Influence: Belajar Bareng Membangun Brand' + Q&A",
+      picOrSpeaker: "Sharing Bersama: Bekti N & Syahrul",
+      notes: "Diskusi interaktif seputar membangun daya tarik brand, monetisasi konten, dan kolaborasi bisnis",
     },
     {
       time: "12.30 – 13.00 WIB",
       activity: "Interactive Games, Doorprize Sponsor & Foto Bersama",
       picOrSpeaker: "MC: Nuha & Yos",
-      notes: "Penyerahan plakat apresiasi, pembagian hadiah/voucher sponsor & dokumentasi",
+      notes: "Penyerahan plakat apresiasi, pembagian hadiah/voucher sponsor & dokumentasi kebersamaan",
     },
   ],
   budgetExpenses: [
@@ -1182,10 +1182,10 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
               </p>
               <ol className="list-decimal pl-5 space-y-0.5">
                 <li>
-                  Memberikan edukasi praktis mengenai strategi branding bisnis dan produksi konten visual komersial (Story, Feed, Reels) yang terbukti menaikkan skala penjualan brand ritel di pasar modern.
+                  Menghadirkan ruang belajar bareng yang aplikatif dan inklusif mengenai strategi kreasi konten visual (Story, Feed, Reels) dan penguatan daya tarik brand ritel di era digital.
                 </li>
                 <li>
-                  Membuka wadah interaksi riil antara brand mitra sponsor dengan pelaku usaha, UMKM, dan kalangan umum melalui sesi presentasi panggung sponsor (khusus Platinum &amp; Gold), live trial, serta 4 booth showcase terpadu (3 booth mitra &amp; 1 booth interaktif ISY).
+                  Membuka ruang temu dan interaksi hangat antara brand mitra sponsor dengan pelaku usaha, UMKM, dan kalangan umum melalui sesi presentasi panggung sponsor (Platinum &amp; Gold), live trial, serta 4 booth showcase terpadu (3 booth mitra &amp; 1 booth interaktif ISY).
                 </li>
                 <li>
                   Memberikan sarana eksposur multi-kanal berkelanjutan bagi mitra di jaringan toko ritel Optik I See You (Purwokerto, Purbalingga, Cilacap, Wonosobo) dan media sosial.
