@@ -92,8 +92,8 @@ export interface ProposalData {
   packages: PackageTier[];
 }
 
-const STORAGE_KEY = "isy_proposal_sponsor_formal_v7";
-const LEGACY_STORAGE_KEY = "isy_proposal_sponsor_formal_v6";
+const STORAGE_KEY = "isy_proposal_sponsor_formal_v8";
+const LEGACY_STORAGE_KEY = "isy_proposal_sponsor_formal_v7";
 
 const DEFAULT_DATA: ProposalData = {
   docNo: "024/MKT-ISY/PROP-SPONSOR/X/2026",
@@ -120,13 +120,13 @@ const DEFAULT_DATA: ProposalData = {
   eventParticipants:
     "50 – 80 Peserta Terpilih (Kreator konten, pegiat media sosial, mahasiswa, UMKM, dan perwakilan tim kreatif brand)",
   eventFormat:
-    "Workshop edukasi interaktif, bedah formula visual ritel, live demo produk brand sponsor, showcase booth & B2B networking",
+    "Workshop edukasi interaktif, bedah formula visual ritel, live demo produk brand sponsor (Platinum & Gold), showcase booth & B2B networking",
   backgroundText1:
     "Di tengah dinamika lanskap digital dan kondisi ekonomi saat ini, kemampuan membangun personal branding dan citra merek (brand identity) yang relevan, otentik, dan berdampak merupakan kunci utama bagi kreator maupun pelaku bisnis untuk tetap tumbuh dan bersaing.",
   backgroundText2:
     "Optik I See You menginisiasi 'Fun Workshop: Unlock Your Influence' sebagai ruang kolaboratif yang mempertemukan talenta kreator lokal dengan brand-brand unggulan di wilayah Banyumas Raya dan sekitarnya. Acara ini bukan sekadar seminar satu arah, melainkan kelas praktik langsung pembuatan konten (Story, Feed, Reels) yang membedah bagaimana Optik I See You membangun citra brand hingga memiliki lebih dari 1.000.000 basis pelanggan ritel.",
   backgroundText3:
-    "Bagi mitra sponsor, kegiatan ini memberikan eksposur multi-dimensi: live demo produk dan interaksi langsung dengan audiens potensial di panggung workshop, aktivasi sampling di lokasi, penayangan materi video/iklan di layar TV Showroom Purwokerto selama periode kemitraan, penempatan media promosi di meja kasir 4 gerai ritel (Purwokerto, Purbalingga, Cilacap, Wonosobo), serta publikasi digital melalui kanal resmi @iseeyou.glasses (244.000+ followers).",
+    "Bagi mitra sponsor, kegiatan ini memberikan eksposur multi-dimensi: live demo produk dan presentasi panggung utama bagi sponsor Platinum & Gold, showcase booth produk, penayangan materi video/iklan di layar TV Showroom Purwokerto selama periode kemitraan, penempatan media promosi di meja kasir 4 gerai ritel (Purwokerto, Purbalingga, Cilacap, Wonosobo), serta publikasi digital melalui kanal resmi @iseeyou.glasses (244.000+ followers).",
   speakers: [
     {
       name: "Ilya / Ilyaken (@ilyaken)",
@@ -184,9 +184,9 @@ const DEFAULT_DATA: ProposalData = {
     },
     {
       time: "10.30 – 11.00 WIB",
-      activity: "Sesi Eksklusif: Live Demo Produk Brand Sponsor & Sampling",
-      picOrSpeaker: "MC + Perwakilan Brand Sponsor",
-      notes: "Live demo produk sponsor di panggung, sesi unboxing, try-on & sampling ke peserta",
+      activity: "Sesi Eksklusif: Live Demo Produk Brand Sponsor (Platinum & Gold)",
+      picOrSpeaker: "MC + Perwakilan Brand Sponsor (Platinum & Gold)",
+      notes: "Sesi presentasi panggung & demo live produk eksklusif bagi sponsor utama & madya, sampling ke peserta",
     },
     {
       time: "11.00 – 12.30 WIB",
@@ -318,11 +318,10 @@ const DEFAULT_DATA: ProposalData = {
     {
       id: "bronze",
       name: "PAKET BRONZE (SPONSOR PENDAMPING)",
-      tagline: "Eksposur Acara, Sesi Demo Produk & Display Gerai",
+      tagline: "Eksposur Acara, Display Gerai Ritel & Media Sosial",
       price: "Rp 1.500.000,-",
       benefits: [
-        "Sesi Demo Produk dari brand sponsor (5–7 menit) pada slot khusus demo produk panggung & live trial peserta.",
-        "Hak membuka mini showcase / stand display sample produk di area interactive showcase venue.",
+        "Hak membuka stand mini display / table showcase sample produk di area interactive showcase venue.",
         "Display poster & brosur materi promosi di meja kasir 4 lokasi cabang Optik I See You.",
         "Pencantuman logo ukuran STANDAR pada backdrop panggung utama dan e-flyer resmi kegiatan.",
         "Hak menyertakan flyer / voucher promosi resmi ke dalam goodie bag peserta workshop.",
@@ -331,15 +330,13 @@ const DEFAULT_DATA: ProposalData = {
     },
     {
       id: "in_kind",
-      name: "PAKET IN-KIND / IN-KEEP & CUSTOM COLLABORATION",
-      tagline: "Sinergi Fleksibel, Barter Fasilitas, Demo Produk & Custom Kemitraan",
-      price: "Barter Ekuivalen / Custom Offer",
+      name: "PAKET IN-KIND / IN-KEEP (BARTER DUKUNGAN)",
+      tagline: "Sinergi Barter Produk / Konsumsi & Fasilitas Kegiatan",
+      price: "Barter Ekuivalen / Sinergi Mitra",
       benefits: [
-        "Sesi Demo Produk dari brand sponsor pada slot khusus demo produk (10.30 – 11.00 WIB) & tester showcase di lokasi.",
-        "Opsi Penawaran Custom Mandiri: Mitra leluasa merumuskan skema kolaborasi sesuai kapabilitas brand (seperti penyediaan konsumsi, merchandise, tote bag, goodie bag kit, make-up & hair styling, atau fasilitas venue).",
-        "Skema Tukar Voucher (Cross-Voucher): Penyertaan voucher diskon / treatment mitra ke dalam Official Goodie Bag peserta & penukaran voucher belanja kacamata Optik I See You untuk pelanggan setia mitra.",
-        "Skema Tukar Display Meja Kasir (Cross-Brochure): Penempatan brosur, flyer, atau tent card promosi mitra di area kasir 4 lokasi cabang ritel Optik I See You.",
-        "Display produk tester / sampling di area venue event serta publikasi apresiasi kemitraan di Instagram Story @iseeyou.glasses (244.000+ followers).",
+        "Skema Barter Dukungan: Penyediaan produk konsumsi, merchandise, tote bag, atau fasilitas pendukung kegiatan yang setara dengan nilai promosi.",
+        "Penyertaan flyer / voucher diskon mitra ke dalam Official Goodie Bag peserta & display materi promosi di meja kasir gerai Optik I See You.",
+        "Pencantuman logo mitra pada backdrop kegiatan & publikasi apresiasi kemitraan di Instagram Story @iseeyou.glasses.",
       ],
     },
   ],
@@ -1061,7 +1058,7 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
               Optik I See You merupakan jaringan ritel kacamata terkemuka yang mengoperasikan 4 lokasi cabang di Purwokerto, Purbalingga, Cilacap, dan Wonosobo. Kami memiliki basis pasar terdata lebih dari <b>1.000.000 (satu juta) pembeli dan pelanggan loyal</b> dengan segmentasi daya beli matang (profesional muda, ASN, pengusaha, keluarga modern, serta komunitas mahasiswa produktif), serta diperkuat jejaring media sosial terintegrasi dengan lebih dari <b>{fmt(totalAll)} pengikut</b>.
             </p>
             <p>
-              Melalui program &quot;{data.eventName}&quot;, pihak mitra sponsor akan memperoleh hak eksposur menyeluruh: slot presentasi &amp; demo produk di hadapan puluhan kreator aktif, penayangan video promosi di layar TV Showroom Purwokerto, display media promosi di meja kasir 4 gerai ritel, hak pembagian produk sampling / voucher ke dalam goodie bag peserta, serta publikasi promosi digital di jejaring media sosial kami.
+              Melalui program &quot;{data.eventName}&quot;, pihak mitra sponsor akan memperoleh hak eksposur menyeluruh: slot presentasi &amp; demo produk panggung bagi sponsor utama (Platinum &amp; Gold), penayangan video promosi di layar TV Showroom Purwokerto, display media promosi di meja kasir 4 gerai ritel, hak pembagian produk sampling / voucher ke dalam goodie bag peserta, serta publikasi promosi digital di jejaring media sosial kami.
             </p>
             <p>
               Bersama surat ini, kami lampirkan rincian kegiatan, susunan rundown, profil narasumber, rencana anggaran biaya (RAB), pilihan paket sponsorship, serta lembar kesepakatan kerjasama untuk menjadi pertimbangan Bapak/Ibu.
@@ -1168,7 +1165,7 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
                   Memberikan edukasi praktis mengenai personal branding dan strategi produksi konten visual komersial (Story, Feed, Reels) yang mampu menaikkan nilai tawar kreator maupun brand.
                 </li>
                 <li>
-                  Membuka wadah interaksi riil antara brand mitra sponsor dengan audiens Gen-Z, kreator konten, dan UMKM melalui demo produk langsung, live trial, dan booth showcase.
+                  Membuka wadah interaksi riil antara brand mitra sponsor dengan audiens Gen-Z, kreator konten, dan UMKM melalui demo produk langsung panggung (khusus sponsor utama Platinum &amp; Gold), live trial, dan booth showcase.
                 </li>
                 <li>
                   Memberikan sarana eksposur multi-kanal berkelanjutan bagi mitra di jaringan toko ritel Optik I See You (Purwokerto, Purbalingga, Cilacap, Wonosobo) dan media sosial.
@@ -1427,7 +1424,7 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
               <div className="border border-neutral-300 bg-white p-2 rounded">
                 <p className="font-bold text-black mb-0.5">07.45 – 08.00 WIB</p>
                 <p className="text-gray-700 leading-snug">
-                  <b>Technical Briefing MC:</b> Koordinasi MC (Nuha &amp; Yos) bersama PIC brand untuk persiapan alur sesi Live Demo Produk panggung (10.30 WIB).
+                  <b>Technical Briefing MC:</b> Koordinasi MC (Nuha &amp; Yos) bersama PIC brand sponsor Platinum &amp; Gold untuk alur presentasi &amp; Live Demo Produk panggung (10.30 WIB).
                 </p>
               </div>
               <div className="border border-neutral-300 bg-white p-2 rounded">
@@ -1791,7 +1788,7 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
           </div>
 
           <p className="text-[8pt] text-gray-600 italic mt-3">
-            * Khusus Kategori 3 (Bronze) dan Kategori 4 (In-Kind / Custom), seluruh mitra mendapatkan hak istimewa <b>Sesi Live Demo Produk</b> dan trial langsung oleh audiens.
+            * Sesi presentasi &amp; <b>Live Demo Produk</b> di panggung utama secara eksklusif hanya diberikan bagi 2 paket teratas: <b>Paket Platinum (15 Menit)</b> dan <b>Paket Gold (10 Menit)</b>.
           </p>
         </section>
 
@@ -1819,7 +1816,7 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
                   Mitra menyerahkan materi publikasi (file logo resolusi tinggi, materi iklan video MP4 1080p, dan flyer cetak) paling lambat <b>H-5</b> sebelum tanggal kegiatan.
                 </li>
                 <li>
-                  Penyelenggara menyampaikan laporan bukti tayang (foto &amp; video dokumentasi kegiatan, live demo produk panggung, serta display gerai ritel) maksimal H+7 setelah acara berakhir.
+                  Penyelenggara menyampaikan laporan bukti tayang (foto &amp; video dokumentasi kegiatan, dokumentasi panggung / booth, serta display gerai ritel) maksimal H+7 setelah acara berakhir.
                 </li>
               </ol>
             </div>
@@ -1997,11 +1994,11 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
                     </div>
                     <div className="flex items-center gap-2">
                       <span className="w-3.5 h-3.5 border border-black inline-block" />
-                      <span>Paket Bronze (Rp 1.500.000,-) — Termasuk Sesi Live Demo Produk</span>
+                      <span>Paket Bronze (Rp 1.500.000,-)</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <span className="w-3.5 h-3.5 border border-black inline-block" />
-                      <span>Paket In-Kind / In-Keep &amp; Custom Collaboration (Barter Produk / Fasilitas)</span>
+                      <span>Paket In-Kind / In-Keep (Barter Produk / Konsumsi / Fasilitas)</span>
                     </div>
                   </td>
                 </tr>
