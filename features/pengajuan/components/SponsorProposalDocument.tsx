@@ -92,8 +92,8 @@ export interface ProposalData {
   packages: PackageTier[];
 }
 
-const STORAGE_KEY = "isy_proposal_sponsor_formal_v9";
-const LEGACY_STORAGE_KEY = "isy_proposal_sponsor_formal_v8";
+const STORAGE_KEY = "isy_proposal_sponsor_formal_v10";
+const LEGACY_STORAGE_KEY = "isy_proposal_sponsor_formal_v9";
 
 const DEFAULT_DATA: ProposalData = {
   docNo: "024/MKT-ISY/PROP-SPONSOR/X/2026",
@@ -292,9 +292,9 @@ const DEFAULT_DATA: ProposalData = {
   picEmail: "",
   headName: "Raja Satria",
   headRole: "Head of Marketing & Strategic Communication",
-  bankName: "Bank Central Asia (BCA) KCU Purwokerto",
-  bankAccountNo: "046-189-2231",
-  bankAccountName: "Optik I See You",
+  bankName: "Bank Central Asia (BCA)",
+  bankAccountNo: "0462207903",
+  bankAccountName: "ERLINA SETIANI",
   packages: [
     {
       id: "platinum",
