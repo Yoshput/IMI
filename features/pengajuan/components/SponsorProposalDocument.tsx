@@ -92,69 +92,69 @@ export interface ProposalData {
   packages: PackageTier[];
 }
 
-const STORAGE_KEY = "isy_proposal_sponsor_formal_v8";
-const LEGACY_STORAGE_KEY = "isy_proposal_sponsor_formal_v7";
+const STORAGE_KEY = "isy_proposal_sponsor_formal_v9";
+const LEGACY_STORAGE_KEY = "isy_proposal_sponsor_formal_v8";
 
 const DEFAULT_DATA: ProposalData = {
   docNo: "024/MKT-ISY/PROP-SPONSOR/X/2026",
   docAttachment: "1 (Satu) Berkas Proposal Kerjasama",
   docSubject:
-    "Permohonan Kerjasama Sponsorship & Kolaborasi Mitra 'Fun Workshop: Unlock Your Influence'",
+    "Permohonan Kerjasama Sponsorship & Kolaborasi Mitra 'Fun Workshop: Scale Your Brand by Optik I See You'",
   letterCity: "Purwokerto",
-  letterDate: "27 Oktober 2026",
+  letterDate: "29 Oktober 2026",
   recipientTitle: "Pimpinan / Brand & Marketing Manager",
   recipientCompany: "[Nama Perusahaan / Brand Mitra]",
   recipientCity: "di Tempat",
   letterIntro:
-    "Sehubungan dengan rencana pelaksanaan program workshop kreatif dan sinergi branding bertajuk 'Fun Workshop: Unlock Your Influence — Buka Kelas Konten & Digital Brand Collaboration', kami dari Divisi Marketing & Strategic Partnership Optik I See You bermaksud mengajukan penawaran kerjasama sponsorship serta sinergi kemitraan Business-to-Business (B2B) kepada instansi / brand yang Bapak/Ibu pimpin.",
+    "Sehubungan dengan rencana pelaksanaan program workshop komersial dan sinergi branding bertajuk 'Fun Workshop: Scale Your Brand — Buka Kelas Konten & Commercial Branding by Optik I See You', kami dari Divisi Marketing & Strategic Partnership Optik I See You bermaksud mengajukan penawaran kerjasama sponsorship serta sinergi kemitraan Business-to-Business (B2B) kepada instansi / brand yang Bapak/Ibu pimpin.",
   letterClosing:
     "Demikian surat penawaran kerjasama sponsorship ini kami sampaikan. Besar harapan kami agar terjalin kolaborasi B2B yang saling menguntungkan (win-win synergy) dan berdampak nyata bagi pertumbuhan kedua belah pihak. Atas perhatian dan kesempatan yang diberikan, kami ucapkan terima kasih.",
-  eventName: "FUN WORKSHOP: UNLOCK YOUR INFLUENCE",
-  eventSubtitle: "Buka Kelas Konten & Digital Brand Collaboration",
+  eventName: "FUN WORKSHOP: SCALE YOUR BRAND",
+  eventSubtitle: "Buka Kelas Konten & Commercial Branding: How Optik I See You Scales to 1.000.000+ Customers",
   eventTheme:
-    "Personal Branding in This Economy: How to Branding Brand by ISY (Story, Feed, Reels) & Personal Branding di Era Digital",
+    "How to Branding Brand by ISY: Membongkar Rahasia Membranding Brand Ritel dari Nol hingga Menembus 1.000.000+ Pelanggan Lewat Formula Konten (Story, Feed, Reels) & Strategi Kolaborasi Bisnis di Era Digital",
   eventOrganizer: "Divisi Marketing & Strategic Partnership, Optik I See You",
   eventDate: "[ ........................................................... ]",
   eventTime: "08.00 – 13.00 WIB",
-  eventVenue: "Gedung FISIP UNSOED / Balai Soetdja / Gedung Hetero Space Purwokerto",
+  eventVenue: "Gedung Hetero Space Purwokerto",
   eventParticipants:
-    "50 – 80 Peserta Terpilih (Kreator konten, pegiat media sosial, mahasiswa, UMKM, dan perwakilan tim kreatif brand)",
+    "50 – 80 Peserta Terpilih (Pelaku bisnis, brand owner, UMKM, pegiat media sosial, tim kreatif, dan masyarakat umum)",
   eventFormat:
-    "Workshop edukasi interaktif, bedah formula visual ritel, live demo produk brand sponsor (Platinum & Gold), showcase booth & B2B networking",
+    "Workshop edukasi interaktif, bedah formula visual & konversi ritel, live demo produk brand sponsor (Platinum & Gold), 4 booth showcase (3 booth mitra & 1 booth interaktif ISY), serta B2B networking",
   backgroundText1:
-    "Di tengah dinamika lanskap digital dan kondisi ekonomi saat ini, kemampuan membangun personal branding dan citra merek (brand identity) yang relevan, otentik, dan berdampak merupakan kunci utama bagi kreator maupun pelaku bisnis untuk tetap tumbuh dan bersaing.",
+    "Di tengah persaingan pasar yang semakin ketat dan pergeseran perilaku konsumen modern, kemampuan membangun citra merek (brand identity) dan daya pikat komersial yang kuat, otentik, serta relevan merupakan kunci utama bagi setiap pelaku bisnis, brand owner, maupun kalangan umum untuk dapat tumbuh dan bersaing secara berkelanjutan.",
   backgroundText2:
-    "Optik I See You menginisiasi 'Fun Workshop: Unlock Your Influence' sebagai ruang kolaboratif yang mempertemukan talenta kreator lokal dengan brand-brand unggulan di wilayah Banyumas Raya dan sekitarnya. Acara ini bukan sekadar seminar satu arah, melainkan kelas praktik langsung pembuatan konten (Story, Feed, Reels) yang membedah bagaimana Optik I See You membangun citra brand hingga memiliki lebih dari 1.000.000 basis pelanggan ritel.",
+    "Optik I See You menginisiasi 'Fun Workshop: Scale Your Brand' sebagai wadah pembelajaran berbobot daging yang membongkar langsung resep nyata bagaimana Optik I See You merintis dan membranding brand ritel dari titik awal hingga bertransformasi menjadi jaringan ritel kacamata terkemuka dengan basis lebih dari 1.000.000 pelanggan aktif. Workshop ini dirancang aplikatif untuk brand, pelaku UMKM, dan kalangan umum agar mampu memproduksi konten visual (Story, Feed, Reels) yang tidak hanya menarik secara visual, tetapi terbukti menghasilkan omzet dan loyalitas pelanggan.",
   backgroundText3:
-    "Bagi mitra sponsor, kegiatan ini memberikan eksposur multi-dimensi: live demo produk dan presentasi panggung utama bagi sponsor Platinum & Gold, showcase booth produk, penayangan materi video/iklan di layar TV Showroom Purwokerto selama periode kemitraan, penempatan media promosi di meja kasir 4 gerai ritel (Purwokerto, Purbalingga, Cilacap, Wonosobo), serta publikasi digital melalui kanal resmi @iseeyou.glasses (244.000+ followers).",
+    "Bagi mitra sponsor, kegiatan ini memberikan eksposur multi-dimensi: live demo produk dan presentasi panggung utama bagi sponsor Platinum & Gold, showcase booth produk (3 booth mitra komersial & 1 booth khusus interaktif Optik I See You untuk Cek Mata Gratis & Try-On), penayangan video di TV Showroom Purwokerto, penempatan media promosi di meja kasir 4 gerai ritel (Purwokerto, Purbalingga, Cilacap, Wonosobo), serta publikasi digital melalui kanal resmi @iseeyou.glasses (244.000+ followers).",
   speakers: [
     {
       name: "Ilya / Ilyaken (@ilyaken)",
       role: "Creative & Brand Content Lead, Optik I See You",
-      topic: "How to Branding Brand by ISY (Story, Feed, Reels)",
+      topic: "How to Branding Brand by ISY (Story, Feed, Reels): Bedah Dapur Kreatif & Formula Visual Konten ISY",
       highlight:
-        "Menceritakan pengalaman nyata sebagai crew ISY dalam membranding Optik I See You: menyusun formula visual estetis ritel, rahasia storytelling komersial yang engage, hingga mengonversi interaksi konten media sosial menjadi 1.000.000+ transaksi pelanggan.",
+        "Menceritakan pengalaman nyata sebagai crew ISY dalam membangun brand Optik I See You dari awal hingga sebesar sekarang: menyusun formula visual estetis ritel, rahasia storytelling komersial yang engage, dan mengubah interaksi media sosial menjadi konversi 1.000.000+ transaksi pelanggan.",
     },
     {
       name: "Bekti N",
-      role: "Digital Content Creator & Influencer Strategist",
-      topic: "Personal Branding in This Economy: Unlock Your Influence",
+      role: "Brand Growth & Content Strategist / Digital Creator",
+      topic: "Scale Your Brand in This Economy: Membangun Positioning Brand yang Kuat & Menarik Kolaborasi Komersial",
       highlight:
-        "Strategi membangun persona digital yang kredibel dan bernilai komersial tinggi, taktik monetisasi audiens di tengah pergeseran ekonomi digital, serta kiat menarik kolaborasi brand papan atas.",
+        "Strategi merancang positioning merek bisnis yang kredibel, bernilai jual tinggi, taktik monetisasi audiens, serta formula kolaborasi antar-brand di tengah kompetisi pasar modern.",
     },
     {
       name: "Syahrul",
       role: "Digital Marketer & Co-Speaker",
-      topic: "Personal Branding di Era Digital & Content Ecosystem",
+      topic: "Retail Branding & Content Ecosystem: Taktik Distribusi Konten Multi-Platform & Ekosistem Bisnis",
       highlight:
-        "Optimalisasi algoritma multi-platform (Instagram, TikTok), ekosistem distribusi konten video vertikal, dan sinergi mutualisme antara kreator independen dan industri ritel modern.",
+        "Optimalisasi algoritma video pendek (Reels, TikTok) untuk brand ritel, ekosistem distribusi konten terpadu, dan strategi sinergi kemitraan bisnis modern.",
     },
     {
       name: "Nuha & Yos",
       role: "Master of Ceremony (MC & Interactive Lead)",
       topic: "Moderator Workshop, Live Product Demo & Games",
       highlight:
-        "Memandu interaktivitas workshop, memfasilitasi live try-on & unboxing produk mitra sponsor, serta mengawal penyerahan doorprize kolaboratif.",
+        "Memandu interaktivitas workshop, memfasilitasi live demo produk panggung bagi sponsor utama & madya, serta mengawal sesi interactive games & doorprize.",
     },
   ],
   rundown: [
@@ -166,9 +166,9 @@ const DEFAULT_DATA: ProposalData = {
     },
     {
       time: "08.30 – 09.00 WIB",
-      activity: "Booth Exploration & Interactive Showcase",
-      picOrSpeaker: "Tim Panitia & Mitra Sponsor",
-      notes: "Peserta bebas berinteraksi di stand sponsor, mencoba produk, & networking santai",
+      activity: "Booth Exploration & Interactive Brand Showcase",
+      picOrSpeaker: "Tim Panitia, Mitra Sponsor & Tim Optik I See You",
+      notes: "Peserta mengeksplorasi 3 Stand Produk Mitra Sponsor dan 1 Stand Khusus Optik I See You (Free Eye Exam / Cek Mata Gratis & Try-On Kacamata)",
     },
     {
       time: "09.00 – 09.10 WIB",
@@ -180,7 +180,7 @@ const DEFAULT_DATA: ProposalData = {
       time: "09.10 – 10.30 WIB",
       activity: "Acara Inti 1: 'How to Branding Brand by ISY' + Q&A",
       picOrSpeaker: "Narasumber: Ilya (@ilyaken)",
-      notes: "Bedah formula konten ritel ISY (Story, Feed, Reels), tips visual & sharing crew ISY",
+      notes: "Membongkar resep dapur ISY membranding brand ritel hingga 1.000.000+ pelanggan, formula Story, Feed, Reels",
     },
     {
       time: "10.30 – 11.00 WIB",
@@ -190,9 +190,9 @@ const DEFAULT_DATA: ProposalData = {
     },
     {
       time: "11.00 – 12.30 WIB",
-      activity: "Acara Inti 2: 'Unlock Your Influence: Personal Branding' + Q&A",
+      activity: "Acara Inti 2: 'Scale Your Brand: Strategi Membesarkan Brand Bisnis' + Q&A",
       picOrSpeaker: "Narasumber: Bekti N & Syahrul",
-      notes: "Membangun personal branding di era digital, monetisasi pengaruh & kolaborasi brand",
+      notes: "Strategi brand positioning yang kuat, monetisasi konten, dan ekosistem kolaborasi bisnis modern",
     },
     {
       time: "12.30 – 13.00 WIB",
@@ -203,7 +203,7 @@ const DEFAULT_DATA: ProposalData = {
   ],
   budgetExpenses: [
     {
-      item: "Sewa Tempat / Ruangan Acara",
+      item: "Sewa Tempat / Ruangan Acara (Gedung Hetero Space Purwokerto)",
       qty: "1 Paket",
       unitCost: "Rp 2.000.000,-",
       totalCost: "Rp 2.000.000,-",
@@ -233,10 +233,22 @@ const DEFAULT_DATA: ProposalData = {
       totalCost: "Rp 100.000,-",
     },
     {
+      item: "Dekorasi Acara & Tata Suasana Venue",
+      qty: "1 Paket",
+      unitCost: "Rp 500.000,-",
+      totalCost: "Rp 500.000,-",
+    },
+    {
       item: "Hadiah Games, Kuis Interaktif & Doorprize",
       qty: "1 Paket",
       unitCost: "Rp 600.000,-",
       totalCost: "Rp 600.000,-",
+    },
+    {
+      item: "Honorarium / Ratecard Pembicara ISY (Ilyaken)",
+      qty: "1 Orang",
+      unitCost: "Rp 1.000.000,-",
+      totalCost: "Rp 1.000.000,-",
     },
     {
       item: "Honorarium Bintang Tamu (Bekti N)",
@@ -264,14 +276,14 @@ const DEFAULT_DATA: ProposalData = {
       projection: "Rp 1.500.000 – Rp 2.400.000",
     },
     {
-      source: "Biaya Registrasi Booth Sponsor On-Site",
-      description: "4 Stand / Booth showcase komersial di venue acara @ Rp 300.000",
-      projection: "Rp 1.200.000,-",
+      source: "Biaya Registrasi Booth Komersial Mitra Sponsor (3 Booth)",
+      description: "3 Stand komersial untuk brand luar / mitra @ Rp 300.000 – Rp 400.000 (1 Stand ke-4 khusus Internal ISY: Free Eye Exam & Try-On)",
+      projection: "Rp 900.000 – Rp 1.200.000,-",
     },
     {
       source: "Target Sponsorship & Barter Sinergi Mitra",
       description: "Paket Platinum, Gold, Bronze, serta In-Kind / In-Keep barter ekuivalen",
-      projection: "Rp 3.900.000 – Rp 4.500.000",
+      projection: "Rp 4.500.000 – Rp 6.000.000,-",
     },
   ],
   picName: "Yossika Putra",
@@ -1073,12 +1085,16 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
           </div>
 
           {/* Tanda Tangan Formal Surat Pengantar */}
-          <div className="mt-7 pt-3 flex justify-between items-end text-[10pt]">
+          <div className="mt-6 pt-3 flex justify-between items-end text-[10pt]">
             <div>
               <p>Hormat kami,</p>
               <p className="font-semibold text-gray-800">Divisi Kemitraan &amp; Sponsorship</p>
-              <div className="h-16 flex items-end">
-                {/* Space for signature */}
+              <div className="h-16 flex items-center py-0.5">
+                <img
+                  src="/signatures/ttd-yossika.png"
+                  alt="Tanda Tangan Yossika Putra"
+                  className="h-14 w-auto object-contain"
+                />
               </div>
               <p className="font-bold underline text-[10.5pt]">
                 <EditSpan
@@ -1099,8 +1115,12 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
             <div className="text-right">
               <p>Mengetahui,</p>
               <p className="font-semibold text-gray-800">Head of Marketing</p>
-              <div className="h-16 flex items-end justify-end">
-                {/* Space for signature */}
+              <div className="h-16 flex items-center justify-end py-0.5">
+                <img
+                  src="/signatures/ttd-raja.png"
+                  alt="Tanda Tangan Raja Satria"
+                  className="h-12 w-auto object-contain"
+                />
               </div>
               <p className="font-bold underline text-[10.5pt]">
                 <EditSpan
@@ -1162,10 +1182,10 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
               </p>
               <ol className="list-decimal pl-5 space-y-0.5">
                 <li>
-                  Memberikan edukasi praktis mengenai personal branding dan strategi produksi konten visual komersial (Story, Feed, Reels) yang mampu menaikkan nilai tawar kreator maupun brand.
+                  Memberikan edukasi praktis mengenai strategi branding bisnis dan produksi konten visual komersial (Story, Feed, Reels) yang terbukti menaikkan skala penjualan brand ritel di pasar modern.
                 </li>
                 <li>
-                  Membuka wadah interaksi riil antara brand mitra sponsor dengan audiens Gen-Z, kreator konten, dan UMKM melalui demo produk langsung panggung (khusus sponsor utama Platinum &amp; Gold), live trial, dan booth showcase.
+                  Membuka wadah interaksi riil antara brand mitra sponsor dengan pelaku usaha, UMKM, dan kalangan umum melalui sesi presentasi panggung sponsor (khusus Platinum &amp; Gold), live trial, serta 4 booth showcase terpadu (3 booth mitra &amp; 1 booth interaktif ISY).
                 </li>
                 <li>
                   Memberikan sarana eksposur multi-kanal berkelanjutan bagi mitra di jaringan toko ritel Optik I See You (Purwokerto, Purbalingga, Cilacap, Wonosobo) dan media sosial.
@@ -1435,7 +1455,7 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
               </div>
             </div>
             <p className="text-[7.5pt] text-gray-600 italic">
-              * Panitia menyediakan tim pendamping khusus untuk membantu setup materi display, kelistrikan booth, dan kelancaran live trial produk sponsor.
+              * Area showcase menyediakan total 4 stand: <b>3 Stand Showcase untuk Mitra Sponsor</b> dan <b>1 Stand Khusus Optik I See You</b> (Free Eye Exam / Cek Mata Gratis &amp; Try-On Kacamata). Panitia menyediakan tim pendamping teknis untuk setup materi dan kelistrikan booth.
             </p>
           </div>
         </section>
@@ -1639,7 +1659,7 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
                   TOTAL KEBUTUHAN ANGGARAN PENGELUARAN
                 </td>
                 <td className="py-1.5 px-2 text-right text-[9.5pt] text-black tabular-nums">
-                  Rp 8.100.000,-
+                  Rp 9.600.000,-
                 </td>
               </tr>
             </tbody>
@@ -1687,7 +1707,7 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
                   ESTIMASI TOTAL PEMASUKAN &amp; DUKUNGAN MITRA
                 </td>
                 <td className="py-1.5 px-2 text-right text-[9pt] text-black tabular-nums">
-                  Rp 6.600.000 – Rp 8.100.000,-
+                  Rp 6.900.000 – Rp 9.600.000,-
                 </td>
               </tr>
             </tbody>
@@ -2032,8 +2052,12 @@ export const SponsorProposalDocument: React.FC<Props> = ({ followers }) => {
               <div className="text-center border border-black p-3">
                 <p className="font-bold uppercase text-[9pt]">PIHAK PERTAMA</p>
                 <p className="text-[8pt] text-gray-700">Penyelenggara (Optik I See You)</p>
-                <div className="h-16 flex items-center justify-center text-gray-400 text-xs italic">
-                  [Tanda Tangan &amp; Stempel]
+                <div className="h-16 flex items-center justify-center my-0.5">
+                  <img
+                    src="/signatures/ttd-yossika.png"
+                    alt="Tanda Tangan Yossika Putra"
+                    className="h-14 w-auto object-contain"
+                  />
                 </div>
                 <p className="font-bold underline text-[9.5pt]">
                   <EditSpan
