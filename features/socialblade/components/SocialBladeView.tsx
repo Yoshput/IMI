@@ -32,7 +32,7 @@ import {
 
 export const SocialBladeView: React.FC = () => {
   const [selectedBranchKey, setSelectedBranchKey] = useState<string>("PWT");
-  const [timeRange, setTimeRange] = useState<"14d" | "30d">("30d");
+  const [timeRange, setTimeRange] = useState<"14d" | "30d">("14d");
   const [realtimeAntrianClicks, setRealtimeAntrianClicks] = useState<number>(305);
   const [realtimeWebTraffic, setRealtimeWebTraffic] = useState<number>(1380);
   const [isLoadingRealtime, setIsLoadingRealtime] = useState<boolean>(false);
@@ -564,7 +564,7 @@ export const SocialBladeView: React.FC = () => {
                   {renderDeltaBadge(summary.followersDelta)}
                 </td>
                 <td className="py-3 px-4 text-right text-red-900 dark:text-red-300 font-sans text-[11px]">
-                  {timeRange === "14d" ? "Net -496 Pengikut" : "Net -959 Pengikut"}
+                  Net {summary.followersDelta > 0 ? `+${summary.followersDelta.toLocaleString("id-ID")}` : summary.followersDelta.toLocaleString("id-ID")} Pengikut
                 </td>
                 <td className="py-3 px-4 text-right text-foreground-muted">0</td>
                 <td className="py-3 px-4 text-right font-bold text-emerald-700 dark:text-emerald-400">
@@ -580,31 +580,36 @@ export const SocialBladeView: React.FC = () => {
       </div>
 
       {/* Strategic Insight & Recommendation Box */}
-      <div className="p-5 rounded-2xl border border-red-200 dark:border-red-900/60 bg-red-50/40 dark:bg-red-950/15 space-y-3">
+      <div className={`p-5 rounded-2xl border space-y-3 ${
+        summary.followersDelta < 0
+          ? "border-red-200 dark:border-red-900/60 bg-red-50/40 dark:bg-red-950/15"
+          : "border-emerald-200 dark:border-emerald-900/60 bg-emerald-50/40 dark:bg-emerald-950/15"
+      }`}>
         <div className="flex items-center gap-2">
-          <TrendingDown className="w-4 h-4 text-red-700 dark:text-red-400" />
-          <h4 className="font-bold text-sm text-red-900 dark:text-red-200">
-            Analisis Evaluasi Marketing: Penurunan Net Followers ({activeProfile.handle})
+          {summary.followersDelta < 0 ? (
+            <TrendingDown className="w-4 h-4 text-red-700 dark:text-red-400" />
+          ) : (
+            <TrendingUp className="w-4 h-4 text-emerald-700 dark:text-emerald-400" />
+          )}
+          <h4 className={`font-bold text-sm ${summary.followersDelta < 0 ? "text-red-900 dark:text-red-200" : "text-emerald-900 dark:text-emerald-200"}`}>
+            Analisis Evaluasi Marketing: {summary.followersDelta < 0 ? "Dinamika Penurunan" : "Pertumbuhan Bersih"} Followers ({activeProfile.handle})
           </h4>
         </div>
-        <p className="text-xs text-red-950 dark:text-red-200/90 leading-relaxed">
-          Dalam 30 hari terakhir, akun utama @iseeyou.glasses mengalami penurunan bersih sebesar{" "}
-          <b>-959 followers</b> (rata-rata berkurang -32 followers/hari). Hal ini merupakan dinamika normal
-          pada akun berukuran besar (225k+) akibat <i>Instagram algorithmic purge</i> (pembersihan akun bot/inaktif).
-          Namun dengan <b>engagement rate 0.06%</b>, tim marketing cabang wajib memperkuat:
+        <p className={`text-xs leading-relaxed ${summary.followersDelta < 0 ? "text-red-950 dark:text-red-200/90" : "text-emerald-950 dark:text-emerald-200/90"}`}>
+          Dalam {timeRange === "14d" ? "14 hari" : "30 hari"} terakhir, akun {activeProfile.branchName} ({activeProfile.handle}) mencatat perubahan bersih{" "}
+          <b>{summary.followersDelta > 0 ? `+${summary.followersDelta.toLocaleString("id-ID")}` : summary.followersDelta.toLocaleString("id-ID")} followers</b>{" "}
+          (rata-rata {activeProfile.dailyAverage.followersDelta > 0 ? `+${activeProfile.dailyAverage.followersDelta}` : activeProfile.dailyAverage.followersDelta} followers/hari).
+          Dengan <b>engagement rate {activeProfile.engagementRate}%</b> dan rata-rata <b>{activeProfile.averageLikes} likes/post</b>, tim marketing cabang disarankan:
         </p>
-        <ul className="list-disc pl-5 text-xs text-red-900 dark:text-red-300 space-y-1">
+        <ul className={`list-disc pl-5 text-xs space-y-1 ${summary.followersDelta < 0 ? "text-red-900 dark:text-red-300" : "text-emerald-900 dark:text-emerald-300"}`}>
           <li>
-            <b>Aktivasi Voucher 5 pcs @ Rp 50.000 KOL:</b> Manfaatkan endorsement Kang Gono (16 Okt), Tarisa (13 &amp; 27 Okt),
-            Yuriko (12 Okt), dan Salsa (19 Okt) untuk menarik kembali follower riil yang aktif bertransaksi.
+            <b>Aktivasi Voucher &amp; Promo Kolaborasi:</b> Maksimalkan voucher promo &amp; kerja sama sponsorship/KOL untuk menarik audiens baru yang aktif bertransaksi.
           </li>
           <li>
-            <b>Format Story Interaktif:</b> Gunakan polling quiz, try-on filter, dan Q&amp;A kesehatan mata untuk
-            menaikkan algoritma interaksi harian Story PIC (Nuha &amp; Ilya).
+            <b>Format Interaktif (Reels &amp; Story):</b> Gunakan polling quiz, edukasi kacamata/lensa, dan try-on showcase guna meningkatkan interaksi audiens harian.
           </li>
           <li>
-            <b>Sinkronisasi Rutin:</b> Pantau data Social Blade ini setiap minggu sebelum rapat evaluasi direksi agar
-            strategi konten selalu berbasis angka nyata, bukan perkiraan.
+            <b>Monitoring Data Berkala:</b> Pantau sinkronisasi Social Blade ini menjelang evaluasi mingguan agar strategi kampanye selalu berbasis real data.
           </li>
         </ul>
       </div>

@@ -1,6 +1,6 @@
 {
-  "lastSync": "2026-10-16T15:11:30.555Z",
-  "nextSyncEstimated": "2026-10-16T16:11:30.555Z",
+  "lastSync": "2026-11-03T05:00:00.000Z",
+  "nextSyncEstimated": "2026-11-03T06:00:00.000Z",
   "accounts": {
     "pwt": {
       "id": "pwt",
@@ -9,12 +9,12 @@
       "url": "https://www.instagram.com/iseeyou.glasses/",
       "city": "Purwokerto",
       "picName": "Ilya (Reels) & Nuha (Story)",
-      "followers": 225390,
-      "followersFormatted": "225K",
-      "following": 77,
-      "posts": 2975,
+      "followers": 224789,
+      "followersFormatted": "224.8K",
+      "following": 78,
+      "posts": 2993,
       "bioTitle": "kacamata purwokerto murah (@iseeyou.glasses) • Instagram photos and videos",
-      "lastUpdated": "2026-10-19T07:13:00.000Z"
+      "lastUpdated": "2026-11-03T05:00:00.000Z"
     },
     "pbg": {
       "id": "pbg",
@@ -23,12 +23,12 @@
       "url": "https://www.instagram.com/iseeyou.purbalingga/",
       "city": "Purbalingga",
       "picName": "Ajun",
-      "followers": 6250,
-      "followersFormatted": "6,250",
+      "followers": 6256,
+      "followersFormatted": "6,256",
       "following": 6,
       "posts": 596,
       "bioTitle": "Optik Purbalingga (@iseeyou.purbalingga) • Instagram photos and videos",
-      "lastUpdated": "2026-10-16T15:11:30.554Z"
+      "lastUpdated": "2026-11-03T05:00:00.000Z"
     },
     "clp": {
       "id": "clp",
@@ -37,12 +37,12 @@
       "url": "https://www.instagram.com/iseeyou.cilacap/",
       "city": "Cilacap",
       "picName": "Intan",
-      "followers": 7425,
-      "followersFormatted": "7,425",
+      "followers": 7415,
+      "followersFormatted": "7,415",
       "following": 6,
       "posts": 1432,
       "bioTitle": "Optik Cilacap (@iseeyou.cilacap) • Instagram photos and videos",
-      "lastUpdated": "2026-10-16T15:11:30.554Z"
+      "lastUpdated": "2026-11-03T05:00:00.000Z"
     },
     "wns": {
       "id": "wns",
@@ -51,12 +51,12 @@
       "url": "https://www.instagram.com/iseeyou.wonosobo/",
       "city": "Wonosobo",
       "picName": "Febi",
-      "followers": 1290,
-      "followersFormatted": "1,290",
+      "followers": 1281,
+      "followersFormatted": "1,281",
       "following": 6,
       "posts": 368,
       "bioTitle": "Kacamata Murah Wonosobo (@iseeyou.wonosobo) • Instagram photos and videos",
-      "lastUpdated": "2026-10-16T15:11:30.554Z"
+      "lastUpdated": "2026-11-03T05:00:00.000Z"
     },
     "lunar": {
       "id": "lunar",
@@ -65,12 +65,12 @@
       "url": "https://www.instagram.com/lunareyewear.co",
       "city": "Tegal",
       "picName": "Amanda",
-      "followers": 4120,
-      "followersFormatted": "4,120",
+      "followers": 4183,
+      "followersFormatted": "4,183",
       "following": 5,
       "posts": 386,
       "bioTitle": "Kacamata Tegal Murah (@lunareyewear.co) • Instagram photos and videos",
-      "lastUpdated": "2026-10-16T15:11:30.554Z"
+      "lastUpdated": "2026-11-03T05:00:00.000Z"
     }
   },
   "reels": {
