@@ -92,8 +92,8 @@ export interface ProposalData {
   packages: PackageTier[];
 }
 
-const STORAGE_KEY = "isy_proposal_sponsor_formal_v13";
-const LEGACY_STORAGE_KEY = "isy_proposal_sponsor_formal_v12";
+const STORAGE_KEY = "isy_proposal_sponsor_formal_v14";
+const LEGACY_STORAGE_KEY = "isy_proposal_sponsor_formal_v13";
 
 const DEFAULT_DATA: ProposalData = {
   docNo: "024/MKT-ISY/PROP-SPONSOR/X/2026",
@@ -136,18 +136,11 @@ const DEFAULT_DATA: ProposalData = {
         "Bukan untuk menggurui, melainkan berbagi cerita nyata dan pengalaman di balik layar crew ISY: proses kreatif menyusun visual estetis ritel, eksplorasi storytelling harian, hingga belajar cara berinteraksi hangat dengan lebih dari 1.000.000 pelanggan ritel.",
     },
     {
-      name: "Bekti N",
-      role: "Brand Growth & Content Strategist / Digital Creator",
-      topic: "Unlock Your Influence: Belajar Bareng Membangun Daya Tarik Brand & Kolaborasi Saling Menguntungkan",
-      highlight:
-        "Sharing santai dan aplikatif mengenai kiat membangun identitas brand yang disukai publik, menjaga konsistensi di tengah tren digital, serta merajut kolaborasi yang saling menguntungkan antar-pelaku usaha.",
-    },
-    {
       name: "Syahrul",
-      role: "Digital Marketer & Co-Speaker",
-      topic: "Sinergi Konten & Komunitas: Belajar Memaksimalkan Distribusi Multi-Platform secara Organik",
+      role: "Digital Marketer & Guest Speaker",
+      topic: "Unlock Your Influence: Sinergi Konten, Komunitas & Memaksimalkan Distribusi Multi-Platform secara Organik",
       highlight:
-        "Eksplorasi bersama seputar dinamika video pendek (Reels, TikTok), tips distribusi konten yang natural dan engage, serta kekuatan ekosistem komunitas lokal.",
+        "Sharing santai dan aplikatif seputar dinamika video pendek (Reels, TikTok), kiat membangun daya tarik brand yang disukai publik, tips distribusi konten yang natural dan engage, serta kekuatan ekosistem komunitas lokal.",
     },
     {
       name: "Nuha & Yos",
@@ -191,7 +184,7 @@ const DEFAULT_DATA: ProposalData = {
     {
       time: "11.00 – 12.30 WIB",
       activity: "Acara Inti 2: 'Unlock Your Influence: Belajar Bareng Membangun Brand' + Q&A",
-      picOrSpeaker: "Sharing Bersama: Bekti N & Syahrul",
+      picOrSpeaker: "Sharing Bersama: Syahrul",
       notes: "Diskusi interaktif seputar membangun daya tarik brand, monetisasi konten, dan kolaborasi bisnis",
     },
     {
@@ -251,7 +244,7 @@ const DEFAULT_DATA: ProposalData = {
       totalCost: "Rp 1.000.000,-",
     },
     {
-      item: "Honorarium Bintang Tamu (Bekti N)",
+      item: "Honorarium Bintang Tamu (Syahrul)",
       qty: "1 Orang",
       unitCost: "Rp 1.000.000,-",
       totalCost: "Rp 1.000.000,-",
@@ -385,16 +378,18 @@ function sanitizeProposalData(d: ProposalData): ProposalData {
     backgroundText1: cleanStr(d.backgroundText1),
     backgroundText2: cleanStr(d.backgroundText2),
     backgroundText3: cleanStr(d.backgroundText3),
-    speakers: (d.speakers && d.speakers.length > 0 ? d.speakers : DEFAULT_DATA.speakers).map((sp) => ({
-      name: cleanStr(sp.name),
-      role: cleanStr(sp.role),
-      topic: cleanStr(sp.topic),
-      highlight: cleanStr(sp.highlight),
-    })),
+    speakers: (d.speakers && d.speakers.length > 0 ? d.speakers : DEFAULT_DATA.speakers)
+      .filter((sp) => !/bekti/i.test(sp.name))
+      .map((sp) => ({
+        name: cleanStr(sp.name),
+        role: cleanStr(sp.role),
+        topic: cleanStr(sp.topic),
+        highlight: cleanStr(sp.highlight),
+      })),
     rundown: (d.rundown && d.rundown.length > 0 ? d.rundown : DEFAULT_DATA.rundown).map((rd) => ({
       time: cleanStr(rd.time),
       activity: cleanStr(rd.activity),
-      picOrSpeaker: cleanStr(rd.picOrSpeaker),
+      picOrSpeaker: cleanStr(rd.picOrSpeaker).replace(/bekti\s*n?\s*(&|\+|dan)?\s*/gi, "").replace(/Sharing Bersama:\s*&?\s*/gi, "Sharing Bersama: ").trim(),
       notes: cleanStr(rd.notes),
     })),
     budgetExpenses: (d.budgetExpenses && d.budgetExpenses.length > 0 ? d.budgetExpenses : DEFAULT_DATA.budgetExpenses).map(
