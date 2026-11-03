@@ -5,8 +5,9 @@ import { getRealContentItems, ContentPeriod } from "@/lib/real-content-items";
 import { DominantPerformer } from "./DominantPerformer";
 import { ContentFilterToolbar, FormatCounts } from "./ContentFilterToolbar";
 import { RankedContentTable } from "./RankedContentTable";
+import { DatabaseDesainView } from "./DatabaseDesainView";
 import { StateRenderer } from "@/components/shared/StateRenderer";
-import { RefreshCw, ExternalLink, ShieldCheck, Download, CheckCircle2, AlertCircle } from "lucide-react";
+import { RefreshCw, ExternalLink, ShieldCheck, Download, CheckCircle2, AlertCircle, Layers, FileText } from "lucide-react";
 import { DevStateSwitcher } from "@/components/shared/DevStateSwitcher";
 import { downloadCSV } from "@/lib/export-csv";
 import { useBranch } from "@/context/BranchContext";
@@ -19,7 +20,18 @@ export const ContentView: React.FC = () => {
   const [activeBranch, setActiveBranch] = useState<string>(selectedBranchId);
   const [activeFormat, setActiveFormat] = useState<string>("all");
   const [sortBy, setSortBy] = useState<"reach" | "likes" | "engagement" | "rank">("reach");
+  const [activeTab, setActiveTab] = useState<"content" | "design">("content");
   const [contentList, setContentList] = useState(() => getRealContentItems(undefined, "weekly"));
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const tabParam = params.get("tab");
+      if (tabParam === "desain" || tabParam === "design") {
+        setActiveTab("design");
+      }
+    }
+  }, []);
   const [isSyncing, setIsSyncing] = useState(false);
   const [syncStatus, setSyncStatus] = useState<string | null>(null);
   const [syncError, setSyncError] = useState<string | null>(null);
@@ -258,6 +270,58 @@ export const ContentView: React.FC = () => {
         </div>
       )}
 
+      {/* Navigation Tabs */}
+      <div className="flex items-center gap-1 border-b border-border">
+        <button
+          type="button"
+          onClick={() => {
+            setActiveTab("content");
+            if (typeof window !== "undefined") {
+              const url = new URL(window.location.href);
+              url.searchParams.delete("tab");
+              window.history.replaceState({}, "", url.toString());
+            }
+          }}
+          className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold border-b-2 transition-all cursor-pointer ${
+            activeTab === "content"
+              ? "border-[#124734] dark:border-emerald-500 text-brand dark:text-emerald-400 bg-brand/5"
+              : "border-transparent text-foreground-secondary hover:text-foreground hover:bg-surface-secondary"
+          }`}
+        >
+          <Layers className="w-3.5 h-3.5" />
+          <span>Evaluasi Kinerja Konten</span>
+          <span className="ml-1 px-1.5 py-0.2 rounded text-[10px] bg-surface-secondary text-foreground-muted font-normal">
+            {filteredItems.length}
+          </span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            setActiveTab("design");
+            if (typeof window !== "undefined") {
+              const url = new URL(window.location.href);
+              url.searchParams.set("tab", "desain");
+              window.history.replaceState({}, "", url.toString());
+            }
+          }}
+          className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold border-b-2 transition-all cursor-pointer ${
+            activeTab === "design"
+              ? "border-[#124734] dark:border-emerald-500 text-brand dark:text-emerald-400 bg-brand/5"
+              : "border-transparent text-foreground-secondary hover:text-foreground hover:bg-surface-secondary"
+          }`}
+        >
+          <FileText className="w-3.5 h-3.5" />
+          <span>Database Desain (Mas Yanuar)</span>
+          <span className="ml-1 px-1.5 py-0.2 rounded text-[10px] bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 font-bold">
+            35 Berkas
+          </span>
+        </button>
+      </div>
+
+      {activeTab === "design" ? (
+        <DatabaseDesainView />
+      ) : (
       <StateRenderer
         status={viewState}
         onRetry={() => setViewState("success")}
@@ -307,6 +371,7 @@ export const ContentView: React.FC = () => {
           <RankedContentTable items={filteredItems} />
         </div>
       </StateRenderer>
+      )}
     </div>
   );
 };

@@ -102,3 +102,14 @@ export interface WeeklyReport {
   masukanTim: string[];
   aiAnalysis: AiNarrativeItem[];
 }
+
+export interface DesignDatabaseItem {
+  id: string;
+  timestamp: string;
+  date: string;
+  pic: string;
+  designName: string;
+  fileUrl: string;
+  creator?: string;
+  designTitle?: string;
+}

@@ -54,6 +54,39 @@ function loadCachedSheetsData(): { data: any; ageMs: number } | null {
   return null;
 }
 
+function parseExcelDateTime(val: any): string {
+  if (!val) return "";
+  if (typeof val === "number") {
+    const utc_days = Math.floor(val - 25569);
+    const utc_value = utc_days * 86400;
+    const fraction = val - Math.floor(val);
+    const secondsInDay = Math.round(fraction * 86400);
+    const date = new Date((utc_value + secondsInDay) * 1000);
+    const m = date.getUTCMonth() + 1;
+    const d = date.getUTCDate();
+    const y = date.getUTCFullYear();
+    const h = date.getUTCHours();
+    const min = String(date.getUTCMinutes()).padStart(2, "0");
+    const sec = String(date.getUTCSeconds()).padStart(2, "0");
+    return `${m}/${d}/${y} ${h}:${min}:${sec}`;
+  }
+  return String(val).trim();
+}
+
+function parseExcelShortDate(val: any): string {
+  if (!val) return "";
+  if (typeof val === "number") {
+    const utc_days = Math.floor(val - 25569);
+    const utc_value = utc_days * 86400;
+    const date = new Date(utc_value * 1000);
+    const m = date.getUTCMonth() + 1;
+    const d = date.getUTCDate();
+    const y = date.getUTCFullYear();
+    return `${m}/${d}/${y}`;
+  }
+  return String(val).trim();
+}
+
 function parseExcelDate(serial: any): string | null {
   if (!serial) return null;
   if (typeof serial === "number") {
@@ -234,7 +267,7 @@ async function syncSpreadsheetData() {
   const sheetUrl =
     "https://docs.google.com/spreadsheets/d/1BU0fIDP656Y-eue55bWVSxeaixSeFJwR3GP1n8kwBYc/export?format=xlsx";
 
-  const res = await fetch(sheetUrl);
+  const res = await fetch(sheetUrl, { cache: "no-store" });
   if (!res.ok) {
     throw new Error(`Gagal fetch Google Sheets: ${res.statusText}`);
   }
@@ -840,16 +873,30 @@ async function syncSpreadsheetData() {
   };
 
   // Additional Operational Sheets
-  const designSheet = workbook.Sheets["Database Desain"];
+  const designSheet = workbook.Sheets["Database Desain"] || workbook.Sheets["Form_Responses6"] || workbook.Sheets["Form Responses 6"];
   const rawDesign: any[] = designSheet ? XLSX.utils.sheet_to_json(designSheet) : [];
-  const databaseDesain = rawDesign.map((r, i) => ({
-    id: `desain-${i}`,
-    timestamp: parseExcelDate(r["Cap waktu"]),
-    date: parseExcelDate(r["Tanggal, Bulan"]),
-    creator: r["Penginput"] || "-",
-    designTitle: r["Nama Desain *tambahkan keterangan jika hasil Revisi (Contoh : Nama File-Revisi 2)"] || "-",
-    fileUrl: r["Upload File "] || "",
-  }));
+  const databaseDesain = rawDesign.map((r, i) => {
+    const rawTs = r["Cap waktu"] || r["Timestamp"] || r["timestamp"];
+    const rawDate = r["Tanggal, Bulan"] || r["Tanggal"] || r["date"];
+    const pic = String(r["Penginput"] || r["PIC"] || r["pic"] || "-").trim();
+    const designName = String(
+      r["Nama Desain *tambahkan keterangan jika hasil Revisi (Contoh : Nama File-Revisi 2)"] ||
+      r["Nama Desain"] ||
+      r["designName"] ||
+      "-"
+    ).trim();
+    const fileUrl = String(r["Upload File "] || r["Upload File"] || r["fileUrl"] || "").trim();
+    return {
+      id: `desain-${i}`,
+      timestamp: parseExcelDateTime(rawTs),
+      date: parseExcelShortDate(rawDate),
+      pic,
+      designName,
+      fileUrl,
+      creator: pic,
+      designTitle: designName,
+    };
+  });
 
   const proposalSheet = workbook.Sheets["Form Proposal"];
   const rawProposal: any[] = proposalSheet ? XLSX.utils.sheet_to_json(proposalSheet) : [];
