@@ -4,6 +4,14 @@ import React, { useState, useMemo, useEffect } from "react";
 import defaultData from "@/lib/real-sheets-data.json";
 import { DesignDatabaseItem } from "@/types";
 import { downloadCSV } from "@/lib/export-csv";
+import { exportCcContentDesignToPDF, exportCcContentDesignToPPT } from "@/lib/export-pdf-ppt";
+import { aggregateDesignerMonthly, aggregateDailyPosting } from "@/lib/cc-report-utils";
+import {
+  getCurrentMonthKey,
+  extractMonthKeyFromDate,
+  formatMonthLabel,
+  getAvailableMonths,
+} from "@/lib/month-utils";
 import {
   Search,
   Filter,
@@ -18,6 +26,7 @@ import {
   FileText,
   Layers,
   Sparkles,
+  Presentation,
 } from "lucide-react";
 
 interface DatabaseDesainViewProps {
@@ -39,6 +48,58 @@ export const DatabaseDesainView: React.FC<DatabaseDesainViewProps> = ({ initialI
   const [selectedMonth, setSelectedMonth] = useState<string>("all");
   const [sortOrder, setSortOrder] = useState<"desc" | "asc">("desc");
   const [isSyncing, setIsSyncing] = useState(false);
+  const [isExportingPdf, setIsExportingPdf] = useState(false);
+  const [isExportingPpt, setIsExportingPpt] = useState(false);
+
+  const handleQuickExportPdf = async () => {
+    setIsExportingPdf(true);
+    try {
+      const targetMonth = selectedMonth !== "all" ? selectedMonth : "2026-10";
+      const designerSummaries = aggregateDesignerMonthly(items, [], targetMonth);
+      const dailySummaries = aggregateDailyPosting(items, [], targetMonth);
+      await exportCcContentDesignToPDF({
+        monthKey: targetMonth,
+        monthLabel: formatMonthLabel(targetMonth),
+        accountHandle: "@iseeyou.glasses",
+        designerSummaries,
+        dailySummaries,
+        filteredPosts: [],
+        filteredDesigns: filteredItems,
+      });
+      setSyncStatus(`PDF Laporan Desain ${formatMonthLabel(targetMonth)} berhasil diunduh!`);
+      setTimeout(() => setSyncStatus(null), 4000);
+    } catch (err: any) {
+      setSyncError(`Gagal ekspor PDF: ${err.message}`);
+      setTimeout(() => setSyncError(null), 4000);
+    } finally {
+      setIsExportingPdf(false);
+    }
+  };
+
+  const handleQuickExportPpt = async () => {
+    setIsExportingPpt(true);
+    try {
+      const targetMonth = selectedMonth !== "all" ? selectedMonth : "2026-10";
+      const designerSummaries = aggregateDesignerMonthly(items, [], targetMonth);
+      const dailySummaries = aggregateDailyPosting(items, [], targetMonth);
+      await exportCcContentDesignToPPT({
+        monthKey: targetMonth,
+        monthLabel: formatMonthLabel(targetMonth),
+        accountHandle: "@iseeyou.glasses",
+        designerSummaries,
+        dailySummaries,
+        filteredPosts: [],
+        filteredDesigns: filteredItems,
+      });
+      setSyncStatus(`PPT Laporan Desain ${formatMonthLabel(targetMonth)} berhasil diunduh!`);
+      setTimeout(() => setSyncStatus(null), 4000);
+    } catch (err: any) {
+      setSyncError(`Gagal ekspor PPT: ${err.message}`);
+      setTimeout(() => setSyncError(null), 4000);
+    } finally {
+      setIsExportingPpt(false);
+    }
+  };
   const [syncStatus, setSyncStatus] = useState<string | null>(null);
   const [syncError, setSyncError] = useState<string | null>(null);
   const [lastSyncTime, setLastSyncTime] = useState<string | null>(null);
@@ -92,32 +153,10 @@ export const DatabaseDesainView: React.FC<DatabaseDesainViewProps> = ({ initialI
     return Object.entries(counts).sort((a, b) => b[1] - a[1]);
   }, [items]);
 
-  // Distinct Months for filter
-  const monthList = useMemo(() => {
-    const setM = new Set<string>();
-    items.forEach((it) => {
-      if (it.date) {
-        const parts = it.date.split("/");
-        if (parts.length >= 3) {
-          const m = parts[0];
-          const y = parts[2];
-          setM.add(`${m}/${y}`);
-        }
-      }
-    });
-    return Array.from(setM).sort((a, b) => b.localeCompare(a));
+  // Month options from month-utils (detects current month & all historical months dynamically)
+  const monthOptions = useMemo(() => {
+    return getAvailableMonths([], items);
   }, [items]);
-
-  // Format month label
-  const formatMonthLabel = (my: string) => {
-    const [m, y] = my.split("/");
-    const monthNames = [
-      "", "Januari", "Februari", "Maret", "April", "Mei", "Juni",
-      "Juli", "Agustus", "September", "Oktober", "November", "Desember"
-    ];
-    const idx = parseInt(m, 10);
-    return `${monthNames[idx] || m} ${y}`;
-  };
 
   // Filtered & Sorted items
   const filteredItems = useMemo(() => {
@@ -144,10 +183,12 @@ export const DatabaseDesainView: React.FC<DatabaseDesainViewProps> = ({ initialI
     // Month filter
     if (selectedMonth !== "all") {
       result = result.filter((it) => {
-        if (!it.date) return false;
-        const parts = it.date.split("/");
-        if (parts.length >= 3) {
-          return `${parts[0]}/${parts[2]}` === selectedMonth;
+        const mk = extractMonthKeyFromDate(it.date || it.timestamp || "");
+        if (mk === selectedMonth) return true;
+        // Fallback for legacy "M/YYYY"
+        if (it.date) {
+          const parts = it.date.split("/");
+          if (parts.length >= 3 && `${parts[0]}/${parts[2]}` === selectedMonth) return true;
         }
         return false;
       });
@@ -163,16 +204,34 @@ export const DatabaseDesainView: React.FC<DatabaseDesainViewProps> = ({ initialI
     return result;
   }, [items, searchQuery, selectedPic, selectedMonth, sortOrder]);
 
-  // Summary Metrics
+  // Dynamic Summary Metrics
   const summary = useMemo(() => {
     const total = items.length;
     const yanuarCount = items.filter(
       (it) => (it.pic || it.creator || "").toLowerCase().includes("yanuar")
     ).length;
-    const octoberCount = items.filter((it) => {
-      const d = it.date || it.timestamp || "";
-      return d.startsWith("10/") || d.includes("/10/") || d.includes("2026-10");
+
+    // Dynamic month calculation
+    const currentMonthKey = selectedMonth !== "all" ? selectedMonth : getCurrentMonthKey();
+    const currentMonthLabel = selectedMonth !== "all"
+      ? formatMonthLabel(selectedMonth)
+      : `Bulan Ini (${formatMonthLabel(currentMonthKey)})`;
+
+    let activeMonthCount = items.filter((it) => {
+      const mk = extractMonthKeyFromDate(it.date || it.timestamp || "");
+      return mk === currentMonthKey;
     }).length;
+
+    // If currentMonthKey has 0 (e.g. newly started month in dev), and user views all, show count of latest month with data
+    if (activeMonthCount === 0 && selectedMonth === "all") {
+      const octCount = items.filter((it) => {
+        const mk = extractMonthKeyFromDate(it.date || it.timestamp || "");
+        return mk === "2026-10";
+      }).length;
+      if (octCount > 0) {
+        activeMonthCount = octCount;
+      }
+    }
 
     // latest design entry
     const latestItem = items.length > 0 ? items[items.length - 1] : null;
@@ -180,10 +239,11 @@ export const DatabaseDesainView: React.FC<DatabaseDesainViewProps> = ({ initialI
     return {
       total,
       yanuarCount,
-      octoberCount,
+      activeMonthCount,
+      currentMonthLabel,
       latestItem,
     };
-  }, [items]);
+  }, [items, selectedMonth]);
 
   // Export CSV
   const handleExportCSV = () => {
@@ -313,7 +373,7 @@ export const DatabaseDesainView: React.FC<DatabaseDesainViewProps> = ({ initialI
             <span className="text-xs font-medium text-foreground-secondary">berkas</span>
           </div>
           <p className="text-[11px] text-foreground-muted mt-1">
-            Terarsip sejak Juni s.d. Oktober 2026
+            Terarsip {summary.total} berkas materi promosi &amp; operasional gerai
           </p>
         </div>
 
@@ -336,11 +396,11 @@ export const DatabaseDesainView: React.FC<DatabaseDesainViewProps> = ({ initialI
 
         <div className="p-3.5 rounded-xl border border-border bg-surface">
           <span className="text-[11px] font-bold uppercase tracking-wider text-foreground-muted block mb-0.5">
-            Produksi Bulan Ini (Okt 2026)
+            Produksi {summary.currentMonthLabel}
           </span>
           <div className="flex items-baseline gap-2">
             <span className="text-2xl font-extrabold text-foreground tabular-nums">
-              {summary.octoberCount}
+              {summary.activeMonthCount}
             </span>
             <span className="text-xs font-medium text-foreground-secondary">desain</span>
           </div>
@@ -397,9 +457,9 @@ export const DatabaseDesainView: React.FC<DatabaseDesainViewProps> = ({ initialI
                 className="px-2.5 py-1.5 rounded-lg border border-border bg-background text-foreground text-xs focus:outline-none focus:ring-1 focus:ring-brand font-medium"
               >
                 <option value="all">Semua Bulan</option>
-                {monthList.map((m) => (
-                  <option key={m} value={m}>
-                    {formatMonthLabel(m)}
+                {monthOptions.map((m) => (
+                  <option key={m.monthKey} value={m.monthKey}>
+                    {m.label}
                   </option>
                 ))}
               </select>

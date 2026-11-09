@@ -10,6 +10,7 @@ import { MetricHistoryTable } from "./MetricHistoryTable";
 import { ManualEntryModal } from "./ManualEntryModal";
 import { GscClickReport } from "./GscClickReport";
 import { TikTokBranchAnalytics } from "./TikTokBranchAnalytics";
+import { MonthlyWebPerformanceReport } from "@/features/reports/components/MonthlyWebPerformanceReport";
 import { StateRenderer } from "@/components/shared/StateRenderer";
 import { PlusCircle, RefreshCw, Sparkles, Activity, ShieldCheck } from "lucide-react";
 import { DevStateSwitcher } from "@/components/shared/DevStateSwitcher";
@@ -29,7 +30,7 @@ export const AnalyticsView: React.FC = () => {
     }
     return ACTUAL_HEADLINE_METRICS;
   });
-  const [activeSection, setActiveSection] = useState<"all" | "traffic" | "gsc" | "tiktok" | "trends">("all");
+  const [activeSection, setActiveSection] = useState<"all" | "monthly_web" | "traffic" | "gsc" | "tiktok" | "trends">("all");
   const [lastSyncTime, setLastSyncTime] = useState<string>("");
   const [isSyncing, setIsSyncing] = useState(false);
 
@@ -123,6 +124,7 @@ export const AnalyticsView: React.FC = () => {
       <div className="flex flex-wrap items-center gap-1.5 pb-2 border-b border-border">
         {[
           { id: "all", label: "Semua Modul Analytics" },
+          { id: "monthly_web", label: "Laporan Web Bulanan (PDF/PPT)" },
           { id: "traffic", label: "Lalu Lintas Web & Traffic" },
           { id: "gsc", label: "Google Search Console" },
           { id: "tiktok", label: "TikTok Branch Analytics" },
@@ -150,6 +152,13 @@ export const AnalyticsView: React.FC = () => {
         emptyActionLabel="Input Metrik Sekarang"
         onEmptyAction={() => setIsModalOpen(true)}
       >
+        {/* Modul Khusus: Laporan Bulanan Web & Performa (PDF & PPT) */}
+        {(activeSection === "all" || activeSection === "monthly_web") && (
+          <section id="sec-monthly-web">
+            <MonthlyWebPerformanceReport />
+          </section>
+        )}
+
         {/* Modul 1: Live Web & Multichannel Traffic Intelligence Radar */}
         {(activeSection === "all" || activeSection === "traffic") && (
           <section id="sec-traffic">

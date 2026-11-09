@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAntrianStats, getPhotoboothStats } from "@/lib/antrian-tracking";
 import { getCalibratedGscData } from "@/lib/gsc";
+import { getMonthlyWebPerformanceData } from "@/lib/monthly-web-performance";
+import { getCurrentMonthKey } from "@/lib/month-utils";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -9,6 +11,8 @@ export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const period = (searchParams.get("period") || "today") as "today" | "weekly" | "monthly";
+    const month = searchParams.get("month") || getCurrentMonthKey();
+    const monthlyPerformance = getMonthlyWebPerformanceData(month);
 
     const now = new Date();
     const currentHour = now.getHours();
@@ -268,6 +272,7 @@ export async function GET(req: NextRequest) {
         averageCtr: gscWeekly.averageCtr,
         averagePosition: gscWeekly.averagePosition,
       },
+      monthlyPerformance,
     });
   } catch (err: any) {
     return NextResponse.json({ success: false, error: err.message }, { status: 500 });

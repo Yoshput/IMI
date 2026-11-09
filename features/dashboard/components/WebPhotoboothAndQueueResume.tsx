@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   Camera,
   Stethoscope,
@@ -16,8 +16,17 @@ import {
   ArrowUpRight,
   Glasses,
   RefreshCw,
+  Download,
+  Presentation,
+  ChevronDown,
+  ChevronUp,
+  FileText,
 } from "lucide-react";
 import { CombinedWebResume, getCombinedWebResume } from "@/lib/antrian-tracking";
+import { getCurrentMonthKey, getAvailableMonths, formatMonthLabel } from "@/lib/month-utils";
+import { getMonthlyWebPerformanceData } from "@/lib/monthly-web-performance";
+import { exportWebPerformanceToPDF, exportWebPerformanceToPPT } from "@/lib/export-pdf-ppt";
+import { MonthlyWebPerformanceReport } from "@/features/reports/components/MonthlyWebPerformanceReport";
 
 interface WebPhotoboothAndQueueResumeProps {
   initialPeriod?: "weekly" | "monthly";
@@ -30,6 +39,47 @@ export const WebPhotoboothAndQueueResume: React.FC<WebPhotoboothAndQueueResumePr
   const [resumeData, setResumeData] = useState<CombinedWebResume>(() => getCombinedWebResume("weekly"));
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [copied, setCopied] = useState(false);
+
+  // Dynamic Month Selector state
+  const [selectedMonth, setSelectedMonth] = useState<string>(() => getCurrentMonthKey());
+  const [isExportingPdf, setIsExportingPdf] = useState(false);
+  const [isExportingPpt, setIsExportingPpt] = useState(false);
+  const [exportNotice, setExportNotice] = useState<string | null>(null);
+  const [showFullMonthlyReport, setShowFullMonthlyReport] = useState(false);
+
+  const availableMonths = useMemo(() => getAvailableMonths(), []);
+
+  const handleQuickExportPdf = async () => {
+    setIsExportingPdf(true);
+    setExportNotice(null);
+    try {
+      const data = getMonthlyWebPerformanceData(selectedMonth);
+      await exportWebPerformanceToPDF(data);
+      setExportNotice(`PDF Laporan Web ${data.monthLabel} berhasil diunduh!`);
+      setTimeout(() => setExportNotice(null), 4000);
+    } catch (err: any) {
+      setExportNotice(`Gagal ekspor PDF: ${err.message}`);
+      setTimeout(() => setExportNotice(null), 4000);
+    } finally {
+      setIsExportingPdf(false);
+    }
+  };
+
+  const handleQuickExportPpt = async () => {
+    setIsExportingPpt(true);
+    setExportNotice(null);
+    try {
+      const data = getMonthlyWebPerformanceData(selectedMonth);
+      await exportWebPerformanceToPPT(data);
+      setExportNotice(`PPT Laporan Web ${data.monthLabel} berhasil diunduh!`);
+      setTimeout(() => setExportNotice(null), 4000);
+    } catch (err: any) {
+      setExportNotice(`Gagal ekspor PPT: ${err.message}`);
+      setTimeout(() => setExportNotice(null), 4000);
+    } finally {
+      setIsExportingPpt(false);
+    }
+  };
 
   const fetchData = async (isBackground = false) => {
     if (!isBackground) setIsRefreshing(true);
@@ -180,6 +230,86 @@ Fitur Web Photobooth efektif menjadi corong (top of funnel) mengarahkan calon cu
           </button>
         </div>
       </div>
+
+      {/* Monthly Filter Bar & Export Actions */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 rounded-lg bg-surface-secondary/40 border border-border">
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="text-xs font-bold text-foreground flex items-center gap-1.5">
+            <Globe className="w-3.5 h-3.5 text-brand" />
+            <span>Laporan Khusus Bulan:</span>
+          </span>
+          <select
+            value={selectedMonth}
+            onChange={(e) => setSelectedMonth(e.target.value)}
+            className="px-2.5 py-1 rounded-md border border-border bg-background text-foreground text-xs font-bold focus:outline-none cursor-pointer"
+          >
+            {availableMonths.map((m) => (
+              <option key={m.monthKey} value={m.monthKey}>
+                {m.label}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="flex items-center gap-2 flex-wrap">
+          <button
+            type="button"
+            onClick={handleQuickExportPdf}
+            disabled={isExportingPdf}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#124734] hover:bg-[#0E3829] dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white text-xs font-bold transition-all shadow-xs disabled:opacity-60 cursor-pointer"
+            title="Download PDF Laporan Web & Performa Bulanan"
+          >
+            <Download className={`w-3 h-3 text-white ${isExportingPdf ? "animate-bounce" : ""}`} />
+            <span>{isExportingPdf ? "Menyiapkan PDF..." : "Export PDF Bulanan"}</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={handleQuickExportPpt}
+            disabled={isExportingPpt}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-surface border border-border text-foreground font-semibold text-xs hover:bg-surface-secondary hover:text-brand hover:border-brand/40 transition-all shadow-2xs disabled:opacity-60 cursor-pointer"
+            title="Download PPT Laporan Web & Performa Bulanan"
+          >
+            <Presentation className={`w-3 h-3 text-brand ${isExportingPpt ? "animate-pulse" : ""}`} />
+            <span>{isExportingPpt ? "Menyiapkan PPT..." : "Export PPT Bulanan"}</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setShowFullMonthlyReport((prev) => !prev)}
+            className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-md border border-brand/30 bg-brand/5 text-brand text-xs font-semibold hover:bg-brand/10 transition-all cursor-pointer"
+          >
+            <FileText className="w-3 h-3" />
+            <span>{showFullMonthlyReport ? "Tutup Laporan Penuh" : "Buka Laporan Penuh"}</span>
+            {showFullMonthlyReport ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
+          </button>
+        </div>
+      </div>
+
+      {exportNotice && (
+        <div className="p-2.5 rounded-md bg-status-successBg border border-status-success/30 text-status-success text-xs font-semibold flex items-center gap-2">
+          <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
+          <span>{exportNotice}</span>
+        </div>
+      )}
+
+      {showFullMonthlyReport && (
+        <div className="border border-brand/20 bg-brand/5 rounded-xl p-4 animate-in fade-in space-y-4">
+          <div className="flex items-center justify-between border-b border-brand/10 pb-2">
+            <span className="text-xs font-bold text-brand uppercase tracking-wider flex items-center gap-1.5">
+              <Globe className="w-4 h-4" />
+              <span>Detail Laporan Web &amp; Performa Bulanan ({formatMonthLabel(selectedMonth)})</span>
+            </span>
+            <button
+              onClick={() => setShowFullMonthlyReport(false)}
+              className="text-xs text-foreground-muted hover:text-foreground cursor-pointer"
+            >
+              &times; Tutup
+            </button>
+          </div>
+          <MonthlyWebPerformanceReport initialMonth={selectedMonth} />
+        </div>
+      )}
 
       {/* Grid: 2 Utama (Photobooth & Antrian) */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">

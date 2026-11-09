@@ -6,6 +6,9 @@ import { ReportSectionNav } from "./ReportSectionNav";
 import { ReportEditorialDocument } from "./ReportEditorialDocument";
 import { ReportConfigPanel } from "./ReportConfigPanel";
 import { StateRenderer } from "@/components/shared/StateRenderer";
+import { MonthlyWebPerformanceReport } from "./MonthlyWebPerformanceReport";
+import { MonthlyCcDesignReportView } from "@/features/content/components/MonthlyCcDesignReportView";
+import { FileText, Globe, Presentation, Layers } from "lucide-react";
 
 import { DevStateSwitcher } from "@/components/shared/DevStateSwitcher";
 
@@ -15,6 +18,19 @@ export const ReportBuilderView: React.FC = () => {
   const [showAiLayer, setShowAiLayer] = useState(true);
   const [selectedStakeholder, setSelectedStakeholder] = useState("all");
   const [reportStatus, setReportStatus] = useState<"draft" | "reviewed" | "final">("reviewed");
+  const [activeReportTab, setActiveReportTab] = useState<"weekly" | "monthly_web" | "monthly_cc">("weekly");
+
+  React.useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const tab = params.get("tab");
+      if (tab === "web" || tab === "performa" || tab === "monthly-web") {
+        setActiveReportTab("monthly_web");
+      } else if (tab === "cc" || tab === "desain" || tab === "konten" || tab === "monthly-cc") {
+        setActiveReportTab("monthly_cc");
+      }
+    }
+  }, []);
 
   const handleSelectSection = (id: string) => {
     setActiveSection(id);

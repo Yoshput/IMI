@@ -113,3 +113,57 @@ export interface DesignDatabaseItem {
   creator?: string;
   designTitle?: string;
 }
+
+export interface MonthlyPeriod {
+  monthKey: string; // format "YYYY-MM", e.g. "2026-10" or "2026-11"
+  label: string; // e.g. "Oktober 2026", "November 2026"
+}
+
+export interface DailyIgPostSummary {
+  date: string; // format "YYYY-MM-DD"
+  formattedDate: string; // e.g. "13 Oktober 2026"
+  postCount: number;
+  designCount: number;
+  posts: ContentItem[];
+  designs: DesignDatabaseItem[];
+  totalReach: number;
+  totalLikes: number;
+  avgEngagementRate: number;
+}
+
+export interface DesignerMonthlySummary {
+  pic: string;
+  totalDesigns: number;
+  totalIgPosts: number;
+  percentageShare: number;
+  designs: DesignDatabaseItem[];
+  igPosts: ContentItem[];
+  totalReach: number;
+  avgEngagementRate: number;
+}
+
+export interface MonthlyWebPerformanceData {
+  monthKey: string;
+  monthLabel: string;
+  photobooth: {
+    totalSessions: number;
+    uniqueUsers: number;
+    sharedPhotos: number;
+    conversionRate: number;
+    topFrames: { model: string; tries: number; shares: number }[];
+  };
+  queue: {
+    totalRegistered: number;
+    dailyAverage: number;
+    byBranch: { branchName: string; count: number }[];
+  };
+  gsc: {
+    totalClicks: number;
+    totalImpressions: number;
+    avgCtr: number;
+    avgPosition: number;
+    topQueries: { query: string; clicks: number; impressions: number; ctr: number; position: number }[];
+    topPages: { page: string; clicks: number; impressions: number }[];
+    dailyTrend: { date: string; clicks: number; impressions: number; sessions?: number; queueBookings?: number }[];
+  };
+}

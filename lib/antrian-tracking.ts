@@ -1,5 +1,8 @@
 // Tracking Event Store & Aggregator for "Antrian Cek Mata" & "Web Photobooth" on optikiseeyou.com
 
+import { MonthlyWebPerformanceData } from "@/types";
+export { getMonthlyWebPerformanceData } from "./monthly-web-performance";
+
 export interface AntrianEvent {
   id: string;
   timestamp: string;

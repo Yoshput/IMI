@@ -6,8 +6,9 @@ import { DominantPerformer } from "./DominantPerformer";
 import { ContentFilterToolbar, FormatCounts } from "./ContentFilterToolbar";
 import { RankedContentTable } from "./RankedContentTable";
 import { DatabaseDesainView } from "./DatabaseDesainView";
+import { MonthlyCcDesignReportView } from "./MonthlyCcDesignReportView";
 import { StateRenderer } from "@/components/shared/StateRenderer";
-import { RefreshCw, ExternalLink, ShieldCheck, Download, CheckCircle2, AlertCircle, Layers, FileText } from "lucide-react";
+import { RefreshCw, ExternalLink, ShieldCheck, Download, CheckCircle2, AlertCircle, Layers, FileText, Presentation } from "lucide-react";
 import { DevStateSwitcher } from "@/components/shared/DevStateSwitcher";
 import { downloadCSV } from "@/lib/export-csv";
 import { useBranch } from "@/context/BranchContext";
@@ -20,7 +21,7 @@ export const ContentView: React.FC = () => {
   const [activeBranch, setActiveBranch] = useState<string>(selectedBranchId);
   const [activeFormat, setActiveFormat] = useState<string>("all");
   const [sortBy, setSortBy] = useState<"reach" | "likes" | "engagement" | "rank">("reach");
-  const [activeTab, setActiveTab] = useState<"content" | "design">("content");
+  const [activeTab, setActiveTab] = useState<"content" | "design" | "cc_report">("content");
   const [contentList, setContentList] = useState(() => getRealContentItems(undefined, "weekly"));
 
   useEffect(() => {
@@ -29,6 +30,8 @@ export const ContentView: React.FC = () => {
       const tabParam = params.get("tab");
       if (tabParam === "desain" || tabParam === "design") {
         setActiveTab("design");
+      } else if (tabParam === "cc" || tabParam === "laporan-cc" || tabParam === "monthly-cc") {
+        setActiveTab("cc_report");
       }
     }
   }, []);
@@ -225,6 +228,21 @@ export const ContentView: React.FC = () => {
             </span>
           </button>
           <button
+            onClick={() => {
+              setActiveTab("cc_report");
+              if (typeof window !== "undefined") {
+                const url = new URL(window.location.href);
+                url.searchParams.set("tab", "laporan-cc");
+                window.history.replaceState({}, "", url.toString());
+              }
+            }}
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-surface border border-brand/40 text-brand font-bold text-xs hover:bg-brand/10 transition-all shadow-xs active:scale-95 cursor-pointer"
+            title="Buka Laporan Bulanan CC & Export PDF / PPT"
+          >
+            <Presentation className="w-3.5 h-3.5" />
+            <span>Laporan Bulanan CC (PDF/PPT)</span>
+          </button>
+          <button
             onClick={handleExportCSV}
             className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-surface border border-border text-foreground font-semibold text-xs hover:bg-surface-secondary hover:text-brand hover:border-brand/40 transition-all shadow-xs active:scale-95 cursor-pointer"
             title="Unduh Data Konten (.csv)"
@@ -317,10 +335,35 @@ export const ContentView: React.FC = () => {
             35 Berkas
           </span>
         </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            setActiveTab("cc_report");
+            if (typeof window !== "undefined") {
+              const url = new URL(window.location.href);
+              url.searchParams.set("tab", "laporan-cc");
+              window.history.replaceState({}, "", url.toString());
+            }
+          }}
+          className={`flex items-center gap-2 px-4 py-2.5 text-xs font-bold border-b-2 transition-all cursor-pointer ${
+            activeTab === "cc_report"
+              ? "border-[#124734] dark:border-emerald-500 text-brand dark:text-emerald-400 bg-brand/5"
+              : "border-transparent text-foreground-secondary hover:text-foreground hover:bg-surface-secondary"
+          }`}
+        >
+          <Presentation className="w-3.5 h-3.5" />
+          <span>Laporan Bulanan CC &amp; IG (@iseeyou.glasses)</span>
+          <span className="ml-1 px-1.5 py-0.2 rounded text-[10px] bg-brand/10 text-brand font-bold">
+            PDF &amp; PPT
+          </span>
+        </button>
       </div>
 
       {activeTab === "design" ? (
         <DatabaseDesainView />
+      ) : activeTab === "cc_report" ? (
+        <MonthlyCcDesignReportView />
       ) : (
       <StateRenderer
         status={viewState}
