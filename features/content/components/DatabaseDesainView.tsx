@@ -46,6 +46,7 @@ export const DatabaseDesainView: React.FC<DatabaseDesainViewProps> = ({ initialI
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedPic, setSelectedPic] = useState<string>("all");
   const [selectedMonth, setSelectedMonth] = useState<string>("all");
+  const [selectedSource, setSelectedSource] = useState<"all" | "Rekap Desain" | "Database Desain">("all");
   const [sortOrder, setSortOrder] = useState<"desc" | "asc">("desc");
   const [isSyncing, setIsSyncing] = useState(false);
   const [isExportingPdf, setIsExportingPdf] = useState(false);
@@ -180,6 +181,13 @@ export const DatabaseDesainView: React.FC<DatabaseDesainViewProps> = ({ initialI
       );
     }
 
+    // Source filter (Rekap Desain vs Database Desain)
+    if (selectedSource !== "all") {
+      result = result.filter(
+        (it) => (it.sourceSheet || "Database Desain") === selectedSource
+      );
+    }
+
     // Month filter
     if (selectedMonth !== "all") {
       result = result.filter((it) => {
@@ -202,7 +210,7 @@ export const DatabaseDesainView: React.FC<DatabaseDesainViewProps> = ({ initialI
     });
 
     return result;
-  }, [items, searchQuery, selectedPic, selectedMonth, sortOrder]);
+  }, [items, searchQuery, selectedPic, selectedSource, selectedMonth, sortOrder]);
 
   // Dynamic Summary Metrics
   const summary = useMemo(() => {
@@ -210,6 +218,10 @@ export const DatabaseDesainView: React.FC<DatabaseDesainViewProps> = ({ initialI
     const yanuarCount = items.filter(
       (it) => (it.pic || it.creator || "").toLowerCase().includes("yanuar")
     ).length;
+    const rekapDesainCount = items.filter(
+      (it) => it.sourceSheet === "Rekap Desain"
+    ).length;
+    const databaseDesainCount = total - rekapDesainCount;
 
     // Dynamic month calculation
     const currentMonthKey = selectedMonth !== "all" ? selectedMonth : getCurrentMonthKey();
@@ -239,6 +251,8 @@ export const DatabaseDesainView: React.FC<DatabaseDesainViewProps> = ({ initialI
     return {
       total,
       yanuarCount,
+      rekapDesainCount,
+      databaseDesainCount,
       activeMonthCount,
       currentMonthLabel,
       latestItem,
@@ -247,13 +261,26 @@ export const DatabaseDesainView: React.FC<DatabaseDesainViewProps> = ({ initialI
 
   // Export CSV
   const handleExportCSV = () => {
-    const headers = ["No", "Cap Waktu (Timestamp)", "Tanggal", "Penginput (PIC)", "Nama Desain", "URL File Google Drive"];
+    const headers = [
+      "No",
+      "Cap Waktu (Timestamp)",
+      "Tanggal",
+      "Penginput (PIC)",
+      "Nama Desain",
+      "Sumber Sheet",
+      "Pekerjaan Hari Ini",
+      "Kendala",
+      "URL File Google Drive",
+    ];
     const rows = filteredItems.map((it, idx) => [
       idx + 1,
       it.timestamp || "-",
       it.date || "-",
       it.pic || it.creator || "-",
       it.designName || it.designTitle || "-",
+      it.sourceSheet || "Database Desain",
+      it.tasks || "-",
+      it.obstacle || "-",
       it.fileUrl || "-",
     ]);
     downloadCSV(`database-desain-yanuar-${new Date().toISOString().slice(0, 10)}.csv`, headers, rows);
@@ -303,7 +330,7 @@ export const DatabaseDesainView: React.FC<DatabaseDesainViewProps> = ({ initialI
               Database Desain Grafis &amp; Materi Cetak
             </span>
             <span className="text-xs text-foreground-muted">
-              Source: Sheet &quot;Database Desain&quot; (Form_Responses6)
+              Source: Tab &quot;Rekap Desain&quot; (Form_Responses10) &amp; &quot;Database Desain&quot; (Form_Responses6)
             </span>
           </div>
           <p className="text-xs text-foreground-secondary mt-1">
@@ -448,6 +475,20 @@ export const DatabaseDesainView: React.FC<DatabaseDesainViewProps> = ({ initialI
 
           {/* Secondary Select Controls */}
           <div className="flex flex-wrap items-center gap-2">
+            {/* Filter Sumber Tab */}
+            <div className="flex items-center gap-1.5 text-xs text-foreground-secondary">
+              <Layers className="w-3.5 h-3.5 text-foreground-muted" />
+              <select
+                value={selectedSource}
+                onChange={(e) => setSelectedSource(e.target.value as any)}
+                className="px-2.5 py-1.5 rounded-lg border border-border bg-background text-foreground text-xs focus:outline-none focus:ring-1 focus:ring-brand font-medium"
+              >
+                <option value="all">Semua Tab ({items.length})</option>
+                <option value="Rekap Desain">Tab Rekap Desain ({summary.rekapDesainCount})</option>
+                <option value="Database Desain">Tab Database Desain ({summary.databaseDesainCount})</option>
+              </select>
+            </div>
+
             {/* Filter Bulan */}
             <div className="flex items-center gap-1.5 text-xs text-foreground-secondary">
               <Calendar className="w-3.5 h-3.5 text-foreground-muted" />
@@ -556,6 +597,7 @@ export const DatabaseDesainView: React.FC<DatabaseDesainViewProps> = ({ initialI
                         setSearchQuery("");
                         setSelectedPic("all");
                         setSelectedMonth("all");
+                        setSelectedSource("all");
                       }}
                       className="mt-3 px-3 py-1.5 rounded-lg bg-surface border border-border text-xs font-semibold text-brand hover:bg-surface-secondary"
                     >
@@ -605,14 +647,35 @@ export const DatabaseDesainView: React.FC<DatabaseDesainViewProps> = ({ initialI
                       </td>
 
                       <td className="py-2.5 px-4">
-                        <div className="flex items-start gap-1.5">
-                          <span className="font-semibold text-foreground text-xs leading-snug">
-                            {designTitle}
-                          </span>
-                          {isRevision && (
-                            <span className="inline-flex shrink-0 items-center px-1.5 py-0.2 rounded text-[10px] font-bold bg-amber-100 text-amber-900 dark:bg-amber-950/60 dark:text-amber-200 border border-amber-300 dark:border-amber-700">
-                              Revisi / Ready
+                        <div className="flex flex-col gap-1">
+                          <div className="flex items-start gap-1.5 flex-wrap">
+                            <span className="font-semibold text-foreground text-xs leading-snug">
+                              {designTitle}
                             </span>
+                            {item.sourceSheet === "Rekap Desain" ? (
+                              <span className="inline-flex shrink-0 items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-blue-100 text-blue-800 dark:bg-blue-950/80 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
+                                Rekap Desain
+                              </span>
+                            ) : (
+                              <span className="inline-flex shrink-0 items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-surface-secondary text-foreground-muted border border-border">
+                                Database Desain
+                              </span>
+                            )}
+                            {isRevision && (
+                              <span className="inline-flex shrink-0 items-center px-1.5 py-0.2 rounded text-[10px] font-bold bg-amber-100 text-amber-900 dark:bg-amber-950/60 dark:text-amber-200 border border-amber-300 dark:border-amber-700">
+                                Revisi / Ready
+                              </span>
+                            )}
+                          </div>
+                          {item.tasks && (
+                            <div className="text-[11px] text-foreground-secondary leading-tight">
+                              <span className="font-medium text-foreground">Tugas:</span> {item.tasks}
+                            </div>
+                          )}
+                          {item.obstacle && (
+                            <div className="text-[10px] text-amber-700 dark:text-amber-400 font-medium bg-amber-50 dark:bg-amber-950/30 px-1.5 py-0.5 rounded border border-amber-200 dark:border-amber-800 w-fit">
+                              Kendala: {item.obstacle}
+                            </div>
                           )}
                         </div>
                       </td>

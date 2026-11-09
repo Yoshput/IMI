@@ -564,7 +564,7 @@ export const MonthlyCcDesignReportView: React.FC<MonthlyCcDesignReportViewProps>
               <span>Section 2A — Desain Grafis Instagram @iseeyou.glasses (Mas Yanuar &amp; Tim)</span>
             </h3>
             <p className="text-xs text-foreground-secondary mt-0.5">
-              Khusus rekapitulasi output desain materi promosi, cetak, feed/carousel Instagram @iseeyou.glasses oleh Mas Yanuar ({activePeriodLabel}).
+              Khusus rekapitulasi output desain materi promosi, cetak, feed &amp; carousel Instagram @iseeyou.glasses oleh Mas Yanuar (Sumber: Tab Rekap Desain &amp; Database Desain) ({activePeriodLabel}).
             </p>
           </div>
           <span className="text-xs font-bold text-emerald-800 bg-emerald-50 dark:bg-emerald-950/40 px-2.5 py-1 rounded border border-emerald-200">
@@ -651,31 +651,58 @@ export const MonthlyCcDesignReportView: React.FC<MonthlyCcDesignReportViewProps>
                             <span className="text-[11px] font-bold text-foreground block">
                               Daftar Karya Desain yang Dikerjakan oleh {ds.pic} ({activePeriodLabel}):
                             </span>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 text-xs">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5 text-xs">
                               {ds.designs.map((des, idx) => (
                                 <div
                                   key={des.id || idx}
-                                  className="p-2.5 rounded-lg border border-border/80 bg-surface-secondary/40 flex items-start justify-between gap-2 shadow-2xs"
+                                  className="p-2.5 rounded-lg border border-border/80 bg-surface-secondary/40 flex flex-col justify-between gap-2 shadow-2xs"
                                 >
-                                  <div>
-                                    <p className="font-semibold text-foreground line-clamp-1" title={des.designName}>
-                                      {idx + 1}. {des.designName}
-                                    </p>
-                                    <span className="text-[10px] text-foreground-muted">
-                                      Tgl: {des.date || "-"}
-                                    </span>
+                                  <div className="space-y-1">
+                                    <div className="flex items-start justify-between gap-1.5">
+                                      <p className="font-semibold text-foreground line-clamp-2 leading-snug" title={des.designName}>
+                                        {idx + 1}. {des.designName}
+                                      </p>
+                                      {des.sourceSheet === "Rekap Desain" ? (
+                                        <span className="shrink-0 px-1.5 py-0.5 rounded text-[9px] font-bold bg-blue-100 text-blue-800 dark:bg-blue-950/80 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
+                                          Rekap Desain
+                                        </span>
+                                      ) : (
+                                        <span className="shrink-0 px-1.5 py-0.5 rounded text-[9px] font-medium bg-surface-secondary text-foreground-muted border border-border">
+                                          Database Desain
+                                        </span>
+                                      )}
+                                    </div>
+                                    <div className="flex flex-wrap items-center gap-2 text-[10px] text-foreground-muted">
+                                      <span>Tgl: {des.date || "-"}</span>
+                                      {des.tasks && (
+                                        <span className="truncate max-w-[180px]" title={`Pekerjaan: ${des.tasks}`}>
+                                          • {des.tasks}
+                                        </span>
+                                      )}
+                                    </div>
+                                    {des.obstacle && (
+                                      <p className="text-[10px] text-amber-700 dark:text-amber-400 font-medium bg-amber-50 dark:bg-amber-950/30 px-1.5 py-0.5 rounded border border-amber-200 dark:border-amber-800 line-clamp-1" title={`Kendala: ${des.obstacle}`}>
+                                        Kendala: {des.obstacle}
+                                      </p>
+                                    )}
                                   </div>
-                                  {des.fileUrl && des.fileUrl !== "-" && (
-                                    <a
-                                      href={des.fileUrl.split(",")[0].trim()}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      className="inline-flex items-center gap-1 text-[10px] text-emerald-700 hover:underline shrink-0 font-bold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200"
-                                    >
-                                      <ExternalLink className="w-2.5 h-2.5" />
-                                      <span>Drive</span>
-                                    </a>
-                                  )}
+
+                                  <div className="flex items-center justify-between pt-1 border-t border-border/40">
+                                    <span className="text-[10px] text-foreground-secondary font-medium">
+                                      PIC: {des.pic || des.creator || "Yanuar"}
+                                    </span>
+                                    {des.fileUrl && des.fileUrl !== "-" && (
+                                      <a
+                                        href={des.fileUrl.split(",")[0].trim()}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="inline-flex items-center gap-1 text-[10px] text-emerald-700 dark:text-emerald-400 hover:underline shrink-0 font-bold bg-emerald-50 dark:bg-emerald-950/50 px-2 py-0.5 rounded border border-emerald-200 dark:border-emerald-800"
+                                      >
+                                        <ExternalLink className="w-2.5 h-2.5" />
+                                        <span>Drive</span>
+                                      </a>
+                                    )}
+                                  </div>
                                 </div>
                               ))}
                             </div>

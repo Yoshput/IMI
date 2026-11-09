@@ -112,6 +112,22 @@ export interface DesignDatabaseItem {
   fileUrl: string;
   creator?: string;
   designTitle?: string;
+  tasks?: string;
+  obstacle?: string;
+  sourceSheet?: string;
+  pendingCount?: string;
+}
+
+export interface RekapDesainDailyEntry {
+  id: string;
+  timestamp: string;
+  date: string;
+  pic: string;
+  tasks: string;
+  completedCount: number;
+  pendingCount: string;
+  obstacle: string;
+  designs: { name: string; fileUrl: string }[];
 }
 
 export interface MonthlyPeriod {

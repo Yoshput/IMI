@@ -745,14 +745,15 @@ export async function exportCcContentDesignToPDF(params: ExportCcReportParams): 
     idx + 1,
     des.date || "-",
     des.pic || des.creator || "Yanuar",
-    des.designName.length > 50 ? des.designName.slice(0, 48) + "..." : des.designName,
+    des.designName.length > 42 ? des.designName.slice(0, 40) + "..." : des.designName,
+    des.sourceSheet || "Database Desain",
     des.fileUrl && des.fileUrl !== "-" ? "Tersedia di Drive" : "-",
   ]);
 
   autoTable(doc, {
     startY: 29,
-    head: [["No", "Tanggal Input", "PIC Desainer", "Nama Desain / Materi Cetak", "Status File G-Drive"]],
-    body: fullDesignRows.length > 0 ? fullDesignRows : [["-", "-", "-", "Tidak ada desain di periode ini", "-"]],
+    head: [["No", "Tanggal Input", "PIC Desainer", "Nama Desain / Materi Cetak", "Sumber Tab", "Status File G-Drive"]],
+    body: fullDesignRows.length > 0 ? fullDesignRows : [["-", "-", "-", "Tidak ada desain di periode ini", "-", "-"]],
     theme: "striped",
     headStyles: { fillColor: BRAND_GREEN_RGB, textColor: 255, fontStyle: "bold", fontSize: 8 },
     bodyStyles: { fontSize: 7.5, textColor: TEXT_DARK_RGB },
@@ -1079,13 +1080,15 @@ export async function exportCcContentDesignToPPT(params: ExportCcReportParams): 
       { text: "Tgl Input", options: { bold: true, fill: { color: PPT_BRAND_COLOR }, color: "FFFFFF" } },
       { text: "PIC Desainer", options: { bold: true, fill: { color: PPT_BRAND_COLOR }, color: "FFFFFF" } },
       { text: "Nama Desain", options: { bold: true, fill: { color: PPT_BRAND_COLOR }, color: "FFFFFF" } },
-      { text: "Link Google Drive", options: { bold: true, fill: { color: PPT_BRAND_COLOR }, color: "FFFFFF" } },
+      { text: "Sumber Tab", options: { bold: true, fill: { color: PPT_BRAND_COLOR }, color: "FFFFFF" } },
+      { text: "Status G-Drive", options: { bold: true, fill: { color: PPT_BRAND_COLOR }, color: "FFFFFF" } },
     ],
     ...sampleDesigns.map((des, idx) => [
       { text: (idx + 1).toString() },
       { text: des.date || "-" },
       { text: des.pic || des.creator || "Yanuar" },
-      { text: des.designName.length > 45 ? des.designName.slice(0, 43) + "..." : des.designName },
+      { text: des.designName.length > 40 ? des.designName.slice(0, 38) + "..." : des.designName },
+      { text: des.sourceSheet || "Database Desain" },
       { text: des.fileUrl && des.fileUrl !== "-" ? "Tersedia" : "-" },
     ]),
   ];

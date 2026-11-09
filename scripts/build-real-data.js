@@ -862,8 +862,75 @@ async function main() {
       fileUrl,
       creator: pic,
       designTitle: designName,
+      sourceSheet: 'Database Desain',
     };
   });
+
+  // Tab Rekap Desain (Form_Responses10) - Mas Yanuar Daily Design Log
+  const rekapDesainSheet = workbook.Sheets['Rekap Desain'];
+  const rekapDesainEntries = [];
+  if (rekapDesainSheet) {
+    const rawRekapRows = XLSX.utils.sheet_to_json(rekapDesainSheet, { header: 1 });
+    for (let i = 1; i < rawRekapRows.length; i++) {
+      const row = rawRekapRows[i];
+      if (!row || !row.length) continue;
+      const rawTs = row[0];
+      const rawDate = row[1];
+      const pic = String(row[2] || '').trim();
+      if (!pic || pic === '.') continue; // skip dummy test row
+
+      const tasks = String(row[3] || '').trim();
+      const completedCount = Number(row[4]) || 0;
+      const pendingCount = row[5] !== undefined ? String(row[5]).trim() : '-';
+      const obstacle = row[6] !== undefined ? String(row[6]).trim() : '-';
+
+      const timestamp = parseExcelDateTime(rawTs);
+      const date = parseExcelShortDate(rawDate);
+
+      const designs = [];
+      const designPairs = [
+        { name: row[7], url: row[8] },
+        { name: row[9], url: row[10] },
+        { name: row[11], url: row[12] },
+        { name: row[13], url: row[14] },
+        { name: row[15], url: row[16] },
+      ];
+
+      designPairs.forEach((dp, dIdx) => {
+        const dName = String(dp.name || '').trim();
+        const dUrl = String(dp.url || '').trim();
+        if (dName && dName !== '-') {
+          designs.push({ name: dName, fileUrl: dUrl });
+          databaseDesain.push({
+            id: `rekap-desain-${i}-${dIdx}`,
+            timestamp,
+            date,
+            pic: pic || 'Yanuar',
+            creator: pic || 'Yanuar',
+            designName: dName,
+            designTitle: dName,
+            fileUrl: dUrl,
+            tasks,
+            obstacle,
+            pendingCount,
+            sourceSheet: 'Rekap Desain',
+          });
+        }
+      });
+
+      rekapDesainEntries.push({
+        id: `rekap-row-${i}`,
+        timestamp,
+        date,
+        pic: pic || 'Yanuar',
+        tasks,
+        completedCount,
+        pendingCount,
+        obstacle,
+        designs,
+      });
+    }
+  }
 
   const proposalSheet = workbook.Sheets['Form Proposal'];
   const rawProposal = proposalSheet ? XLSX.utils.sheet_to_json(proposalSheet) : [];
@@ -938,6 +1005,7 @@ async function main() {
       spreadsheetFollowersByBranch: spreadsheetFollowersByBranch,
       bonusSummary: bonusSummary,
       databaseDesain: databaseDesain,
+      rekapDesain: rekapDesainEntries,
       formProposal: formProposal,
       formPengajuan: formPengajuan,
       executiveRecap: {
