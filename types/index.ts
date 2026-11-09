@@ -142,9 +142,27 @@ export interface DesignerMonthlySummary {
   avgEngagementRate: number;
 }
 
+export type WeekFilterKey = "w4_monthly" | "w1" | "w2" | "w3" | "w4_only";
+
+export interface BranchReelsPicSummary {
+  pic: string;
+  role: string;
+  branchName: string;
+  accountHandle: string;
+  totalReels: number;
+  targetQuota: number;
+  quotaPercentage: number;
+  totalViews: number;
+  totalLikes: number;
+  avgEngagementRate: number;
+  topReelsTitle: string;
+}
+
 export interface MonthlyWebPerformanceData {
   monthKey: string;
   monthLabel: string;
+  weekKey?: WeekFilterKey;
+  periodLabel?: string;
   photobooth: {
     totalSessions: number;
     uniqueUsers: number;

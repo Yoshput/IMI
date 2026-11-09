@@ -30,6 +30,8 @@ import {
   DesignDatabaseItem,
   DesignerMonthlySummary,
   DailyIgPostSummary,
+  BranchReelsPicSummary,
+  WeekFilterKey,
 } from "@/types";
 import defaultData from "@/lib/real-sheets-data.json";
 import { getRealContentItems } from "@/lib/real-content-items";
@@ -37,9 +39,12 @@ import {
   getCurrentMonthKey,
   formatMonthLabel,
   getAvailableMonths,
+  getWeekOptions,
+  formatPeriodHeader,
 } from "@/lib/month-utils";
 import {
   aggregateDesignerMonthly,
+  aggregateBranchReels,
   aggregateDailyPosting,
   filterDesignsByMonth,
   filterPostsByMonth,
@@ -72,6 +77,7 @@ export const MonthlyCcDesignReportView: React.FC<MonthlyCcDesignReportViewProps>
   const [selectedMonth, setSelectedMonth] = useState<string>(
     () => initialMonth || "2026-10" // Default to October 2026 where rich data exists, or current
   );
+  const [selectedWeek, setSelectedWeek] = useState<WeekFilterKey>("w4_monthly");
   const [selectedAccount, setSelectedAccount] = useState<string>("@iseeyou.glasses");
   const [selectedPic, setSelectedPic] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -83,10 +89,14 @@ export const MonthlyCcDesignReportView: React.FC<MonthlyCcDesignReportViewProps>
   const [isSyncing, setIsSyncing] = useState(false);
   const [feedback, setFeedback] = useState<string | null>(null);
 
-  // Dynamic Available Months
+  // Dynamic Available Months & Weeks
   const monthOptions = useMemo(() => {
     return getAvailableMonths(contentList, designList);
   }, [contentList, designList]);
+
+  const weekOptions = useMemo(() => {
+    return getWeekOptions(selectedMonth);
+  }, [selectedMonth]);
 
   // Sync Live Data from APIs
   const handleSyncData = async () => {
@@ -122,19 +132,19 @@ export const MonthlyCcDesignReportView: React.FC<MonthlyCcDesignReportViewProps>
     }
   };
 
-  // Filter items by Month & Account & PIC
+  // Filter items by Month & Week & Account & PIC
   const monthFilteredDesigns = useMemo(() => {
-    let items = filterDesignsByMonth(designList, selectedMonth);
+    let items = filterDesignsByMonth(designList, selectedMonth, selectedWeek);
     if (selectedPic !== "all") {
       items = items.filter(
         (it) => (it.pic || it.creator || "").toLowerCase() === selectedPic.toLowerCase()
       );
     }
     return items;
-  }, [designList, selectedMonth, selectedPic]);
+  }, [designList, selectedMonth, selectedWeek, selectedPic]);
 
   const monthFilteredPosts = useMemo(() => {
-    let items = filterPostsByMonth(contentList, selectedMonth);
+    let items = filterPostsByMonth(contentList, selectedMonth, selectedWeek);
 
     // Account Filter
     if (selectedAccount === "@iseeyou.glasses") {
@@ -166,16 +176,20 @@ export const MonthlyCcDesignReportView: React.FC<MonthlyCcDesignReportViewProps>
     }
 
     return items;
-  }, [contentList, selectedMonth, selectedAccount, selectedPic, searchQuery]);
+  }, [contentList, selectedMonth, selectedWeek, selectedAccount, selectedPic, searchQuery]);
 
   // Aggregated Summaries
   const designerSummaries: DesignerMonthlySummary[] = useMemo(() => {
-    return aggregateDesignerMonthly(designList, contentList, selectedMonth);
-  }, [designList, contentList, selectedMonth]);
+    return aggregateDesignerMonthly(designList, contentList, selectedMonth, selectedWeek);
+  }, [designList, contentList, selectedMonth, selectedWeek]);
+
+  const branchReelsSummaries: BranchReelsPicSummary[] = useMemo(() => {
+    return aggregateBranchReels(contentList, selectedMonth, selectedWeek);
+  }, [contentList, selectedMonth, selectedWeek]);
 
   const dailySummaries: DailyIgPostSummary[] = useMemo(() => {
-    return aggregateDailyPosting(monthFilteredDesigns, monthFilteredPosts, selectedMonth);
-  }, [monthFilteredDesigns, monthFilteredPosts, selectedMonth]);
+    return aggregateDailyPosting(monthFilteredDesigns, monthFilteredPosts, selectedMonth, selectedWeek);
+  }, [monthFilteredDesigns, monthFilteredPosts, selectedMonth, selectedWeek]);
 
   // Top KPIs
   const totalDesigns = monthFilteredDesigns.length;
@@ -191,6 +205,7 @@ export const MonthlyCcDesignReportView: React.FC<MonthlyCcDesignReportViewProps>
   const activePostingDays = dailySummaries.filter((d) => d.postCount > 0).length;
 
   const currentMonthLabel = formatMonthLabel(selectedMonth);
+  const activePeriodLabel = formatPeriodHeader(selectedMonth, selectedWeek);
 
   // Export PDF Handler
   const handleExportPdf = async () => {
@@ -200,13 +215,16 @@ export const MonthlyCcDesignReportView: React.FC<MonthlyCcDesignReportViewProps>
       await exportCcContentDesignToPDF({
         monthKey: selectedMonth,
         monthLabel: currentMonthLabel,
+        weekKey: selectedWeek,
+        periodLabel: activePeriodLabel,
         accountHandle: selectedAccount,
         designerSummaries,
+        branchReelsSummaries,
         dailySummaries,
         filteredPosts: monthFilteredPosts,
         filteredDesigns: monthFilteredDesigns,
       });
-      setFeedback(`PDF Laporan CC & Konten Design ${currentMonthLabel} berhasil diunduh!`);
+      setFeedback(`PDF Laporan CC & Konten Design (${activePeriodLabel}) berhasil diunduh!`);
       setTimeout(() => setFeedback(null), 4000);
     } catch (err: any) {
       setFeedback(`Gagal ekspor PDF: ${err.message}`);
@@ -224,13 +242,16 @@ export const MonthlyCcDesignReportView: React.FC<MonthlyCcDesignReportViewProps>
       await exportCcContentDesignToPPT({
         monthKey: selectedMonth,
         monthLabel: currentMonthLabel,
+        weekKey: selectedWeek,
+        periodLabel: activePeriodLabel,
         accountHandle: selectedAccount,
         designerSummaries,
+        branchReelsSummaries,
         dailySummaries,
         filteredPosts: monthFilteredPosts,
         filteredDesigns: monthFilteredDesigns,
       });
-      setFeedback(`PPT Laporan CC & Konten Design ${currentMonthLabel} berhasil diunduh!`);
+      setFeedback(`PPT Laporan CC & Konten Design (${activePeriodLabel}) berhasil diunduh!`);
       setTimeout(() => setFeedback(null), 4000);
     } catch (err: any) {
       setFeedback(`Gagal ekspor PPT: ${err.message}`);
@@ -383,6 +404,23 @@ export const MonthlyCcDesignReportView: React.FC<MonthlyCcDesignReportViewProps>
             </select>
           </div>
 
+          {/* Week Selector */}
+          <div className="flex items-center gap-1.5 text-xs text-foreground-secondary">
+            <Calendar className="w-3.5 h-3.5 text-brand" />
+            <span className="font-semibold text-foreground">Minggu / Siklus:</span>
+            <select
+              value={selectedWeek}
+              onChange={(e) => setSelectedWeek(e.target.value as WeekFilterKey)}
+              className="px-2.5 py-1.5 rounded-lg border border-border bg-background text-foreground text-xs font-bold focus:outline-none focus:ring-1 focus:ring-brand cursor-pointer"
+            >
+              {weekOptions.map((opt) => (
+                <option key={opt.key} value={opt.key}>
+                  {opt.label}
+                </option>
+              ))}
+            </select>
+          </div>
+
           {/* Account Filter */}
           <div className="flex items-center gap-1.5 text-xs text-foreground-secondary">
             <Instagram className="w-3.5 h-3.5 text-foreground-muted" />
@@ -517,20 +555,20 @@ export const MonthlyCcDesignReportView: React.FC<MonthlyCcDesignReportViewProps>
         </div>
       </div>
 
-      {/* SECTION A: Rekap Output Desainer / CC Selama 1 Bulan */}
+      {/* SECTION 2A: Rekap Output Desain Grafis Instagram @iseeyou.glasses (Mas Yanuar) */}
       <div className="p-4 rounded-xl border border-border bg-surface shadow-2xs space-y-4">
-        <div className="flex items-center justify-between border-b border-border pb-3">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-border pb-3">
           <div>
             <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
-              <User className="w-4 h-4 text-brand" />
-              <span>Section A — Rekap Produktivitas Desainer / CC ({currentMonthLabel})</span>
+              <FileText className="w-4 h-4 text-brand" />
+              <span>Section 2A — Desain Grafis Instagram @iseeyou.glasses (Mas Yanuar &amp; Tim)</span>
             </h3>
             <p className="text-xs text-foreground-secondary mt-0.5">
-              Rangkuman jumlah karya desain materi cetak &amp; postingan Instagram yang dihasilkan tiap PIC di bulan terpilih.
+              Khusus rekapitulasi output desain materi promosi, cetak, feed/carousel Instagram @iseeyou.glasses oleh Mas Yanuar ({activePeriodLabel}).
             </p>
           </div>
-          <span className="text-xs font-semibold text-foreground-muted">
-            {designerSummaries.length} Anggota Tim Terdata
+          <span className="text-xs font-bold text-emerald-800 bg-emerald-50 dark:bg-emerald-950/40 px-2.5 py-1 rounded border border-emerald-200">
+            {totalDesigns} Desain Selesai
           </span>
         </div>
 
@@ -538,9 +576,9 @@ export const MonthlyCcDesignReportView: React.FC<MonthlyCcDesignReportViewProps>
           <table className="w-full text-xs">
             <thead>
               <tr className="border-b border-border bg-surface-secondary/50 text-foreground-muted font-bold">
-                <th className="py-2.5 px-3 text-left">Nama Desainer / PIC</th>
+                <th className="py-2.5 px-3 text-left">Nama Desainer / Lead</th>
                 <th className="py-2.5 px-3 text-center">Desain Selesai</th>
-                <th className="py-2.5 px-3 text-center">Postingan IG</th>
+                <th className="py-2.5 px-3 text-center">Post Feed/Carousel</th>
                 <th className="py-2.5 px-3 text-right">Pangsa Kontribusi</th>
                 <th className="py-2.5 px-3 text-right">Total Reach</th>
                 <th className="py-2.5 px-3 text-right">Rata-rata ER</th>
@@ -557,10 +595,13 @@ export const MonthlyCcDesignReportView: React.FC<MonthlyCcDesignReportViewProps>
                         <div className="w-6 h-6 rounded-full bg-brand/10 text-brand flex items-center justify-center text-[10px] font-extrabold shrink-0">
                           {ds.pic.slice(0, 1)}
                         </div>
-                        <span>{ds.pic}</span>
+                        <div>
+                          <span>{ds.pic}</span>
+                          <span className="block text-[10px] text-foreground-muted font-normal">Fokus Desain &amp; Postingan @iseeyou.glasses</span>
+                        </div>
                       </td>
                       <td className="py-2.5 px-3 text-center font-extrabold text-foreground tabular-nums">
-                        <span className="inline-block px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-300">
+                        <span className="inline-block px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-300 font-bold border border-emerald-200">
                           {ds.totalDesigns} desain
                         </span>
                       </td>
@@ -591,9 +632,9 @@ export const MonthlyCcDesignReportView: React.FC<MonthlyCcDesignReportViewProps>
                             onClick={() =>
                               setExpandedDesigner(isExpanded ? null : ds.pic)
                             }
-                            className="inline-flex items-center gap-1 px-2 py-1 rounded text-[11px] font-semibold bg-surface border border-border hover:bg-surface-secondary text-brand transition-colors cursor-pointer"
+                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-bold bg-surface border border-brand/30 hover:bg-surface-secondary text-brand transition-colors cursor-pointer shadow-2xs"
                           >
-                            <span>{ds.designs.length} Karya</span>
+                            <span>{ds.designs.length} Berkas Desain</span>
                             {isExpanded ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
                           </button>
                         ) : (
@@ -608,13 +649,13 @@ export const MonthlyCcDesignReportView: React.FC<MonthlyCcDesignReportViewProps>
                         <td colSpan={7} className="p-3">
                           <div className="p-3 rounded-lg border border-border bg-surface space-y-2">
                             <span className="text-[11px] font-bold text-foreground block">
-                              Daftar Karya Desain yang Dikerjakan oleh {ds.pic} ({currentMonthLabel}):
+                              Daftar Karya Desain yang Dikerjakan oleh {ds.pic} ({activePeriodLabel}):
                             </span>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 text-xs">
                               {ds.designs.map((des, idx) => (
                                 <div
                                   key={des.id || idx}
-                                  className="p-2 rounded border border-border/70 bg-surface-secondary/40 flex items-start justify-between gap-2"
+                                  className="p-2.5 rounded-lg border border-border/80 bg-surface-secondary/40 flex items-start justify-between gap-2 shadow-2xs"
                                 >
                                   <div>
                                     <p className="font-semibold text-foreground line-clamp-1" title={des.designName}>
@@ -629,7 +670,7 @@ export const MonthlyCcDesignReportView: React.FC<MonthlyCcDesignReportViewProps>
                                       href={des.fileUrl.split(",")[0].trim()}
                                       target="_blank"
                                       rel="noopener noreferrer"
-                                      className="inline-flex items-center gap-1 text-[10px] text-emerald-700 hover:underline shrink-0"
+                                      className="inline-flex items-center gap-1 text-[10px] text-emerald-700 hover:underline shrink-0 font-bold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200"
                                     >
                                       <ExternalLink className="w-2.5 h-2.5" />
                                       <span>Drive</span>
@@ -650,20 +691,114 @@ export const MonthlyCcDesignReportView: React.FC<MonthlyCcDesignReportViewProps>
         </div>
       </div>
 
-      {/* SECTION B: Date-by-Date Posting & Design Tracker */}
+      {/* SECTION 2B: Rekap Performa Video Reels Cabang (Amanda, Ilya, Febi, Ajun, Intan) */}
+      <div className="p-4 rounded-xl border border-border bg-surface shadow-2xs space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-border pb-3">
+          <div>
+            <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
+              <Instagram className="w-4 h-4 text-pink-600" />
+              <span>Section 2B — Rekap Performa Video Reels Cabang (Amanda, Ilya, Febi, Ajun)</span>
+            </h3>
+            <p className="text-xs text-foreground-secondary mt-0.5">
+              Evaluasi kuota dan capaian engagement PIC Video Reels di tiap cabang jaringan Optik I See You &amp; Lunar Eyewear ({activePeriodLabel}).
+            </p>
+          </div>
+          <span className="text-xs font-semibold text-foreground-muted">
+            Target Standar: {selectedWeek !== "w4_monthly" ? "3-4 Video / Minggu" : "14 Video / Bulan"}
+          </span>
+        </div>
+
+        <div className="overflow-x-auto">
+          <table className="w-full text-xs">
+            <thead>
+              <tr className="border-b border-border bg-surface-secondary/50 text-foreground-muted font-bold">
+                <th className="py-2.5 px-3 text-left">PIC &amp; Cabang</th>
+                <th className="py-2.5 px-3 text-left">Akun Instagram</th>
+                <th className="py-2.5 px-3 text-center">Reels Tayang</th>
+                <th className="py-2.5 px-3 text-center">Target Kuota</th>
+                <th className="py-2.5 px-3 text-center">Capaian Kuota</th>
+                <th className="py-2.5 px-3 text-right">Total Views</th>
+                <th className="py-2.5 px-3 text-right">Total Likes</th>
+                <th className="py-2.5 px-3 text-right">Rata2 ER</th>
+                <th className="py-2.5 px-3 text-left">Top Konten Reels</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-border/50">
+              {branchReelsSummaries.map((br) => {
+                const isAboveTarget = br.quotaPercentage >= 100;
+                return (
+                  <tr key={br.branchName} className="hover:bg-surface-secondary/30 transition-colors">
+                    <td className="py-2.5 px-3 font-bold text-foreground whitespace-nowrap">
+                      <div className="flex items-center gap-2">
+                        <div className="w-6 h-6 rounded-full bg-pink-500/10 text-pink-700 dark:text-pink-300 flex items-center justify-center text-[10px] font-extrabold shrink-0">
+                          {br.pic.slice(0, 1)}
+                        </div>
+                        <div>
+                          <span>{br.pic}</span>
+                          <span className="block text-[10px] text-foreground-muted font-normal">
+                            {br.branchName}
+                          </span>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="py-2.5 px-3 font-semibold text-brand whitespace-nowrap">
+                      {br.accountHandle}
+                    </td>
+                    <td className="py-2.5 px-3 text-center font-extrabold text-foreground tabular-nums">
+                      <span className="inline-block px-2.5 py-0.5 rounded bg-surface-secondary text-foreground font-bold border border-border">
+                        {br.totalReels} video
+                      </span>
+                    </td>
+                    <td className="py-2.5 px-3 text-center font-semibold text-foreground-muted tabular-nums">
+                      {br.targetQuota} video
+                    </td>
+                    <td className="py-2.5 px-3 text-center tabular-nums">
+                      <div className="flex items-center justify-center gap-2">
+                        <div className="w-14 h-1.5 bg-surface-secondary rounded-full overflow-hidden">
+                          <div
+                            className={`h-full rounded-full ${isAboveTarget ? "bg-emerald-600" : "bg-amber-500"}`}
+                            style={{ width: `${Math.min(100, br.quotaPercentage)}%` }}
+                          />
+                        </div>
+                        <span className={`font-bold text-[11px] ${isAboveTarget ? "text-emerald-700" : "text-amber-700"}`}>
+                          {br.quotaPercentage}%
+                        </span>
+                      </div>
+                    </td>
+                    <td className="py-2.5 px-3 text-right font-medium text-foreground tabular-nums whitespace-nowrap">
+                      {br.totalViews > 0 ? br.totalViews.toLocaleString("id-ID") : "-"}
+                    </td>
+                    <td className="py-2.5 px-3 text-right font-medium text-foreground tabular-nums whitespace-nowrap">
+                      {br.totalLikes > 0 ? br.totalLikes.toLocaleString("id-ID") : "-"}
+                    </td>
+                    <td className="py-2.5 px-3 text-right font-bold text-emerald-700 dark:text-emerald-400 tabular-nums">
+                      {br.avgEngagementRate}%
+                    </td>
+                    <td className="py-2.5 px-3 max-w-xs text-foreground truncate" title={br.topReelsTitle}>
+                      {br.topReelsTitle}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* SECTION 3: Date-by-Date Posting & Design Tracker */}
       <div className="p-4 rounded-xl border border-border bg-surface shadow-2xs space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-border pb-3">
           <div>
             <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
               <Calendar className="w-4 h-4 text-emerald-600" />
-              <span>Section B — Date-by-Date Tracker: Deteksi Tanggal Posting IG &amp; Desain</span>
+              <span>Section 3 — Date-by-Date Tracker: Deteksi Tanggal Posting IG &amp; Desain</span>
             </h3>
             <p className="text-xs text-foreground-secondary mt-0.5">
-              Pelacakan harian tanggal berapa saja ada konten rilis di Instagram {selectedAccount} dan berapa desain baru yang dibuat.
+              Pelacakan harian tanggal berapa saja ada konten rilis di Instagram {selectedAccount} dan berapa desain baru yang dibuat ({activePeriodLabel}).
             </p>
           </div>
           <span className="text-xs text-foreground-muted font-medium">
-            Periode: {currentMonthLabel}
+            Periode: {activePeriodLabel}
           </span>
         </div>
 
@@ -766,16 +901,16 @@ export const MonthlyCcDesignReportView: React.FC<MonthlyCcDesignReportViewProps>
         </div>
       </div>
 
-      {/* SECTION C: Tabel Performa Konten Postingan IG Bulanan */}
+      {/* SECTION 4: Tabel Performa Konten Postingan IG */}
       <div className="p-4 rounded-xl border border-border bg-surface shadow-2xs space-y-4">
         <div className="flex items-center justify-between border-b border-border pb-3">
           <div>
             <h3 className="text-sm font-bold text-foreground flex items-center gap-2">
               <Layers className="w-4 h-4 text-brand" />
-              <span>Section C — Tabel Performa Postingan Instagram {selectedAccount} ({currentMonthLabel})</span>
+              <span>Section 4 — Tabel Performa Postingan Instagram {selectedAccount} ({activePeriodLabel})</span>
             </h3>
             <p className="text-xs text-foreground-secondary mt-0.5">
-              Seluruh postingan Instagram yang rilis di bulan {currentMonthLabel} diurutkan berdasarkan performa jangkauan.
+              Seluruh postingan Instagram yang rilis pada periode {activePeriodLabel} diurutkan berdasarkan performa jangkauan.
             </p>
           </div>
           <span className="text-xs font-semibold text-foreground-muted">

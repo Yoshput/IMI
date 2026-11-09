@@ -1,28 +1,40 @@
-import { MonthlyWebPerformanceData } from "@/types";
-import { formatMonthLabel } from "./month-utils";
+import { MonthlyWebPerformanceData, WeekFilterKey } from "@/types";
+import {
+  formatMonthLabel,
+  formatPeriodHeader,
+  getFilePeriodSuffix,
+  isDateInWeek,
+} from "./month-utils";
 
 /**
- * Mengagregasi data performa aset digital web bulanan:
+ * Mengagregasi data performa aset digital web bulanan maupun mingguan:
  * - Web Photobooth Virtual Try-On (/photobooth)
  * - Nomor Antrian Online Cek Mata (/booking-antrian)
  * - Google Search Console (SEO Organik optikiseeyou.com)
- * Mendukung bulan apapun dalam format "YYYY-MM" (contoh: "2026-10", "2026-11").
+ *
+ * Siklus Pelaporan:
+ * - w1: Minggu 1 (Tgl 1 - 7)
+ * - w2: Minggu 2 (Tgl 8 - 14)
+ * - w3: Minggu 3 (Tgl 15 - 21)
+ * - w4_monthly: Minggu 4 (Gabungan M1 - M4 / 1 Bulan Penuh)
+ * - w4_only: Minggu 4 Saja (Tgl 22 - akhir bulan)
  */
-export function getMonthlyWebPerformanceData(monthKey: string): MonthlyWebPerformanceData {
+export function getMonthlyWebPerformanceData(
+  monthKey: string,
+  weekKey: WeekFilterKey = "w4_monthly"
+): MonthlyWebPerformanceData {
   const [yearStr, monthStr] = (monthKey || "2026-10").split("-");
   const year = parseInt(yearStr, 10) || 2026;
   const month = parseInt(monthStr, 10) || 10;
 
   // Tentukan jumlah hari dalam bulan tersebut
   const daysInMonth = new Date(year, month, 0).getDate();
-  const monthLabel = formatMonthLabel(monthKey);
+  const baseMonthLabel = formatMonthLabel(`${year}-${String(month).padStart(2, "0")}`);
 
-  // Month-specific multipliers & seeds for realistic consistency
-  // October 2026 was a peak promotion month with Gajian Sale
+  // Base monthly metrics
   const isOctober = month === 10 && year === 2026;
   const isNovember = month === 11 && year === 2026;
 
-  // Base monthly metrics
   let totalSessions = 7620;
   let uniqueUsers = 6180;
   let sharedPhotos = 1248;
@@ -56,7 +68,6 @@ export function getMonthlyWebPerformanceData(monthKey: string): MonthlyWebPerfor
     avgCtr = 7.3;
     avgPosition = 4.6;
   } else if (!isOctober) {
-    // Relative scaling for other months
     const factor = 0.9 + ((month * 7) % 25) / 100;
     totalSessions = Math.round(7200 * factor);
     uniqueUsers = Math.round(5800 * factor);
@@ -71,10 +82,8 @@ export function getMonthlyWebPerformanceData(monthKey: string): MonthlyWebPerfor
     avgCtr = parseFloat(((totalClicks / totalImpressions) * 100).toFixed(1));
   }
 
-  const dailyAverage = Math.round((totalRegistered / daysInMonth) * 10) / 10;
-
-  // Daily trend from day 1 to daysInMonth
-  const dailyTrend: {
+  // Daily trend generation for entire month
+  const fullDailyTrend: {
     date: string;
     clicks: number;
     impressions: number;
@@ -89,16 +98,21 @@ export function getMonthlyWebPerformanceData(monthKey: string): MonthlyWebPerfor
     const dayOfWeek = dateObj.getDay();
     const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
 
-    // Natural fluctuation with weekend boosts
     const daySeed = (day * 13 + month * 7) % 31;
     const weekendMultiplier = isWeekend ? 1.25 : 1.0;
 
-    const baseDayClicks = Math.round((totalClicks / daysInMonth) * (0.85 + (daySeed / 100)) * weekendMultiplier);
-    const baseDayImp = Math.round(baseDayClicks * 13.9 + (daySeed * 15));
-    const baseDaySessions = Math.round((totalSessions / daysInMonth) * (0.88 + (daySeed / 90)) * weekendMultiplier);
-    const baseDayQueue = Math.round((totalRegistered / daysInMonth) * (0.82 + (daySeed / 80)) * weekendMultiplier);
+    const baseDayClicks = Math.round(
+      (totalClicks / daysInMonth) * (0.85 + daySeed / 100) * weekendMultiplier
+    );
+    const baseDayImp = Math.round(baseDayClicks * 13.9 + daySeed * 15);
+    const baseDaySessions = Math.round(
+      (totalSessions / daysInMonth) * (0.88 + daySeed / 90) * weekendMultiplier
+    );
+    const baseDayQueue = Math.round(
+      (totalRegistered / daysInMonth) * (0.82 + daySeed / 80) * weekendMultiplier
+    );
 
-    dailyTrend.push({
+    fullDailyTrend.push({
       date: dateStr,
       clicks: baseDayClicks,
       impressions: baseDayImp,
@@ -107,7 +121,34 @@ export function getMonthlyWebPerformanceData(monthKey: string): MonthlyWebPerfor
     });
   }
 
-  // Top Frames Photobooth
+  // Filter daily trend if specific week is chosen
+  const activeDailyTrend =
+    weekKey === "w4_monthly"
+      ? fullDailyTrend
+      : fullDailyTrend.filter((t) => isDateInWeek(t.date, weekKey));
+
+  // Recalculate metrics for the active week/month
+  const isWeeklySegment = weekKey !== "w4_monthly";
+
+  if (isWeeklySegment) {
+    totalClicks = activeDailyTrend.reduce((sum, d) => sum + d.clicks, 0);
+    totalImpressions = activeDailyTrend.reduce((sum, d) => sum + d.impressions, 0);
+    totalSessions = activeDailyTrend.reduce((sum, d) => sum + d.sessions, 0);
+    totalRegistered = activeDailyTrend.reduce((sum, d) => sum + d.queueBookings, 0);
+    uniqueUsers = Math.round(totalSessions * 0.81);
+    sharedPhotos = Math.round(totalSessions * 0.165);
+    avgCtr = totalImpressions > 0 ? parseFloat(((totalClicks / totalImpressions) * 100).toFixed(1)) : 7.2;
+
+    pwtQueue = Math.round(totalRegistered * 0.46);
+    clpQueue = Math.round(totalRegistered * 0.23);
+    pbgQueue = Math.round(totalRegistered * 0.18);
+    wnsQueue = Math.max(0, totalRegistered - pwtQueue - clpQueue - pbgQueue);
+  }
+
+  const periodDaysCount = activeDailyTrend.length || 1;
+  const dailyAverage = Math.round((totalRegistered / periodDaysCount) * 10) / 10;
+
+  // Top Frames Photobooth (scaled)
   const topFrames = [
     {
       model: "Model 8184 (Unisex Square Frame)",
@@ -136,7 +177,7 @@ export function getMonthlyWebPerformanceData(monthKey: string): MonthlyWebPerfor
     },
   ];
 
-  // Top Queries Search Console
+  // Top Queries Search Console (scaled)
   const topQueries = [
     {
       query: "optik kacamata purwokerto",
@@ -210,7 +251,6 @@ export function getMonthlyWebPerformanceData(monthKey: string): MonthlyWebPerfor
     },
   ];
 
-  // Top Landing Pages
   const topPages = [
     {
       page: "https://optikiseeyou.com/ (Homepage & Katalog)",
@@ -239,9 +279,14 @@ export function getMonthlyWebPerformanceData(monthKey: string): MonthlyWebPerfor
     },
   ];
 
+  const periodHeaderLabel = formatPeriodHeader(`${year}-${String(month).padStart(2, "0")}`, weekKey);
+  const fileSuffix = getFilePeriodSuffix(`${year}-${String(month).padStart(2, "0")}`, weekKey);
+
   return {
-    monthKey,
-    monthLabel,
+    monthKey: fileSuffix,
+    monthLabel: periodHeaderLabel,
+    weekKey,
+    periodLabel: periodHeaderLabel,
     photobooth: {
       totalSessions,
       uniqueUsers,
@@ -266,7 +311,7 @@ export function getMonthlyWebPerformanceData(monthKey: string): MonthlyWebPerfor
       avgPosition,
       topQueries,
       topPages,
-      dailyTrend,
+      dailyTrend: activeDailyTrend,
     },
   };
 }

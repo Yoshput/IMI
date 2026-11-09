@@ -23,10 +23,11 @@ import {
   FileText,
 } from "lucide-react";
 import { CombinedWebResume, getCombinedWebResume } from "@/lib/antrian-tracking";
-import { getCurrentMonthKey, getAvailableMonths, formatMonthLabel } from "@/lib/month-utils";
+import { getCurrentMonthKey, getAvailableMonths, formatMonthLabel, getWeekOptions } from "@/lib/month-utils";
 import { getMonthlyWebPerformanceData } from "@/lib/monthly-web-performance";
 import { exportWebPerformanceToPDF, exportWebPerformanceToPPT } from "@/lib/export-pdf-ppt";
 import { MonthlyWebPerformanceReport } from "@/features/reports/components/MonthlyWebPerformanceReport";
+import { WeekFilterKey } from "@/types";
 
 interface WebPhotoboothAndQueueResumeProps {
   initialPeriod?: "weekly" | "monthly";
@@ -40,22 +41,24 @@ export const WebPhotoboothAndQueueResume: React.FC<WebPhotoboothAndQueueResumePr
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  // Dynamic Month Selector state
+  // Dynamic Month & Week Selector state
   const [selectedMonth, setSelectedMonth] = useState<string>(() => getCurrentMonthKey());
+  const [selectedWeek, setSelectedWeek] = useState<WeekFilterKey>("w4_monthly");
   const [isExportingPdf, setIsExportingPdf] = useState(false);
   const [isExportingPpt, setIsExportingPpt] = useState(false);
   const [exportNotice, setExportNotice] = useState<string | null>(null);
   const [showFullMonthlyReport, setShowFullMonthlyReport] = useState(false);
 
   const availableMonths = useMemo(() => getAvailableMonths(), []);
+  const weekOptions = useMemo(() => getWeekOptions(selectedMonth), [selectedMonth]);
 
   const handleQuickExportPdf = async () => {
     setIsExportingPdf(true);
     setExportNotice(null);
     try {
-      const data = getMonthlyWebPerformanceData(selectedMonth);
+      const data = getMonthlyWebPerformanceData(selectedMonth, selectedWeek);
       await exportWebPerformanceToPDF(data);
-      setExportNotice(`PDF Laporan Web ${data.monthLabel} berhasil diunduh!`);
+      setExportNotice(`PDF Laporan Web ${data.periodLabel || data.monthLabel} berhasil diunduh!`);
       setTimeout(() => setExportNotice(null), 4000);
     } catch (err: any) {
       setExportNotice(`Gagal ekspor PDF: ${err.message}`);
@@ -69,9 +72,9 @@ export const WebPhotoboothAndQueueResume: React.FC<WebPhotoboothAndQueueResumePr
     setIsExportingPpt(true);
     setExportNotice(null);
     try {
-      const data = getMonthlyWebPerformanceData(selectedMonth);
+      const data = getMonthlyWebPerformanceData(selectedMonth, selectedWeek);
       await exportWebPerformanceToPPT(data);
-      setExportNotice(`PPT Laporan Web ${data.monthLabel} berhasil diunduh!`);
+      setExportNotice(`PPT Laporan Web ${data.periodLabel || data.monthLabel} berhasil diunduh!`);
       setTimeout(() => setExportNotice(null), 4000);
     } catch (err: any) {
       setExportNotice(`Gagal ekspor PPT: ${err.message}`);
@@ -231,12 +234,12 @@ Fitur Web Photobooth efektif menjadi corong (top of funnel) mengarahkan calon cu
         </div>
       </div>
 
-      {/* Monthly Filter Bar & Export Actions */}
+      {/* Monthly & Weekly Filter Bar & Export Actions */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 rounded-lg bg-surface-secondary/40 border border-border">
         <div className="flex items-center gap-2 flex-wrap">
           <span className="text-xs font-bold text-foreground flex items-center gap-1.5">
             <Globe className="w-3.5 h-3.5 text-brand" />
-            <span>Laporan Khusus Bulan:</span>
+            <span>Periode Laporan:</span>
           </span>
           <select
             value={selectedMonth}
@@ -249,6 +252,18 @@ Fitur Web Photobooth efektif menjadi corong (top of funnel) mengarahkan calon cu
               </option>
             ))}
           </select>
+
+          <select
+            value={selectedWeek}
+            onChange={(e) => setSelectedWeek(e.target.value as WeekFilterKey)}
+            className="px-2.5 py-1 rounded-md border border-border bg-background text-foreground text-xs font-bold focus:outline-none cursor-pointer"
+          >
+            {weekOptions.map((w) => (
+              <option key={w.key} value={w.key}>
+                {w.shortLabel}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div className="flex items-center gap-2 flex-wrap">
@@ -257,10 +272,10 @@ Fitur Web Photobooth efektif menjadi corong (top of funnel) mengarahkan calon cu
             onClick={handleQuickExportPdf}
             disabled={isExportingPdf}
             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#124734] hover:bg-[#0E3829] dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white text-xs font-bold transition-all shadow-xs disabled:opacity-60 cursor-pointer"
-            title="Download PDF Laporan Web & Performa Bulanan"
+            title="Download PDF Laporan Web & Performa"
           >
             <Download className={`w-3 h-3 text-white ${isExportingPdf ? "animate-bounce" : ""}`} />
-            <span>{isExportingPdf ? "Menyiapkan PDF..." : "Export PDF Bulanan"}</span>
+            <span>{isExportingPdf ? "Menyiapkan PDF..." : "Export PDF"}</span>
           </button>
 
           <button
@@ -268,10 +283,10 @@ Fitur Web Photobooth efektif menjadi corong (top of funnel) mengarahkan calon cu
             onClick={handleQuickExportPpt}
             disabled={isExportingPpt}
             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-surface border border-border text-foreground font-semibold text-xs hover:bg-surface-secondary hover:text-brand hover:border-brand/40 transition-all shadow-2xs disabled:opacity-60 cursor-pointer"
-            title="Download PPT Laporan Web & Performa Bulanan"
+            title="Download PPT Laporan Web & Performa"
           >
             <Presentation className={`w-3 h-3 text-brand ${isExportingPpt ? "animate-pulse" : ""}`} />
-            <span>{isExportingPpt ? "Menyiapkan PPT..." : "Export PPT Bulanan"}</span>
+            <span>{isExportingPpt ? "Menyiapkan PPT..." : "Export PPT"}</span>
           </button>
 
           <button

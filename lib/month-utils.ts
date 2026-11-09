@@ -1,4 +1,111 @@
-import { ContentItem, DesignDatabaseItem, MonthlyPeriod } from "@/types";
+import { ContentItem, DesignDatabaseItem, MonthlyPeriod, WeekFilterKey } from "@/types";
+
+export interface WeekPeriodOption {
+  key: WeekFilterKey;
+  label: string;
+  shortLabel: string;
+  startDay: number;
+  endDay: number;
+}
+
+/**
+ * Daftar opsi minggu dalam satu bulan:
+ * - Minggu 1: Tgl 1 - 7
+ * - Minggu 2: Tgl 8 - 14
+ * - Minggu 3: Tgl 15 - 21
+ * - Minggu 4 (Bulanan Penuh M1-M4): Gabungan Minggu 1 s.d. 4 (Default Bulanan)
+ * - Minggu 4 Saja: Tgl 22 s.d. Akhir Bulan
+ */
+export function getWeekOptions(monthKey: string): WeekPeriodOption[] {
+  const [yearStr, monthStr] = (monthKey || "2026-10").split("-");
+  const year = parseInt(yearStr, 10) || 2026;
+  const month = parseInt(monthStr, 10) || 10;
+  const lastDay = new Date(year, month, 0).getDate();
+
+  return [
+    {
+      key: "w4_monthly",
+      label: `Minggu 4 (Bulanan M1-M4 · 1 - ${lastDay} Penuh)`,
+      shortLabel: "Minggu 4 (Bulanan M1-M4)",
+      startDay: 1,
+      endDay: lastDay,
+    },
+    {
+      key: "w1",
+      label: "Minggu 1 (Tgl 1 - 7)",
+      shortLabel: "Minggu 1 (1-7)",
+      startDay: 1,
+      endDay: 7,
+    },
+    {
+      key: "w2",
+      label: "Minggu 2 (Tgl 8 - 14)",
+      shortLabel: "Minggu 2 (8-14)",
+      startDay: 8,
+      endDay: 14,
+    },
+    {
+      key: "w3",
+      label: "Minggu 3 (Tgl 15 - 21)",
+      shortLabel: "Minggu 3 (15-21)",
+      startDay: 15,
+      endDay: 21,
+    },
+    {
+      key: "w4_only",
+      label: `Minggu 4 Saja (Tgl 22 - ${lastDay})`,
+      shortLabel: `Minggu 4 (22-${lastDay})`,
+      startDay: 22,
+      endDay: lastDay,
+    },
+  ];
+}
+
+/**
+ * Memeriksa apakah tanggal berada di dalam rentang minggu yang dipilih.
+ */
+export function isDateInWeek(dateStr: string, weekKey: WeekFilterKey): boolean {
+  if (weekKey === "w4_monthly") return true; // Full month
+  const iso = normalizeDateToISO(dateStr);
+  if (!iso || !iso.includes("-")) return true;
+  const parts = iso.split("-");
+  const day = parseInt(parts[2], 10);
+  if (isNaN(day)) return true;
+
+  if (weekKey === "w1") return day >= 1 && day <= 7;
+  if (weekKey === "w2") return day >= 8 && day <= 14;
+  if (weekKey === "w3") return day >= 15 && day <= 21;
+  if (weekKey === "w4_only") return day >= 22;
+  return true;
+}
+
+/**
+ * Format label judul periode laporan (misal: "Minggu 1 (1 - 7 Oktober 2026)" atau "Rekap Bulanan M1-M4 (Oktober 2026)")
+ */
+export function formatPeriodHeader(monthKey: string, weekKey: WeekFilterKey = "w4_monthly"): string {
+  const monthLabel = formatMonthLabel(monthKey);
+  const [yearStr, monthStr] = (monthKey || "2026-10").split("-");
+  const year = parseInt(yearStr, 10) || 2026;
+  const month = parseInt(monthStr, 10) || 10;
+  const lastDay = new Date(year, month, 0).getDate();
+
+  if (weekKey === "w1") return `Minggu 1 (1 - 7 ${monthLabel})`;
+  if (weekKey === "w2") return `Minggu 2 (8 - 14 ${monthLabel})`;
+  if (weekKey === "w3") return `Minggu 3 (15 - 21 ${monthLabel})`;
+  if (weekKey === "w4_only") return `Minggu 4 (22 - ${lastDay} ${monthLabel})`;
+  return `Rekap Bulanan M1 - M4 (${monthLabel})`;
+}
+
+/**
+ * Format suffix file ekspor PDF/PPT (misal: "2026-10_Minggu-1" atau "2026-10_Bulanan_M1-M4")
+ */
+export function getFilePeriodSuffix(monthKey: string, weekKey: WeekFilterKey = "w4_monthly"): string {
+  if (weekKey === "w1") return `${monthKey}_Minggu-1`;
+  if (weekKey === "w2") return `${monthKey}_Minggu-2`;
+  if (weekKey === "w3") return `${monthKey}_Minggu-3`;
+  if (weekKey === "w4_only") return `${monthKey}_Minggu-4`;
+  return `${monthKey}_Bulanan_M1-M4`;
+}
 
 const MONTH_NAMES_ID = [
   "Januari",

@@ -21,8 +21,8 @@ import {
   Clock,
   ArrowUpRight,
 } from "lucide-react";
-import { MonthlyWebPerformanceData, MonthlyPeriod } from "@/types";
-import { getCurrentMonthKey, getAvailableMonths, formatMonthLabel } from "@/lib/month-utils";
+import { MonthlyWebPerformanceData, MonthlyPeriod, WeekFilterKey } from "@/types";
+import { getCurrentMonthKey, getAvailableMonths, formatMonthLabel, getWeekOptions } from "@/lib/month-utils";
 import { getMonthlyWebPerformanceData } from "@/lib/monthly-web-performance";
 import { exportWebPerformanceToPDF, exportWebPerformanceToPPT } from "@/lib/export-pdf-ppt";
 
@@ -38,27 +38,32 @@ export const MonthlyWebPerformanceReport: React.FC<MonthlyWebPerformanceReportPr
   const [selectedMonth, setSelectedMonth] = useState<string>(
     () => initialMonth || getCurrentMonthKey()
   );
+  const [selectedWeek, setSelectedWeek] = useState<WeekFilterKey>("w4_monthly");
 
   const [isExportingPdf, setIsExportingPdf] = useState(false);
   const [isExportingPpt, setIsExportingPpt] = useState(false);
   const [exportFeedback, setExportFeedback] = useState<string | null>(null);
 
-  // Available month periods
+  // Available month periods & week options
   const monthOptions: MonthlyPeriod[] = useMemo(() => {
     return getAvailableMonths();
   }, []);
 
-  // Compute or fetch monthly data
-  const data: MonthlyWebPerformanceData = useMemo(() => {
-    return getMonthlyWebPerformanceData(selectedMonth);
+  const weekOptions = useMemo(() => {
+    return getWeekOptions(selectedMonth);
   }, [selectedMonth]);
+
+  // Compute or fetch monthly/weekly data
+  const data: MonthlyWebPerformanceData = useMemo(() => {
+    return getMonthlyWebPerformanceData(selectedMonth, selectedWeek);
+  }, [selectedMonth, selectedWeek]);
 
   const handleExportPdf = async () => {
     setIsExportingPdf(true);
     setExportFeedback(null);
     try {
       await exportWebPerformanceToPDF(data);
-      setExportFeedback(`PDF Laporan Web ${data.monthLabel} berhasil diunduh!`);
+      setExportFeedback(`PDF Laporan Web ${data.periodLabel || data.monthLabel} berhasil diunduh!`);
       setTimeout(() => setExportFeedback(null), 4000);
     } catch (err: any) {
       console.error("Gagal ekspor PDF:", err);
@@ -74,7 +79,7 @@ export const MonthlyWebPerformanceReport: React.FC<MonthlyWebPerformanceReportPr
     setExportFeedback(null);
     try {
       await exportWebPerformanceToPPT(data);
-      setExportFeedback(`PPT Laporan Web ${data.monthLabel} berhasil diunduh!`);
+      setExportFeedback(`PPT Laporan Web ${data.periodLabel || data.monthLabel} berhasil diunduh!`);
       setTimeout(() => setExportFeedback(null), 4000);
     } catch (err: any) {
       console.error("Gagal ekspor PPT:", err);
@@ -93,14 +98,14 @@ export const MonthlyWebPerformanceReport: React.FC<MonthlyWebPerformanceReportPr
           <div className="flex items-center gap-2">
             <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded text-[11px] font-bold uppercase tracking-wider bg-brand/10 text-brand border border-brand/20">
               <Globe className="w-3 h-3 text-brand" />
-              Laporan Web &amp; Performa Bulanan
+              Laporan Web &amp; Performa
             </span>
-            <span className="text-xs text-foreground-muted">
-              optikiseeyou.com
+            <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded border border-emerald-200 dark:border-emerald-800">
+              {data.periodLabel || data.monthLabel}
             </span>
           </div>
           <p className="text-xs text-foreground-secondary mt-1">
-            Rekap lengkap performa aset digital: Web Photobooth Virtual Try-On, Pendaftaran Nomor Antrian Online Cek Mata, dan SEO Organik Google Search Console.
+            Rekap lengkap performa aset digital: Web Photobooth Virtual Try-On, Pendaftaran Nomor Antrian Online Cek Mata, dan SEO Organik Google Search Console ({data.periodLabel || data.monthLabel}).
           </p>
         </div>
 
@@ -117,6 +122,22 @@ export const MonthlyWebPerformanceReport: React.FC<MonthlyWebPerformanceReportPr
               {monthOptions.map((opt) => (
                 <option key={opt.monthKey} value={opt.monthKey} className="bg-surface text-foreground">
                   {opt.label}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Week Selector */}
+          <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-border bg-background">
+            <Calendar className="w-3.5 h-3.5 text-brand" />
+            <select
+              value={selectedWeek}
+              onChange={(e) => setSelectedWeek(e.target.value as WeekFilterKey)}
+              className="bg-transparent text-foreground text-xs font-bold focus:outline-none cursor-pointer"
+            >
+              {weekOptions.map((w) => (
+                <option key={w.key} value={w.key} className="bg-surface text-foreground">
+                  {w.shortLabel}
                 </option>
               ))}
             </select>

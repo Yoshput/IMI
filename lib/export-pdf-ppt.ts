@@ -11,7 +11,10 @@ import {
   DailyIgPostSummary,
   ContentItem,
   DesignDatabaseItem,
+  WeekFilterKey,
+  BranchReelsPicSummary,
 } from "@/types";
+import { getFilePeriodSuffix } from "./month-utils";
 
 // Helper for dynamic loading of jsPDF & autoTable to ensure complete SSR safety
 async function getJsPdf() {
@@ -41,7 +44,7 @@ const PPT_DARK_TEXT = "1F2937";
 const PPT_MUTED_TEXT = "6B7280";
 
 // ============================================================================
-// 1. LAPORAN WEB & PERFORMA BULANAN -> PDF
+// 1. LAPORAN WEB & PERFORMA BULANAN / MINGGUAN -> PDF
 // ============================================================================
 export async function exportWebPerformanceToPDF(data: MonthlyWebPerformanceData): Promise<void> {
   const { jsPDF, autoTable } = await getJsPdf();
@@ -58,11 +61,11 @@ export async function exportWebPerformanceToPDF(data: MonthlyWebPerformanceData)
   doc.setTextColor(255, 255, 255);
   doc.setFont("helvetica", "bold");
   doc.setFontSize(15);
-  doc.text("LAPORAN WEB & PERFORMA BULANAN", margin, 12);
+  doc.text("LAPORAN WEB & PERFORMA", margin, 12);
 
   doc.setFont("helvetica", "normal");
   doc.setFontSize(9.5);
-  doc.text(`Periode: ${data.monthLabel.toUpperCase()} (${data.monthKey}) · Optik I See You & Lunar Eyewear`, margin, 18);
+  doc.text(`Periode: ${(data.periodLabel || data.monthLabel).toUpperCase()} · Optik I See You & Lunar Eyewear`, margin, 18);
   doc.text(`Dicetak: ${new Date().toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" })}`, margin, 23);
 
   // Section 1: Executive KPI Summary Cards
@@ -261,7 +264,7 @@ export async function exportWebPerformanceToPPT(data: MonthlyWebPerformanceData)
   // Slide 1: Cover Slide
   const s1 = pptx.addSlide();
   s1.background = { color: PPT_BRAND_COLOR };
-  s1.addText("LAPORAN WEB & PERFORMA BULANAN", {
+  s1.addText("LAPORAN WEB & PERFORMA", {
     x: 0.8,
     y: 2.0,
     w: 8.5,
@@ -271,7 +274,7 @@ export async function exportWebPerformanceToPPT(data: MonthlyWebPerformanceData)
     bold: true,
     color: "FFFFFF",
   });
-  s1.addText(`Periode: ${data.monthLabel} (${data.monthKey})`, {
+  s1.addText(`Periode: ${data.periodLabel || data.monthLabel}`, {
     x: 0.8,
     y: 3.1,
     w: 8.5,
@@ -494,13 +497,16 @@ export async function exportWebPerformanceToPPT(data: MonthlyWebPerformanceData)
 }
 
 // ============================================================================
-// 3. LAPORAN CC PERFORMA KONTEN & DESIGN BULANAN -> PDF
+// 3. LAPORAN CC PERFORMA KONTEN & DESIGN -> PDF
 // ============================================================================
 export interface ExportCcReportParams {
   monthKey: string;
   monthLabel: string;
+  weekKey?: WeekFilterKey;
+  periodLabel?: string;
   accountHandle: string;
   designerSummaries: DesignerMonthlySummary[];
+  branchReelsSummaries?: BranchReelsPicSummary[];
   dailySummaries: DailyIgPostSummary[];
   filteredPosts: ContentItem[];
   filteredDesigns: DesignDatabaseItem[];
@@ -522,6 +528,8 @@ export async function exportCcContentDesignToPDF(params: ExportCcReportParams): 
     : "0.0";
   const activePostingDays = params.dailySummaries.filter((d) => d.postCount > 0).length;
 
+  const periodDisplayName = params.periodLabel || params.monthLabel;
+
   // Header Banner
   doc.setFillColor(...BRAND_GREEN_RGB);
   doc.rect(0, 0, pageWidth, 28, "F");
@@ -534,7 +542,7 @@ export async function exportCcContentDesignToPDF(params: ExportCcReportParams): 
   doc.setFont("helvetica", "normal");
   doc.setFontSize(9);
   doc.text(
-    `Akun: ${params.accountHandle} · Periode: ${params.monthLabel.toUpperCase()} (${params.monthKey})`,
+    `Akun: ${params.accountHandle} · Periode: ${periodDisplayName.toUpperCase()} (${params.monthKey})`,
     margin,
     17
   );
@@ -548,18 +556,18 @@ export async function exportCcContentDesignToPDF(params: ExportCcReportParams): 
   doc.setTextColor(...TEXT_DARK_RGB);
   doc.setFont("helvetica", "bold");
   doc.setFontSize(10.5);
-  doc.text(`1. Ringkasan Eksekutif Produksi & Distribusi Konten (${params.monthLabel})`, margin, 35);
+  doc.text(`1. Ringkasan Eksekutif Produksi & Distribusi Konten (${periodDisplayName})`, margin, 35);
 
   const kpiY = 39;
   const cardWidth = (pageWidth - margin * 2 - 9) / 4;
   const cardHeight = 20;
 
-  // KPI 1: Desain Dibuat
+  // KPI 1: Desain Selesai (Yanuar)
   doc.setFillColor(243, 244, 246);
   doc.roundedRect(margin, kpiY, cardWidth, cardHeight, 2, 2, "F");
   doc.setFontSize(7.5);
   doc.setTextColor(...MUTED_RGB);
-  doc.text("TOTAL DESAIN SELESAI", margin + 3, kpiY + 5);
+  doc.text("TOTAL DESAIN (YANUAR)", margin + 3, kpiY + 5);
   doc.setFontSize(12);
   doc.setTextColor(...BRAND_GREEN_RGB);
   doc.setFont("helvetica", "bold");
@@ -567,7 +575,7 @@ export async function exportCcContentDesignToPDF(params: ExportCcReportParams): 
   doc.setFontSize(7);
   doc.setTextColor(...TEXT_DARK_RGB);
   doc.setFont("helvetica", "normal");
-  doc.text("Form Responses 6", margin + 3, kpiY + 17);
+  doc.text("Database Sheets", margin + 3, kpiY + 17);
 
   // KPI 2: Postingan IG
   const card2X = margin + cardWidth + 3;
@@ -591,7 +599,7 @@ export async function exportCcContentDesignToPDF(params: ExportCcReportParams): 
   doc.roundedRect(card3X, kpiY, cardWidth, cardHeight, 2, 2, "F");
   doc.setFontSize(7.5);
   doc.setTextColor(...MUTED_RGB);
-  doc.text("TOTAL REACH BULANAN", card3X + 3, kpiY + 5);
+  doc.text("TOTAL REACH / VIEWS", card3X + 3, kpiY + 5);
   doc.setFontSize(12);
   doc.setTextColor(...BRAND_GREEN_RGB);
   doc.setFont("helvetica", "bold");
@@ -617,11 +625,11 @@ export async function exportCcContentDesignToPDF(params: ExportCcReportParams): 
   doc.setFont("helvetica", "normal");
   doc.text("Interaksi / Reach", card4X + 3, kpiY + 17);
 
-  // Section 2: Table Produktivitas Desainer / CC
+  // Section 2A: Table Desain Grafis Instagram @iseeyou.glasses (Mas Yanuar)
   doc.setFont("helvetica", "bold");
   doc.setFontSize(10);
   doc.setTextColor(...TEXT_DARK_RGB);
-  doc.text(`2. Rekap Produktivitas Output per Desainer / CC (${params.monthLabel}):`, margin, 66);
+  doc.text(`2A. Rekap Desain Grafis Instagram @iseeyou.glasses (Mas Yanuar & Tim):`, margin, 66);
 
   const designerRows = params.designerSummaries.map((ds, idx) => [
     idx + 1,
@@ -635,7 +643,7 @@ export async function exportCcContentDesignToPDF(params: ExportCcReportParams): 
 
   autoTable(doc, {
     startY: 70,
-    head: [["No", "Nama Desainer / PIC", "Desain Selesai", "Postingan IG", "% Kontribusi", "Total Reach", "Rata2 ER"]],
+    head: [["No", "Nama Desainer / Lead", "Desain Selesai", "Post Feed/Carousel", "% Kontribusi", "Total Reach", "Rata2 ER"]],
     body: designerRows,
     theme: "striped",
     headStyles: { fillColor: BRAND_GREEN_RGB, textColor: 255, fontStyle: "bold", fontSize: 8 },
@@ -643,8 +651,43 @@ export async function exportCcContentDesignToPDF(params: ExportCcReportParams): 
     margin: { left: margin, right: margin },
   });
 
+  // Section 2B: Table Performa Video Reels Cabang (Amanda, Ilya, Febi, Ajun, Intan)
+  let reelsY = (doc as any).lastAutoTable ? (doc as any).lastAutoTable.finalY + 8 : 100;
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(10);
+  doc.setTextColor(...TEXT_DARK_RGB);
+  doc.text(`2B. Rekap Performa Video Reels Cabang (Amanda, Ilya, Febi, Ajun):`, margin, reelsY);
+
+  const branchReels = params.branchReelsSummaries || [];
+  const reelsRows = branchReels.map((br, idx) => [
+    idx + 1,
+    `${br.pic} (${br.branchName.replace("Optik I See You ", "").replace(" (Second Brand)", "")})`,
+    br.accountHandle,
+    `${br.totalReels} reels`,
+    `${br.targetQuota} reels`,
+    `${br.quotaPercentage}%`,
+    br.totalViews > 0 ? br.totalViews.toLocaleString("id-ID") : "-",
+    br.totalLikes > 0 ? br.totalLikes.toLocaleString("id-ID") : "-",
+    br.avgEngagementRate > 0 ? `${br.avgEngagementRate.toFixed(1)}%` : "-",
+  ]);
+
+  autoTable(doc, {
+    startY: reelsY + 3,
+    head: [["No", "PIC & Cabang", "Akun IG", "Reels", "Target", "% Capai", "Total Views", "Likes", "ER (%)"]],
+    body: reelsRows.length > 0 ? reelsRows : [["-", "-", "-", "-", "-", "-", "-", "-", "-"]],
+    theme: "striped",
+    headStyles: { fillColor: BRAND_EMERALD_RGB, textColor: 255, fontStyle: "bold", fontSize: 8 },
+    bodyStyles: { fontSize: 8, textColor: TEXT_DARK_RGB },
+    margin: { left: margin, right: margin },
+  });
+
   // Section 3: Date-by-date Posting Tracker
-  let trackerY = (doc as any).lastAutoTable ? (doc as any).lastAutoTable.finalY + 8 : 115;
+  let trackerY = (doc as any).lastAutoTable ? (doc as any).lastAutoTable.finalY + 8 : 145;
+  if (trackerY > 230) {
+    doc.addPage();
+    trackerY = 20;
+  }
+
   doc.setFont("helvetica", "bold");
   doc.setFontSize(10);
   doc.setTextColor(...TEXT_DARK_RGB);
@@ -676,7 +719,7 @@ export async function exportCcContentDesignToPDF(params: ExportCcReportParams): 
     head: [["No", "Tanggal", "Post IG", "Desain Baru", "Judul Konten / Desain", "Reach", "Likes"]],
     body: trackerRows.length > 0 ? trackerRows : [["-", "Tidak ada posting pada periode ini", "-", "-", "-", "-", "-"]],
     theme: "striped",
-    headStyles: { fillColor: BRAND_EMERALD_RGB, textColor: 255, fontStyle: "bold", fontSize: 7.5 },
+    headStyles: { fillColor: BRAND_GREEN_RGB, textColor: 255, fontStyle: "bold", fontSize: 7.5 },
     bodyStyles: { fontSize: 7.5, textColor: TEXT_DARK_RGB },
     margin: { left: margin, right: margin },
   });
@@ -690,13 +733,13 @@ export async function exportCcContentDesignToPDF(params: ExportCcReportParams): 
   doc.setTextColor(255, 255, 255);
   doc.setFont("helvetica", "bold");
   doc.setFontSize(11);
-  doc.text(`RINCIAN DESAIN & KONTEN INSTAGRAM - ${params.monthLabel.toUpperCase()} (Halaman 2)`, margin, 12);
+  doc.text(`RINCIAN DESAIN (MAS YANUAR) & KONTEN INSTAGRAM - ${periodDisplayName.toUpperCase()}`, margin, 12);
 
   // Table Desain Lengkap
   doc.setTextColor(...TEXT_DARK_RGB);
   doc.setFont("helvetica", "bold");
   doc.setFontSize(10);
-  doc.text(`4. Daftar Seluruh Desain yang Dikerjakan (${params.filteredDesigns.length} Berkas):`, margin, 26);
+  doc.text(`4. Daftar Seluruh Desain yang Dikerjakan Mas Yanuar (${params.filteredDesigns.length} Berkas):`, margin, 26);
 
   const fullDesignRows = params.filteredDesigns.map((des, idx) => [
     idx + 1,
@@ -709,7 +752,7 @@ export async function exportCcContentDesignToPDF(params: ExportCcReportParams): 
   autoTable(doc, {
     startY: 29,
     head: [["No", "Tanggal Input", "PIC Desainer", "Nama Desain / Materi Cetak", "Status File G-Drive"]],
-    body: fullDesignRows.length > 0 ? fullDesignRows : [["-", "-", "-", "Tidak ada desain di bulan ini", "-"]],
+    body: fullDesignRows.length > 0 ? fullDesignRows : [["-", "-", "-", "Tidak ada desain di periode ini", "-"]],
     theme: "striped",
     headStyles: { fillColor: BRAND_GREEN_RGB, textColor: 255, fontStyle: "bold", fontSize: 8 },
     bodyStyles: { fontSize: 7.5, textColor: TEXT_DARK_RGB },
@@ -722,13 +765,14 @@ export async function exportCcContentDesignToPDF(params: ExportCcReportParams): 
   doc.setFont("helvetica", "bold");
   doc.setFontSize(10);
   doc.setTextColor(...TEXT_DARK_RGB);
-  doc.text(`5. Daftar Postingan Instagram ${params.accountHandle} (${params.filteredPosts.length} Post):`, margin, afterDesignY);
+  doc.text(`5. Daftar Postingan Instagram & Reels Cabang (${params.filteredPosts.length} Post):`, margin, afterDesignY);
 
   const postDetailRows = params.filteredPosts.map((p, idx) => [
     idx + 1,
     p.publishDate || "-",
+    p.pic || "-",
     p.format.toUpperCase(),
-    p.title.length > 40 ? p.title.slice(0, 38) + "..." : p.title,
+    p.title.length > 38 ? p.title.slice(0, 36) + "..." : p.title,
     (p.reach || 0).toLocaleString("id-ID"),
     (p.likes || 0).toLocaleString("id-ID"),
     `${p.engagementRate || 0}%`,
@@ -736,8 +780,8 @@ export async function exportCcContentDesignToPDF(params: ExportCcReportParams): 
 
   autoTable(doc, {
     startY: afterDesignY + 3,
-    head: [["No", "Tgl Rilis", "Format", "Judul / Hook Konten", "Reach", "Likes", "ER (%)"]],
-    body: postDetailRows.length > 0 ? postDetailRows : [["-", "-", "-", "Tidak ada postingan di bulan ini", "-", "-", "-"]],
+    head: [["No", "Tgl Rilis", "PIC", "Format", "Judul / Hook Konten", "Reach", "Likes", "ER (%)"]],
+    body: postDetailRows.length > 0 ? postDetailRows : [["-", "-", "-", "-", "Tidak ada postingan di periode ini", "-", "-", "-"]],
     theme: "striped",
     headStyles: { fillColor: BRAND_EMERALD_RGB, textColor: 255, fontStyle: "bold", fontSize: 7.5 },
     bodyStyles: { fontSize: 7.5, textColor: TEXT_DARK_RGB },
@@ -758,11 +802,12 @@ export async function exportCcContentDesignToPDF(params: ExportCcReportParams): 
     );
   }
 
-  doc.save(`Laporan_CC_Konten_Design_${params.monthKey}.pdf`);
+  const fileSuffix = getFilePeriodSuffix(params.monthKey, params.weekKey);
+  doc.save(`Laporan_CC_Konten_Design_${fileSuffix}.pdf`);
 }
 
 // ============================================================================
-// 4. LAPORAN CC PERFORMA KONTEN & DESIGN BULANAN -> PPTX
+// 4. LAPORAN CC PERFORMA KONTEN & DESIGN -> PPTX
 // ============================================================================
 export async function exportCcContentDesignToPPT(params: ExportCcReportParams): Promise<void> {
   const PptxGenJS = await getPptxGen();
@@ -776,33 +821,35 @@ export async function exportCcContentDesignToPPT(params: ExportCcReportParams): 
     ? (params.filteredPosts.reduce((acc, p) => acc + (p.engagementRate || 0), 0) / params.filteredPosts.length).toFixed(1)
     : "0.0";
 
+  const periodDisplayName = params.periodLabel || params.monthLabel;
+
   // Slide 1: Cover
   const s1 = pptx.addSlide();
   s1.background = { color: PPT_BRAND_COLOR };
-  s1.addText("LAPORAN BULANAN CC & KONTEN DESIGN", {
+  s1.addText("LAPORAN CC & KONTEN DESIGN", {
     x: 0.8,
-    y: 2.0,
+    y: 1.8,
     w: 8.5,
-    h: 1.0,
-    fontSize: 28,
+    h: 0.9,
+    fontSize: 26,
     fontFace: "Arial",
     bold: true,
     color: "FFFFFF",
   });
-  s1.addText(`Akun: ${params.accountHandle} · Periode: ${params.monthLabel} (${params.monthKey})`, {
+  s1.addText(`Periode: ${periodDisplayName} (${params.monthKey})`, {
     x: 0.8,
-    y: 3.1,
+    y: 2.8,
     w: 8.5,
     h: 0.5,
     fontSize: 16,
     fontFace: "Arial",
     color: "A7F3D0",
   });
-  s1.addText("Evaluasi Output Tim Desainer Grafis & Performa Postingan Instagram", {
+  s1.addText("Desain Grafis Mas Yanuar (@iseeyou.glasses) & Performa Video Reels Cabang (Amanda, Ilya, Febi, Ajun)", {
     x: 0.8,
-    y: 3.7,
+    y: 3.4,
     w: 8.5,
-    h: 0.5,
+    h: 0.6,
     fontSize: 12,
     fontFace: "Arial",
     color: "E5E7EB",
@@ -817,10 +864,10 @@ export async function exportCcContentDesignToPPT(params: ExportCcReportParams): 
     color: "9CA3AF",
   });
 
-  // Slide 2: Highlight & Produktivitas Desainer
+  // Slide 2: Produktivitas Desain Grafis (Mas Yanuar)
   const s2 = pptx.addSlide();
   s2.background = { color: PPT_BG_COLOR };
-  s2.addText("PRODUKTIVITAS TIM DESAIN & CC", {
+  s2.addText("PRODUKTIVITAS DESAIN GRAFIS (MAS YANUAR)", {
     x: 0.8,
     y: 0.5,
     w: 8.5,
@@ -829,7 +876,7 @@ export async function exportCcContentDesignToPPT(params: ExportCcReportParams): 
     bold: true,
     color: PPT_ACCENT_COLOR,
   });
-  s2.addText(`Rekap Output & Kontribusi per Desainer — ${params.monthLabel}`, {
+  s2.addText(`Rekap Output Desain Instagram @iseeyou.glasses — ${periodDisplayName}`, {
     x: 0.8,
     y: 0.9,
     w: 8.5,
@@ -841,7 +888,7 @@ export async function exportCcContentDesignToPPT(params: ExportCcReportParams): 
 
   // 4 Top Metric Cards
   const kpiData = [
-    { label: "DESAIN SELESAI", val: `${totalDesigns} Desain`, sub: "Database Sheets" },
+    { label: "DESAIN YANUAR", val: `${totalDesigns} Desain`, sub: "Database Sheets" },
     { label: "POSTINGAN IG", val: `${totalPosts} Post`, sub: params.accountHandle },
     { label: "TOTAL REACH", val: totalReach.toLocaleString("id-ID"), sub: "Akun Terjangkau" },
     { label: "RATA-RATA ER", val: `${avgEr}%`, sub: "Engagement Rate" },
@@ -863,10 +910,10 @@ export async function exportCcContentDesignToPPT(params: ExportCcReportParams): 
     s2.addText(k.sub, { x: x + 0.1, y: 2.35, w: 1.8, h: 0.25, fontSize: 8, color: PPT_DARK_TEXT });
   });
 
-  // Table Designer Summary
+  // Table Designer Summary (Yanuar)
   const designerTableRows: any[][] = [
     [
-      { text: "Nama Desainer / PIC", options: { bold: true, fill: { color: PPT_BRAND_COLOR }, color: "FFFFFF" } },
+      { text: "Nama Desainer / Lead", options: { bold: true, fill: { color: PPT_BRAND_COLOR }, color: "FFFFFF" } },
       { text: "Desain Selesai", options: { bold: true, fill: { color: PPT_BRAND_COLOR }, color: "FFFFFF" } },
       { text: "Post IG", options: { bold: true, fill: { color: PPT_BRAND_COLOR }, color: "FFFFFF" } },
       { text: "Kontribusi (%)", options: { bold: true, fill: { color: PPT_BRAND_COLOR }, color: "FFFFFF" } },
@@ -892,10 +939,10 @@ export async function exportCcContentDesignToPPT(params: ExportCcReportParams): 
     border: { pt: 0.5, color: "E5E7EB" },
   });
 
-  // Slide 3: Date-by-date Posting Tracker
+  // Slide 3: Performa Video Reels Cabang (Amanda, Ilya, Febi, Ajun, Intan)
   const s3 = pptx.addSlide();
   s3.background = { color: PPT_BG_COLOR };
-  s3.addText("TIMELINE & DETEKSI TANGGAL POSTING", {
+  s3.addText("PERFORMA VIDEO REELS CABANG", {
     x: 0.8,
     y: 0.5,
     w: 8.5,
@@ -904,7 +951,62 @@ export async function exportCcContentDesignToPPT(params: ExportCcReportParams): 
     bold: true,
     color: PPT_ACCENT_COLOR,
   });
-  s3.addText(`Log Tanggal Posting Instagram & Output Desain (${params.monthLabel})`, {
+  s3.addText(`Capaian Kuota & Engagement PIC Reels Cabang — ${periodDisplayName}`, {
+    x: 0.8,
+    y: 0.9,
+    w: 8.5,
+    h: 0.5,
+    fontSize: 18,
+    bold: true,
+    color: PPT_DARK_TEXT,
+  });
+
+  const branchReels = params.branchReelsSummaries || [];
+  const reelsTableRows: any[][] = [
+    [
+      { text: "PIC & Cabang", options: { bold: true, fill: { color: PPT_BRAND_COLOR }, color: "FFFFFF" } },
+      { text: "Akun IG", options: { bold: true, fill: { color: PPT_BRAND_COLOR }, color: "FFFFFF" } },
+      { text: "Reels", options: { bold: true, fill: { color: PPT_BRAND_COLOR }, color: "FFFFFF" } },
+      { text: "Target", options: { bold: true, fill: { color: PPT_BRAND_COLOR }, color: "FFFFFF" } },
+      { text: "Capai (%)", options: { bold: true, fill: { color: PPT_BRAND_COLOR }, color: "FFFFFF" } },
+      { text: "Views / Reach", options: { bold: true, fill: { color: PPT_BRAND_COLOR }, color: "FFFFFF" } },
+      { text: "Likes", options: { bold: true, fill: { color: PPT_BRAND_COLOR }, color: "FFFFFF" } },
+      { text: "ER (%)", options: { bold: true, fill: { color: PPT_BRAND_COLOR }, color: "FFFFFF" } },
+    ],
+    ...branchReels.map((br) => [
+      { text: `${br.pic} (${br.branchName.replace("Optik I See You ", "").replace(" (Second Brand)", "")})` },
+      { text: br.accountHandle },
+      { text: `${br.totalReels} reels` },
+      { text: `${br.targetQuota} reels` },
+      { text: `${br.quotaPercentage}%` },
+      { text: br.totalViews > 0 ? br.totalViews.toLocaleString("id-ID") : "-" },
+      { text: br.totalLikes > 0 ? br.totalLikes.toLocaleString("id-ID") : "-" },
+      { text: `${br.avgEngagementRate}%` },
+    ]),
+  ];
+
+  s3.addTable(reelsTableRows, {
+    x: 0.8,
+    y: 1.6,
+    w: 8.5,
+    h: 4.2,
+    fontSize: 9,
+    border: { pt: 0.5, color: "E5E7EB" },
+  });
+
+  // Slide 4: Timeline & Deteksi Tanggal Posting
+  const s4 = pptx.addSlide();
+  s4.background = { color: PPT_BG_COLOR };
+  s4.addText("TIMELINE & DETEKSI TANGGAL POSTING", {
+    x: 0.8,
+    y: 0.5,
+    w: 8.5,
+    h: 0.4,
+    fontSize: 12,
+    bold: true,
+    color: PPT_ACCENT_COLOR,
+  });
+  s4.addText(`Log Tanggal Posting Instagram & Output Desain (${periodDisplayName})`, {
     x: 0.8,
     y: 0.9,
     w: 8.5,
@@ -939,7 +1041,7 @@ export async function exportCcContentDesignToPPT(params: ExportCcReportParams): 
     })),
   ];
 
-  s3.addTable(trackerTableRows, {
+  s4.addTable(trackerTableRows, {
     x: 0.8,
     y: 1.6,
     w: 8.5,
@@ -948,10 +1050,10 @@ export async function exportCcContentDesignToPPT(params: ExportCcReportParams): 
     border: { pt: 0.5, color: "E5E7EB" },
   });
 
-  // Slide 4: Daftar Desain yang Dikerjakan
-  const s4 = pptx.addSlide();
-  s4.background = { color: PPT_BG_COLOR };
-  s4.addText("DATABASE KARYA DESAIN", {
+  // Slide 5: Database Karya Desain Grafis (Mas Yanuar)
+  const s5 = pptx.addSlide();
+  s5.background = { color: PPT_BG_COLOR };
+  s5.addText("DATABASE KARYA DESAIN (MAS YANUAR)", {
     x: 0.8,
     y: 0.5,
     w: 8.5,
@@ -960,7 +1062,7 @@ export async function exportCcContentDesignToPPT(params: ExportCcReportParams): 
     bold: true,
     color: PPT_ACCENT_COLOR,
   });
-  s4.addText(`Daftar Karya Desain Grafis & Materi Cetak (${params.monthLabel})`, {
+  s5.addText(`Daftar Desain Grafis & Materi Promosi Mas Yanuar (${periodDisplayName})`, {
     x: 0.8,
     y: 0.9,
     w: 8.5,
@@ -988,7 +1090,7 @@ export async function exportCcContentDesignToPPT(params: ExportCcReportParams): 
     ]),
   ];
 
-  s4.addTable(designTableRows, {
+  s5.addTable(designTableRows, {
     x: 0.8,
     y: 1.6,
     w: 8.5,
@@ -997,5 +1099,6 @@ export async function exportCcContentDesignToPPT(params: ExportCcReportParams): 
     border: { pt: 0.5, color: "E5E7EB" },
   });
 
-  await pptx.writeFile({ fileName: `Laporan_CC_Konten_Design_${params.monthKey}.pptx` });
+  const fileSuffix = getFilePeriodSuffix(params.monthKey, params.weekKey);
+  await pptx.writeFile({ fileName: `Laporan_CC_Konten_Design_${fileSuffix}.pptx` });
 }
