@@ -1,3 +1,6 @@
+import fs from "fs";
+import path from "path";
+import os from "os";
 // Tracking Event Store & Aggregator for "Antrian Cek Mata" & "Web Photobooth" on optikiseeyou.com
 
 import { MonthlyWebPerformanceData } from "@/types";
@@ -82,8 +85,43 @@ export interface CombinedWebResume {
   photobooth: PhotoboothSummary;
 }
 
+
+const DATA_FILE = path.join(process.cwd(), "data", "antrian-events.json");
+const TMP_FILE = path.join(os.tmpdir(), "antrian-events.json");
+
+function loadStoredEvents(): AntrianEvent[] {
+  try {
+    if (fs.existsSync(DATA_FILE)) {
+      const raw = fs.readFileSync(DATA_FILE, "utf-8");
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    }
+  } catch {}
+  try {
+    if (fs.existsSync(TMP_FILE)) {
+      const raw = fs.readFileSync(TMP_FILE, "utf-8");
+      const parsed = JSON.parse(raw);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    }
+  } catch {}
+  return [];
+}
+
+function persistEvents(events: AntrianEvent[]) {
+  try {
+    const dir = path.join(process.cwd(), "data");
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(DATA_FILE, JSON.stringify(events, null, 2), "utf-8");
+  } catch {
+    try {
+      fs.writeFileSync(TMP_FILE, JSON.stringify(events, null, 2), "utf-8");
+    } catch {}
+  }
+}
+
 // In-memory events store
-let inMemoryEvents: AntrianEvent[] = [
+const initialPersisted = loadStoredEvents();
+let inMemoryEvents: AntrianEvent[] = initialPersisted.length > 0 ? initialPersisted : [
   {
     id: "evt-01",
     timestamp: new Date(Date.now() - 4 * 60000).toISOString(),
