@@ -13,6 +13,7 @@ import {
   Target,
   Camera,
   MapPin,
+  MessageSquare,
   BarChart2,
   FileText,
   Copy,
@@ -48,6 +49,7 @@ const MODULES = [
   { label: 'Social Blade Realtime', category: 'Sosial & Konten', path: '/social-blade', icon: TrendingUp, desc: 'Instagram Meta Graph real-time growth tracker' },
   { label: 'Konten & Reels Hub', category: 'Sosial & Konten', path: '/content', icon: Video, desc: 'Jurnal 40 konten, video viral, & ide kreatif' },
   { label: 'Pengajuan & Sponsor B2B', category: 'Kemitraan & Pelanggan', path: '/pengajuan', icon: Briefcase, desc: '11 Leads sponsor, barter voucher & proposal pitching' },
+  { label: 'Communication Center', category: 'Kemitraan & Pelanggan', path: '/communication-center', icon: MessageSquare, desc: 'Pusat template WhatsApp sponsorship, kemitraan & talent model' },
   { label: 'Aftersales CRM Lensa', category: 'Kemitraan & Pelanggan', path: '/aftersales', icon: Glasses, desc: '4.106 Pasien (Bluray, Photocromic, Bluecromic)' },
   { label: 'Radar 27 Kompetitor', category: 'Riset & Pertumbuhan', path: '/competitors', icon: Target, desc: 'Database 27 optik ritel & D2C Barlingmascakeb' },
   { label: 'Database 14 KOL Lokal', category: 'Riset & Pertumbuhan', path: '/kol', icon: Camera, desc: 'Kreator Banyumas, Cilacap, Purbalingga & Tegal' },
@@ -63,6 +65,7 @@ const SEARCHABLE_PICS = [
   { name: 'Amanda', branch: 'Lunar Eyewear Tegal', role: 'PIC Konten Reels & TikTok', path: '/content?branch=lunar_tegal' },
   { name: 'Intan', branch: 'Cilacap', role: 'PIC Konten Reels & TikTok', path: '/content?branch=cilacap' },
   { name: 'Febi', branch: 'Wonosobo', role: 'PIC Konten Reels & TikTok', path: '/content?branch=wonosobo' },
+  { name: 'Yossika', branch: 'Marketing Pusat', role: 'PIC Sentral Model & Sponsorship', path: '/communication-center' },
 ];
 
 const SEARCHABLE_BRANCHES = [

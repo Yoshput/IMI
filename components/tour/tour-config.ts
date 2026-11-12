@@ -118,13 +118,17 @@ export const TOUR_STEPS: TourStep[] = [
   {
     id: "nav-category-kemitraan",
     title: "5. Menu Kemitraan & Pelanggan",
-    subtitle: "B2B Merchants, Sponsorship, & Layanan Purna Jual (2 Modul)",
+    subtitle: "B2B Merchants, Sponsorship, & Layanan Purna Jual (3 Modul)",
     description:
       "Modul pengelolaan relasi eksternal baik dengan partner bisnis maupun pelanggan loyal optik:",
     subItems: [
       {
         label: "💼 Pengajuan",
         desc: "Alur persetujuan voucher diskon merchant, proposal kerjasama, dan sponsorship event.",
+      },
+      {
+        label: "💬 Communication Center",
+        desc: "Pusat template WhatsApp sponsorship, kemitraan, dan koordinasi satu pintu talent/model.",
       },
       {
         label: "👓 Aftersales",

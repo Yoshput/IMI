@@ -24,6 +24,7 @@ import {
   ChevronDown,
   Building2,
   Layers,
+  MessageSquare,
   Sparkles,
   HelpCircle,
 } from "lucide-react";
@@ -76,6 +77,7 @@ const NAV_CATEGORIES: NavCategory[] = [
     title: "Kemitraan & Pelanggan",
     items: [
       { label: "Pengajuan", href: "/pengajuan", icon: Briefcase },
+      { label: "Communication Center", href: "/communication-center", icon: MessageSquare },
       { label: "Aftersales", href: "/aftersales", icon: Glasses },
     ],
   },
