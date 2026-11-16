@@ -20,11 +20,13 @@ import {
   Share2,
   Clock,
   ArrowUpRight,
+  ShieldCheck,
 } from "lucide-react";
 import { MonthlyWebPerformanceData, MonthlyPeriod, WeekFilterKey } from "@/types";
 import { getCurrentMonthKey, getAvailableMonths, formatMonthLabel, getWeekOptions } from "@/lib/month-utils";
 import { getMonthlyWebPerformanceData } from "@/lib/monthly-web-performance";
 import { exportWebPerformanceToPDF, exportWebPerformanceToPPT } from "@/lib/export-pdf-ppt";
+import { RealCloudflareMetrics } from "@/lib/cloudflare-r2";
 
 interface MonthlyWebPerformanceReportProps {
   initialMonth?: string;
@@ -39,6 +41,7 @@ export const MonthlyWebPerformanceReport: React.FC<MonthlyWebPerformanceReportPr
     () => initialMonth || getCurrentMonthKey()
   );
   const [selectedWeek, setSelectedWeek] = useState<WeekFilterKey>("w4_monthly");
+  const [cloudflareReal, setCloudflareReal] = useState<RealCloudflareMetrics | null>(null);
 
   const [isExportingPdf, setIsExportingPdf] = useState(false);
   const [isExportingPpt, setIsExportingPpt] = useState(false);
@@ -53,10 +56,19 @@ export const MonthlyWebPerformanceReport: React.FC<MonthlyWebPerformanceReportPr
     return getWeekOptions(selectedMonth);
   }, [selectedMonth]);
 
-  // Compute or fetch monthly/weekly data
+  useEffect(() => {
+    fetch(`/api/track-event?month=${selectedMonth}`)
+      .then((res) => res.json())
+      .then((json) => {
+        if (json.cloudflareReal) setCloudflareReal(json.cloudflareReal);
+      })
+      .catch(() => {});
+  }, [selectedMonth]);
+
+  // Compute or fetch monthly/weekly data with Cloudflare R2 override
   const data: MonthlyWebPerformanceData = useMemo(() => {
-    return getMonthlyWebPerformanceData(selectedMonth, selectedWeek);
-  }, [selectedMonth, selectedWeek]);
+    return getMonthlyWebPerformanceData(selectedMonth, selectedWeek, cloudflareReal);
+  }, [selectedMonth, selectedWeek, cloudflareReal]);
 
   const handleExportPdf = async () => {
     setIsExportingPdf(true);
@@ -102,6 +114,10 @@ export const MonthlyWebPerformanceReport: React.FC<MonthlyWebPerformanceReportPr
             </span>
             <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded border border-emerald-200 dark:border-emerald-800">
               {data.periodLabel || data.monthLabel}
+            </span>
+            <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-800 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/50 px-2 py-0.5 rounded border border-emerald-300 dark:border-emerald-800">
+              <ShieldCheck className="w-3 h-3 text-emerald-600" />
+              <span>Cloudflare R2 Terverifikasi</span>
             </span>
           </div>
           <p className="text-xs text-foreground-secondary mt-1">

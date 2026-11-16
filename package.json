@@ -13,6 +13,7 @@
     "test": "npm run test:venue && npm run test:spreadsheet"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1169.0",
     "clsx": "^2.1.1",
     "gsap": "^3.15.0",
     "jspdf": "^4.2.1",

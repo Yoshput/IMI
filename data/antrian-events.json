@@ -1,0 +1,44 @@
+[
+  {
+    "id": "book-1794784651254-m0oj",
+    "timestamp": "2026-11-15T23:17:31.253Z",
+    "branch": "pwt",
+    "branchName": "Purwokerto (Pusat & Lab)",
+    "sourceUrl": "https://optikiseeyou.com/booking-antrian",
+    "device": "mobile",
+    "referrer": "https://www.google.com/search?q=antrian+cek+mata+optik+i+see+you",
+    "customerName": "Chiara Malika Putri Permadi",
+    "customerPhone": "082116749559",
+    "bookingDate": "2026-11-16",
+    "bookingTime": "Pagi (09.00 - 12.00 WIB)",
+    "type": "antrian_booking"
+  },
+  {
+    "id": "book-1794639858119-o30i",
+    "timestamp": "2026-11-14T07:04:19.144Z",
+    "branch": "pwt",
+    "branchName": "Purwokerto (Pusat)",
+    "sourceUrl": "https://optikiseeyou.com/booking-antrian",
+    "device": "mobile",
+    "referrer": "https://www.instagram.com/@iseeyou.glasses/",
+    "customerName": "Rifqi Alamsyah",
+    "customerPhone": "085812347890",
+    "bookingDate": "2026-11-14",
+    "bookingTime": "Siang (13.00 - 16.00 WIB)",
+    "type": "antrian_booking"
+  },
+  {
+    "id": "book-1794569001470-ku4n",
+    "timestamp": "2026-11-13T11:23:22.155Z",
+    "branch": "pwt",
+    "branchName": "Purwokerto (Pusat)",
+    "sourceUrl": "https://optikiseeyou.com/booking-antrian",
+    "device": "mobile",
+    "referrer": "https://optikiseeyou.com/photobooth",
+    "customerName": "Annisa Rahmawati",
+    "customerPhone": "081298765432",
+    "bookingDate": "2026-11-13",
+    "bookingTime": "Sore (16.00 - 19.00 WIB)",
+    "type": "antrian_booking"
+  }
+]

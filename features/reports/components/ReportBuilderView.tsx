@@ -57,10 +57,57 @@ export const ReportBuilderView: React.FC = () => {
             <span>·</span>
             <span>Editorial Document</span>
           </div>
-          <h1 className="heading-page text-foreground">Laporan Mingguan Manajemen</h1>
+          <h1 className="heading-page text-foreground">
+            {activeReportTab === "weekly"
+              ? "Laporan Mingguan Manajemen"
+              : activeReportTab === "monthly_web"
+              ? "Laporan Bulanan Web & Virtual Try-On"
+              : "Laporan Bulanan Tim Desain & Konten"}
+          </h1>
           <p className="text-sm text-foreground-secondary mt-1">
-            Penyusunan dokumen evaluasi siap saji untuk Owner, Management, HRD, dan Finance tanpa rakit slide manual.
+            {activeReportTab === "weekly"
+              ? "Penyusunan dokumen evaluasi siap saji untuk Owner, Management, HRD, dan Finance tanpa rakit slide manual."
+              : activeReportTab === "monthly_web"
+              ? "Rekapitulasi trafik web photobooth optikiseeyou.com, performa virtual try-on frame, dan pendaftaran antrian cek mata online (Sinkron Cloudflare R2)."
+              : "Monitoring produktivitas tim desain grafis dan konten kreator (output feed, reels, story, and status pengerjaan)."}
           </p>
+        </div>
+
+        {/* Tab Selector */}
+        <div className="flex items-center gap-1.5 p-1 bg-surface-secondary rounded-control border border-border">
+          <button
+            onClick={() => setActiveReportTab("weekly")}
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-semibold transition-all ${
+              activeReportTab === "weekly"
+                ? "bg-surface text-foreground shadow-subtle border border-border"
+                : "text-foreground-secondary hover:text-foreground"
+            }`}
+          >
+            <FileText className="w-3.5 h-3.5 text-brand" />
+            <span>Mingguan Manajemen</span>
+          </button>
+          <button
+            onClick={() => setActiveReportTab("monthly_web")}
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-semibold transition-all ${
+              activeReportTab === "monthly_web"
+                ? "bg-surface text-foreground shadow-subtle border border-border"
+                : "text-foreground-secondary hover:text-foreground"
+            }`}
+          >
+            <Globe className="w-3.5 h-3.5 text-emerald-600" />
+            <span>Web & Try-On (R2)</span>
+          </button>
+          <button
+            onClick={() => setActiveReportTab("monthly_cc")}
+            className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-semibold transition-all ${
+              activeReportTab === "monthly_cc"
+                ? "bg-surface text-foreground shadow-subtle border border-border"
+                : "text-foreground-secondary hover:text-foreground"
+            }`}
+          >
+            <Layers className="w-3.5 h-3.5 text-purple-600" />
+            <span>Desain & Konten</span>
+          </button>
         </div>
       </div>
 
@@ -72,33 +119,39 @@ export const ReportBuilderView: React.FC = () => {
         emptyActionLabel="Generate Laporan Baru"
         onEmptyAction={() => setViewState("success")}
       >
-        {/* 3-Column Editorial Layout (DESIGN.md §23) */}
-        <div className="flex flex-col lg:flex-row items-start gap-8">
-          {/* Left: Section Navigation */}
-          <ReportSectionNav
-            activeSection={activeSection}
-            onSelectSection={handleSelectSection}
-          />
+        {activeReportTab === "monthly_web" ? (
+          <MonthlyWebPerformanceReport />
+        ) : activeReportTab === "monthly_cc" ? (
+          <MonthlyCcDesignReportView />
+        ) : (
+          /* 3-Column Editorial Layout (DESIGN.md §23) */
+          <div className="flex flex-col lg:flex-row items-start gap-8">
+            {/* Left: Section Navigation */}
+            <ReportSectionNav
+              activeSection={activeSection}
+              onSelectSection={handleSelectSection}
+            />
 
-          {/* Center: Editorial Document */}
-          <ReportEditorialDocument
-            report={ACTUAL_WEEKLY_REPORT}
-            showAiLayer={showAiLayer}
-            selectedStakeholder={selectedStakeholder}
-            reportStatus={reportStatus}
-          />
+            {/* Center: Editorial Document */}
+            <ReportEditorialDocument
+              report={ACTUAL_WEEKLY_REPORT}
+              showAiLayer={showAiLayer}
+              selectedStakeholder={selectedStakeholder}
+              reportStatus={reportStatus}
+            />
 
-          {/* Right: Configuration Panel */}
-          <ReportConfigPanel
-            report={ACTUAL_WEEKLY_REPORT}
-            showAiLayer={showAiLayer}
-            onToggleAiLayer={setShowAiLayer}
-            selectedStakeholder={selectedStakeholder}
-            onSelectStakeholder={setSelectedStakeholder}
-            reportStatus={reportStatus}
-            onChangeStatus={setReportStatus}
-          />
-        </div>
+            {/* Right: Configuration Panel */}
+            <ReportConfigPanel
+              report={ACTUAL_WEEKLY_REPORT}
+              showAiLayer={showAiLayer}
+              onToggleAiLayer={setShowAiLayer}
+              selectedStakeholder={selectedStakeholder}
+              onSelectStakeholder={setSelectedStakeholder}
+              reportStatus={reportStatus}
+              onChangeStatus={setReportStatus}
+            />
+          </div>
+        )}
       </StateRenderer>
     </div>
   );

@@ -31,10 +31,10 @@ export const AntrianTrackingCard: React.FC = () => {
   const [showRecentClicks, setShowRecentClicks] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  const fetchStats = async (isBackground = false) => {
+  const fetchStats = async (isBackground = false, forceRefresh = false) => {
     if (!isBackground) setIsRefreshing(true);
     try {
-      const res = await fetch("/api/track-event", {
+      const res = await fetch(`/api/track-event${forceRefresh ? "?refresh=true" : ""}`, {
         cache: "no-store",
         headers: { "Cache-Control": "no-cache" },
       });
@@ -61,7 +61,16 @@ export const AntrianTrackingCard: React.FC = () => {
 
   const handleManualSync = async () => {
     setIsRefreshing(true);
-    await fetchStats();
+    await fetchStats(false, true);
+    window.dispatchEvent(
+      new CustomEvent("app-toast", {
+        detail: {
+          title: "Antrian Cloudflare R2 Disinkronkan",
+          message: "Data pendaftaran antrian cek mata berhasil diperbarui langsung dari Cloudflare R2.",
+          type: "success",
+        },
+      })
+    );
   };
 
   const handleSimulateClick = async (branchId: string = "pwt") => {
@@ -152,7 +161,10 @@ export const AntrianTrackingCard: React.FC = () => {
               </span>
               <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-bold bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                LIVE AUTO-SYNC
+                CLOUDFLARE R2 LIVE
+              </span>
+              <span className="px-1.5 py-0.5 rounded text-[9px] font-mono text-foreground-muted bg-surface-secondary border border-border">
+                antrian/2026-11/
               </span>
             </div>
             <p className="text-[11px] text-foreground-muted flex items-center gap-1.5 mt-0.5">
