@@ -8,8 +8,8 @@
  * + Centralized PIC Yossika Putra Erlangga (087778683766)
  */
 
-export type TemplateCategory = "sponsorship" | "model";
-export type SubCategory = "sponsorship" | "partnership" | "model";
+export type TemplateCategory = "sponsorship" | "model" | "cadence";
+export type SubCategory = "sponsorship" | "partnership" | "model" | "upload_reminder" | "cadence_check";
 
 export interface PlaceholderConfig {
   key: string;
@@ -434,6 +434,250 @@ Jika tertarik, Kakak bisa langsung menghubungi PIC kami di 087778683766 ya.
 Terima kasih, Kak!`,
     tags: ["model", "follow-up", "tanya kabar", "katalog", "reminder"],
   },
+
+  // =========================================================================
+  // KATEGORI C: JADWAL UPLOAD & CADENCE REELS 19.00 WIB (5 TEMPLATES)
+  // Aturan Operasional: Upload Pukul 19.00 WIB · Reminder 18.30 WIB · Maks 3 Hari
+  // =========================================================================
+  {
+    id: "cadence-01",
+    templateNumber: "TEMPLATE 16",
+    title: "Reminder Pra-Upload Jam 19.00 (Kirim 18.30 WIB)",
+    category: "cadence",
+    subcategory: "upload_reminder",
+    badge: "Pra-Upload 18.30 WIB",
+    description: "Pengingat wajib 30 menit sebelum slot upload prime time (19.00 WIB) ke PIC cabang agar materi video, cover, audio, caption, dan tagging sudah siap tayang.",
+    content: `Halo Kak [Nama PIC], selamat sore! 😊
+
+Mengingatkan kembali ya, jadwal upload konten Reels untuk [Nama Cabang / Akun IG] malam ini adalah pukul 19.00 WIB (prime time).
+
+Sebelum tayang pukul 19.00 nanti, mohon dibantu pastikan:
+1. Video sudah di-draft dan siap tayang
+2. Cover kacamata/talent terlihat jelas & estetik di grid feed
+3. Caption, hashtag resmi, dan tagging akun @iseeyou.glasses sudah terpasang
+4. Lokasi store [Nama Cabang] sudah ditandai
+
+Jika ada kendala teknis atau materi yang perlu dicek terlebih dahulu, kabari ya, Kak.
+
+Semangat untuk upload malam ini! 🚀👓`,
+    placeholders: [
+      {
+        key: "pic_name",
+        label: "Nama PIC Cabang",
+        placeholder: "[Nama PIC]",
+        defaultValue: "Ilya",
+        type: "select",
+        options: ["Ilya", "Nuha", "Ajun", "Amanda", "Vio", "Rian"],
+      },
+      {
+        key: "branch_name",
+        label: "Akun Cabang / Outlet",
+        placeholder: "[Nama Cabang / Akun IG]",
+        defaultValue: "@iseeyou.glasses (Purwokerto)",
+        type: "select",
+        options: [
+          "@iseeyou.glasses (Purwokerto)",
+          "@iseeyou.purbalingga",
+          "@iseeyou.cilacap",
+          "@iseeyou.wonosobo",
+          "@lunar.eyewear (Tegal)",
+        ],
+      },
+    ],
+    tags: ["upload", "reels", "reminder 18.30", "prime time 19.00", "cadence", "cabang"],
+  },
+  {
+    id: "cadence-02",
+    templateNumber: "TEMPLATE 17",
+    title: "Pengecekan Batas Maksimal 3 Hari Belum Upload Reels",
+    category: "cadence",
+    subcategory: "cadence_check",
+    badge: "Batas Ritme 3 Hari",
+    description: "Peringatan ramah dan solutif jika akun cabang sudah 3 hari atau lebih belum memposting Reels baru, untuk menjaga algoritma dan interaksi audiens lokal.",
+    content: `Halo Kak [Nama PIC], selamat [pagi/siang/sore]. 😊
+
+Izin mengingatkan terkait ritme upload konten Reels di akun [Nama Cabang / Akun IG]. Berdasarkan catatan evaluasi ritme 3 hari, akun cabang saat ini sudah [Jumlah Hari] hari belum ada postingan Reels baru nih, Kak.
+
+Standar operasional ritme konten kita adalah minimal 1 Reels setiap 3 hari agar reach dan engagement akun tetap optimal.
+
+Kira-kira apakah ada kendala pada proses take video atau editingnya, Kak? Apakah materi [Judul Reels / Konsep Konten] bisa dijadwalkan untuk upload hari ini pada prime time pukul 19.00 WIB?
+
+Jika butuh bantuan ide konsep atau review materi, silakan kabari ya, Kak. Terima kasih banyak! 🙏✨`,
+    placeholders: [
+      {
+        key: "pic_name",
+        label: "Nama PIC Cabang",
+        placeholder: "[Nama PIC]",
+        defaultValue: "Ajun",
+        type: "select",
+        options: ["Ilya", "Nuha", "Ajun", "Amanda", "Vio", "Rian"],
+      },
+      {
+        key: "branch_name",
+        label: "Akun Cabang",
+        placeholder: "[Nama Cabang / Akun IG]",
+        defaultValue: "@iseeyou.purbalingga",
+        type: "select",
+        options: [
+          "@iseeyou.glasses (Purwokerto)",
+          "@iseeyou.purbalingga",
+          "@iseeyou.cilacap",
+          "@iseeyou.wonosobo",
+          "@lunar.eyewear (Tegal)",
+        ],
+      },
+      {
+        key: "days_behind",
+        label: "Jeda Hari Tanpa Upload",
+        placeholder: "[Jumlah Hari]",
+        defaultValue: "3",
+        type: "number",
+      },
+      {
+        key: "reels_title",
+        label: "Rencana Materi Reels",
+        placeholder: "[Judul Reels / Konsep Konten]",
+        defaultValue: "Reels Edukasi / Fitting Frame",
+        type: "text",
+      },
+      {
+        key: "greeting_time",
+        label: "Sapaan Waktu",
+        placeholder: "[pagi/siang/sore]",
+        defaultValue: "siang",
+        type: "select",
+        options: ["pagi", "siang", "sore"],
+      },
+    ],
+    tags: ["cadence 3 hari", "warning", "reels tertunda", "ritme", "upload 19.00", "evaluasi"],
+  },
+  {
+    id: "cadence-03",
+    templateNumber: "TEMPLATE 18",
+    title: "Checklist Kesiapan Materi Reels Jam 19.00 (Cover, Audio & Tagging)",
+    category: "cadence",
+    subcategory: "upload_reminder",
+    badge: "Checklist Teknis",
+    description: "Panduan pengecekan standar kualitas teknis konten (hook, audio trending, framing 1:1, call-to-action) 30 menit sebelum dipencet Share.",
+    content: `Halo Kak [Nama PIC]! 30 menit lagi jam upload prime time (19.00 WIB) ya. ⏰
+
+Yuk kita checklist bareng materi Reels untuk [Nama Cabang / Akun IG] hari ini:
+✅ Audio: Gunakan audio original yang jernih atau audio trending rekomendasi
+✅ Hook 3 Detik: Frame kacamata atau promo langsung kelihatan di detik awal
+✅ Cover Feed: Grid 1:1 rapi dan tidak kepotong teks penting
+✅ CTA (Call To Action): Ajak cek mata gratis atau coba virtual try-on di optikiseeyou.com
+✅ Tagging & Kolaborasi: Tag @iseeyou.glasses dan pin lokasi store cabang
+
+Siap tayang tepat 19.00 WIB ya, Kak. Let's go! 🔥`,
+    placeholders: [
+      {
+        key: "pic_name",
+        label: "Nama PIC Cabang",
+        placeholder: "[Nama PIC]",
+        defaultValue: "Amanda",
+        type: "select",
+        options: ["Ilya", "Nuha", "Ajun", "Amanda", "Vio", "Rian"],
+      },
+      {
+        key: "branch_name",
+        label: "Akun Cabang",
+        placeholder: "[Nama Cabang / Akun IG]",
+        defaultValue: "@iseeyou.cilacap",
+        type: "select",
+        options: [
+          "@iseeyou.glasses (Purwokerto)",
+          "@iseeyou.purbalingga",
+          "@iseeyou.cilacap",
+          "@iseeyou.wonosobo",
+          "@lunar.eyewear (Tegal)",
+        ],
+      },
+    ],
+    tags: ["checklist", "teknis", "hook", "audio trending", "cover feed", "sop upload"],
+  },
+  {
+    id: "cadence-04",
+    templateNumber: "TEMPLATE 19",
+    title: "Follow-up Pasca Jam 19.00 (Jika Konten Belum Tayang)",
+    category: "cadence",
+    subcategory: "upload_reminder",
+    badge: "Follow-up 19.15 WIB",
+    description: "Konfirmasi cepat jika jam upload 19.00 WIB sudah terlewati namun video Reels cabang belum muncul di feed Instagram.",
+    content: `Halo Kak [Nama PIC], selamat malam.
+
+Izin konfirmasi ya Kak, kami cek di feed [Nama Cabang / Akun IG] untuk konten Reels jadwal jam 19.00 WIB malam ini sepertinya belum tayang ya?
+
+Apakah proses uploadnya sedang terkendala jaringan / render video, Kak? 
+
+Boleh dibantu update statusnya ya, agar bisa kami pantau bersama. Terima kasih, Kak! 🙏`,
+    placeholders: [
+      {
+        key: "pic_name",
+        label: "Nama PIC Cabang",
+        placeholder: "[Nama PIC]",
+        defaultValue: "Vio",
+        type: "select",
+        options: ["Ilya", "Nuha", "Ajun", "Amanda", "Vio", "Rian"],
+      },
+      {
+        key: "branch_name",
+        label: "Akun Cabang",
+        placeholder: "[Nama Cabang / Akun IG]",
+        defaultValue: "@iseeyou.wonosobo",
+        type: "select",
+        options: [
+          "@iseeyou.glasses (Purwokerto)",
+          "@iseeyou.purbalingga",
+          "@iseeyou.cilacap",
+          "@iseeyou.wonosobo",
+          "@lunar.eyewear (Tegal)",
+        ],
+      },
+    ],
+    tags: ["follow-up", "terlambat upload", "kendala render", "monitoring 19.15"],
+  },
+  {
+    id: "cadence-05",
+    templateNumber: "TEMPLATE 20",
+    title: "Konfirmasi Upload Berhasil & Perawatan Interaksi Awal",
+    category: "cadence",
+    subcategory: "upload_reminder",
+    badge: "Pasca Upload",
+    description: "Apresiasi dan panduan aktivasi engagement 1 jam pertama (share story, balas interaksi komen/DM, dan catat ke spreadsheet).",
+    content: `Halo Kak [Nama PIC], mantap! Konten Reels hari ini sudah berhasil tayang di [Nama Cabang / Akun IG]. 👏🎉
+
+Untuk memaksimalkan performa algoritma di 1 jam pertama:
+1. Tolong langsung share video Reels ini ke Instagram Story cabang dengan sticker interaksi
+2. Pantau dan balas komentar atau DM yang masuk dari calon customer
+3. Jangan lupa input link dan judul video ke Spreadsheet harian ya
+
+Terima kasih banyak atas kerja kerasnya hari ini, Kak! ✨`,
+    placeholders: [
+      {
+        key: "pic_name",
+        label: "Nama PIC Cabang",
+        placeholder: "[Nama PIC]",
+        defaultValue: "Rian",
+        type: "select",
+        options: ["Ilya", "Nuha", "Ajun", "Amanda", "Vio", "Rian"],
+      },
+      {
+        key: "branch_name",
+        label: "Akun Cabang",
+        placeholder: "[Nama Cabang / Akun IG]",
+        defaultValue: "@lunar.eyewear (Tegal)",
+        type: "select",
+        options: [
+          "@iseeyou.glasses (Purwokerto)",
+          "@iseeyou.purbalingga",
+          "@iseeyou.cilacap",
+          "@iseeyou.wonosobo",
+          "@lunar.eyewear (Tegal)",
+        ],
+      },
+    ],
+    tags: ["apresiasi", "story share", "algoritma", "engagement", "interaksi 1 jam"],
+  },
 ];
 
 /**
@@ -448,6 +692,23 @@ export function applyPlaceholdersToText(
   // Specific mappings for known templates
   if (values.greeting_time) {
     result = result.replace(/\[pagi\/siang\/sore\]/g, values.greeting_time);
+  }
+
+  if (values.pic_name) {
+    result = result.replace(/\[Nama PIC\]/g, values.pic_name);
+  }
+
+  if (values.branch_name) {
+    result = result.replace(/\[Nama Cabang \/ Akun IG\]/g, values.branch_name);
+    result = result.replace(/\[Nama Cabang\]/g, values.branch_name);
+  }
+
+  if (values.days_behind) {
+    result = result.replace(/\[Jumlah Hari\]/g, values.days_behind);
+  }
+
+  if (values.reels_title) {
+    result = result.replace(/\[Judul Reels \/ Konsep Konten\]/g, values.reels_title);
   }
 
   if (values.q1) {

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useMemo } from "react";
+import Link from "next/link";
 import {
   Calendar,
   Monitor,
@@ -462,6 +463,15 @@ Akses Dashboard Lengkap: ${PRODUCTION_BASE_URL}/spreadsheet`;
 
         {/* Quick Action Buttons */}
         <div className="flex flex-wrap items-center gap-2 shrink-0">
+          <Link
+            href="/communication-center"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-control text-xs font-bold bg-amber-500/10 hover:bg-amber-500/20 text-amber-900 dark:text-amber-200 border border-amber-500/30 transition-all shadow-subtle"
+            title="Buka Template Chat Reminder Upload 18.30 & Cadence di Communication Center"
+          >
+            <Clock className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
+            <span>Reminder Upload 18.30 (Jam 19.00)</span>
+          </Link>
+
           <button
             onClick={() => setIsPresentationMode(!isPresentationMode)}
             className={`flex items-center gap-1.5 px-3 py-2 rounded-control text-xs font-semibold transition-all border ${

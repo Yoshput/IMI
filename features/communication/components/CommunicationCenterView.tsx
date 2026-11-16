@@ -16,6 +16,10 @@ import {
   HelpCircle,
   FileText,
   UserCheck,
+  Clock,
+  CalendarCheck,
+  AlertTriangle,
+  BellRing,
 } from "lucide-react";
 import {
   COMMUNICATION_TEMPLATES,
@@ -48,6 +52,15 @@ export const CommunicationCenterView: React.FC = () => {
         return false;
       }
 
+      // Subcategory filter (if within cadence & upload reminder)
+      if (
+        activeCategory === "cadence" &&
+        activeSubCategory !== "all" &&
+        tpl.subcategory !== activeSubCategory
+      ) {
+        return false;
+      }
+
       // Search query filter
       if (searchQuery.trim()) {
         const query = searchQuery.toLowerCase().trim();
@@ -69,9 +82,12 @@ export const CommunicationCenterView: React.FC = () => {
   const countAll = COMMUNICATION_TEMPLATES.length;
   const countSponsorship = COMMUNICATION_TEMPLATES.filter((t) => t.category === "sponsorship").length;
   const countModel = COMMUNICATION_TEMPLATES.filter((t) => t.category === "model").length;
+  const countCadence = COMMUNICATION_TEMPLATES.filter((t) => t.category === "cadence").length;
 
   const countSubSponsorship = COMMUNICATION_TEMPLATES.filter((t) => t.subcategory === "sponsorship").length;
   const countSubPartnership = COMMUNICATION_TEMPLATES.filter((t) => t.subcategory === "partnership").length;
+  const countSubUploadReminder = COMMUNICATION_TEMPLATES.filter((t) => t.subcategory === "upload_reminder").length;
+  const countSubCadenceCheck = COMMUNICATION_TEMPLATES.filter((t) => t.subcategory === "cadence_check").length;
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
@@ -120,7 +136,7 @@ export const CommunicationCenterView: React.FC = () => {
         </div>
 
         {/* Quick Highlights Strip */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-5 pt-4 border-t border-border">
+        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3 mt-5 pt-4 border-t border-border">
           <div className="p-3 rounded-xl bg-surface-secondary/60 border border-border/60">
             <span className="text-[10px] font-bold uppercase tracking-wider text-foreground-muted block">
               Total Template
@@ -147,7 +163,17 @@ export const CommunicationCenterView: React.FC = () => {
             </span>
             <div className="flex items-baseline gap-1 mt-0.5">
               <span className="text-lg font-black text-purple-700 dark:text-purple-400">{countModel}</span>
-              <span className="text-[11px] text-foreground-secondary">Template (5 Pendekatan)</span>
+              <span className="text-[11px] text-foreground-secondary">Template (5 Alur)</span>
+            </div>
+          </div>
+
+          <div className="p-3 rounded-xl bg-surface-secondary/60 border border-border/60">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-foreground-muted block">
+              Upload &amp; Cadence
+            </span>
+            <div className="flex items-baseline gap-1 mt-0.5">
+              <span className="text-lg font-black text-amber-700 dark:text-amber-400">{countCadence}</span>
+              <span className="text-[11px] text-foreground-secondary">Jam 19.00 / 3 Hari</span>
             </div>
           </div>
 
@@ -246,6 +272,32 @@ export const CommunicationCenterView: React.FC = () => {
                 {countModel}
               </span>
             </button>
+
+            {/* Tab: Jadwal Upload & Cadence (19.00 WIB) */}
+            <button
+              type="button"
+              onClick={() => {
+                setActiveCategory("cadence");
+                setActiveSubCategory("all");
+              }}
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
+                activeCategory === "cadence"
+                  ? "bg-[#124734] text-white shadow-xs"
+                  : "text-foreground-secondary hover:text-foreground hover:bg-surface-secondary"
+              }`}
+            >
+              <Clock className="w-3.5 h-3.5 text-amber-500" />
+              <span>Upload &amp; Cadence (19.00 WIB)</span>
+              <span
+                className={`text-[10px] px-1.5 py-0.2 rounded-full font-black ${
+                  activeCategory === "cadence"
+                    ? "bg-white/20 text-white"
+                    : "bg-surface-secondary text-foreground-muted"
+                }`}
+              >
+                {countCadence}
+              </span>
+            </button>
           </div>
 
           {/* Search Box */}
@@ -309,7 +361,109 @@ export const CommunicationCenterView: React.FC = () => {
             </button>
           </div>
         )}
+
+        {/* Subcategory Pills for Upload & Cadence */}
+        {activeCategory === "cadence" && (
+          <div className="flex items-center gap-2 pt-1 animate-in fade-in duration-150 flex-wrap">
+            <span className="text-[11px] font-semibold text-foreground-muted">Fokus Arahan:</span>
+            <button
+              type="button"
+              onClick={() => setActiveSubCategory("all")}
+              className={`px-3 py-1 rounded-lg text-xs font-semibold cursor-pointer transition-all ${
+                activeSubCategory === "all"
+                  ? "bg-amber-800 text-white"
+                  : "bg-surface border border-border text-foreground-secondary hover:text-foreground"
+              }`}
+            >
+              Semua Cadence ({countCadence})
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveSubCategory("upload_reminder")}
+              className={`px-3 py-1 rounded-lg text-xs font-semibold cursor-pointer transition-all ${
+                activeSubCategory === "upload_reminder"
+                  ? "bg-amber-800 text-white"
+                  : "bg-surface border border-border text-foreground-secondary hover:text-foreground"
+              }`}
+            >
+              Reminder Upload (18.30 &amp; 19.00) ({countSubUploadReminder})
+            </button>
+            <button
+              type="button"
+              onClick={() => setActiveSubCategory("cadence_check")}
+              className={`px-3 py-1 rounded-lg text-xs font-semibold cursor-pointer transition-all ${
+                activeSubCategory === "cadence_check"
+                  ? "bg-amber-800 text-white"
+                  : "bg-surface border border-border text-foreground-secondary hover:text-foreground"
+              }`}
+            >
+              Pengecekan Ritme 3 Hari ({countSubCadenceCheck})
+            </button>
+          </div>
+        )}
       </div>
+
+      {/* ========================================================================= */}
+      {/* 2B. CADENCE GUIDELINES BANNER (PROMINENT ON CADENCE TAB)                  */}
+      {/* ========================================================================= */}
+      {(activeCategory === "cadence" || (activeCategory === "all" && !searchQuery)) && (
+        <div className="rounded-2xl p-5 bg-gradient-to-r from-amber-500/10 via-amber-500/5 to-surface border border-amber-500/30 shadow-subtle space-y-3">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div className="flex items-center gap-2.5">
+              <div className="w-9 h-9 rounded-xl bg-amber-500/20 text-amber-800 dark:text-amber-300 flex items-center justify-center font-bold">
+                <Clock className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="text-sm font-black text-foreground">
+                  Pedoman Jam Upload &amp; Ritme Konsistensi Reels (Cadence SOP)
+                </h3>
+                <p className="text-xs text-foreground-secondary">
+                  Standar wajib tim Marketing &amp; seluruh PIC Cabang Optik I See You serta Lunar Eyewear.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <span className="px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-900 dark:text-amber-200 text-xs font-bold flex items-center gap-1.5 border border-amber-500/30">
+                <BellRing className="w-3.5 h-3.5 text-amber-600" />
+                <span>Prime Time: 19.00 WIB</span>
+              </span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 border-t border-amber-500/20 text-xs">
+            <div className="p-3 rounded-xl bg-surface/80 border border-amber-500/20 space-y-1">
+              <div className="font-bold text-foreground flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-amber-500" />
+                <span>1. Reminder 18.30 WIB</span>
+              </div>
+              <p className="text-[11px] text-foreground-secondary">
+                Chat up dikirimkan <strong>setengah 7 malam (18.30 WIB)</strong> atau 30 menit sebelum slot upload untuk konfirmasi materi sudah ready.
+              </p>
+            </div>
+
+            <div className="p-3 rounded-xl bg-surface/80 border border-amber-500/20 space-y-1">
+              <div className="font-bold text-foreground flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                <span>2. Upload Tepat 19.00 WIB</span>
+              </div>
+              <p className="text-[11px] text-foreground-secondary">
+                Video Reels wajib tayang tepat <strong>pukul 19.00 WIB</strong> (jam puncak audiens aktif, interaksi lokal, dan jangkauan reels maksimal).
+              </p>
+            </div>
+
+            <div className="p-3 rounded-xl bg-surface/80 border border-amber-500/20 space-y-1">
+              <div className="font-bold text-foreground flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-rose-500" />
+                <span>3. Cek Ritme Maksimal 3 Hari</span>
+              </div>
+              <p className="text-[11px] text-foreground-secondary">
+                Tidak boleh ada cabang yang kosong tanpa Reels lebih dari <strong>3 hari</strong>. Jika sudah 3 hari, wajib gunakan Template 17.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ========================================================================= */}
       {/* 3. CENTRALIZED PIC SECTION (PROMINENT ON MODEL TAB & RECRUITMENT)         */}
