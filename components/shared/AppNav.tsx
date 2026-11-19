@@ -69,7 +69,7 @@ const NAV_CATEGORIES: NavCategory[] = [
     title: "Riset & Pertumbuhan",
     items: [
       { label: "Kompetitor", href: "/competitors", icon: Target },
-      { label: "KOL", href: "/kol", icon: Camera },
+      { label: "KOL & Creator Partnership", href: "/kol", icon: Camera },
       { label: "Venue", href: "/venue", icon: MapPin },
     ],
   },

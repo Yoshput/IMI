@@ -1,12 +1,19 @@
 import React from "react";
-import { KolRadarView } from "@/features/kol/components/KolRadarView";
+import { Metadata } from "next";
+import { KolPartnershipModule } from "@/features/kol/components/KolPartnershipModule";
 
-export const metadata = {
-  title: "KOL & Influencer Radar (5 Cabang) | I See You & Lunar Eyewear",
+export const metadata: Metadata = {
+  title: "KOL & Creator Partnership Management | Optik I See You",
   description:
-    "Kurasi dan database 17 Selebgram & TikTok Creator Lokal Pilihan (Purwokerto, Purbalingga, Cilacap, Wonosobo, Tegal) dengan Cek Social Blade, Rate Card, Benefit, dan Hak Owning Video Mentahan Iklan (Meta Ads).",
+    "Pusat strategi kemitraan KOL, sistem evaluasi visual vs jangkauan, barter produk kacamata kirim ke rumah tanpa visit toko, 14 tahapan collaboration pipeline, generator pesan WhatsApp, dan pelacakan campaign.",
 };
 
 export default function KolPage() {
-  return <KolRadarView />;
+  return (
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 p-4 sm:p-6 lg:p-8">
+      <div className="max-w-7xl mx-auto">
+        <KolPartnershipModule />
+      </div>
+    </div>
+  );
 }
