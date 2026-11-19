@@ -89,6 +89,7 @@ export const CentralizedPicCard: React.FC = () => {
               type="button"
               onClick={handleCopyPhone}
               className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white/10 hover:bg-white/20 active:bg-white/25 text-white font-bold text-xs border border-white/20 transition-all shadow-xs cursor-pointer active:scale-95"
+              title="Salin nomor kontak Kak Yossika untuk keperluan koordinasi internal tim"
             >
               {copiedPhone ? (
                 <>
@@ -98,7 +99,7 @@ export const CentralizedPicCard: React.FC = () => {
               ) : (
                 <>
                   <Copy className="w-3.5 h-3.5 text-white" />
-                  <span>SALIN NOMOR WHATSAPP</span>
+                  <span>SALIN KONTAK PIC (INTERNAL)</span>
                 </>
               )}
             </button>
@@ -109,9 +110,10 @@ export const CentralizedPicCard: React.FC = () => {
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-emerald-950 font-black text-xs transition-all shadow-md active:scale-95 cursor-pointer"
+              title="Staff langsung chat Kak Yossika untuk meneruskan kontak calon model"
             >
               <MessageCircle className="w-3.5 h-3.5 fill-current" />
-              <span>HUBUNGI PIC</span>
+              <span>LAPOR KE KAK YOSSIKA</span>
               <ExternalLink className="w-3 h-3 opacity-70" />
             </a>
           </div>

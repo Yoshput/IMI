@@ -163,7 +163,7 @@ export const CommunicationCenterView: React.FC = () => {
             </span>
             <div className="flex items-baseline gap-1 mt-0.5">
               <span className="text-lg font-black text-purple-700 dark:text-purple-400">{countModel}</span>
-              <span className="text-[11px] text-foreground-secondary">Template (5 Alur)</span>
+              <span className="text-[11px] text-foreground-secondary">Template ({countModel} Alur)</span>
             </div>
           </div>
 
@@ -536,7 +536,7 @@ export const CommunicationCenterView: React.FC = () => {
           </p>
           <p className="leading-relaxed">
             Gunakan gaya bahasa Indonesia yang natural, ramah, dan profesional. Selalu awali dengan sapaan sopan dan akhiri dengan ucapan terima kasih.
-            Untuk calon model katalog, pastikan tidak memberikan konfirmasi jadwal atau kompensasi secara mandiri melainkan mengarahkan ke kontak resmi PIC Yossika Putra Erlangga.
+            Untuk calon model katalog, staff cukup melakukan sapaan dan penawaran awal tanpa menyuruh calon model re-chat/berpindah nomor. Jika calon model tertarik, Kak Yossika yang akan langsung menghubungi mereka via WhatsApp untuk briefing konsep, jadwal, dan kompensasi.
           </p>
         </div>
       </div>

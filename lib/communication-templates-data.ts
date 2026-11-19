@@ -51,18 +51,21 @@ export interface ModelPrimaryPic {
 
 /**
  * PIC UTAMA MODEL RECRUITMENT & COORDINATION
- * Seluruh konfirmasi, pendataan, dan koordinasi akhir calon model dilakukan melalui PIC utama.
+ * Staff marketing (Mba Ilya, Mas Raja, dll) melakukan pendekatan awal.
+ * Calon model TIDAK PERLU re-chat / berpindah nomor.
+ * Kak Yossika yang akan langsung menghubungi calon model untuk follow-up teknis dan jadwal.
  */
 export const MODEL_PRIMARY_PIC: ModelPrimaryPic = {
   name: "Yossika Putra Erlangga",
-  role: "Marketing",
+  role: "Lead Marketing",
   organization: "Optik I See You",
   phoneDisplay: "087778683766",
   phoneInternational: "6287778683766",
   waUrl: "https://wa.me/6287778683766",
-  note: "Seluruh konfirmasi, pendataan, dan koordinasi akhir calon model dilakukan melalui PIC utama.",
+  note: "Staff (Mba Ilya, Mas Raja, dll) melakukan pendekatan awal. Jika calon model tertarik, sampaikan bahwa Kak Yossika yang akan langsung menghubungi mereka via WhatsApp. Calon model TIDAK PERLU re-chat atau pindah kontak sendiri.",
   responsibilities: [
-    "Konfirmasi ketertarikan calon model",
+    "Follow-up langsung ke calon model setelah dihubungi staff",
+    "Konfirmasi ketertarikan dan briefing konsep visual katalog",
     "Pendataan lengkap calon model & talent portfolio",
     "Penjelasan detail kegiatan, wardrobe & konsep visual",
     "Koordinasi jadwal & rundown pemotretan",
@@ -75,9 +78,11 @@ export const MODEL_PRIMARY_PIC: ModelPrimaryPic = {
       "Melakukan talent scouting & pencarian calon model di media sosial (IG, TikTok)",
       "Melakukan pendekatan awal & sapaan ramah menggunakan template resmi",
       "Mengirimkan penawaran awal ke calon model",
-      "Mengarahkan calon model yang tertarik ke nomor WhatsApp PIC utama",
+      "Menginfokan bahwa PIC utama (Kak Yossika) yang akan langsung menghubungi mereka via WhatsApp",
+      "Meneruskan kontak dan akun IG/TikTok calon model yang tertarik kepada Kak Yossika",
     ],
     forbidden: [
+      "Menyuruh atau meminta calon model untuk re-chat / pindah nomor sendiri ke Kak Yossika (karena tidak nyaman bagi talent)",
       "Memberikan konfirmasi final atau janji jadwal secara mandiri",
       "Menentukan kesepakatan fee / kompensasi di luar wewenang PIC utama",
       "Menetapkan lokasi atau tanggal fix pemotretan tanpa persetujuan PIC",
@@ -341,30 +346,31 @@ Tim Marketing Optik I See You.`,
   },
 
   // =========================================================================
-  // KATEGORI B: MODEL RECRUITMENT & COORDINATION (5 TEMPLATES)
+  // KATEGORI B: MODEL RECRUITMENT & COORDINATION (6 TEMPLATES)
+  // Staff (Mba Ilya / Mas Raja dll) melakukan outreach awal.
+  // Calon model TIDAK PERLU re-chat / pindah nomor.
+  // Kak Yossika (Lead Marketing) yang akan langsung chat follow up ke calon model!
   // =========================================================================
   {
     id: "model-01",
     templateNumber: "MODEL TEMPLATE 01",
-    title: "Penawaran kepada Calon Model",
+    title: "Penawaran kepada Calon Model (Outreach Staff)",
     category: "model",
     subcategory: "model",
     badge: "Penawaran Awal",
-    description: "Pendekatan awal kepada talent/kreator untuk mengajak berpartisipasi sebagai model foto katalog kacamata, softlens, dan konten promosi.",
-    content: `Halo Kak! Perkenalkan, kami dari tim Marketing Optik I See You.
+    description: "Pendekatan awal oleh staff (Mba Ilya / Mas Raja) kepada talent/kreator. Calon model tidak diminta pindah nomor, melainkan diinfokan bahwa Kak Yossika yang akan langsung menghubungi mereka.",
+    content: `Halo Kak! Perkenalkan, kami dari tim Marketing Optik I See You. 😊
 
 Saat ini kami sedang mencari talent/model untuk kebutuhan foto katalog produk kacamata dan konten promosi Optik I See You.
 
 Kami tertarik untuk mengajak Kakak berpartisipasi sebagai model dalam kegiatan tersebut.
 
-Apabila Kakak berkenan atau tertarik, nantinya bisa langsung menghubungi PIC kami melalui WhatsApp berikut:
+Kira-kira apakah Kakak berkenan atau tertarik untuk berpartisipasi?
 
-087778683766 (Yossika)
+Jika Kakak tertarik, nantinya PIC utama kami, Kak Yossika, yang akan langsung menghubungi Kakak melalui WhatsApp ini untuk menjelaskan detail konsep, jadwal, dan teknis kegiatannya ya, Kak.
 
-Untuk informasi lebih lanjut mengenai konsep, jadwal, dan teknis kegiatan akan dijelaskan oleh PIC kami ya, Kak.
-
-Terima kasih! 😊`,
-    tags: ["model", "talent", "penawaran", "katalog", "foto", "promosi", "scouting"],
+Terima kasih banyak, Kak! ✨`,
+    tags: ["model", "talent", "penawaran", "katalog", "foto", "promosi", "scouting", "outreach"],
   },
   {
     id: "model-02",
@@ -373,15 +379,15 @@ Terima kasih! 😊`,
     category: "model",
     subcategory: "model",
     badge: "Merespon Minat",
-    description: "Respon saat calon model menyatakan tertarik, langsung mengarahkan nomor kontak PIC Yossika Putra Erlangga untuk koordinasi lanjutan.",
-    content: `Wah, baik Kak! Terima kasih atas ketertarikannya.
+    description: "Respon saat calon model menyatakan tertarik. Staff meneruskan kontak ke Kak Yossika dan menginfokan bahwa Kak Yossika yang akan langsung chat mereka.",
+    content: `Wah, baik Kak! Terima kasih banyak atas ketertarikan dan respon positifnya. 😊
 
-Untuk informasi lebih lanjut dan konfirmasi keikutsertaan, Kakak bisa langsung menghubungi PIC kami melalui WhatsApp:
+Untuk langkah berikutnya, izin kami teruskan kontak Kakak ke PIC utama kami ya.
 
-087778683766
+Nantinya PIC kami, Kak Yossika, yang akan langsung menghubungi Kakak melalui WhatsApp ini untuk berkoordinasi terkait detail kegiatan, konsep pemotretan, dan jadwalnya.
 
-Nantinya akan dibantu terkait detail kegiatan dan koordinasi selanjutnya ya, Kak.`,
-    tags: ["model", "tertarik", "minat", "arahan pic", "lanjutan"],
+Mohon ditunggu pesan dari beliau ya, Kak. Terima kasih! 🙏✨`,
+    tags: ["model", "tertarik", "minat", "arahan pic", "lanjutan", "follow-up"],
   },
   {
     id: "model-03",
@@ -390,14 +396,12 @@ Nantinya akan dibantu terkait detail kegiatan dan koordinasi selanjutnya ya, Kak
     category: "model",
     subcategory: "model",
     badge: "Detail Teknis",
-    description: "Respon sopan saat model menanyakan konsep pemotretan, lokasi, pakaian, jadwal, atau kompensasi agar dijawab langsung dan jelas oleh PIC utama.",
-    content: `Untuk detail kegiatan seperti konsep pemotretan, jadwal, lokasi, serta ketentuan lainnya akan dijelaskan langsung oleh PIC kami agar informasinya lebih lengkap.
+    description: "Respon sopan saat model menanyakan konsep pemotretan, lokasi, atau jadwal. Menjelaskan bahwa PIC Kak Yossika yang akan menghubungi langsung untuk detail lengkap.",
+    content: `Untuk detail kegiatan seperti konsep pemotretan, jadwal, lokasi, serta ketentuan lainnya nantinya akan dijelaskan langsung oleh PIC utama kami, Kak Yossika, agar informasinya jauh lebih lengkap dan jelas.
 
-Kakak bisa menghubungi WhatsApp berikut ya:
+Izin ya Kak, kontak Kakak akan kami teruskan ke beliau agar Kak Yossika bisa langsung menghubungi Kakak melalui WhatsApp ini.
 
-087778683766
-
-Terima kasih, Kak!`,
+Terima kasih banyak atas pengertiannya ya, Kak! 😊`,
     tags: ["model", "pertanyaan", "detail", "konsep", "jadwal", "lokasi", "pic"],
   },
   {
@@ -408,31 +412,106 @@ Terima kasih, Kak!`,
     subcategory: "model",
     badge: "Pendataan",
     description: "Respon saat calon model bersedia untuk didata dan dikontak lebih lanjut untuk sesi pemotretan.",
-    content: `Baik Kak, terima kasih atas kesediaannya.
+    content: `Baik Kak, terima kasih banyak atas kesediaannya. 🙏
 
-Agar koordinasi dan konfirmasi lebih lanjut bisa dilakukan dengan mudah, boleh langsung menghubungi PIC kami melalui nomor berikut:
+Data dan kontak Kakak sudah kami catat dan kami sampaikan kepada tim manajemen.
 
-087778683766
+Nantinya PIC utama kami, Kak Yossika, yang akan langsung menghubungi Kakak melalui WhatsApp ini untuk proses pendataan lengkap serta koordinasi rundown dan jadwal pemotretan.
 
-Nantinya akan dibantu untuk proses pendataan dan konfirmasi selanjutnya.`,
+Ditunggu pesan dari beliau ya, Kak. Terima kasih! 😊`,
     tags: ["model", "bersedia", "pendataan", "konfirmasi", "pic"],
   },
   {
     id: "model-05",
     templateNumber: "MODEL TEMPLATE 05",
-    title: "Follow-up Calon Model",
+    title: "Follow-up Calon Model (Oleh Staff)",
     category: "model",
     subcategory: "model",
-    badge: "Follow-up",
+    badge: "Follow-up Staff",
     description: "Menghubungi kembali calon model yang belum membalas penawaran awal foto katalog dan kampanye visual.",
-    content: `Halo Kak, izin menghubungi kembali terkait penawaran menjadi model untuk kebutuhan foto katalog dan konten promosi Optik I See You.
+    content: `Halo Kak, selamat [pagi/siang/sore]. 😊
 
-Apakah Kakak berkenan untuk berpartisipasi dalam kegiatan tersebut?
+Izin follow-up kembali terkait penawaran menjadi model foto katalog dan konten promosi Optik I See You yang kami kirimkan sebelumnya.
 
-Jika tertarik, Kakak bisa langsung menghubungi PIC kami di 087778683766 ya.
+Kira-kira apakah Kakak berkenan untuk bergabung dalam project ini?
 
-Terima kasih, Kak!`,
+Jika berkenan, nantinya PIC utama kami, Kak Yossika, yang akan langsung menghubungi Kakak via WhatsApp ini untuk koordinasi detailnya ya, Kak.
+
+Kami tunggu kabar baiknya. Terima kasih banyak, Kak! 🙏`,
+    placeholders: [
+      {
+        key: "greeting_time",
+        label: "Sapaan Waktu",
+        placeholder: "[pagi/siang/sore]",
+        defaultValue: "siang",
+        type: "select",
+        options: ["pagi", "siang", "sore"],
+      },
+    ],
     tags: ["model", "follow-up", "tanya kabar", "katalog", "reminder"],
+  },
+  {
+    id: "model-06",
+    templateNumber: "MODEL TEMPLATE 06",
+    title: "Follow-up Langsung oleh PIC (Kak Yossika ke Model)",
+    category: "model",
+    subcategory: "model",
+    badge: "Chat dari PIC",
+    description: "Template resmi untuk Kak Yossika saat menghubungi langsung calon model yang sudah menyatakan tertarik dari pendekatan staff sebelumnya (Mba Ilya / Mas Raja).",
+    content: `Halo Kak [Nama Model], selamat [pagi/siang/sore]! 😊
+
+Perkenalkan, saya Yossika, Lead PIC Marketing Optik I See You.
+
+Menyambung informasi penawaran dari tim kami sebelumnya ([Nama Staff, misal: Mba Ilya / Mas Raja]), terima kasih banyak atas ketertarikan Kakak untuk berpartisipasi sebagai model katalog kacamata kami.
+
+Izin, berikut kami sampaikan gambaran singkat project pemotretannya ya Kak:
+- Konsep: Foto katalog frame kacamata & konten visual promosi
+- Estimasi Lokasi: [Store Cabang / Studio]
+- Jadwal: [Hari, Tanggal & Estimasi Jam]
+
+Kira-kira untuk jadwal tersebut apakah Kakak available? Nantinya bisa kita diskusikan lebih lanjut ya, Kak.
+
+Terima kasih banyak, Kak! 🙏👓`,
+    placeholders: [
+      {
+        key: "model_name",
+        label: "Nama Calon Model",
+        placeholder: "[Nama Model]",
+        defaultValue: "Kak",
+        type: "text",
+      },
+      {
+        key: "staff_name",
+        label: "Nama Staff Outreach",
+        placeholder: "[Nama Staff, misal: Mba Ilya / Mas Raja]",
+        defaultValue: "Mba Ilya",
+        type: "select",
+        options: ["Mba Ilya", "Mas Raja", "Mba Nuha", "Mas Ajun", "Mba Amanda", "Mas Rian"],
+      },
+      {
+        key: "location_name",
+        label: "Lokasi Pemotretan",
+        placeholder: "[Store Cabang / Studio]",
+        defaultValue: "Store Optik I See You Cabang Purwokerto",
+        type: "text",
+      },
+      {
+        key: "shoot_schedule",
+        label: "Estimasi Waktu",
+        placeholder: "[Hari, Tanggal & Estimasi Jam]",
+        defaultValue: "Sabtu mendatang pukul 14.00 WIB",
+        type: "text",
+      },
+      {
+        key: "greeting_time",
+        label: "Sapaan Waktu",
+        placeholder: "[pagi/siang/sore]",
+        defaultValue: "siang",
+        type: "select",
+        options: ["pagi", "siang", "sore"],
+      },
+    ],
+    tags: ["model", "follow-up pic", "yossika", "rundown", "jadwal", "briefing"],
   },
 
   // =========================================================================
@@ -709,6 +788,22 @@ export function applyPlaceholdersToText(
 
   if (values.reels_title) {
     result = result.replace(/\[Judul Reels \/ Konsep Konten\]/g, values.reels_title);
+  }
+
+  if (values.model_name) {
+    result = result.replace(/\[Nama Model\]/g, values.model_name);
+  }
+
+  if (values.staff_name) {
+    result = result.replace(/\[Nama Staff, misal: Mba Ilya \/ Mas Raja\]/g, values.staff_name);
+  }
+
+  if (values.location_name) {
+    result = result.replace(/\[Store Cabang \/ Studio\]/g, values.location_name);
+  }
+
+  if (values.shoot_schedule) {
+    result = result.replace(/\[Hari, Tanggal & Estimasi Jam\]/g, values.shoot_schedule);
   }
 
   if (values.q1) {
